@@ -366,7 +366,128 @@ a {
 .difficulty-dot.hard {
   background: var(--danger);
 }
+.brief-text {
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
 
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.mini-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #dbe6ff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+}
+/* Workspace */
+.submission-feedback {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+}
+
+.submission-feedback h4 {
+  margin: 0 0 10px;
+}
+
+.submission-feedback.success {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+.submission-feedback.close {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.submission-feedback.needs-work,
+.submission-feedback.not-available {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border);
+}
+.brief-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+  transition: 0.2s ease;
+}
+
+.brief-toggle:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.brief-dropdown-content {
+  margin-top: 12px;
+}
+.layout-toggle {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/*  */
+.icon-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  transition: 0.2s ease;
+}
+
+.icon-toggle-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.workspace-grid-stacked {
+  grid-template-columns: 1fr;
+}
+
+.workspace-grid-stacked .preview-card,
+.workspace-grid-stacked .editor-card {
+  min-height: auto;
+}
+
+.workspace-grid-stacked .preview-frame {
+  height: 420px;
+}
+
+.workspace-grid-stacked .code-editor {
+  min-height: 380px;
+}
+.icon-toggle-btn.split {
+  background: rgba(109, 124, 255, 0.12);
+}
+
+.icon-toggle-btn.stacked {
+  background: rgba(139, 92, 246, 0.12);
+}
 @media (max-width: 1100px) {
   .content-grid,
   .workspace-grid {
