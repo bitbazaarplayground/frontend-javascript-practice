@@ -1,6 +1,7 @@
 export const rookieChallenges = [
   {
     id: "styled-heading",
+    editorType: "web",
     title: "Challenge 1 — Styled Heading",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -57,6 +58,7 @@ export const rookieChallenges = [
   },
   {
     id: "styled-button",
+    editorType: "web",
     title: "Challenge 2 — Styled Button",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -119,6 +121,7 @@ export const rookieChallenges = [
   },
   {
     id: "centered-box",
+    editorType: "web",
     title: "Challenge 3 — Centered Box",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -181,6 +184,7 @@ export const rookieChallenges = [
   },
   {
     id: "profile-card",
+    editorType: "web",
     title: "Challenge 4 — Profile Card",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -252,6 +256,7 @@ export const rookieChallenges = [
   },
   {
     id: "simple-navbar",
+    editorType: "web",
     title: "Challenge 5 — Simple Navbar",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -323,6 +328,7 @@ export const rookieChallenges = [
   },
   {
     id: "center-circle",
+    editorType: "web",
     title: "Challenge 6 — Centered Circle",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -388,6 +394,7 @@ export const rookieChallenges = [
   },
   {
     id: "two-column-layout",
+    editorType: "web",
     title: "Challenge 7 — Two Column Layout",
     difficulty: "Easy",
     category: "HTML + CSS",
@@ -452,6 +459,7 @@ export const rookieChallenges = [
   },
   {
     id: "login-form-ui",
+    editorType: "web",
     title: "Challenge 8 — Login Form UI",
     difficulty: "Medium",
     category: "HTML + CSS",
@@ -523,6 +531,7 @@ export const rookieChallenges = [
   },
   {
     id: "product-card",
+    editorType: "web",
     title: "Challenge 9 — Product Card",
     difficulty: "Medium",
     category: "HTML + CSS",
@@ -607,6 +616,7 @@ button {
   },
   {
     id: "toggle-theme",
+    editorType: "web",
     title: "Challenge 10 — Toggle Theme Button",
     difficulty: "Medium",
     category: "HTML + CSS + JS",
@@ -692,6 +702,7 @@ themeBtn.addEventListener("click", () => {
   },
   {
     id: "counter-app",
+    editorType: "web",
     title: "Challenge 11 — Counter App",
     difficulty: "Medium",
     category: "HTML + CSS + JS",
@@ -783,6 +794,7 @@ decreaseBtn.addEventListener("click", () => {
   },
   {
     id: "show-hide-password",
+    editorType: "web",
     title: "Challenge 12 — Show / Hide Password",
     difficulty: "Medium",
     category: "HTML + CSS + JS",

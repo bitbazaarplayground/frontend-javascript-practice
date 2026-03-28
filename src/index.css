@@ -488,6 +488,25 @@ a {
 .icon-toggle-btn.stacked {
   background: rgba(139, 92, 246, 0.12);
 }
+.react-preview-placeholder {
+  min-height: 510px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.react-preview-placeholder h4 {
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.react-preview-placeholder p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
 @media (max-width: 1100px) {
   .content-grid,
   .workspace-grid {
