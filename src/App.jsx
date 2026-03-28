@@ -169,6 +169,8 @@ export default function App() {
         <div className="content-grid">
           <BriefPanel challenge={activeChallenge} />
           <WorkspacePanel
+            challengeId={activeChallenge.id}
+            editorType={activeChallenge.editorType}
             html={currentDraft.html}
             css={currentDraft.css}
             js={currentDraft.js}

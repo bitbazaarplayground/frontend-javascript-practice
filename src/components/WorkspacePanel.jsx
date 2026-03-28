@@ -1,7 +1,9 @@
 import { Columns2, Rows2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function WorkspacePanel({
+  challengeId,
+  editorType = "web",
   html,
   css,
   js,
@@ -17,11 +19,15 @@ export default function WorkspacePanel({
   const [showSolution, setShowSolution] = useState(false);
   const [layoutMode, setLayoutMode] = useState("split");
 
-  const visibleHtml = showSolution ? solution.html : html;
-  const visibleCss = showSolution ? solution.css : css;
-  const visibleJs = showSolution ? solution.js : js;
+  const isReactChallenge = editorType === "react";
+
+  const visibleHtml = showSolution ? solution?.html || "" : html || "";
+  const visibleCss = showSolution ? solution?.css || "" : css || "";
+  const visibleJs = showSolution ? solution?.js || "" : js || "";
 
   const srcDoc = useMemo(() => {
+    if (isReactChallenge) return "";
+
     return `
       <html>
         <head>
@@ -44,17 +50,26 @@ export default function WorkspacePanel({
             try {
               ${visibleJs}
             } catch (error) {
-              document.body.innerHTML += '<pre style="color:red;padding:12px;">' + error.message + '</pre>';
+              const errorEl = document.createElement("pre");
+              errorEl.style.color = "red";
+              errorEl.style.padding = "12px";
+              errorEl.textContent = error.message;
+              document.body.appendChild(errorEl);
             }
           </script>
         </body>
       </html>
     `;
-  }, [visibleHtml, visibleCss, visibleJs]);
+  }, [visibleHtml, visibleCss, visibleJs, isReactChallenge]);
 
   const toggleLayoutMode = () => {
     setLayoutMode((prev) => (prev === "split" ? "stacked" : "split"));
   };
+
+  useEffect(() => {
+    setActiveTab(editorType === "react" ? "js" : "html");
+    setShowSolution(false);
+  }, [challengeId, editorType]);
 
   const renderEditor = () => (
     <div className="editor-card">
@@ -62,10 +77,11 @@ export default function WorkspacePanel({
         {showSolution ? "Solution View" : "Your Code"} •{" "}
         {activeTab === "html" && "HTML Editor"}
         {activeTab === "css" && "CSS Editor"}
-        {activeTab === "js" && "JavaScript Editor"}
+        {activeTab === "js" &&
+          (isReactChallenge ? "React Editor" : "JavaScript Editor")}
       </div>
 
-      {activeTab === "html" && (
+      {activeTab === "html" && !isReactChallenge && (
         <textarea
           className="code-editor"
           value={visibleHtml}
@@ -73,12 +89,12 @@ export default function WorkspacePanel({
             if (!showSolution) setHtml(e.target.value);
           }}
           readOnly={showSolution}
-          spellCheck="false"
+          spellCheck={false}
           placeholder={showSolution ? "" : "Write your HTML here..."}
         />
       )}
 
-      {activeTab === "css" && (
+      {activeTab === "css" && !isReactChallenge && (
         <textarea
           className="code-editor"
           value={visibleCss}
@@ -86,7 +102,7 @@ export default function WorkspacePanel({
             if (!showSolution) setCss(e.target.value);
           }}
           readOnly={showSolution}
-          spellCheck="false"
+          spellCheck={false}
           placeholder={showSolution ? "" : "Write your CSS here..."}
         />
       )}
@@ -99,8 +115,14 @@ export default function WorkspacePanel({
             if (!showSolution) setJs(e.target.value);
           }}
           readOnly={showSolution}
-          spellCheck="false"
-          placeholder={showSolution ? "" : "Write your JavaScript here..."}
+          spellCheck={false}
+          placeholder={
+            showSolution
+              ? ""
+              : isReactChallenge
+              ? "Write your React code here..."
+              : "Write your JavaScript here..."
+          }
         />
       )}
     </div>
@@ -112,12 +134,26 @@ export default function WorkspacePanel({
         Live Preview {showSolution ? "• Solution" : "• My Code"}
       </div>
 
-      <iframe
-        title="preview"
-        srcDoc={srcDoc}
-        className="preview-frame"
-        sandbox="allow-scripts"
-      />
+      {isReactChallenge ? (
+        <div className="react-preview-placeholder">
+          <h4>React Preview Coming Soon</h4>
+          <p>
+            This workspace can already store, edit, and compare React challenge
+            code, but live React rendering is not wired yet.
+          </p>
+          <p>
+            For now, use this mode to practise component structure, props,
+            state, hooks, and JSX syntax.
+          </p>
+        </div>
+      ) : (
+        <iframe
+          title="preview"
+          srcDoc={srcDoc}
+          className="preview-frame"
+          sandbox="allow-scripts"
+        />
+      )}
     </div>
   );
 
@@ -125,23 +161,29 @@ export default function WorkspacePanel({
     <section className="panel workspace-panel">
       <div className="workspace-toolbar">
         <div className="tab-group">
-          <button
-            className={activeTab === "html" ? "tab active" : "tab"}
-            onClick={() => setActiveTab("html")}
-          >
-            HTML
-          </button>
-          <button
-            className={activeTab === "css" ? "tab active" : "tab"}
-            onClick={() => setActiveTab("css")}
-          >
-            CSS
-          </button>
+          {!isReactChallenge && (
+            <>
+              <button
+                className={activeTab === "html" ? "tab active" : "tab"}
+                onClick={() => setActiveTab("html")}
+              >
+                HTML
+              </button>
+
+              <button
+                className={activeTab === "css" ? "tab active" : "tab"}
+                onClick={() => setActiveTab("css")}
+              >
+                CSS
+              </button>
+            </>
+          )}
+
           <button
             className={activeTab === "js" ? "tab active" : "tab"}
             onClick={() => setActiveTab("js")}
           >
-            JS
+            {isReactChallenge ? "React" : "JS"}
           </button>
         </div>
 

@@ -1,19 +1,30 @@
-import { builderChallenges } from "./builder.js";
-import { rookieChallenges } from "./rookie.js";
+import { builderChallenges } from "./builder";
+import { reactChallenges } from "./react";
+import { rookieChallenges } from "./rookie";
 
 export const challengeModes = [
   {
     id: "rookie",
     title: "Rookie",
     description:
-      "Begin with HTML and CSS basics. Small wins, strong foundations.",
+      "Build strong foundations in HTML and CSS with beginner-friendly layout and styling challenges.",
+    level: "Beginner",
     challenges: rookieChallenges,
   },
   {
     id: "builder",
     title: "Builder",
     description:
-      "Move into layouts, forms, and your first JavaScript interactions.",
+      "Practice real JavaScript fundamentals including DOM interaction, filtering, events, localStorage, and async logic.",
+    level: "Beginner to Intermediate",
     challenges: builderChallenges,
+  },
+  {
+    id: "react",
+    title: "React",
+    description:
+      "Train modern React skills with components, props, state, forms, lists, hooks, and realistic UI patterns.",
+    level: "Intermediate",
+    challenges: reactChallenges,
   },
 ];
