@@ -1,3 +1,7 @@
+function getChallengeStatus(challengeId, challengeProgress) {
+  return challengeProgress?.[challengeId] || "not-started";
+}
+
 export default function SidebarDrawer({
   isOpen,
   onClose,
@@ -6,6 +10,7 @@ export default function SidebarDrawer({
   challenges,
   activeId,
   onSelect,
+  challengeProgress,
 }) {
   return (
     <>
@@ -35,26 +40,39 @@ export default function SidebarDrawer({
         <div className="sidebar-section-label">Challenges</div>
 
         <div className="challenge-list">
-          {challenges.map((challenge) => (
-            <button
-              key={challenge.id}
-              className={`challenge-nav-item ${
-                activeId === challenge.id ? "active" : ""
-              }`}
-              onClick={() => {
-                onSelect(challenge.id);
-                onClose();
-              }}
-            >
-              <span
-                className={`difficulty-dot ${challenge.difficulty.toLowerCase()}`}
-              />
-              <div>
-                <strong>{challenge.title}</strong>
-                <small>{challenge.category}</small>
-              </div>
-            </button>
-          ))}
+          {challenges.map((challenge) => {
+            const status = getChallengeStatus(challenge.id, challengeProgress);
+
+            return (
+              <button
+                key={challenge.id}
+                className={`challenge-nav-item ${
+                  activeId === challenge.id ? "active" : ""
+                }`}
+                onClick={() => {
+                  onSelect(challenge.id);
+                  onClose();
+                }}
+              >
+                <span
+                  className={`difficulty-dot ${challenge.difficulty.toLowerCase()}`}
+                />
+
+                <div className="challenge-nav-content">
+                  <strong>{challenge.title}</strong>
+                  <small>{challenge.category}</small>
+
+                  <div className="challenge-meta-row">
+                    <span className={`status-pill ${status}`}>
+                      {status === "not-started" && "Not started"}
+                      {status === "in-progress" && "In progress"}
+                      {status === "completed" && "Completed"}
+                    </span>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </aside>
     </>
