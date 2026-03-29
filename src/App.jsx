@@ -44,6 +44,7 @@ export default function App() {
   useEffect(() => {
     setSubmissionResult(null);
   }, [activeId]);
+
   const currentDraft = activeChallenge
     ? savedDrafts[activeChallenge.id] || activeChallenge.starter
     : { html: "", css: "", js: "" };
@@ -154,34 +155,36 @@ export default function App() {
       />
 
       <div className="app-main">
-        <div className="top-actions">
-          <button className="primary-btn" onClick={() => setDrawerOpen(true)}>
-            ☰ Challenges
-          </button>
-          <span className="mode-pill">{selectedMode.title} Mode</span>
-          <button className="secondary-btn" onClick={handleMarkComplete}>
-            Mark Complete
-          </button>
-        </div>
+        <div className="app-container">
+          <div className="top-actions">
+            <button className="primary-btn" onClick={() => setDrawerOpen(true)}>
+              ☰ Challenges
+            </button>
+            <span className="mode-pill">{selectedMode.title} Mode</span>
+            <button className="secondary-btn" onClick={handleMarkComplete}>
+              Mark Complete
+            </button>
+          </div>
 
-        <ChallengeHeader challenge={activeChallenge} />
+          <ChallengeHeader challenge={activeChallenge} />
 
-        <div className="content-grid">
-          <BriefPanel challenge={activeChallenge} />
-          <WorkspacePanel
-            challengeId={activeChallenge.id}
-            editorType={activeChallenge.editorType}
-            html={currentDraft.html}
-            css={currentDraft.css}
-            js={currentDraft.js}
-            setHtml={(value) => updateDraft("html", value)}
-            setCss={(value) => updateDraft("css", value)}
-            setJs={(value) => updateDraft("js", value)}
-            onReset={handleReset}
-            onSubmit={handleSubmitSolution}
-            solution={activeChallenge.solution}
-            submissionResult={submissionResult}
-          />
+          <div className="content-grid">
+            <BriefPanel challenge={activeChallenge} />
+            <WorkspacePanel
+              challengeId={activeChallenge.id}
+              editorType={activeChallenge.editorType}
+              html={currentDraft.html}
+              css={currentDraft.css}
+              js={currentDraft.js}
+              setHtml={(value) => updateDraft("html", value)}
+              setCss={(value) => updateDraft("css", value)}
+              setJs={(value) => updateDraft("js", value)}
+              onReset={handleReset}
+              onSubmit={handleSubmitSolution}
+              solution={activeChallenge.solution}
+              submissionResult={submissionResult}
+            />
+          </div>
         </div>
       </div>
     </div>
