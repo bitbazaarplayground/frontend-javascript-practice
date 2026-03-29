@@ -26,11 +26,114 @@ export default function WorkspacePanel({
   const visibleJs = showSolution ? solution?.js || "" : js || "";
 
   const srcDoc = useMemo(() => {
-    if (isReactChallenge) return "";
+    if (isReactChallenge) {
+      return `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+            <style>
+              html, body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background: white;
+                color: #111827;
+              }
+
+              * {
+                box-sizing: border-box;
+              }
+
+              body {
+                padding: 16px;
+              }
+
+              #root {
+                min-height: 100%;
+              }
+
+              .preview-error {
+                white-space: pre-wrap;
+                color: #b91c1c;
+                background: #fef2f2;
+                border: 1px solid #fecaca;
+                border-radius: 8px;
+                padding: 12px;
+                font-family: monospace;
+                line-height: 1.5;
+              }
+
+              ${visibleCss}
+            </style>
+          </head>
+          <body>
+            <div id="root"></div>
+
+            <script>
+              function showPreviewError(message) {
+                const rootEl = document.getElementById("root");
+                if (!rootEl) return;
+
+                rootEl.innerHTML = "";
+                const errorEl = document.createElement("pre");
+                errorEl.className = "preview-error";
+                errorEl.textContent = message;
+                rootEl.appendChild(errorEl);
+              }
+
+              window.addEventListener("error", function (event) {
+                showPreviewError(event.message);
+              });
+
+              window.addEventListener("unhandledrejection", function (event) {
+                const message =
+                  event.reason && event.reason.message
+                    ? event.reason.message
+                    : String(event.reason);
+                showPreviewError(message);
+              });
+            <\/script>
+
+            <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"><\/script>
+            <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>
+            <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>
+
+            <script type="text/babel" data-presets="react">
+              try {
+                ${visibleJs}
+
+                const root = ReactDOM.createRoot(document.getElementById("root"));
+                root.render(<Challenge />);
+              } catch (error) {
+                const rootEl = document.getElementById("root");
+                if (rootEl) {
+                  rootEl.innerHTML = "";
+                  const errorEl = document.createElement("pre");
+                  errorEl.className = "preview-error";
+                  errorEl.textContent = error.message;
+                  rootEl.appendChild(errorEl);
+                }
+              }
+            <\/script>
+          </body>
+        </html>
+      `;
+    }
 
     return `
-      <html>
+      <!DOCTYPE html>
+      <html lang="en">
         <head>
+          <meta charset="UTF-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
           <style>
             html, body {
               margin: 0;
@@ -56,7 +159,7 @@ export default function WorkspacePanel({
               errorEl.textContent = error.message;
               document.body.appendChild(errorEl);
             }
-          </script>
+          <\/script>
         </body>
       </html>
     `;
@@ -134,26 +237,12 @@ export default function WorkspacePanel({
         Live Preview {showSolution ? "• Solution" : "• My Code"}
       </div>
 
-      {isReactChallenge ? (
-        <div className="react-preview-placeholder">
-          <h4>React Preview Coming Soon</h4>
-          <p>
-            This workspace can already store, edit, and compare React challenge
-            code, but live React rendering is not wired yet.
-          </p>
-          <p>
-            For now, use this mode to practise component structure, props,
-            state, hooks, and JSX syntax.
-          </p>
-        </div>
-      ) : (
-        <iframe
-          title="preview"
-          srcDoc={srcDoc}
-          className="preview-frame"
-          sandbox="allow-scripts"
-        />
-      )}
+      <iframe
+        title="preview"
+        srcDoc={srcDoc}
+        className="preview-frame"
+        sandbox="allow-scripts"
+      />
     </div>
   );
 

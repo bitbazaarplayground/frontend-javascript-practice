@@ -1355,4 +1355,445 @@ const total = cartItems.reduce((sum, item) => {
 cartTotal.textContent = "Total: £" + total;`,
     },
   },
+  {
+    id: "mock-product-search",
+    editorType: "web",
+    title: "Challenge 21 — Mock Product Search",
+    difficulty: "Medium",
+    category: "JavaScript + Async",
+    goal: "Search mock products asynchronously and render the matching results.",
+    requirements: [
+      "Use an async function",
+      "Search products by text",
+      "Show a loading message",
+      "Render the matching results",
+    ],
+    tips: [
+      "Use a fake request with Promise and setTimeout.",
+      "Update the DOM before and after the request.",
+      "Filter the products based on the input text.",
+    ],
+    concepts: ["promises", "async/await", "loading state", "filtering"],
+    suggestedApproach: [
+      "Create a small products array.",
+      "Create a fake async search function.",
+      "Show loading text while waiting.",
+      "Render the filtered products after the Promise resolves.",
+    ],
+    commonMistakes: [
+      "Trying to return data before awaiting it",
+      "Not clearing old results",
+      "Forgetting to show loading state",
+    ],
+    expectedOutcome:
+      "A small product search interface that loads mock results asynchronously.",
+    starter: {
+      html: `<input id="searchInput" type="text" placeholder="Search products..." />
+  <button id="searchBtn">Search</button>
+  <p id="statusText"></p>
+  <ul id="resultsList"></ul>`,
+      css: ``,
+      js: `const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const statusText = document.getElementById("statusText");
+  const resultsList = document.getElementById("resultsList");
+  
+  const products = [
+    { id: 1, name: "Laptop" },
+    { id: 2, name: "Chair" },
+    { id: 3, name: "Phone" },
+    { id: 4, name: "Desk Lamp" },
+  ];
+  
+  function searchProducts(term) {
+    
+  }
+  
+  searchBtn.addEventListener("click", async () => {
+    
+  });`,
+    },
+    solution: {
+      html: `<input id="searchInput" type="text" placeholder="Search products..." />
+  <button id="searchBtn">Search</button>
+  <p id="statusText"></p>
+  <ul id="resultsList"></ul>`,
+      css: ``,
+      js: `const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const statusText = document.getElementById("statusText");
+  const resultsList = document.getElementById("resultsList");
+  
+  const products = [
+    { id: 1, name: "Laptop" },
+    { id: 2, name: "Chair" },
+    { id: 3, name: "Phone" },
+    { id: 4, name: "Desk Lamp" },
+  ];
+  
+  function searchProducts(term) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const filteredProducts = products.filter((product) =>
+          product.name.toLowerCase().includes(term.toLowerCase())
+        );
+  
+        resolve(filteredProducts);
+      }, 1000);
+    });
+  }
+  
+  searchBtn.addEventListener("click", async () => {
+    statusText.textContent = "Loading...";
+    resultsList.innerHTML = "";
+  
+    const results = await searchProducts(searchInput.value);
+  
+    statusText.textContent = "";
+  
+    if (results.length === 0) {
+      statusText.textContent = "No products found.";
+      return;
+    }
+  
+    results.forEach((product) => {
+      const li = document.createElement("li");
+      li.textContent = product.name;
+      resultsList.appendChild(li);
+    });
+  });`,
+    },
+  },
+  {
+    id: "promise-all-user-posts",
+    editorType: "web",
+    title: "Challenge 22 — Load User and Posts with Promise.all",
+    difficulty: "Hard",
+    category: "JavaScript + Async",
+    goal: "Load mock user and post data at the same time using Promise.all and render both results.",
+    requirements: [
+      "Create 2 fake async functions",
+      "Use Promise.all to wait for both results",
+      "Show a loading message first",
+      "Render the user and posts after both requests finish",
+    ],
+    tips: [
+      "Use Promise.all([promise1, promise2]).",
+      "Both fake functions can use setTimeout.",
+      "Only render the results after both promises resolve.",
+    ],
+    concepts: [
+      "Promise.all",
+      "async/await",
+      "parallel requests",
+      "DOM rendering",
+    ],
+    suggestedApproach: [
+      "Create one fake function for the user and another for the posts.",
+      "Set loading text before starting.",
+      "Await both functions with Promise.all.",
+      "Render the user name and the post titles.",
+    ],
+    commonMistakes: [
+      "Awaiting each request separately instead of using Promise.all",
+      "Trying to use the results before both promises finish",
+      "Forgetting to clear old content before rendering new data",
+    ],
+    expectedOutcome:
+      "A small UI that first shows loading text and then displays one user and a list of post titles.",
+    starter: {
+      html: `<button id="loadBtn">Load Dashboard</button>
+  <p id="statusText"></p>
+  <div id="userBox"></div>
+  <ul id="postList"></ul>`,
+      css: ``,
+      js: `const loadBtn = document.getElementById("loadBtn");
+  const statusText = document.getElementById("statusText");
+  const userBox = document.getElementById("userBox");
+  const postList = document.getElementById("postList");
+  
+  function fetchUser() {
+    
+  }
+  
+  function fetchPosts() {
+    
+  }
+  
+  loadBtn.addEventListener("click", async () => {
+    
+  });`,
+    },
+    solution: {
+      html: `<button id="loadBtn">Load Dashboard</button>
+  <p id="statusText"></p>
+  <div id="userBox"></div>
+  <ul id="postList"></ul>`,
+      css: ``,
+      js: `const loadBtn = document.getElementById("loadBtn");
+  const statusText = document.getElementById("statusText");
+  const userBox = document.getElementById("userBox");
+  const postList = document.getElementById("postList");
+  
+  function fetchUser() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ id: 1, name: "Nico" });
+      }, 1000);
+    });
+  }
+  
+  function fetchPosts() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([
+          { id: 1, title: "Getting started with React" },
+          { id: 2, title: "Understanding async JavaScript" },
+        ]);
+      }, 1000);
+    });
+  }
+  
+  loadBtn.addEventListener("click", async () => {
+    statusText.textContent = "Loading...";
+    userBox.textContent = "";
+    postList.innerHTML = "";
+  
+    const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
+  
+    statusText.textContent = "";
+    userBox.textContent = "User: " + user.name;
+  
+    posts.forEach((post) => {
+      const li = document.createElement("li");
+      li.textContent = post.title;
+      postList.appendChild(li);
+    });
+  });`,
+    },
+  },
+  {
+    id: "filter-sort-products",
+    editorType: "web",
+    title: "Challenge 23 — Filter and Sort Products",
+    difficulty: "Hard",
+    category: "JavaScript + Arrays",
+    goal: "Filter products by category and sort the visible products by price.",
+    requirements: [
+      "Use an array of product objects",
+      "Add category filter buttons",
+      "Add a sort by price button",
+      "Render the updated product list",
+    ],
+    tips: [
+      "Keep the original product data in JavaScript.",
+      "Use filter() for category changes.",
+      "Use sort() on a copied array when sorting.",
+    ],
+    concepts: ["filter()", "sort()", "arrays of objects", "DOM rendering"],
+    suggestedApproach: [
+      "Create an array of products with category and price.",
+      "Write a render function for the list.",
+      "Filter the products when category buttons are clicked.",
+      "Sort the currently visible products by price when the sort button is pressed.",
+    ],
+    commonMistakes: [
+      "Sorting the wrong array",
+      "Filtering correctly but rendering the old list",
+      "Mutating data without understanding the effect",
+    ],
+    expectedOutcome:
+      "A product list that can be filtered by category and sorted by price.",
+    starter: {
+      html: `<button id="allBtn">All</button>
+  <button id="techBtn">Tech</button>
+  <button id="homeBtn">Home</button>
+  <button id="sortBtn">Sort by Price</button>
+  <ul id="productList"></ul>`,
+      css: ``,
+      js: `const allBtn = document.getElementById("allBtn");
+  const techBtn = document.getElementById("techBtn");
+  const homeBtn = document.getElementById("homeBtn");
+  const sortBtn = document.getElementById("sortBtn");
+  const productList = document.getElementById("productList");
+  
+  const products = [
+    { id: 1, name: "Laptop", category: "Tech", price: 899 },
+    { id: 2, name: "Chair", category: "Home", price: 120 },
+    { id: 3, name: "Phone", category: "Tech", price: 699 },
+    { id: 4, name: "Lamp", category: "Home", price: 35 },
+  ];
+  
+  let visibleProducts = products;
+  
+  function renderProducts(items) {
+    
+  }
+  
+  allBtn.addEventListener("click", () => {
+    
+  });
+  
+  techBtn.addEventListener("click", () => {
+    
+  });
+  
+  homeBtn.addEventListener("click", () => {
+    
+  });
+  
+  sortBtn.addEventListener("click", () => {
+    
+  });
+  
+  renderProducts(visibleProducts);`,
+    },
+    solution: {
+      html: `<button id="allBtn">All</button>
+  <button id="techBtn">Tech</button>
+  <button id="homeBtn">Home</button>
+  <button id="sortBtn">Sort by Price</button>
+  <ul id="productList"></ul>`,
+      css: ``,
+      js: `const allBtn = document.getElementById("allBtn");
+  const techBtn = document.getElementById("techBtn");
+  const homeBtn = document.getElementById("homeBtn");
+  const sortBtn = document.getElementById("sortBtn");
+  const productList = document.getElementById("productList");
+  
+  const products = [
+    { id: 1, name: "Laptop", category: "Tech", price: 899 },
+    { id: 2, name: "Chair", category: "Home", price: 120 },
+    { id: 3, name: "Phone", category: "Tech", price: 699 },
+    { id: 4, name: "Lamp", category: "Home", price: 35 },
+  ];
+  
+  let visibleProducts = products;
+  
+  function renderProducts(items) {
+    productList.innerHTML = "";
+  
+    items.forEach((product) => {
+      const li = document.createElement("li");
+      li.textContent =
+        product.name + " - " + product.category + " - £" + product.price;
+      productList.appendChild(li);
+    });
+  }
+  
+  allBtn.addEventListener("click", () => {
+    visibleProducts = products;
+    renderProducts(visibleProducts);
+  });
+  
+  techBtn.addEventListener("click", () => {
+    visibleProducts = products.filter((product) => product.category === "Tech");
+    renderProducts(visibleProducts);
+  });
+  
+  homeBtn.addEventListener("click", () => {
+    visibleProducts = products.filter((product) => product.category === "Home");
+    renderProducts(visibleProducts);
+  });
+  
+  sortBtn.addEventListener("click", () => {
+    visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
+    renderProducts(visibleProducts);
+  });
+  
+  renderProducts(visibleProducts);`,
+    },
+  },
+  {
+    id: "save-load-todos-localstorage",
+    editorType: "web",
+    title: "Challenge 24 — Save and Load Todos with localStorage",
+    difficulty: "Hard",
+    category: "JavaScript + localStorage",
+    goal: "Let the user add todos, save them in localStorage, and load them on refresh.",
+    requirements: [
+      "Add a text input and button",
+      "Render new todos in a list",
+      "Save the todo list to localStorage",
+      "Load saved todos when the page starts",
+    ],
+    tips: [
+      "localStorage only stores strings.",
+      "Use JSON.stringify() when saving arrays.",
+      "Use JSON.parse() when reading arrays back.",
+    ],
+    concepts: [
+      "localStorage",
+      "JSON.stringify()",
+      "JSON.parse()",
+      "DOM rendering",
+    ],
+    suggestedApproach: [
+      "Create an array to store todos.",
+      "Render the array into the page.",
+      "Save the array after adding a todo.",
+      "Load the saved array when the script starts.",
+    ],
+    commonMistakes: [
+      "Saving the array without JSON.stringify()",
+      "Forgetting to re-render after adding an item",
+      "Using different localStorage keys for save and load",
+    ],
+    expectedOutcome:
+      "A todo list that keeps its items even after the page refreshes.",
+    starter: {
+      html: `<input id="todoInput" type="text" placeholder="Add a todo..." />
+  <button id="addTodoBtn">Add Todo</button>
+  <ul id="todoList"></ul>`,
+      css: ``,
+      js: `const todoInput = document.getElementById("todoInput");
+  const addTodoBtn = document.getElementById("addTodoBtn");
+  const todoList = document.getElementById("todoList");
+  
+  let todos = [];
+  
+  function renderTodos() {
+    
+  }
+  
+  addTodoBtn.addEventListener("click", () => {
+    
+  });`,
+    },
+    solution: {
+      html: `<input id="todoInput" type="text" placeholder="Add a todo..." />
+  <button id="addTodoBtn">Add Todo</button>
+  <ul id="todoList"></ul>`,
+      css: ``,
+      js: `const todoInput = document.getElementById("todoInput");
+  const addTodoBtn = document.getElementById("addTodoBtn");
+  const todoList = document.getElementById("todoList");
+  
+  let todos = JSON.parse(localStorage.getItem("todos")) || [];
+  
+  function renderTodos() {
+    todoList.innerHTML = "";
+  
+    todos.forEach((todo) => {
+      const li = document.createElement("li");
+      li.textContent = todo;
+      todoList.appendChild(li);
+    });
+  }
+  
+  addTodoBtn.addEventListener("click", () => {
+    const value = todoInput.value.trim();
+  
+    if (value === "") return;
+  
+    todos.push(value);
+    localStorage.setItem("todos", JSON.stringify(todos));
+    renderTodos();
+  
+    todoInput.value = "";
+  });
+  
+  renderTodos();`,
+    },
+  },
 ];

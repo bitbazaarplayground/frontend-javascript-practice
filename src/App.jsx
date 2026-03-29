@@ -91,9 +91,9 @@ export default function App() {
     });
 
     const hasStarted =
-      updatedDraft.html.trim() ||
-      updatedDraft.css.trim() ||
-      updatedDraft.js.trim();
+      (updatedDraft.html || "").trim() ||
+      (updatedDraft.css || "").trim() ||
+      (updatedDraft.js || "").trim();
 
     setChallengeProgress({
       ...challengeProgress,
