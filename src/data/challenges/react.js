@@ -34,7 +34,7 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     return (
       
     );
@@ -43,7 +43,7 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     return (
       <section>
         <h1>Welcome to React Practice</h1>
@@ -91,7 +91,7 @@ export const reactChallenges = [
     return <span>Frontend</span>;
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return (
       <div>
         
@@ -106,7 +106,7 @@ export const reactChallenges = [
     return <span>Frontend</span>;
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return (
       <div>
         <Badge />
@@ -164,7 +164,7 @@ export const reactChallenges = [
     );
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return (
       <div>
         
@@ -184,7 +184,7 @@ export const reactChallenges = [
     );
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return (
       <div>
         <Card
@@ -233,7 +233,7 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const topics = ["HTML", "CSS", "JavaScript"];
   
     return (
@@ -246,7 +246,7 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const topics = ["HTML", "CSS", "JavaScript"];
   
     return (
@@ -292,7 +292,7 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const users = [
       { id: 1, name: "Nico" },
       { id: 2, name: "Sara" },
@@ -309,7 +309,7 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const users = [
       { id: 1, name: "Nico" },
       { id: 2, name: "Sara" },
@@ -365,7 +365,7 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const isOnline = true;
   
     return (
@@ -378,7 +378,7 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const isOnline = true;
   
     return (
@@ -395,38 +395,35 @@ export const reactChallenges = [
     title: "Challenge 7 — Counter with useState",
     difficulty: "Easy",
     category: "React",
-    goal: "Build a simple counter using useState.",
+    goal: "Build a simple counter using React state.",
     requirements: [
-      "Use useState",
+      "Use React.useState",
       "Display the current count",
       "Add a button to increase the count",
     ],
     tips: [
-      "useState stores changing values in React components.",
-      "Call the state update function to change the value.",
-      "Use the current count inside the JSX.",
+      "React.useState lets you store values that can change.",
+      "It returns an array: [value, setValue].",
+      "Call the setter function to update the value.",
     ],
     concepts: ["useState", "state updates", "event handling", "interactive UI"],
     suggestedApproach: [
-      "Import useState from React.",
-      "Create count state with an initial value.",
-      "Render the count.",
-      "Add a button that increases the value when clicked.",
+      "Create count state using React.useState.",
+      "Render the count inside your JSX.",
+      "Add a button.",
+      "Update the count when the button is clicked.",
     ],
     commonMistakes: [
-      "Trying to change the state variable directly",
-      "Forgetting to import useState",
+      "Trying to change the state variable directly (count = count + 1)",
+      "Forgetting to use the setter function",
       "Not rendering the count value in the JSX",
     ],
-    expectedOutcome:
-      "A counter that updates on the page when the button is clicked.",
+    expectedOutcome: "A counter that increases when the button is clicked.",
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [count, setCount] = useState(0);
+      js: `function Challenge() {
+    const [count, setCount] = React.useState(0);
   
     return (
       <div>
@@ -438,10 +435,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [count, setCount] = useState(0);
+      js: `function Challenge() {
+    const [count, setCount] = React.useState(0);
   
     return (
       <div>
@@ -490,10 +485,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [showInfo, setShowInfo] = useState(false);
+      js: `function Challenge() {
+    const [showInfo, setShowInfo] = React.useState(false);
   
     return (
       <div>
@@ -505,10 +498,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [showInfo, setShowInfo] = useState(false);
+      js: `function Challenge() {
+    const [showInfo, setShowInfo] = React.useState(false);
   
     return (
       <div>
@@ -561,10 +552,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [name, setName] = useState("");
+      js: `function Challenge() {
+    const [name, setName] = React.useState("");
   
     return (
       <div>
@@ -576,10 +565,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [name, setName] = useState("");
+      js: `function Challenge() {
+    const [name, setName] = React.useState("");
   
     return (
       <div>
@@ -634,10 +621,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [text, setText] = useState("");
+      js: `function Challenge() {
+    const [text, setText] = React.useState("");
   
     return (
       <div>
@@ -649,10 +634,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [text, setText] = useState("");
+      js: `function Challenge() {
+    const [text, setText] = React.useState("");
   
     return (
       <div>
@@ -700,10 +683,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [search, setSearch] = useState("");
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
     const items = ["React", "JavaScript", "CSS", "HTML"];
   
     return (
@@ -716,10 +697,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [search, setSearch] = useState("");
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
     const items = ["React", "JavaScript", "CSS", "HTML"];
   
     const filteredItems = items.filter((item) =>
@@ -784,10 +763,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [activeCategory, setActiveCategory] = useState("All");
+      js: `function Challenge() {
+    const [activeCategory, setActiveCategory] = React.useState("All");
   
     const products = [
       { id: 1, name: "Laptop", category: "Tech" },
@@ -805,10 +782,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [activeCategory, setActiveCategory] = useState("All");
+      js: `function Challenge() {
+    const [activeCategory, setActiveCategory] = React.useState("All");
   
     const products = [
       { id: 1, name: "Laptop", category: "Tech" },
@@ -876,9 +851,7 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  function Display() {
+      js: `function Display() {
     return <p></p>;
   }
   
@@ -886,8 +859,8 @@ export const reactChallenges = [
     return <button>Increase</button>;
   }
   
-  export default function Challenge() {
-    const [count, setCount] = useState(0);
+  function Challenge() {
+    const [count, setCount] = React.useState(0);
   
     return (
       <div>
@@ -899,9 +872,7 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  function Display({ count }) {
+      js: `function Display({ count }) {
     return <p>Count: {count}</p>;
   }
   
@@ -909,8 +880,8 @@ export const reactChallenges = [
     return <button onClick={onIncrease}>Increase</button>;
   }
   
-  export default function Challenge() {
-    const [count, setCount] = useState(0);
+  function Challenge() {
+    const [count, setCount] = React.useState(0);
   
     return (
       <div>
@@ -960,7 +931,7 @@ export const reactChallenges = [
     );
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return (
       <div>
         
@@ -975,7 +946,7 @@ export const reactChallenges = [
     return <button onClick={onClick}>{label}</button>;
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return (
       <div>
         <AppButton label="Save" onClick={() => alert("Saved")} />
@@ -988,20 +959,22 @@ export const reactChallenges = [
   {
     id: "react-form-validation",
     editorType: "react",
-    title: "Challenge 15 — Form Validation in React",
+    title: "Challenge 15 — Email Validation in React",
     difficulty: "Medium",
     category: "React",
-    goal: "Validate a simple form in React and show an error or success message.",
+    goal: "Validate an email field in React and show an error or success message.",
     requirements: [
-      "Create a controlled input",
+      "Create a controlled email input",
       "Handle form submission",
-      "Show an error if the input is empty",
-      "Show a success message if valid",
+      "Show an error if the field is empty",
+      "Show an error if the email does not contain @",
+      "Show a success message if the email is valid",
     ],
     tips: [
       "Use onSubmit on the form.",
       "Call preventDefault() in the submit handler.",
-      "Use state for the input and for the message if needed.",
+      "Trim the email before checking it.",
+      "Start with simple validation rules first.",
     ],
     concepts: [
       "controlled forms",
@@ -1010,30 +983,42 @@ export const reactChallenges = [
       "React state",
     ],
     suggestedApproach: [
-      "Create state for the input value.",
-      "Add a form and submit button.",
+      "Create state for the email value.",
+      "Create state for the feedback message.",
       "Handle the submit event.",
-      "Check if the input is empty and render the right message.",
+      "Check for an empty field first, then check whether the email contains @.",
     ],
     commonMistakes: [
       "Forgetting preventDefault()",
       "Checking the wrong state value",
       "Not trimming the input",
+      "Only checking for empty input and forgetting the @ rule",
     ],
     expectedOutcome:
-      "A React form that gives feedback when submitted with empty or valid input.",
+      "A React form that shows an error when the email is empty or invalid, and a success message when the email passes the simple validation.",
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
+      js: `function Challenge() {
+    const [email, setEmail] = React.useState("");
+    const [message, setMessage] = React.useState("");
   
-  export default function Challenge() {
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      
+    }
   
     return (
-      <form>
-        
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="Enter email"
+        />
+        <button type="submit">Submit</button>
+        <p>{message}</p>
       </form>
     );
   }`,
@@ -1041,17 +1026,19 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
+      js: `function Challenge() {
+    const [email, setEmail] = React.useState("");
+    const [message, setMessage] = React.useState("");
   
     function handleSubmit(event) {
       event.preventDefault();
   
-      if (email.trim() === "") {
+      const trimmedEmail = email.trim();
+  
+      if (trimmedEmail === "") {
         setMessage("Please enter your email.");
+      } else if (!trimmedEmail.includes("@")) {
+        setMessage("Please enter a valid email address.");
       } else {
         setMessage("Form submitted successfully.");
       }
@@ -1060,7 +1047,7 @@ export const reactChallenges = [
     return (
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
+          type="text"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Enter email"
@@ -1111,10 +1098,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [isOpen, setIsOpen] = useState(false);
+      js: `function Challenge() {
+    const [isOpen, setIsOpen] = React.useState(false);
   
     return (
       <div>
@@ -1126,10 +1111,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [isOpen, setIsOpen] = useState(false);
+      js: `function Challenge() {
+    const [isOpen, setIsOpen] = React.useState(false);
   
     return (
       <div>
@@ -1186,10 +1169,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [activeTab, setActiveTab] = useState("overview");
+      js: `function Challenge() {
+    const [activeTab, setActiveTab] = React.useState("overview");
   
     return (
       <div>
@@ -1201,10 +1182,8 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useState } from "react";
-  
-  export default function Challenge() {
-    const [activeTab, setActiveTab] = useState("overview");
+      js: `function Challenge() {
+    const [activeTab, setActiveTab] = React.useState("overview");
   
     return (
       <div>
@@ -1257,10 +1236,8 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useEffect, useState } from "react";
-  
-  export default function Challenge() {
-    const [user, setUser] = useState(null);
+      js: `function Challenge() {
+    const [user, setUser] = React.useState(null);
   
     return (
       <div>
@@ -1272,12 +1249,10 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `import { useEffect, useState } from "react";
+      js: `function Challenge() {
+    const [user, setUser] = React.useState(null);
   
-  export default function Challenge() {
-    const [user, setUser] = useState(null);
-  
-    useEffect(() => {
+    React.useEffect(() => {
       const timer = setTimeout(() => {
         setUser({
           name: "Nico",
@@ -1343,7 +1318,7 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const isLoading = false;
     const error = "";
     const items = [];
@@ -1358,7 +1333,7 @@ export const reactChallenges = [
     solution: {
       html: ``,
       css: ``,
-      js: `export default function Challenge() {
+      js: `function Challenge() {
     const isLoading = false;
     const error = "";
     const items = [];
@@ -1419,35 +1394,31 @@ export const reactChallenges = [
     starter: {
       html: ``,
       css: ``,
-      js: `import { useEffect, useState } from "react";
-  
-  function useStoredValue(key, initialValue) {
+      js: `function useStoredValue(key, initialValue) {
     
   }
   
-  export default function Challenge() {
+  function Challenge() {
     return <div></div>;
   }`,
     },
     solution: {
       html: ``,
       css: ``,
-      js: `import { useEffect, useState } from "react";
-  
-  function useStoredValue(key, initialValue) {
-    const [value, setValue] = useState(() => {
+      js: `function useStoredValue(key, initialValue) {
+    const [value, setValue] = React.useState(() => {
       const savedValue = localStorage.getItem(key);
       return savedValue !== null ? savedValue : initialValue;
     });
   
-    useEffect(() => {
+    React.useEffect(() => {
       localStorage.setItem(key, value);
     }, [key, value]);
   
     return [value, setValue];
   }
   
-  export default function Challenge() {
+  function Challenge() {
     const [name, setName] = useStoredValue("username", "");
   
     return (
@@ -1459,6 +1430,1229 @@ export const reactChallenges = [
           placeholder="Enter your name"
         />
         <p>Saved name: {name || "None"}</p>
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-load-users",
+    editorType: "react",
+    title: "Challenge 21 — Load Mock Users",
+    difficulty: "Medium",
+    category: "React + Async",
+    goal: "Load mock users asynchronously and show loading and success states.",
+    requirements: [
+      "Use React state",
+      "Load users asynchronously",
+      "Show a loading message while waiting",
+      "Render the users after loading",
+    ],
+    tips: [
+      "Use React.useEffect to load data on mount.",
+      "Use React.useState for users and loading.",
+      "Start by rendering loading text first.",
+    ],
+    concepts: ["useEffect", "async loading", "state", "conditional rendering"],
+    suggestedApproach: [
+      "Create state for users and loading.",
+      "Use React.useEffect to simulate a request.",
+      "Set the users after a timeout.",
+      "Render the users in a list.",
+    ],
+    commonMistakes: [
+      "Forgetting the dependency array",
+      "Trying to render the data before it exists",
+      "Not handling loading state separately",
+    ],
+    expectedOutcome:
+      "A component that first shows loading text and then renders a list of users.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [users, setUsers] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+  
+    React.useEffect(() => {
+      
+      
+    }, []);
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [users, setUsers] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+  
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        setUsers([
+          { id: 1, name: "Nico" },
+          { id: 2, name: "Sara" },
+          { id: 3, name: "Alex" },
+        ]);
+        setIsLoading(false);
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }, []);
+  
+    if (isLoading) {
+      return <p>Loading users...</p>;
+    }
+  
+    return (
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-retry-request",
+    editorType: "react",
+    title: "Challenge 22 — Retry a Failed Request",
+    difficulty: "Medium",
+    category: "React + Async",
+    goal: "Simulate a request that can fail and let the user retry.",
+    requirements: [
+      "Show loading state",
+      "Show an error message if the request fails",
+      "Add a retry button",
+      "Show success content if the request works",
+    ],
+    tips: [
+      "Use state for loading, error, and data.",
+      "Put the request logic in a reusable function.",
+      "Clear old error text before retrying.",
+    ],
+    concepts: ["error state", "retry pattern", "async UI", "React state"],
+    suggestedApproach: [
+      "Create states for loading, error, and data.",
+      "Write a function that simulates a request.",
+      "Call that function when the button is clicked.",
+      "Render different UI based on the current state.",
+    ],
+    commonMistakes: [
+      "Not clearing old error state",
+      "Retry button not re-running the request",
+      "Mixing loading and success UI together",
+    ],
+    expectedOutcome:
+      "A component that can fail, show an error, and successfully retry.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [data, setData] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState("");
+  
+    function loadData() {
+      
+    }
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [data, setData] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState("");
+  
+    function loadData() {
+      setIsLoading(true);
+      setError("");
+      setData(null);
+  
+      setTimeout(() => {
+        const success = Math.random() > 0.5;
+  
+        if (success) {
+          setData("Data loaded successfully.");
+          setIsLoading(false);
+        } else {
+          setError("Request failed. Please try again.");
+          setIsLoading(false);
+        }
+      }, 1000);
+    }
+  
+    return (
+      <div>
+        <button onClick={loadData}>Load Data</button>
+  
+        {isLoading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
+        {data && <p>{data}</p>}
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-async-search",
+    editorType: "react",
+    title: "Challenge 23 — Async Search Filter",
+    difficulty: "Medium",
+    category: "React + Async",
+    goal: "Search mock items asynchronously and render matching results.",
+    requirements: [
+      "Add a controlled input",
+      "Search items asynchronously",
+      "Show loading while waiting",
+      "Render matching results",
+    ],
+    tips: [
+      "The available topics are React, JavaScript, CSS, and HTML.",
+      "Use state for the search text and results.",
+      "Use setTimeout to simulate an API request.",
+      "Filter the items before setting the result.",
+    ],
+    concepts: [
+      "controlled input",
+      "async search",
+      "loading state",
+      "filtering",
+    ],
+    suggestedApproach: [
+      "Create state for search text, results, and loading.",
+      "Write a fake search function.",
+      "Run it when the button is clicked.",
+      "Render the results after the delay.",
+    ],
+    commonMistakes: [
+      "Not clearing previous results",
+      "Trying to render before loading finishes",
+      "Forgetting lowercase comparison",
+    ],
+    expectedOutcome:
+      "A searchable list that loads matching results from these topics: React, JavaScript, CSS, and HTML.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
+    const [results, setResults] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+  
+    const items = ["React", "JavaScript", "CSS", "HTML"];
+  
+    function handleSearch() {
+      
+      
+    }
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
+    const [results, setResults] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+  
+    const items = ["React", "JavaScript", "CSS", "HTML"];
+  
+    function handleSearch() {
+      setIsLoading(true);
+      setResults([]);
+  
+      setTimeout(() => {
+        const filteredItems = items.filter((item) =>
+          item.toLowerCase().includes(search.toLowerCase())
+        );
+  
+        setResults(filteredItems);
+        setIsLoading(false);
+      }, 800);
+    }
+  
+    return (
+      <div>
+        <input
+          type="text"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search topics"
+        />
+        <button onClick={handleSearch}>Search</button>
+  
+        {isLoading && <p>Loading...</p>}
+  
+        {!isLoading && (
+          <ul>
+            {results.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-empty-state",
+    editorType: "react",
+    title: "Challenge 24 — Empty State After Loading",
+    difficulty: "Medium",
+    category: "React + Async",
+    goal: "Show a loading state first, then an empty state if no data is returned.",
+    requirements: [
+      "Show loading text first",
+      "Simulate async loading",
+      "Render an empty state when there are no items",
+    ],
+    tips: [
+      "Use separate state for loading and items.",
+      "After loading finishes, check items.length.",
+      "Return different UI for each state.",
+    ],
+    concepts: [
+      "empty state",
+      "loading state",
+      "conditional rendering",
+      "async UI",
+    ],
+    suggestedApproach: [
+      "Create state for items and loading.",
+      "Simulate loading in React.useEffect.",
+      "Set items to an empty array after the delay.",
+      "Render an empty message when no items exist.",
+    ],
+    commonMistakes: [
+      "Showing empty state before loading finishes",
+      "Not checking items.length",
+      "Rendering multiple states at once",
+    ],
+    expectedOutcome:
+      "A component that shows loading first and then shows a no items message.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [items, setItems] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+  
+    React.useEffect(() => {
+      
+      
+    }, []);
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [items, setItems] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+  
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        setItems([]);
+        setIsLoading(false);
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }, []);
+  
+    if (isLoading) {
+      return <p>Loading items...</p>;
+    }
+  
+    if (items.length === 0) {
+      return <p>No items found.</p>;
+    }
+  
+    return (
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-loaded-category-filter",
+    editorType: "react",
+    title: "Challenge 25 — Filter Loaded Products by Category",
+    difficulty: "Medium",
+    category: "React + Async",
+    goal: "Load products and filter them by category.",
+    requirements: [
+      "Load products asynchronously",
+      "Store the active category in state",
+      "Filter the rendered products by category",
+    ],
+    tips: [
+      "The product categories are Tech and Home.",
+      "Load the products once in React.useEffect.",
+      "Use derived data for the filtered list.",
+      "Add an All button.",
+    ],
+    concepts: ["async data", "filtering", "derived values", "React state"],
+    suggestedApproach: [
+      "Create state for products, loading, and category.",
+      "Load the products after a short delay.",
+      "Filter the products based on the selected category.",
+      "Render the filtered list.",
+    ],
+    commonMistakes: [
+      "Filtering before the data loads",
+      "Changing category but still rendering all products",
+      "Not including an All category",
+    ],
+    expectedOutcome:
+      "A product list that loads first and then filters these products by category: Laptop and Phone in Tech, Chair in Home.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [products, setProducts] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [activeCategory, setActiveCategory] = React.useState("All");
+  
+    React.useEffect(() => {
+      
+      
+    }, []);
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [products, setProducts] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [activeCategory, setActiveCategory] = React.useState("All");
+  
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        setProducts([
+          { id: 1, name: "Laptop", category: "Tech" },
+          { id: 2, name: "Chair", category: "Home" },
+          { id: 3, name: "Phone", category: "Tech" },
+        ]);
+        setIsLoading(false);
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }, []);
+  
+    const filteredProducts =
+      activeCategory === "All"
+        ? products
+        : products.filter((product) => product.category === activeCategory);
+  
+    if (isLoading) {
+      return <p>Loading products...</p>;
+    }
+  
+    return (
+      <div>
+        <button onClick={() => setActiveCategory("All")}>All</button>
+        <button onClick={() => setActiveCategory("Tech")}>Tech</button>
+        <button onClick={() => setActiveCategory("Home")}>Home</button>
+  
+        <ul>
+          {filteredProducts.map((product) => (
+            <li key={product.id}>{product.name}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-custom-data-hook",
+    editorType: "react",
+    title: "Challenge 26 — Custom Hook for Loading Data",
+    difficulty: "Medium",
+    category: "React + Hooks",
+    goal: "Create a custom hook that loads data and returns loading state.",
+    requirements: [
+      "Create a custom hook",
+      "Use React.useState inside the hook",
+      "Use React.useEffect inside the hook",
+      "Render the returned data in a component",
+    ],
+    tips: [
+      "Custom hooks usually start with use.",
+      "Return both the data and the loading state.",
+      "Use the custom hook inside the Challenge component.",
+    ],
+    concepts: ["custom hooks", "useEffect", "useState", "reusable logic"],
+    suggestedApproach: [
+      "Create a hook called useUsers.",
+      "Load users after a delay inside the hook.",
+      "Return users and isLoading.",
+      "Use that hook in the Challenge component.",
+    ],
+    commonMistakes: [
+      "Forgetting to return values from the hook",
+      "Writing the hook logic in the component instead",
+      "Not using React.useEffect inside the hook",
+    ],
+    expectedOutcome:
+      "A reusable custom hook that loads users and exposes loading state.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function useUsers() {
+    
+  }
+  
+  function Challenge() {
+    return <div></div>;
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function useUsers() {
+    const [users, setUsers] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+  
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        setUsers([
+          { id: 1, name: "Nico" },
+          { id: 2, name: "Sara" },
+        ]);
+        setIsLoading(false);
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }, []);
+  
+    return { users, isLoading };
+  }
+  
+  function Challenge() {
+    const { users, isLoading } = useUsers();
+  
+    if (isLoading) {
+      return <p>Loading users...</p>;
+    }
+  
+    return (
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-sort-products",
+    editorType: "react",
+    title: "Challenge 27 — Sort Products by Price",
+    difficulty: "Medium",
+    category: "React + Data",
+    goal: "Sort a list of products by price using React state.",
+    requirements: [
+      "Render a list of products",
+      "Add a button to sort products by price",
+      "Update the rendered order after sorting",
+    ],
+    tips: [
+      "The available products are Laptop (£899), Chair (£120), and Phone (£699).",
+      "Use React state to store the products.",
+      "Create a new sorted array instead of mutating state directly.",
+    ],
+    concepts: [
+      "arrays of objects",
+      "sorting",
+      "React state",
+      "rendering lists",
+    ],
+    suggestedApproach: [
+      "Create product state with name and price values.",
+      "Render the products in a list.",
+      "Add a button that sorts the products from lowest to highest price.",
+      "Update the state with the sorted array.",
+    ],
+    commonMistakes: [
+      "Mutating the original array directly",
+      "Sorting correctly but not updating state",
+      "Rendering the old order instead of the sorted one",
+    ],
+    expectedOutcome:
+      "A product list that changes from its original order to price order when the user clicks the sort button.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [products, setProducts] = React.useState([
+      { id: 1, name: "Laptop", price: 899 },
+      { id: 2, name: "Chair", price: 120 },
+      { id: 3, name: "Phone", price: 699 },
+    ]);
+  
+    function handleSort() {
+      
+    }
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [products, setProducts] = React.useState([
+      { id: 1, name: "Laptop", price: 899 },
+      { id: 2, name: "Chair", price: 120 },
+      { id: 3, name: "Phone", price: 699 },
+    ]);
+  
+    function handleSort() {
+      const sortedProducts = [...products].sort((a, b) => a.price - b.price);
+      setProducts(sortedProducts);
+    }
+  
+    return (
+      <div>
+        <button onClick={handleSort}>Sort by Price</button>
+  
+        <ul>
+          {products.map((product) => (
+            <li key={product.id}>
+              {product.name} - £{product.price}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-toggle-favourites",
+    editorType: "react",
+    title: "Challenge 28 — Toggle Favourite Products",
+    difficulty: "Medium",
+    category: "React + State",
+    goal: "Let the user mark products as favourites and update the UI.",
+    requirements: [
+      "Render a list of products",
+      "Add a button to toggle favourite status",
+      "Update the text when a product is favourited or unfavourited",
+    ],
+    tips: [
+      "The available products are Laptop, Chair, and Phone.",
+      "Store the products in state.",
+      "Use map() to update the correct product.",
+    ],
+    concepts: ["state updates", "arrays of objects", "event handling", "map()"],
+    suggestedApproach: [
+      "Create state for the products list.",
+      "Add an isFavourite property to each product.",
+      "Write a function that toggles the clicked product.",
+      "Render different button text based on favourite status.",
+    ],
+    commonMistakes: [
+      "Mutating the original object directly",
+      "Updating the wrong product",
+      "Changing state without using setProducts",
+    ],
+    expectedOutcome:
+      "A list of products where each item can be marked or unmarked as a favourite.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [products, setProducts] = React.useState([
+      { id: 1, name: "Laptop", isFavourite: false },
+      { id: 2, name: "Chair", isFavourite: false },
+      { id: 3, name: "Phone", isFavourite: false },
+    ]);
+  
+    function handleToggleFavourite(productId) {
+      
+    }
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [products, setProducts] = React.useState([
+      { id: 1, name: "Laptop", isFavourite: false },
+      { id: 2, name: "Chair", isFavourite: false },
+      { id: 3, name: "Phone", isFavourite: false },
+    ]);
+  
+    function handleToggleFavourite(productId) {
+      const updatedProducts = products.map((product) => {
+        if (product.id === productId) {
+          return {
+            ...product,
+            isFavourite: !product.isFavourite,
+          };
+        }
+  
+        return product;
+      });
+  
+      setProducts(updatedProducts);
+    }
+  
+    return (
+      <ul>
+        {products.map((product) => (
+          <li key={product.id}>
+            {product.name}
+            <button onClick={() => handleToggleFavourite(product.id)}>
+              {product.isFavourite ? "Unfavourite" : "Favourite"}
+            </button>
+          </li>
+        ))}
+      </ul>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-theme-localstorage",
+    editorType: "react",
+    title: "Challenge 29 — Save Theme in localStorage",
+    difficulty: "Medium",
+    category: "React + localStorage",
+    goal: "Let the user toggle a theme and save the preference in localStorage.",
+    requirements: [
+      "Store the theme in React state",
+      "Add a button to toggle between light and dark",
+      "Save the selected theme in localStorage",
+      "Load the saved theme on first render",
+    ],
+    tips: [
+      "Use React.useState with a function for the initial value.",
+      "Use localStorage.getItem() and setItem().",
+      "Use React.useEffect to save changes.",
+    ],
+    concepts: ["localStorage", "useEffect", "state persistence", "UI state"],
+    suggestedApproach: [
+      "Create theme state with an initial value from localStorage.",
+      "Add a button to toggle the theme.",
+      "Use React.useEffect to save the theme whenever it changes.",
+      "Render text showing the current theme.",
+    ],
+    commonMistakes: [
+      "Saving to localStorage but not reading from it",
+      "Reading the wrong localStorage key",
+      "Not updating the UI after toggling",
+    ],
+    expectedOutcome:
+      "A theme toggle that remembers the user's last selected mode after refresh.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [theme, setTheme] = React.useState("light");
+  
+    React.useEffect(() => {
+      
+      
+    }, [theme]);
+  
+    function handleToggleTheme() {
+      
+    }
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [theme, setTheme] = React.useState(() => {
+      return localStorage.getItem("theme") || "light";
+    });
+  
+    React.useEffect(() => {
+      localStorage.setItem("theme", theme);
+    }, [theme]);
+  
+    function handleToggleTheme() {
+      setTheme((currentTheme) =>
+        currentTheme === "light" ? "dark" : "light"
+      );
+    }
+  
+    return (
+      <div>
+        <button onClick={handleToggleTheme}>Toggle Theme</button>
+        <p>Current theme: {theme}</p>
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-disable-submit-loading",
+    editorType: "react",
+    title: "Challenge 30 — Disable Submit While Loading",
+    difficulty: "Medium",
+    category: "React + Forms",
+    goal: "Disable the submit button while a fake form submission is in progress.",
+    requirements: [
+      "Create a controlled input",
+      "Handle form submission",
+      "Disable the submit button while loading",
+      "Show a success message after the delay",
+    ],
+    tips: [
+      "Use state for the input, loading status, and message.",
+      "Disable the button with the disabled prop.",
+      "Use setTimeout to simulate a request.",
+    ],
+    concepts: [
+      "controlled forms",
+      "loading state",
+      "disabled buttons",
+      "async UI",
+    ],
+    suggestedApproach: [
+      "Create state for the input value.",
+      "Create state for loading and feedback.",
+      "Start loading when the form submits.",
+      "Re-enable the button after the fake request finishes.",
+    ],
+    commonMistakes: [
+      "Forgetting preventDefault()",
+      "Not disabling the button during loading",
+      "Leaving the button disabled forever",
+    ],
+    expectedOutcome:
+      "A form where the submit button becomes disabled during submission and a success message appears afterward.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [name, setName] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+  
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      
+    }
+  
+    return (
+      <form onSubmit={handleSubmit}>
+        
+      </form>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [name, setName] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+  
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      setIsLoading(true);
+      setMessage("");
+  
+      setTimeout(() => {
+        setMessage("Form submitted successfully.");
+        setIsLoading(false);
+      }, 1000);
+    }
+  
+    return (
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="Enter your name"
+        />
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Submitting..." : "Submit"}
+        </button>
+        <p>{message}</p>
+      </form>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-debounced-search",
+    editorType: "react",
+    title: "Challenge 31 — Debounced Search Input",
+    difficulty: "Hard",
+    category: "React + Performance",
+    goal: "Only update the search results after the user stops typing for a short delay.",
+    requirements: [
+      "Create a controlled input",
+      "Store the search value in state",
+      "Wait before applying the search",
+      "Render matching results after the debounce delay",
+    ],
+    tips: [
+      "The available topics are React, JavaScript, CSS, HTML, and TypeScript.",
+      "Use React.useEffect with setTimeout.",
+      "Clear the previous timer when the user types again.",
+    ],
+    concepts: ["debouncing", "useEffect", "cleanup", "derived UI"],
+    suggestedApproach: [
+      "Create state for the input value and the debounced value.",
+      "Use React.useEffect to delay updating the debounced value.",
+      "Filter the list using the debounced value.",
+      "Render the filtered results.",
+    ],
+    commonMistakes: [
+      "Forgetting to clearTimeout in the cleanup function",
+      "Filtering with the wrong value",
+      "Updating results on every keystroke instead of after a delay",
+    ],
+    expectedOutcome:
+      "A search field where results update only after the user pauses typing.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
+    const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  
+    const topics = ["React", "JavaScript", "CSS", "HTML", "TypeScript"];
+  
+    React.useEffect(() => {
+      
+      
+    }, [search]);
+  
+    const filteredTopics = topics.filter((topic) =>
+      topic.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
+    const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  
+    const topics = ["React", "JavaScript", "CSS", "HTML", "TypeScript"];
+  
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        setDebouncedSearch(search);
+      }, 500);
+  
+      return () => clearTimeout(timer);
+    }, [search]);
+  
+    const filteredTopics = topics.filter((topic) =>
+      topic.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
+  
+    return (
+      <div>
+        <input
+          type="text"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search topics"
+        />
+        <p>Showing results for: {debouncedSearch || "all topics"}</p>
+        <ul>
+          {filteredTopics.map((topic) => (
+            <li key={topic}>{topic}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-paginated-list",
+    editorType: "react",
+    title: "Challenge 32 — Paginated List",
+    difficulty: "Hard",
+    category: "React + Data",
+    goal: "Render a paginated list and let the user move between pages.",
+    requirements: [
+      "Render a list of items",
+      "Show only a few items per page",
+      "Add Next and Previous buttons",
+      "Prevent moving beyond the first or last page",
+    ],
+    tips: [
+      "The available items are 8 frontend topics.",
+      "Use currentPage state.",
+      "Use slice() to get the items for the active page.",
+    ],
+    concepts: ["pagination", "slice()", "state", "derived values"],
+    suggestedApproach: [
+      "Create a list of items and currentPage state.",
+      "Choose how many items to show per page.",
+      "Use slice() to get the visible items.",
+      "Disable the buttons when the user reaches the start or end.",
+    ],
+    commonMistakes: [
+      "Using the wrong slice indexes",
+      "Not disabling the buttons correctly",
+      "Showing all items instead of the current page only",
+    ],
+    expectedOutcome:
+      "A list that shows a limited number of items per page with working navigation buttons.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [currentPage, setCurrentPage] = React.useState(1);
+  
+    const topics = [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "React",
+      "TypeScript",
+      "Accessibility",
+      "Testing",
+      "Performance",
+    ];
+  
+    const itemsPerPage = 3;
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [currentPage, setCurrentPage] = React.useState(1);
+  
+    const topics = [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "React",
+      "TypeScript",
+      "Accessibility",
+      "Testing",
+      "Performance",
+    ];
+  
+    const itemsPerPage = 3;
+    const totalPages = Math.ceil(topics.length / itemsPerPage);
+  
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const visibleTopics = topics.slice(startIndex, startIndex + itemsPerPage);
+  
+    return (
+      <div>
+        <ul>
+          {visibleTopics.map((topic) => (
+            <li key={topic}>{topic}</li>
+          ))}
+        </ul>
+  
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+  
+        <span> Page {currentPage} of {totalPages} </span>
+  
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+    );
+  }`,
+    },
+  },
+  {
+    id: "react-multi-filter-products",
+    editorType: "react",
+    title: "Challenge 33 — Multi-Filter Product List",
+    difficulty: "Hard",
+    category: "React + Data",
+    goal: "Filter products by both category and search text at the same time.",
+    requirements: [
+      "Store the selected category in state",
+      "Store the search text in state",
+      "Filter the products using both conditions",
+      "Render only matching products",
+    ],
+    tips: [
+      "The products are Laptop (Tech), Phone (Tech), Chair (Home), Lamp (Home), and Keyboard (Tech).",
+      "Use one state for the category and one for the search.",
+      "Apply both filters before rendering.",
+    ],
+    concepts: [
+      "multiple filters",
+      "controlled input",
+      "derived values",
+      "state-driven UI",
+    ],
+    suggestedApproach: [
+      "Create a products array.",
+      "Create state for category and search text.",
+      "Use filter() with both conditions.",
+      "Render the filtered result list.",
+    ],
+    commonMistakes: [
+      "Only applying one of the filters",
+      "Using the original array instead of the filtered one",
+      "Forgetting lowercase comparison for search",
+    ],
+    expectedOutcome:
+      "A product list that updates based on both selected category and typed search text.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
+    const [category, setCategory] = React.useState("All");
+  
+    const products = [
+      { id: 1, name: "Laptop", category: "Tech" },
+      { id: 2, name: "Phone", category: "Tech" },
+      { id: 3, name: "Chair", category: "Home" },
+      { id: 4, name: "Lamp", category: "Home" },
+      { id: 5, name: "Keyboard", category: "Tech" },
+    ];
+  
+    return (
+      <div>
+        
+      </div>
+    );
+  }`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function Challenge() {
+    const [search, setSearch] = React.useState("");
+    const [category, setCategory] = React.useState("All");
+  
+    const products = [
+      { id: 1, name: "Laptop", category: "Tech" },
+      { id: 2, name: "Phone", category: "Tech" },
+      { id: 3, name: "Chair", category: "Home" },
+      { id: 4, name: "Lamp", category: "Home" },
+      { id: 5, name: "Keyboard", category: "Tech" },
+    ];
+  
+    const filteredProducts = products.filter((product) => {
+      const matchesCategory =
+        category === "All" || product.category === category;
+  
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+  
+      return matchesCategory && matchesSearch;
+    });
+  
+    return (
+      <div>
+        <input
+          type="text"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search products"
+        />
+  
+        <button onClick={() => setCategory("All")}>All</button>
+        <button onClick={() => setCategory("Tech")}>Tech</button>
+        <button onClick={() => setCategory("Home")}>Home</button>
+  
+        <ul>
+          {filteredProducts.map((product) => (
+            <li key={product.id}>
+              {product.name} - {product.category}
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }`,
