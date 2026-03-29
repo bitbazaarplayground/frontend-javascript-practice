@@ -64,9 +64,9 @@ a {
   padding: 28px;
 }
 .app-container {
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 .challenge-header {
   display: flex;
@@ -118,7 +118,7 @@ a {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 22px;
 }
 
@@ -237,7 +237,7 @@ a {
 
 .workspace-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
