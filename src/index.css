@@ -39,7 +39,7 @@ body,
 
 body {
   overflow-x: hidden;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 button,
@@ -64,6 +64,7 @@ a {
 .app-main {
   width: 100%;
   max-width: none;
+  min-height: 100vh;
   padding: 28px;
 }
 
@@ -71,6 +72,7 @@ a {
   width: 100%;
   max-width: none;
   margin: 0;
+  min-height: calc(100vh - 56px);
 }
 
 .challenge-header {
@@ -91,7 +93,7 @@ a {
 
 .challenge-header h2 {
   margin: 0;
-  font-size: 32px;
+  font-size: 36px;
   line-height: 1.1;
 }
 
@@ -99,7 +101,7 @@ a {
   margin: 10px 0 0;
   max-width: 700px;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .header-badges {
@@ -113,7 +115,7 @@ a {
   border-radius: 999px;
   background: rgba(109, 124, 255, 0.15);
   border: 1px solid rgba(109, 124, 255, 0.22);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .badge.muted {
@@ -126,6 +128,7 @@ a {
   grid-template-columns: 280px minmax(0, 1fr);
   gap: 22px;
   width: 100%;
+  align-items: stretch;
 }
 
 .workspace-grid {
@@ -146,7 +149,10 @@ a {
 .brief-panel {
   padding: 20px;
 }
-
+.brief-panel,
+.workspace-panel {
+  height: 100%;
+}
 .panel-top {
   display: flex;
   align-items: center;
@@ -254,7 +260,7 @@ a {
   border: 1px solid var(--border);
   border-radius: 20px;
   overflow: hidden;
-  min-height: 500px;
+  min-height: 560px;
 }
 
 .editor-label {
@@ -267,7 +273,7 @@ a {
 
 .code-editor {
   width: 100%;
-  min-height: 450px;
+  min-height: 510px;
   border: none;
   outline: none;
   resize: none;
@@ -276,7 +282,7 @@ a {
   color: #dbe6ff;
   font-family: "Courier New", monospace;
   line-height: 1.6;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .code-editor::placeholder {
@@ -289,7 +295,7 @@ a {
 
 .preview-frame {
   width: 100%;
-  height: 450px;
+  height: 510px;
   border: none;
   background: white;
 }
