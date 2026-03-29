@@ -58,16 +58,21 @@ a {
 
 .app-shell {
   min-height: 100vh;
+  width: 100%;
 }
 
 .app-main {
+  width: 100%;
+  max-width: none;
   padding: 28px;
 }
+
 .app-container {
   width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
 }
+
 .challenge-header {
   display: flex;
   align-items: flex-start;
@@ -120,6 +125,14 @@ a {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   gap: 22px;
+  width: 100%;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
 }
 
 .panel {
@@ -233,12 +246,6 @@ a {
 .secondary-btn:hover,
 .tab:hover {
   transform: translateY(-1px);
-}
-
-.workspace-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
 }
 
 .editor-card,
