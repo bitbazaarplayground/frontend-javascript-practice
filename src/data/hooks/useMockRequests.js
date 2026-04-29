@@ -34,6 +34,8 @@ export default function useMockRequest(requestFn, dependencies = []) {
     return () => {
       isMounted = false;
     };
+    // Callers provide the dependency list for each mock request scenario.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 
   return { data, isLoading, error };

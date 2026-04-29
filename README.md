@@ -1,16 +1,36 @@
-# React + Vite
+# Frontend Practice Lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A bilingual learning lab for taking beginners from early HTML/CSS practice toward frontend and JavaScript job readiness.
 
-Currently, two official plugins are available:
+The app combines a class path, challenge modes, live code previews, saved local progress, hints, solutions, and lightweight validators.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Current Features
 
-## React Compiler
+- English and Spanish app interface with a persistent language switcher.
+- Persistent theme toggle for the clean light UI or the blue lab UI.
+- Structured class path grouped by track, with each class block opening only its own challenge subset.
+- Practice modes for HTML/CSS foundations, JavaScript + DOM, and React.
+- 102 total challenges across 14 class blocks, from foundations through capstone-style React work.
+- Live preview workspace for HTML, CSS, JavaScript, and React-style challenges.
+- Local draft saving and challenge progress tracking.
+- Expandable brief sections for requirements, concept explanations, tips, common mistakes, and expected outcomes.
+- Initial automatic solution checkers for the first beginner challenges.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Product Direction
 
-## Expanding the ESLint configuration
+The goal is to make this feel like a practical bootcamp companion rather than a static list of exercises. The next high-impact improvements are:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Complete Spanish translations for the full Builder and React challenge banks.
+- Add more automatic validators beyond the first Rookie challenges.
+- Introduce capstone projects after each major class block.
+- Add a teacher/classroom view with cohort progress and recommended next exercises.
+- Replace the textarea editor with a richer code editor when the challenge content stabilizes.
+
+## Development
+
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+```

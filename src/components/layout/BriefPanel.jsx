@@ -1,21 +1,19 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { getConcept } from "../../data/concepts";
 
-export default function BriefPanel({ challenge }) {
+export default function BriefPanel({ challenge, copy, language }) {
   const [openSections, setOpenSections] = useState({
     tips: false,
     approach: false,
     mistakes: false,
     outcome: false,
   });
-
-  useEffect(() => {
-    setOpenSections({
-      tips: false,
-      approach: false,
-      mistakes: false,
-      outcome: false,
-    });
-  }, [challenge.id]);
+  const [selectedConcept, setSelectedConcept] = useState(null);
+  const selectedConceptDetails = useMemo(
+    () =>
+      selectedConcept ? getConcept(selectedConcept, language) : null,
+    [selectedConcept, language]
+  );
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
@@ -27,16 +25,16 @@ export default function BriefPanel({ challenge }) {
   return (
     <section className="panel brief-panel">
       <div className="panel-top">
-        <h3>Challenge Brief</h3>
+        <h3>{copy.brief.title}</h3>
       </div>
 
       <div className="brief-block">
-        <h4>Goal</h4>
+        <h4>{copy.brief.goal}</h4>
         <p className="brief-text">{challenge.goal}</p>
       </div>
 
       <div className="brief-block">
-        <h4>Requirements</h4>
+        <h4>{copy.brief.requirements}</h4>
         <ul className="clean-list">
           {challenge.requirements?.map((item, index) => (
             <li key={index}>{item}</li>
@@ -46,14 +44,52 @@ export default function BriefPanel({ challenge }) {
 
       {challenge.concepts?.length > 0 && (
         <div className="brief-block">
-          <h4>Concepts Practiced</h4>
+          <h4>{copy.brief.concepts}</h4>
           <div className="tag-list">
-            {challenge.concepts.map((concept, index) => (
-              <span key={index} className="mini-tag">
-                {concept}
-              </span>
-            ))}
+            {challenge.concepts.map((concept, index) => {
+              const conceptDetails = getConcept(concept, language);
+
+              if (!conceptDetails) {
+                return (
+                  <span key={index} className="mini-tag">
+                    {concept}
+                  </span>
+                );
+              }
+
+              return (
+                <button
+                  key={index}
+                  type="button"
+                  className="mini-tag concept-tag"
+                  onClick={() => setSelectedConcept(concept)}
+                  aria-label={`${copy.brief.learnConcept}: ${conceptDetails.title}`}
+                >
+                  {concept}
+                </button>
+              );
+            })}
           </div>
+
+          {selectedConceptDetails && (
+            <div className="concept-card">
+              <div className="concept-card-top">
+                <span>{copy.brief.learnConcept}</span>
+                <button
+                  type="button"
+                  className="concept-close"
+                  onClick={() => setSelectedConcept(null)}
+                  aria-label={copy.brief.closeConcept}
+                >
+                  ×
+                </button>
+              </div>
+              <h5>{selectedConceptDetails.title}</h5>
+              <p>{selectedConceptDetails.summary}</p>
+              <strong>{copy.brief.whyItMatters}</strong>
+              <p>{selectedConceptDetails.why}</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -63,7 +99,7 @@ export default function BriefPanel({ challenge }) {
             className="brief-toggle"
             onClick={() => toggleSection("approach")}
           >
-            <span>Suggested Approach</span>
+            <span>{copy.brief.approach}</span>
             <span>{openSections.approach ? "−" : "+"}</span>
           </button>
 
@@ -83,7 +119,7 @@ export default function BriefPanel({ challenge }) {
             className="brief-toggle"
             onClick={() => toggleSection("mistakes")}
           >
-            <span>Common Mistakes</span>
+            <span>{copy.brief.mistakes}</span>
             <span>{openSections.mistakes ? "−" : "+"}</span>
           </button>
 
@@ -103,7 +139,7 @@ export default function BriefPanel({ challenge }) {
             className="brief-toggle"
             onClick={() => toggleSection("outcome")}
           >
-            <span>Expected Outcome</span>
+            <span>{copy.brief.outcome}</span>
             <span>{openSections.outcome ? "−" : "+"}</span>
           </button>
 
@@ -121,7 +157,7 @@ export default function BriefPanel({ challenge }) {
             className="brief-toggle"
             onClick={() => toggleSection("tips")}
           >
-            <span>Tips</span>
+            <span>{copy.brief.tips}</span>
             <span>{openSections.tips ? "−" : "+"}</span>
           </button>
 

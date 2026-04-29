@@ -1,3 +1,5 @@
+import { ArrowLeft, X } from "lucide-react";
+
 function getChallengeStatus(challengeId, challengeProgress) {
   return challengeProgress?.[challengeId] || "not-started";
 }
@@ -11,6 +13,7 @@ export default function SidebarDrawer({
   activeId,
   onSelect,
   challengeProgress,
+  copy,
 }) {
   return (
     <>
@@ -22,22 +25,27 @@ export default function SidebarDrawer({
       <aside className={`sidebar-drawer ${isOpen ? "open" : ""}`}>
         <div className="drawer-top">
           <div>
-            <h2>Frontend Practice Lab</h2>
-            <p>{modeTitle} mode</p>
+            <h2>{copy.appName}</h2>
+            <p>{modeTitle}</p>
           </div>
 
-          <button className="icon-btn" onClick={onClose}>
-            ✕
+          <button
+            className="icon-btn"
+            onClick={onClose}
+            aria-label={copy.drawer.close}
+          >
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
         <div className="drawer-actions">
           <button className="secondary-btn full-width" onClick={onBackHome}>
-            ← Back to modes
+            <ArrowLeft size={17} aria-hidden="true" />
+            {copy.drawer.backToModes}
           </button>
         </div>
 
-        <div className="sidebar-section-label">Challenges</div>
+        <div className="sidebar-section-label">{copy.drawer.challenges}</div>
 
         <div className="challenge-list">
           {challenges.map((challenge) => {
@@ -64,9 +72,7 @@ export default function SidebarDrawer({
 
                   <div className="challenge-meta-row">
                     <span className={`status-pill ${status}`}>
-                      {status === "not-started" && "Not started"}
-                      {status === "in-progress" && "In progress"}
-                      {status === "completed" && "Completed"}
+                      {copy.status[status]}
                     </span>
                   </div>
                 </div>
