@@ -1,13 +1,15 @@
 import {
   BookOpen,
   CheckCircle2,
+  Clock3,
   Code2,
   GraduationCap,
+  Layers3,
   PlayCircle,
 } from "lucide-react";
 import LanguageToggle from "../components/LanguageToggle";
 import ThemeToggle from "../components/ThemeToggle";
-import { getClassStats } from "../data/classes";
+import { getClassStats, getLearningRoadmap } from "../data/classes";
 import { getCopy } from "../data/i18n";
 
 function getModeStats(challenges, challengeProgress) {
@@ -45,6 +47,21 @@ function getDashboardStats(modes, classModules, challengeProgress) {
   };
 }
 
+function getPhaseStats(phase, classModules, challengeProgress) {
+  const modules = classModules.filter((module) => phase.classIds.includes(module.id));
+  const moduleStats = modules.map((module) => getClassStats(module, challengeProgress));
+
+  return {
+    modules,
+    classCount: modules.length,
+    challengeCount: moduleStats.reduce((total, stats) => total + stats.total, 0),
+    completedChallenges: moduleStats.reduce(
+      (total, stats) => total + stats.completed,
+      0
+    ),
+  };
+}
+
 export default function HomePage({
   modes,
   classModules,
@@ -67,6 +84,10 @@ export default function HomePage({
     modules: classModules
       .filter((module) => module.modeId === mode.id)
       .sort((a, b) => Number(a.number) - Number(b.number)),
+  }));
+  const roadmap = getLearningRoadmap(language).map((phase) => ({
+    ...phase,
+    stats: getPhaseStats(phase, classModules, challengeProgress),
   }));
 
   return (
@@ -131,6 +152,80 @@ export default function HomePage({
       <section className="home-section">
         <div className="section-heading">
           <div>
+            <p className="eyebrow">{copy.home.roadmap}</p>
+            <h2>{copy.home.roadmap}</h2>
+          </div>
+          <p>{copy.home.roadmapIntro}</p>
+        </div>
+
+        <div className="roadmap-grid">
+          {roadmap.map((phase, index) => {
+            const firstModule = phase.stats.modules[0];
+            const completionLabel = copy.home.completedOf(
+              phase.stats.completedChallenges,
+              phase.stats.challengeCount
+            );
+
+            return (
+              <article className="roadmap-card" key={phase.id}>
+                <div className="roadmap-card-top">
+                  <span className="class-number roadmap-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="mode-count">{completionLabel}</span>
+                </div>
+
+                <h3>{phase.title}</h3>
+                <p>{phase.summary}</p>
+
+                <div className="roadmap-meta-grid">
+                  <div className="roadmap-meta-item">
+                    <Clock3 size={16} aria-hidden="true" />
+                    <div>
+                      <span>{copy.home.typicalTime}</span>
+                      <strong>{phase.duration}</strong>
+                    </div>
+                  </div>
+
+                  <div className="roadmap-meta-item">
+                    <Layers3 size={16} aria-hidden="true" />
+                    <div>
+                      <span>{copy.home.classPath}</span>
+                      <strong>
+                        {copy.home.phaseClasses(phase.stats.classCount)} ·{" "}
+                        {copy.home.phaseChallenges(phase.stats.challengeCount)}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="class-outcomes roadmap-focus">
+                  <span>{copy.home.phaseFocus}</span>
+                  <ul>
+                    {phase.focus.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {firstModule && (
+                  <button
+                    className="secondary-btn class-action"
+                    onClick={() => onSelectClass(firstModule.id)}
+                  >
+                    <PlayCircle size={17} aria-hidden="true" />
+                    {copy.home.roadmapStart}
+                  </button>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="home-section">
+        <div className="section-heading">
+          <div>
             <p className="eyebrow">{copy.home.classPath}</p>
             <h2>{copy.home.classPath}</h2>
           </div>
@@ -184,6 +279,30 @@ export default function HomePage({
                           <span>{copy.home.projectLabel}</span>
                           <strong>{module.project}</strong>
                         </div>
+
+                        <div className="class-meta-grid">
+                          <div className="class-meta-item">
+                            <span>{copy.home.typicalTime}</span>
+                            <strong>{module.estimatedTime}</strong>
+                          </div>
+                          <div className="class-meta-item">
+                            <span>{copy.home.practiceModes}</span>
+                            <strong>{module.formatLabel}</strong>
+                          </div>
+                        </div>
+
+                        {module.sections?.length > 0 && (
+                          <div className="class-section-groups">
+                            <span>{copy.home.practiceGroups}</span>
+                            <div className="class-section-chip-row">
+                              {module.sections.map((section) => (
+                                <span className="status-pill not-started" key={section.title}>
+                                  {section.title}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
                         <div className="class-outcomes">
                           <span>{copy.home.outcomesLabel}</span>

@@ -10,13 +10,24 @@ import {
   Send,
   Undo2,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+
+const HISTORY_LIMIT = 240;
+const HISTORY_GROUP_MS = 900;
 
 function createEditorHistory(html = "", css = "", js = "") {
   return {
     html: { items: [html], index: 0 },
     css: { items: [css], index: 0 },
     js: { items: [js], index: 0 },
+  };
+}
+
+function createHistoryMeta() {
+  return {
+    html: { lastRecordedAt: 0 },
+    css: { lastRecordedAt: 0 },
+    js: { lastRecordedAt: 0 },
   };
 }
 
@@ -96,6 +107,7 @@ export default function WorkspacePanel({
   const [editorHistory, setEditorHistory] = useState(() =>
     createEditorHistory(html || "", css || "", js || "")
   );
+  const historyMetaRef = useRef(createHistoryMeta());
 
   const isReactChallenge =
     editorType === "react" || editorType === "react-ts";
@@ -311,19 +323,43 @@ export default function WorkspacePanel({
         index: 0,
       };
       const currentValue = fieldHistory.items[fieldHistory.index];
+      const fieldMeta = historyMetaRef.current[field] || { lastRecordedAt: 0 };
+      const now = Date.now();
 
       if (currentValue === value) return currentHistory;
 
-      const nextItems = [
-        ...fieldHistory.items.slice(0, fieldHistory.index + 1),
-        value,
-      ].slice(-80);
+      const isAtLatestEntry = fieldHistory.index === fieldHistory.items.length - 1;
+      const isShortGap = now - fieldMeta.lastRecordedAt < HISTORY_GROUP_MS;
+      const shouldMergeChange = isAtLatestEntry && isShortGap;
+
+      let nextItems = [];
+      let nextIndex = 0;
+
+      if (shouldMergeChange) {
+        nextItems = fieldHistory.items.map((item, itemIndex) =>
+          itemIndex === fieldHistory.index ? value : item
+        );
+        nextIndex = fieldHistory.index;
+      } else {
+        nextItems = [
+          ...fieldHistory.items.slice(0, fieldHistory.index + 1),
+          value,
+        ];
+
+        if (nextItems.length > HISTORY_LIMIT) {
+          nextItems = nextItems.slice(nextItems.length - HISTORY_LIMIT);
+        }
+
+        nextIndex = nextItems.length - 1;
+      }
+
+      historyMetaRef.current[field] = { lastRecordedAt: now };
 
       return {
         ...currentHistory,
         [field]: {
           items: nextItems,
-          index: nextItems.length - 1,
+          index: nextIndex,
         },
       };
     });
@@ -373,6 +409,7 @@ export default function WorkspacePanel({
 
   const handleReset = () => {
     onReset();
+    historyMetaRef.current = createHistoryMeta();
     setEditorHistory(
       createEditorHistory(
         starter?.html || "",

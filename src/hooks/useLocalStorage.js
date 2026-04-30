@@ -13,8 +13,13 @@ export default function useLocalStorage(key, initialValue) {
 
   const updateValue = (newValue) => {
     try {
-      setValue(newValue);
-      localStorage.setItem(key, JSON.stringify(newValue));
+      setValue((currentValue) => {
+        const resolvedValue =
+          typeof newValue === "function" ? newValue(currentValue) : newValue;
+
+        localStorage.setItem(key, JSON.stringify(resolvedValue));
+        return resolvedValue;
+      });
     } catch (error) {
       console.error("Error writing localStorage key:", key, error);
     }

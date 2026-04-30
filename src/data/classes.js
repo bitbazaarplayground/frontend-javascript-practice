@@ -1,3 +1,587 @@
+const classPhaseMap = {
+  "class-01": "phase-01",
+  "class-02": "phase-01",
+  "class-03": "phase-01",
+  "class-04": "phase-01",
+  "class-15": "phase-01",
+  "class-05": "phase-02",
+  "class-06": "phase-02",
+  "class-07": "phase-03",
+  "class-08": "phase-03",
+  "class-09": "phase-03",
+  "class-16": "phase-03",
+  "class-10": "phase-04",
+  "class-11": "phase-04",
+  "class-12": "phase-05",
+  "class-13": "phase-05",
+  "class-14": "phase-05",
+  "class-17": "phase-05",
+  "class-18": "phase-06",
+  "class-19": "phase-06",
+  "class-20": "phase-06",
+  "class-21": "phase-06",
+  "class-22": "phase-06",
+  "class-23": "phase-06",
+  "class-24": "phase-06",
+  "class-25": "phase-06",
+  "class-26": "phase-06",
+  "class-27": "phase-06",
+};
+
+const roadmapPhases = [
+  {
+    id: "phase-01",
+    title: {
+      en: "Phase 1 - Foundations",
+      es: "Fase 1 - Fundamentos",
+    },
+    duration: {
+      en: "2-3 weeks",
+      es: "2-3 semanas",
+    },
+    summary: {
+      en: "Learn the visual language of the web: structure, layout, forms, responsive sections, and the first small interactions.",
+      es: "Aprende el lenguaje visual de la web: estructura, layout, formularios, secciones responsive y primeras interacciones.",
+    },
+    focus: {
+      en: [
+        "HTML and CSS confidence",
+        "Visual polish and spacing",
+        "Beginner-friendly portfolio pieces",
+      ],
+      es: [
+        "Confianza con HTML y CSS",
+        "Pulido visual y espaciado",
+        "Primeras piezas para portfolio",
+      ],
+    },
+    classIds: ["class-01", "class-02", "class-03", "class-04", "class-15"],
+  },
+  {
+    id: "phase-02",
+    title: {
+      en: "Phase 2 - JavaScript UI",
+      es: "Fase 2 - UI con JavaScript",
+    },
+    duration: {
+      en: "3-5 weeks",
+      es: "3-5 semanas",
+    },
+    summary: {
+      en: "Build repetition into DOM work with toggles, search, forms, arrays, reusable logic, and interface feedback.",
+      es: "Construye repeticion en trabajo DOM con toggles, busqueda, formularios, arrays, logica reutilizable y feedback.",
+    },
+    focus: {
+      en: [
+        "Event handling patterns",
+        "Rendering and filtering data",
+        "First product-like JavaScript features",
+      ],
+      es: [
+        "Patrones de manejo de eventos",
+        "Renderizado y filtros de datos",
+        "Primeras funcionalidades de JavaScript tipo producto",
+      ],
+    },
+    classIds: ["class-05", "class-06"],
+  },
+  {
+    id: "phase-03",
+    title: {
+      en: "Phase 3 - Async, APIs, and Debugging",
+      es: "Fase 3 - Async, APIs y depuracion",
+    },
+    duration: {
+      en: "4-6 weeks",
+      es: "4-6 semanas",
+    },
+    summary: {
+      en: "Move from toy UI to realistic frontend work: async states, persistence, API thinking, backend awareness, and bug fixing.",
+      es: "Pasa de UI de practica a trabajo realista: estados asincronos, persistencia, pensamiento API, backend awareness y correccion de bugs.",
+    },
+    focus: {
+      en: [
+        "Loading, error, and retry flows",
+        "Request and storage habits",
+        "Calm debugging under pressure",
+      ],
+      es: [
+        "Flujos de carga, error y reintento",
+        "Habitos de requests y almacenamiento",
+        "Depuracion con calma bajo presion",
+      ],
+    },
+    classIds: ["class-07", "class-08", "class-09", "class-16"],
+  },
+  {
+    id: "phase-04",
+    title: {
+      en: "Phase 4 - React Foundations",
+      es: "Fase 4 - Fundamentos de React",
+    },
+    duration: {
+      en: "3-5 weeks",
+      es: "3-5 semanas",
+    },
+    summary: {
+      en: "Translate DOM skills into components, props, state, controlled inputs, effects, and resilient React UI.",
+      es: "Traduce habilidades del DOM a componentes, props, estado, inputs controlados, effects y UI React resistente.",
+    },
+    focus: {
+      en: [
+        "Component thinking",
+        "State ownership and effects",
+        "React-ready explanation skills",
+      ],
+      es: [
+        "Pensamiento por componentes",
+        "Propiedad del estado y effects",
+        "Capacidad de explicar React con claridad",
+      ],
+    },
+    classIds: ["class-10", "class-11"],
+  },
+  {
+    id: "phase-05",
+    title: {
+      en: "Phase 5 - Real Apps and Routing",
+      es: "Fase 5 - Apps reales y routing",
+    },
+    duration: {
+      en: "4-6 weeks",
+      es: "4-6 semanas",
+    },
+    summary: {
+      en: "Build portfolio-grade React features with routing, auth flows, persistence, accessibility, composition, and capstones.",
+      es: "Construye funcionalidades de React para portfolio con routing, auth, persistencia, accesibilidad, composicion y capstones.",
+    },
+    focus: {
+      en: [
+        "Larger React flows",
+        "Routing and protected screens",
+        "Portfolio-ready capstones",
+      ],
+      es: [
+        "Flujos React mas grandes",
+        "Routing y pantallas protegidas",
+        "Capstones listos para portfolio",
+      ],
+    },
+    classIds: ["class-12", "class-13", "class-14", "class-17"],
+  },
+  {
+    id: "phase-06",
+    title: {
+      en: "Phase 6 - Interview and Job Tests",
+      es: "Fase 6 - Entrevistas y pruebas tecnicas",
+    },
+    duration: {
+      en: "2-4 weeks",
+      es: "2-4 semanas",
+    },
+    summary: {
+      en: "Practice take-homes, accessibility checks, TypeScript, shipping quality, and several bug-fix drills that feel much closer to real hiring.",
+      es: "Practica take-homes, accesibilidad, TypeScript, calidad de envio y varias pruebas de depuracion mucho mas cercanas a una contratacion real.",
+    },
+    focus: {
+      en: [
+        "Interview-style builds",
+        "Debugging and repair work",
+        "Quality-focused decision making",
+      ],
+      es: [
+        "Builds tipo entrevista",
+        "Depuracion y trabajo de reparacion",
+        "Toma de decisiones centrada en calidad",
+      ],
+    },
+    classIds: [
+      "class-18",
+      "class-19",
+      "class-20",
+      "class-21",
+      "class-22",
+      "class-23",
+      "class-24",
+      "class-25",
+      "class-26",
+      "class-27",
+    ],
+  },
+];
+
+const classSections = {
+  "class-05": [
+    {
+      title: {
+        en: "Toggle patterns",
+        es: "Patrones toggle",
+      },
+      challengeIds: [
+        "toggle-message",
+        "toggle-background-color",
+        "toggle-button-label",
+        "toggle-card-class",
+        "theme-toggle-saved",
+        "faq-toggle",
+      ],
+    },
+    {
+      title: {
+        en: "Counters and live text",
+        es: "Contadores y texto en vivo",
+      },
+      challengeIds: [
+        "character-counter",
+        "counter-with-reset",
+        "button-click-counter",
+      ],
+    },
+    {
+      title: {
+        en: "Search basics",
+        es: "Busqueda basica",
+      },
+      challengeIds: [
+        "live-search-filter",
+        "fruit-partial-match-list",
+        "city-search-list",
+        "movie-search-list",
+        "case-insensitive-book-search",
+        "username-search-filter",
+      ],
+    },
+    {
+      title: {
+        en: "Search variations and feedback",
+        es: "Variaciones de busqueda y feedback",
+      },
+      challengeIds: [
+        "no-results-search-state",
+        "clear-search-button",
+        "bold-matching-fruits",
+        "search-cards-layout",
+        "filter-products-name-price",
+        "password-visibility-toggle",
+      ],
+    },
+    {
+      title: {
+        en: "Integrated mini build",
+        es: "Mini build integrado",
+      },
+      challengeIds: ["interactive-settings-capstone"],
+    },
+  ],
+  "class-06": [
+    {
+      title: {
+        en: "Validation basics",
+        es: "Validacion basica",
+      },
+      challengeIds: [
+        "simple-form-validation",
+        "contact-form-validation",
+        "password-strength-checker",
+        "password-rules-validation",
+      ],
+    },
+    {
+      title: {
+        en: "Lists and mutations",
+        es: "Listas y cambios",
+      },
+      challengeIds: [
+        "prevent-duplicate-items",
+        "add-item-to-list",
+        "add-goal-to-list",
+        "remove-item-from-list",
+        "remove-saved-item",
+        "todo-complete-toggle",
+      ],
+    },
+    {
+      title: {
+        en: "Sorting, filtering, and tabs",
+        es: "Ordenacion, filtros y tabs",
+      },
+      challengeIds: [
+        "sort-products",
+        "filter-products",
+        "tab-switcher",
+        "restaurant-tabs-panel",
+      ],
+    },
+    {
+      title: {
+        en: "All-in-one class build",
+        es: "Build integrador del bloque",
+      },
+      challengeIds: ["product-list-manager-capstone"],
+    },
+  ],
+  "class-07": [
+    {
+      title: {
+        en: "Async request basics",
+        es: "Bases de requests async",
+      },
+      challengeIds: [
+        "mock-fetch-loading",
+        "mock-fetch-error-retry",
+        "promise-chain-practice",
+        "await-user-card",
+        "async-save-button",
+      ],
+    },
+    {
+      title: {
+        en: "Persistence practice",
+        es: "Practica de persistencia",
+      },
+      challengeIds: [
+        "save-notes-localstorage",
+        "save-load-todos-localstorage",
+      ],
+    },
+    {
+      title: {
+        en: "Data responses and transforms",
+        es: "Respuestas y transformaciones de datos",
+      },
+      challengeIds: [
+        "shopping-cart-total",
+        "mock-product-search",
+        "promise-all-user-posts",
+        "filter-sort-products",
+      ],
+    },
+    {
+      title: {
+        en: "Async dashboard checkpoint",
+        es: "Checkpoint de dashboard async",
+      },
+      challengeIds: ["async-dashboard-capstone"],
+    },
+  ],
+  "class-09": [
+    {
+      title: {
+        en: "Core JavaScript foundations",
+        es: "Fundamentos de JavaScript",
+      },
+      challengeIds: [
+        "destructure-profile-card",
+        "spread-settings-merge",
+        "switch-role-permissions",
+        "closure-counter-factory",
+        "event-loop-order",
+      ],
+    },
+    {
+      title: {
+        en: "Debugging and parsing",
+        es: "Depuracion y parsing",
+      },
+      challengeIds: ["try-catch-json-parser"],
+    },
+    {
+      title: {
+        en: "Requests and API habits",
+        es: "Requests y habitos con APIs",
+      },
+      challengeIds: [
+        "fetch-users-status-codes",
+        "post-json-with-headers",
+        "query-param-search",
+      ],
+    },
+    {
+      title: {
+        en: "Race conditions and backend flow",
+        es: "Race conditions y flujo backend",
+      },
+      challengeIds: [
+        "request-race-condition-guard",
+        "backend-request-flow",
+        "api-toolkit-capstone",
+      ],
+    },
+  ],
+  "class-10": [
+    {
+      title: {
+        en: "First components and props",
+        es: "Primeros componentes y props",
+      },
+      challengeIds: [
+        "first-react-component",
+        "reuse-component",
+        "props-card-component",
+        "render-list-map",
+        "list-keys",
+        "conditional-status-badge",
+      ],
+    },
+    {
+      title: {
+        en: "State and controlled inputs",
+        es: "Estado e inputs controlados",
+      },
+      challengeIds: [
+        "react-counter-usestate",
+        "react-toggle-section",
+        "react-toggle-button-label",
+        "controlled-input",
+        "react-character-counter",
+      ],
+    },
+    {
+      title: {
+        en: "Search and filter thinking",
+        es: "Pensamiento de busqueda y filtros",
+      },
+      challengeIds: [
+        "react-search-filter",
+        "react-category-filter",
+        "react-component-directory-capstone",
+      ],
+    },
+  ],
+  "class-11": [
+    {
+      title: {
+        en: "State ownership and reuse",
+        es: "Propiedad del estado y reutilizacion",
+      },
+      challengeIds: [
+        "lift-state-up",
+        "reusable-button-component",
+        "react-form-validation",
+        "react-modal-component",
+        "react-accordion-item",
+        "react-tabs-component",
+      ],
+    },
+    {
+      title: {
+        en: "Effects and async UI",
+        es: "Effects y UI async",
+      },
+      challengeIds: [
+        "react-mock-fetch-useeffect",
+        "loading-error-empty-states",
+        "custom-hook-localstorage",
+        "react-load-users",
+        "react-retry-request",
+        "react-async-search",
+        "react-empty-state",
+      ],
+    },
+    {
+      title: {
+        en: "Block project",
+        es: "Proyecto del bloque",
+      },
+      challengeIds: ["react-users-dashboard-capstone"],
+    },
+  ],
+  "class-12": [
+    {
+      title: {
+        en: "Filtering and sorting flows",
+        es: "Flujos de filtros y ordenacion",
+      },
+      challengeIds: [
+        "react-loaded-category-filter",
+        "react-custom-data-hook",
+        "react-sort-products",
+        "react-toggle-favourites",
+      ],
+    },
+    {
+      title: {
+        en: "Persistence and async polish",
+        es: "Persistencia y pulido async",
+      },
+      challengeIds: [
+        "react-theme-localstorage",
+        "react-disable-submit-loading",
+        "react-debounced-search",
+        "react-paginated-list",
+      ],
+    },
+    {
+      title: {
+        en: "Derived UI and capstone",
+        es: "UI derivada y capstone",
+      },
+      challengeIds: [
+        "react-multi-filter-products",
+        "react-results-summary",
+        "react-product-browser-capstone",
+      ],
+    },
+  ],
+  "class-13": [
+    {
+      title: {
+        en: "Advanced state patterns",
+        es: "Patrones avanzados de estado",
+      },
+      challengeIds: [
+        "react-usereducer-todos",
+        "react-context-theme",
+        "react-view-mode-context",
+      ],
+    },
+    {
+      title: {
+        en: "Accessible and resilient UX",
+        es: "UX accesible y resistente",
+      },
+      challengeIds: [
+        "react-accessible-form-errors",
+        "react-optimistic-favourites",
+        "react-saved-filter-state",
+      ],
+    },
+    {
+      title: {
+        en: "Composition and take-home build",
+        es: "Composicion y build tipo take-home",
+      },
+      challengeIds: [
+        "react-dashboard-composition",
+        "react-job-board-capstone",
+      ],
+    },
+  ],
+  "class-14": [
+    {
+      title: {
+        en: "Routes and navigation",
+        es: "Rutas y navegacion",
+      },
+      challengeIds: [
+        "react-router-basic-pages",
+        "react-route-tab-navigation",
+        "react-router-dynamic-user",
+      ],
+    },
+    {
+      title: {
+        en: "Protected app flow",
+        es: "Flujo de app protegida",
+      },
+      challengeIds: [
+        "react-auth-guard-state",
+        "react-routed-directory-capstone",
+      ],
+    },
+  ],
+};
+
 const classModules = [
   {
     id: "class-01",
@@ -978,6 +1562,62 @@ function pickLocalized(value, language) {
   return value[language] || value.en;
 }
 
+function localizeSections(sections = [], language) {
+  return sections.map((section) => ({
+    ...section,
+    title: pickLocalized(section.title, language),
+    summary: pickLocalized(section.summary, language),
+  }));
+}
+
+function getEstimatedTime(module, language = "en") {
+  const isInterview = module.modeId === "interview";
+  const isSingleCapstone = module.challengeIds.length === 1 && !isInterview;
+
+  if (language === "es") {
+    if (isInterview) return "60-120 min";
+    if (isSingleCapstone) return "2-4 horas";
+    if (module.challengeIds.length <= 6) return "60-90 min";
+    if (module.challengeIds.length <= 10) return "90-120 min";
+    if (module.challengeIds.length <= 14) return "2-3 horas";
+    if (module.challengeIds.length <= 18) return "3-4 horas";
+    return "4-6 horas";
+  }
+
+  if (isInterview) return "60-120 min";
+  if (isSingleCapstone) return "2-4 hours";
+  if (module.challengeIds.length <= 6) return "60-90 min";
+  if (module.challengeIds.length <= 10) return "90-120 min";
+  if (module.challengeIds.length <= 14) return "2-3 hours";
+  if (module.challengeIds.length <= 18) return "3-4 hours";
+  return "4-6 hours";
+}
+
+function getFormatLabel(module, language = "en") {
+  const isInterview = module.modeId === "interview";
+  const isSingleCapstone = module.challengeIds.length === 1 && !isInterview;
+
+  if (language === "es") {
+    if (isInterview) return "Prueba tecnica";
+    if (isSingleCapstone) return "Capstone";
+    return "Bloque guiado";
+  }
+
+  if (isInterview) return "Interview test";
+  if (isSingleCapstone) return "Capstone";
+  return "Guided block";
+}
+
+export function getLearningRoadmap(language = "en") {
+  return roadmapPhases.map((phase) => ({
+    ...phase,
+    title: pickLocalized(phase.title, language),
+    duration: pickLocalized(phase.duration, language),
+    summary: pickLocalized(phase.summary, language),
+    focus: pickLocalized(phase.focus, language),
+  }));
+}
+
 export function getClassModules(language = "en") {
   return classModules.map((module) => ({
     ...module,
@@ -985,6 +1625,10 @@ export function getClassModules(language = "en") {
     summary: pickLocalized(module.summary, language),
     outcomes: pickLocalized(module.outcomes, language),
     project: pickLocalized(module.project, language),
+    phaseId: classPhaseMap[module.id],
+    sections: localizeSections(classSections[module.id] || [], language),
+    estimatedTime: getEstimatedTime(module, language),
+    formatLabel: getFormatLabel(module, language),
   }));
 }
 
