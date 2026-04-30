@@ -2112,8 +2112,11 @@ export const copy = {
       eyebrow: "Zero to job-ready",
       title: "Frontend + JavaScript training lab",
       intro:
-        "A guided, bilingual practice space for learning HTML, CSS, JavaScript, and React through classes, focused challenges, live preview, and saved progress.",
+        "A free, guided, bilingual practice space for learning HTML, CSS, JavaScript, and React through classes, focused challenges, live preview, and saved progress.",
       dashboard: "Learning dashboard",
+      roadmap: "Learning roadmap",
+      roadmapIntro:
+        "Follow the free path in phases so the course feels finishable, not endless. Each phase groups related classes and job-focused practice.",
       classPath: "Class path",
       classIntro:
         "A suggested teaching sequence that turns the challenge bank into a structured course.",
@@ -2123,6 +2126,12 @@ export const copy = {
       totalChallenges: "Challenges",
       totalClasses: "Classes",
       learningTracks: "Tracks",
+      typicalTime: "Typical time",
+      practiceGroups: "Practice groups",
+      phaseFocus: "What this phase builds",
+      phaseClasses: (count) => `${count} classes`,
+      phaseChallenges: (count) => `${count} challenges`,
+      roadmapStart: "Start this phase",
       projectLabel: "Class project",
       outcomesLabel: "Outcomes",
       linkedPractice: "Linked practice",
@@ -2203,6 +2212,10 @@ export const copy = {
     drawer: {
       backToModes: "Back to modes",
       challenges: "Challenges",
+      currentBlock: "Current block",
+      practiceGroups: "Practice groups",
+      typicalTime: "Typical time",
+      format: "Format",
       close: "Close navigation",
     },
     status: {
@@ -2223,8 +2236,11 @@ export const copy = {
       eyebrow: "De cero a empleable",
       title: "Laboratorio de Frontend + JavaScript",
       intro:
-        "Un espacio bilingue y guiado para aprender HTML, CSS, JavaScript y React con clases, retos enfocados, preview en vivo y progreso guardado.",
+        "Un espacio gratuito, bilingue y guiado para aprender HTML, CSS, JavaScript y React con clases, retos enfocados, preview en vivo y progreso guardado.",
       dashboard: "Panel de aprendizaje",
+      roadmap: "Roadmap de aprendizaje",
+      roadmapIntro:
+        "Sigue la ruta gratuita por fases para que el curso se sienta terminable y no infinito. Cada fase agrupa clases relacionadas y practica orientada al trabajo.",
       classPath: "Ruta de clases",
       classIntro:
         "Una secuencia didactica sugerida que convierte el banco de retos en un curso estructurado.",
@@ -2234,6 +2250,12 @@ export const copy = {
       totalChallenges: "Retos",
       totalClasses: "Clases",
       learningTracks: "Rutas",
+      typicalTime: "Tiempo habitual",
+      practiceGroups: "Grupos de practica",
+      phaseFocus: "Lo que construye esta fase",
+      phaseClasses: (count) => `${count} clases`,
+      phaseChallenges: (count) => `${count} retos`,
+      roadmapStart: "Empezar esta fase",
       projectLabel: "Proyecto de clase",
       outcomesLabel: "Objetivos",
       linkedPractice: "Practica asociada",
@@ -2314,6 +2336,10 @@ export const copy = {
     drawer: {
       backToModes: "Volver a modos",
       challenges: "Retos",
+      currentBlock: "Bloque actual",
+      practiceGroups: "Grupos de practica",
+      typicalTime: "Tiempo habitual",
+      format: "Formato",
       close: "Cerrar navegacion",
     },
     status: {

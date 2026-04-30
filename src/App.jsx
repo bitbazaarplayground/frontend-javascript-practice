@@ -134,19 +134,19 @@ export default function App() {
   const handleSkipPrimer = () => {
     if (!activeChallenge) return;
 
-    setSkippedPrimers({
-      ...skippedPrimers,
+    setSkippedPrimers((currentPrimers) => ({
+      ...currentPrimers,
       [activeChallenge.id]: true,
-    });
+    }));
   };
 
   const handleShowPrimer = () => {
     if (!activeChallenge) return;
 
-    setSkippedPrimers({
-      ...skippedPrimers,
+    setSkippedPrimers((currentPrimers) => ({
+      ...currentPrimers,
       [activeChallenge.id]: false,
-    });
+    }));
   };
 
   const handleNextChallenge = () => {
@@ -171,10 +171,10 @@ export default function App() {
     setSubmissionResult(result);
 
     if (result.status === "success") {
-      setChallengeProgress({
-        ...challengeProgress,
+      setChallengeProgress((currentProgress) => ({
+        ...currentProgress,
         [activeChallenge.id]: "completed",
-      });
+      }));
     }
   };
 
@@ -186,45 +186,45 @@ export default function App() {
       [field]: value,
     };
 
-    setSavedDrafts({
-      ...savedDrafts,
+    setSavedDrafts((currentDrafts) => ({
+      ...currentDrafts,
       [activeChallenge.id]: updatedDraft,
-    });
+    }));
 
     const hasStarted =
       (updatedDraft.html || "").trim() ||
       (updatedDraft.css || "").trim() ||
       (updatedDraft.js || "").trim();
 
-    setChallengeProgress({
-      ...challengeProgress,
+    setChallengeProgress((currentProgress) => ({
+      ...currentProgress,
       [activeChallenge.id]: hasStarted ? "in-progress" : "not-started",
-    });
+    }));
   };
 
   const handleReset = () => {
     if (!activeChallenge) return;
 
-    setSavedDrafts({
-      ...savedDrafts,
+    setSavedDrafts((currentDrafts) => ({
+      ...currentDrafts,
       [activeChallenge.id]: {
         ...activeChallenge.starter,
       },
-    });
+    }));
 
-    setChallengeProgress({
-      ...challengeProgress,
+    setChallengeProgress((currentProgress) => ({
+      ...currentProgress,
       [activeChallenge.id]: "not-started",
-    });
+    }));
   };
 
   const handleMarkComplete = () => {
     if (!activeChallenge) return;
 
-    setChallengeProgress({
-      ...challengeProgress,
+    setChallengeProgress((currentProgress) => ({
+      ...currentProgress,
       [activeChallenge.id]: "completed",
-    });
+    }));
   };
 
   if (!selectedMode) {
@@ -269,6 +269,7 @@ export default function App() {
         activeId={activeChallenge.id}
         onSelect={handleSelectChallenge}
         challengeProgress={challengeProgress}
+        selectedClass={selectedClass}
         copy={appCopy}
       />
 
