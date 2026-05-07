@@ -148,6 +148,281 @@ export const rookieChallenges = [
     },
   },
   {
+    id: "selector-playground-card",
+    editorType: "web",
+    title: "Challenge 0 — Selector Playground Card",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Style a mini card layout using an element selector, a class selector, and an id selector.",
+    requirements: [
+      "Add a heading and at least one paragraph",
+      "Style the paragraph with a p selector",
+      "Style the card with a .card selector",
+      "Style the outer wrapper with an id selector",
+      "Add background color and spacing",
+    ],
+    tips: [
+      "p styles every paragraph on the page.",
+      ".card only styles elements with that class name.",
+      "#main only targets one special element.",
+    ],
+    concepts: [
+      "selectors",
+      "element selectors",
+      "class selectors",
+      "id selectors",
+      "background-color",
+    ],
+    suggestedApproach: [
+      "Create one wrapper, one card, a heading, and a paragraph.",
+      "Give the wrapper an id and the card a class.",
+      "Write one CSS rule for p, one for .card, and one for the wrapper id.",
+      "Add spacing and color so the difference is easy to see.",
+    ],
+    commonMistakes: [
+      "Forgetting the dot before a class selector",
+      "Forgetting the hash before an id selector",
+      "Styling the wrong element with the wrong selector",
+    ],
+    expectedOutcome:
+      "A small layout where the wrapper, card, and paragraph each show different styles from different selectors.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section id="main">
+  <div class="card">
+    <h2>Build with selectors</h2>
+    <p>Each selector points at a different part of the layout.</p>
+  </div>
+</section>`,
+      css: `#main {
+  padding: 32px;
+  background: #eff6ff;
+}
+
+.card {
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid #bfdbfe;
+}
+
+p {
+  color: #475569;
+  line-height: 1.6;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "nav-link-hover-styles",
+    editorType: "web",
+    title: "Challenge 0 — Nav Link Hover Styles",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Style navigation links with a nested selector and a hover state.",
+    requirements: [
+      "Add a nav area with at least 3 links",
+      "Style the links with a nested selector such as .nav-links a",
+      "Remove the default underline",
+      "Add spacing between links",
+      "Add a hover state",
+    ],
+    tips: [
+      "A nested selector helps you style only links inside one area.",
+      "gap works well when the link wrapper uses flexbox.",
+      "Use :hover to change color or opacity.",
+    ],
+    concepts: [
+      "descendant selectors",
+      "anchor styling",
+      "hover states",
+      "flexbox",
+      "gap",
+    ],
+    suggestedApproach: [
+      "Create a nav wrapper with a links container inside it.",
+      "Place three anchor elements inside the links container.",
+      "Use flexbox on the links wrapper for spacing.",
+      "Style only the links inside that wrapper and add a hover rule.",
+    ],
+    commonMistakes: [
+      "Styling every link on the page by accident",
+      "Forgetting to remove the underline",
+      "Adding hover styles to the wrapper instead of the links",
+    ],
+    expectedOutcome:
+      "A neat set of navbar links that only change style inside the navigation area.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<nav class="topbar">
+  <strong>Studio</strong>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Work</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>`,
+      css: `.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  background: white;
+  border-radius: 18px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-links a {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav-links a:hover {
+  color: #2563eb;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "box-model-profile-tile",
+    editorType: "web",
+    title: "Challenge 0 — Box Model Profile Tile",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Build a profile tile that practices width, padding, border, margin, and height.",
+    requirements: [
+      "Create one card or tile container",
+      "Give the tile a width and height",
+      "Add padding inside the tile",
+      "Add a border",
+      "Use margin to separate it from the page edge",
+    ],
+    tips: [
+      "Padding is space inside the tile.",
+      "Margin creates space outside the tile.",
+      "A border makes the box easier to understand visually.",
+    ],
+    concepts: [
+      "box model",
+      "width",
+      "height",
+      "padding",
+      "margin",
+    ],
+    suggestedApproach: [
+      "Create one tile with a heading and short paragraph.",
+      "Give the tile a visible width and height.",
+      "Add padding so the content has breathing room.",
+      "Use margin to place the tile neatly on the page.",
+    ],
+    commonMistakes: [
+      "Mixing up padding and margin",
+      "Adding width but forgetting height",
+      "Making the box too cramped to read",
+    ],
+    expectedOutcome:
+      "A clear tile that visibly shows the difference between inner space, outer space, and the edge of the box.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<div class="tile">
+  <h2>Junior Frontend</h2>
+  <p>Practice the box model until spacing starts to feel natural.</p>
+</div>`,
+      css: `.tile {
+  width: 320px;
+  height: 220px;
+  margin: 40px auto;
+  padding: 24px;
+  border: 2px solid #94a3b8;
+  border-radius: 18px;
+  background: white;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "border-box-info-panel",
+    editorType: "web",
+    title: "Challenge 0 — Border Box Info Panel",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Create an info panel that keeps its width under control with box-sizing: border-box.",
+    requirements: [
+      "Create one info panel",
+      "Give it a width and height",
+      "Add padding and a border",
+      "Use box-sizing: border-box",
+      "Add a background color",
+    ],
+    tips: [
+      "border-box keeps the padding and border inside the width you choose.",
+      "This rule is often used globally across a project.",
+      "A visible border makes the effect easier to notice.",
+    ],
+    concepts: [
+      "box model",
+      "box-sizing",
+      "width",
+      "height",
+      "border",
+    ],
+    suggestedApproach: [
+      "Build one panel with a title and supporting text.",
+      "Set a fixed width and height so the result is easy to compare.",
+      "Add padding and a thicker border.",
+      "Use box-sizing: border-box so the panel stays under control.",
+    ],
+    commonMistakes: [
+      "Adding padding and wondering why the box becomes wider",
+      "Writing box-sizing on the wrong selector",
+      "Forgetting to give the panel a visible border",
+    ],
+    expectedOutcome:
+      "A clean panel that keeps the size you expect even after padding and border are added.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<div class="panel">
+  <h2>Layout note</h2>
+  <p>border-box keeps width math calmer when a box has padding and border.</p>
+</div>`,
+      css: `* {
+  box-sizing: border-box;
+}
+
+.panel {
+  width: 320px;
+  height: 210px;
+  padding: 24px;
+  border: 6px solid #60a5fa;
+  border-radius: 18px;
+  background: #eff6ff;
+}`,
+      js: ``,
+    },
+  },
+  {
     id: "centered-box",
     editorType: "web",
     title: "Challenge 3 — Centered Box",
@@ -523,6 +798,80 @@ export const rookieChallenges = [
     },
   },
   {
+    id: "display-mode-announcement",
+    editorType: "web",
+    title: "Challenge 0 — Display Mode Announcement",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Build a small announcement block that uses block, inline-block, and display: none.",
+    requirements: [
+      "Add a heading and at least 2 links or tags",
+      "Use inline-block on the links or tags",
+      "Add padding and rounded corners to those inline-block elements",
+      "Hide one helper element with display: none",
+      "Add a background to the announcement block",
+    ],
+    tips: [
+      "Inline-block is useful when you want padding on small items that still sit in a row.",
+      "display: none removes the element from the layout.",
+      "A section wrapper makes the whole piece easier to style.",
+    ],
+    concepts: [
+      "display",
+      "inline-block",
+      "display: none",
+      "padding",
+      "background-color",
+    ],
+    suggestedApproach: [
+      "Create one announcement wrapper with a heading and small action links.",
+      "Style the small action links as inline-block pills.",
+      "Add padding, background, and rounded corners to those pills.",
+      "Hide one helper note using display: none.",
+    ],
+    commonMistakes: [
+      "Trying to pad inline elements without changing display",
+      "Hiding the wrong element",
+      "Forgetting a wrapper background so the section feels unfinished",
+    ],
+    expectedOutcome:
+      "A small announcement block where the action links behave like neat pills and one helper note stays hidden.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="announcement">
+  <h2>Course update</h2>
+  <a class="pill" href="#">Schedule</a>
+  <a class="pill" href="#">Resources</a>
+  <p class="helper">Hidden helper text</p>
+</section>`,
+      css: `.announcement {
+  padding: 24px;
+  border-radius: 20px;
+  background: #f8fafc;
+}
+
+.pill {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.helper {
+  display: none;
+}`,
+      js: ``,
+    },
+  },
+  {
     id: "two-column-layout",
     editorType: "web",
     title: "Challenge 7 — Two Column Layout",
@@ -583,6 +932,141 @@ export const rookieChallenges = [
   display: flex;
   align-items: center;
   justify-content: center;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "flex-service-row",
+    editorType: "web",
+    title: "Challenge 0 — Flex Service Row",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Build a row of 3 service cards that share the space evenly with flexbox.",
+    requirements: [
+      "Create 3 cards",
+      "Use display: flex on the parent",
+      "Add spacing with gap",
+      "Make the cards share equal width",
+      "Add padding and background to each card",
+    ],
+    tips: [
+      "flex: 1 helps all cards grow evenly.",
+      "The parent controls the row layout.",
+      "Keep the card structure repeated and consistent.",
+    ],
+    concepts: [
+      "flexbox",
+      "gap",
+      "flex: 1",
+      "card row",
+      "layout structure",
+    ],
+    suggestedApproach: [
+      "Create one parent wrapper and three child cards.",
+      "Turn the parent into a flex container.",
+      "Add gap between the cards.",
+      "Use flex: 1 on each card so they share the row evenly.",
+    ],
+    commonMistakes: [
+      "Giving only one card flex: 1",
+      "Forgetting gap so the cards stick together",
+      "Styling one card differently by accident",
+    ],
+    expectedOutcome:
+      "A balanced row of three cards that could be reused for features or services.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="service-row">
+  <article>HTML</article>
+  <article>CSS</article>
+  <article>JavaScript</article>
+</section>`,
+      css: `.service-row {
+  display: flex;
+  gap: 16px;
+}
+
+.service-row article {
+  flex: 1;
+  padding: 24px;
+  border-radius: 18px;
+  background: #e2e8f0;
+  text-align: center;
+  font-weight: 700;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "flex-wrap-chip-row",
+    editorType: "web",
+    title: "Challenge 0 — Flex Wrap Chip Row",
+    difficulty: "Easy",
+    category: "HTML + CSS",
+    goal: "Build a row of chips that wraps neatly onto a new line when there is not enough space.",
+    requirements: [
+      "Add at least 6 chips or tags",
+      "Use display: flex on the parent",
+      "Use flex-wrap",
+      "Add gap between chips",
+      "Style each chip with padding and rounded corners",
+    ],
+    tips: [
+      "This is a common pattern for tags, skills, and filters.",
+      "Without flex-wrap, the row may overflow.",
+      "Give every chip the same visual pattern.",
+    ],
+    concepts: [
+      "flexbox",
+      "flex-wrap",
+      "gap",
+      "padding",
+      "border-radius",
+    ],
+    suggestedApproach: [
+      "Create one wrapper and several chip elements inside it.",
+      "Use flexbox on the wrapper.",
+      "Turn on flex-wrap so items can move to a new line.",
+      "Add gap, padding, and rounded corners for a clean look.",
+    ],
+    commonMistakes: [
+      "Forgetting flex-wrap",
+      "Using different chip spacing on each item",
+      "Making the chips too small to read comfortably",
+    ],
+    expectedOutcome:
+      "A tidy row of chips that wraps naturally and still feels part of one design system.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<div class="chip-row">
+  <span>HTML</span>
+  <span>CSS</span>
+  <span>Flexbox</span>
+  <span>Grid</span>
+  <span>Responsive</span>
+  <span>UI Polish</span>
+</div>`,
+      css: `.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip-row span {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f172a;
+  font-weight: 700;
 }`,
       js: ``,
     },
@@ -661,6 +1145,73 @@ button {
   border-radius: 12px;
   background: #2563eb;
   color: white;
+  font-weight: 700;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "grid-feature-board",
+    editorType: "web",
+    title: "Challenge 0 — Grid Feature Board",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Build a 3-column feature board with CSS Grid.",
+    requirements: [
+      "Create at least 3 cards",
+      "Use CSS Grid on the parent",
+      "Use 3 equal columns",
+      "Add spacing with gap",
+      "Give each card padding and a background",
+    ],
+    tips: [
+      "repeat(3, 1fr) is a good starting point for equal columns.",
+      "Grid works well when you want rows and columns together.",
+      "Keep the card pattern repeated and balanced.",
+    ],
+    concepts: [
+      "CSS Grid",
+      "grid-template-columns",
+      "repeat()",
+      "gap",
+      "card layout",
+    ],
+    suggestedApproach: [
+      "Create one parent wrapper and three child cards.",
+      "Turn the parent into a grid container.",
+      "Define 3 equal columns with repeat(3, 1fr).",
+      "Add gap, padding, and card styling so the board feels polished.",
+    ],
+    commonMistakes: [
+      "Using flexbox when the exercise is about Grid",
+      "Forgetting gap so the cards touch each other",
+      "Making one card visually different for no reason",
+    ],
+    expectedOutcome:
+      "A simple feature board with three equal cards lined up cleanly in a grid.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="feature-board">
+  <article>Learn</article>
+  <article>Practice</article>
+  <article>Ship</article>
+</section>`,
+      css: `.feature-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-board article {
+  padding: 24px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid #dbe3ef;
+  text-align: center;
   font-weight: 700;
 }`,
       js: ``,
@@ -1511,6 +2062,149 @@ a {
     },
   },
   {
+    id: "media-query-stack-layout",
+    editorType: "web",
+    title: "Challenge 0 — Media Query Stack Layout",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Build a 2-column section that stacks into one column on smaller screens.",
+    requirements: [
+      "Create 2 content areas",
+      "Place them side by side on larger screens",
+      "Use a media query",
+      "Stack the layout on mobile",
+      "Add spacing and padding",
+    ],
+    tips: [
+      "Flexbox is a simple choice for the larger-screen layout.",
+      "Use @media (max-width: 700px) to change the direction.",
+      "This is one of the most common responsive patterns on the web.",
+    ],
+    concepts: [
+      "responsive design",
+      "media queries",
+      "flexbox",
+      "mobile-first thinking",
+      "layout structure",
+    ],
+    suggestedApproach: [
+      "Create one parent wrapper with two child sections.",
+      "Use flexbox and gap for the larger-screen layout.",
+      "Add padding so the section breathes.",
+      "Use a media query to switch to one column on smaller screens.",
+    ],
+    commonMistakes: [
+      "Forgetting the media query entirely",
+      "Changing the width but not the layout direction",
+      "Letting the two areas feel unrelated because spacing is too weak",
+    ],
+    expectedOutcome:
+      "A section that feels comfortable on desktop and then stacks cleanly on smaller screens.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="promo">
+  <div class="visual">Image area</div>
+  <div class="copy">
+    <h2>Responsive layout</h2>
+    <p>Two columns on wider screens, one column on smaller ones.</p>
+  </div>
+</section>`,
+      css: `.promo {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+}
+
+.promo > * {
+  flex: 1;
+}
+
+.visual,
+.copy {
+  padding: 24px;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+@media (max-width: 700px) {
+  .promo {
+    flex-direction: column;
+  }
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "fluid-container-shell",
+    editorType: "web",
+    title: "Challenge 0 — Fluid Container Shell",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Build a page wrapper that stays centered with width: 90%, max-width, and auto margins.",
+    requirements: [
+      "Create one main container",
+      "Use width: 90%",
+      "Use max-width",
+      "Center the container with auto margins",
+      "Add padding or section spacing inside it",
+    ],
+    tips: [
+      "This pattern appears on a huge number of real websites.",
+      "The container stops text from stretching too wide.",
+      "Combine width and max-width so the layout feels flexible and controlled.",
+    ],
+    concepts: [
+      "responsive design",
+      "max-width",
+      "width: 100%",
+      "container pattern",
+      "layout structure",
+    ],
+    suggestedApproach: [
+      "Create a main wrapper and one or two sections inside it.",
+      "Set the wrapper width to 90% and add a max-width value.",
+      "Center it with margin: 0 auto.",
+      "Add inner spacing so the content feels readable.",
+    ],
+    commonMistakes: [
+      "Using a fixed width that breaks on smaller screens",
+      "Forgetting auto margins so the container stays stuck to one side",
+      "Letting the content fill the full screen width",
+    ],
+    expectedOutcome:
+      "A flexible page shell that stays centered and readable across screen sizes.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<main class="container">
+  <section class="panel">
+    <h2>Centered container</h2>
+    <p>This is the kind of wrapper you will reuse again and again.</p>
+  </section>
+</main>`,
+      css: `.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.panel {
+  padding: 24px;
+  border-radius: 20px;
+  background: #eff6ff;
+}`,
+      js: ``,
+    },
+  },
+  {
     id: "dashboard-stats-layout",
     editorType: "web",
     title: "Challenge 17 — Dashboard Stats Layout",
@@ -1596,6 +2290,172 @@ span {
 
 strong {
   font-size: 30px;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "polished-pricing-card",
+    editorType: "web",
+    title: "Challenge 0 — Polished Pricing Card",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Build a pricing card with radius, shadow, hover movement, and a visible focus state.",
+    requirements: [
+      "Create a pricing card",
+      "Add border-radius and box-shadow",
+      "Add a hover effect",
+      "Add transition and transform",
+      "Style a clear focus state on the button or link",
+    ],
+    tips: [
+      "This is where beginner work starts to feel more professional.",
+      "Keep the hover movement small and tidy.",
+      "Focus styles matter for keyboard users, not just for design.",
+    ],
+    concepts: [
+      "box-shadow",
+      "border-radius",
+      "transition",
+      "transform",
+      "focus states",
+    ],
+    suggestedApproach: [
+      "Create a card with a plan name, price, short list, and button.",
+      "Add radius and shadow so the card lifts off the page.",
+      "Use transition and transform for a small hover motion.",
+      "Add a strong focus style to the main action.",
+    ],
+    commonMistakes: [
+      "Making the hover movement too dramatic",
+      "Forgetting transition so the hover feels abrupt",
+      "Removing focus without adding a better focus state",
+    ],
+    expectedOutcome:
+      "A polished pricing card that feels calmer, clearer, and more professional than a plain box.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<article class="pricing-card">
+  <p class="plan">Starter</p>
+  <h2>£19</h2>
+  <p class="note">Perfect for building your first portfolio sections.</p>
+  <button>Choose plan</button>
+</article>`,
+      css: `.pricing-card {
+  max-width: 320px;
+  padding: 28px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+}
+
+.note {
+  opacity: 0.8;
+}
+
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+}
+
+button:focus {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "gradient-hero-callout",
+    editorType: "web",
+    title: "Challenge 0 — Gradient Hero Callout",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Build a hero callout that uses a linear gradient background and clean content spacing.",
+    requirements: [
+      "Create a callout or hero block",
+      "Add a heading and paragraph",
+      "Use a button or link button",
+      "Add a linear-gradient background",
+      "Use padding and rounded corners",
+    ],
+    tips: [
+      "Gradients work best when the rest of the layout stays simple.",
+      "Keep the text readable by using good contrast.",
+      "This is a nice place to practice visual hierarchy.",
+    ],
+    concepts: [
+      "background",
+      "linear-gradient",
+      "padding",
+      "border-radius",
+      "content hierarchy",
+    ],
+    suggestedApproach: [
+      "Build one wrapper with a heading, paragraph, and action.",
+      "Add a gradient background to the wrapper.",
+      "Use padding and rounded corners to frame the content.",
+      "Keep the spacing clean so the gradient does not have to do all the work.",
+    ],
+    commonMistakes: [
+      "Using a very loud gradient that makes text hard to read",
+      "Forgetting spacing inside the callout",
+      "Adding too many extra colors at the same time",
+    ],
+    expectedOutcome:
+      "A bright but tidy hero-style block that still feels readable and controlled.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="hero-callout">
+  <p class="eyebrow">New lesson</p>
+  <h2>Turn CSS basics into real page sections</h2>
+  <p>Learn selectors, layout, responsive design, and polish by building visual pieces that feel useful.</p>
+  <a href="#">Open class</a>
+</section>`,
+      css: `.hero-callout {
+  padding: 32px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: white;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0 0 14px;
+}
+
+a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: white;
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 800;
 }`,
       js: ``,
     },
@@ -2297,6 +3157,611 @@ togglePasswordBtn.addEventListener("click", () => {
   passwordInput.type = isHidden ? "text" : "password";
   togglePasswordBtn.textContent = isHidden ? "Hide" : "Show";
 });`,
+    },
+  },
+  {
+    id: "debug-broken-profile-card-css",
+    editorType: "web",
+    title: "Challenge 0 — Debug Broken Profile Card CSS",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Fix the broken CSS so the profile card becomes centered, readable, and properly spaced.",
+    requirements: [
+      "Keep the existing HTML structure",
+      "Center the card on the page",
+      "Add proper padding inside the card",
+      "Fix the card colors so the text is readable",
+      "Add rounded corners and one professional finishing touch",
+    ],
+    tips: [
+      "This is a bug-fix exercise, so start by reading what is already there.",
+      "You do not need to rewrite everything to fix a layout.",
+      "Think in small checks: centering, spacing, readability, and polish.",
+    ],
+    concepts: [
+      "CSS debugging",
+      "box model",
+      "centering",
+      "readability",
+      "visual polish",
+    ],
+    suggestedApproach: [
+      "Read the starter CSS and spot what looks suspicious.",
+      "Fix the page layout first so the card is centered.",
+      "Then fix spacing and colors inside the card.",
+      "Finish with one extra professional touch such as shadow or border.",
+    ],
+    commonMistakes: [
+      "Deleting everything instead of repairing the broken rules",
+      "Fixing the card background but forgetting the text color",
+      "Adding centering rules to the card instead of the page wrapper",
+    ],
+    expectedOutcome:
+      "A clean, centered profile card that looks like a real UI block instead of a broken draft.",
+    starter: {
+      html: `<main class="page">
+  <article class="card">
+    <h2>Olivia Stone</h2>
+    <p>Junior frontend developer focused on clean layouts and accessible UI.</p>
+    <a href="#">View portfolio</a>
+  </article>
+</main>`,
+      css: `.page {
+  min-height: 100vh;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  background: #e2e8f0;
+}
+
+.card {
+  width: 320px;
+  padding: 0;
+  border-radius: 0;
+  background: #0f172a;
+  color: #0f172a;
+  margin-left: 24px;
+}
+
+a {
+  color: #0f172a;
+  text-decoration: underline;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<main class="page">
+  <article class="card">
+    <h2>Olivia Stone</h2>
+    <p>Junior frontend developer focused on clean layouts and accessible UI.</p>
+    <a href="#">View portfolio</a>
+  </article>
+</main>`,
+      css: `.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e2e8f0;
+  padding: 24px;
+}
+
+.card {
+  width: 320px;
+  padding: 24px;
+  border-radius: 18px;
+  background: white;
+  color: #0f172a;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
+}
+
+a {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "debug-broken-navbar-layout",
+    editorType: "web",
+    title: "Challenge 0 — Debug Broken Navbar Layout",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Repair the broken navbar so the logo sits on the left, the links sit in one row on the right, and the whole bar feels usable.",
+    requirements: [
+      "Keep the existing HTML structure",
+      "Place the logo on the left and links on the right",
+      "Show the links in one row",
+      "Remove list bullets and default link decoration",
+      "Add spacing, padding, and a background to the navbar",
+    ],
+    tips: [
+      "Start by checking which element should become the flex container.",
+      "Lists inside navbars usually need both layout rules and list reset rules.",
+      "This kind of fix is common in assessment-day tasks.",
+    ],
+    concepts: [
+      "CSS debugging",
+      "flexbox",
+      "nav layout",
+      "list reset",
+      "spacing",
+    ],
+    suggestedApproach: [
+      "Read the starter CSS and identify which layout rules are missing or wrong.",
+      "Fix the navbar container first.",
+      "Then fix the links wrapper so the links line up in a row.",
+      "Finish with spacing, background, and cleaner link styling.",
+    ],
+    commonMistakes: [
+      "Applying flexbox to the wrong child element",
+      "Forgetting to remove list bullets",
+      "Leaving the navbar with no breathing room",
+    ],
+    expectedOutcome:
+      "A simple, tidy navbar that looks like something a junior developer could confidently ship.",
+    starter: {
+      html: `<nav class="navbar">
+  <strong class="logo">Studio North</strong>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Projects</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>`,
+      css: `.navbar {
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+}
+
+.nav-links {
+  display: block;
+  gap: 0;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.nav-links a {
+  color: #0f172a;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<nav class="navbar">
+  <strong class="logo">Studio North</strong>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Projects</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>`,
+      css: `.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  border-radius: 18px;
+  background: #0f172a;
+}
+
+.logo {
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "debug-broken-responsive-grid",
+    editorType: "web",
+    title: "Challenge 0 — Debug Broken Responsive Grid",
+    difficulty: "Medium",
+    category: "HTML + CSS",
+    goal: "Fix the broken card layout so it becomes a responsive grid that works on large and small screens.",
+    requirements: [
+      "Keep the existing HTML structure",
+      "Turn the layout into a grid",
+      "Add spacing between cards",
+      "Use a responsive column pattern",
+      "Keep the cards readable on smaller screens",
+    ],
+    tips: [
+      "A fixed-width multi-column layout is often the reason things break on mobile.",
+      "repeat(auto-fit, minmax()) is a strong responsive pattern.",
+      "You can also use a media query if you prefer.",
+    ],
+    concepts: [
+      "CSS debugging",
+      "CSS Grid",
+      "responsive layout",
+      "gap",
+      "minmax()",
+    ],
+    suggestedApproach: [
+      "Find the rule that is making the layout rigid.",
+      "Replace it with a real grid layout.",
+      "Add gap so the cards breathe.",
+      "Check that the cards can shrink or stack on smaller screens.",
+    ],
+    commonMistakes: [
+      "Keeping fixed card widths that still overflow",
+      "Forgetting to add gap after switching to Grid",
+      "Only fixing desktop and not thinking about mobile",
+    ],
+    expectedOutcome:
+      "A card section that behaves like a real responsive layout instead of a broken desktop-only row.",
+    starter: {
+      html: `<section class="cards">
+  <article>HTML Foundations</article>
+  <article>CSS Systems</article>
+  <article>JavaScript Basics</article>
+  <article>Portfolio Projects</article>
+</section>`,
+      css: `.cards {
+  display: block;
+  grid-template-columns: repeat(4, 280px);
+}
+
+.cards article {
+  width: 280px;
+  padding: 6px;
+  border-radius: 0;
+  background: #e2e8f0;
+  margin-bottom: 8px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="cards">
+  <article>HTML Foundations</article>
+  <article>CSS Systems</article>
+  <article>JavaScript Basics</article>
+  <article>Portfolio Projects</article>
+</section>`,
+      css: `.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.cards article {
+  padding: 20px;
+  border-radius: 16px;
+  background: #e2e8f0;
+  font-weight: 700;
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "copy-mock-pricing-section",
+    editorType: "web",
+    title: "Challenge 0 — Copy Mock Layout: Pricing Section",
+    difficulty: "Hard",
+    category: "HTML + CSS",
+    goal: "Recreate a pricing comparison section from the brief, like a small assessment-day layout task.",
+    requirements: [
+      "Add a section heading and short supporting paragraph",
+      "Create 3 pricing cards",
+      "Each card should include a plan name, price, list, and button",
+      "Make the middle card look featured",
+      "Use a responsive layout for the card row",
+      "Use spacing, shadow, and radius so it feels like a real design brief",
+    ],
+    tips: [
+      "Treat this like a mini take-home: work from the outside in.",
+      "Build one clean card first, then repeat the pattern.",
+      "A featured card usually needs one visual difference, not ten.",
+    ],
+    concepts: [
+      "mock layout copy",
+      "pricing cards",
+      "responsive layout",
+      "visual hierarchy",
+      "assessment practice",
+    ],
+    suggestedApproach: [
+      "Create the section shell and header copy first.",
+      "Build the card grid or flex row.",
+      "Create one pricing card and repeat it two more times.",
+      "Add one featured style to the middle card and polish the section spacing.",
+    ],
+    commonMistakes: [
+      "Making every card look different instead of following one system",
+      "Forgetting to highlight one featured plan",
+      "Leaving the cards unresponsive on smaller screens",
+    ],
+    expectedOutcome:
+      "A polished pricing section that looks close to the kind of layout brief a junior might get in an interview task.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="pricing-section">
+  <header class="pricing-copy">
+    <p class="eyebrow">Plans</p>
+    <h2>Choose a learning path that matches your pace.</h2>
+    <p>Three simple options, one featured choice, and a layout that still works on smaller screens.</p>
+  </header>
+
+  <div class="pricing-grid">
+    <article class="price-card">
+      <h3>Starter</h3>
+      <strong>£0</strong>
+      <ul>
+        <li>Core lessons</li>
+        <li>Basic challenges</li>
+        <li>Saved progress</li>
+      </ul>
+      <button>Start free</button>
+    </article>
+
+    <article class="price-card featured">
+      <h3>Growth</h3>
+      <strong>£19</strong>
+      <ul>
+        <li>All beginner tracks</li>
+        <li>Capstones and mock tasks</li>
+        <li>Interview-ready drills</li>
+      </ul>
+      <button>Choose Growth</button>
+    </article>
+
+    <article class="price-card">
+      <h3>Team</h3>
+      <strong>£49</strong>
+      <ul>
+        <li>Everything in Growth</li>
+        <li>Shared reporting</li>
+        <li>Mentor notes</li>
+      </ul>
+      <button>Contact team</button>
+    </article>
+  </div>
+</section>`,
+      css: `.pricing-section {
+  padding: 32px;
+  border-radius: 24px;
+  background: #f8fafc;
+}
+
+.pricing-copy {
+  max-width: 620px;
+  margin-bottom: 24px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.price-card {
+  padding: 24px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+.price-card strong {
+  display: block;
+  margin: 14px 0;
+  font-size: 32px;
+}
+
+.price-card ul {
+  padding-left: 18px;
+  line-height: 1.7;
+}
+
+.price-card button {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #0f172a;
+  color: white;
+  font-weight: 700;
+}
+
+.featured {
+  background: #dbeafe;
+  transform: translateY(-4px);
+}`,
+      js: ``,
+    },
+  },
+  {
+    id: "copy-mock-dashboard-overview",
+    editorType: "web",
+    title: "Challenge 0 — Copy Mock Layout: Dashboard Overview",
+    difficulty: "Hard",
+    category: "HTML + CSS",
+    goal: "Recreate a simple dashboard overview from the brief, like the kind of layout-copy task that appears in junior interviews.",
+    requirements: [
+      "Add a sidebar or navigation column",
+      "Add a top header area for the main content",
+      "Create 4 stat cards",
+      "Add one recent activity or updates panel",
+      "Use grid or flex for the larger layout",
+      "Make the layout adapt on smaller screens",
+    ],
+    tips: [
+      "Start with the biggest layout pieces first: sidebar, main area, then internal sections.",
+      "A dashboard should feel quiet, structured, and easy to scan.",
+      "Use repeated stat-card styles instead of styling each card from scratch.",
+    ],
+    concepts: [
+      "mock layout copy",
+      "dashboard shell",
+      "sidebar layout",
+      "responsive layout",
+      "assessment practice",
+    ],
+    suggestedApproach: [
+      "Create the outer shell with sidebar and main area.",
+      "Add a header and a stats grid inside the main area.",
+      "Build one stat card and repeat it four times.",
+      "Finish with a larger updates panel and then make the layout responsive.",
+    ],
+    commonMistakes: [
+      "Jumping straight into small details before the main layout exists",
+      "Making the dashboard too decorative instead of easy to scan",
+      "Forgetting to adapt the sidebar layout for smaller screens",
+    ],
+    expectedOutcome:
+      "A compact dashboard overview that feels close to a realistic HTML/CSS interview exercise.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<div class="dashboard-shell">
+  <aside class="sidebar">
+    <h2>North Panel</h2>
+    <nav>
+      <a href="#">Overview</a>
+      <a href="#">Learners</a>
+      <a href="#">Projects</a>
+      <a href="#">Settings</a>
+    </nav>
+  </aside>
+
+  <main class="dashboard-main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Overview</p>
+        <h1>Learning dashboard</h1>
+      </div>
+      <button>Export</button>
+    </header>
+
+    <section class="stats-grid">
+      <article><span>Students</span><strong>428</strong></article>
+      <article><span>Completion</span><strong>74%</strong></article>
+      <article><span>Projects</span><strong>96</strong></article>
+      <article><span>Reviews</span><strong>38</strong></article>
+    </section>
+
+    <section class="activity-panel">
+      <h2>Recent activity</h2>
+      <ul>
+        <li>Rookie block 3 received new submissions.</li>
+        <li>Builder filters challenge passed 12 times today.</li>
+        <li>React interview path reached 84% completion.</li>
+      </ul>
+    </section>
+  </main>
+</div>`,
+      css: `.dashboard-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 20px;
+}
+
+.sidebar,
+.topbar,
+.stats-grid article,
+.activity-panel {
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #dbe3ef;
+}
+
+.sidebar {
+  padding: 24px;
+}
+
+.sidebar nav {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sidebar a {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.dashboard-main {
+  display: grid;
+  gap: 18px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 22px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.stats-grid article,
+.activity-panel {
+  padding: 20px;
+}
+
+.stats-grid span {
+  display: block;
+  margin-bottom: 10px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.stats-grid strong {
+  font-size: 30px;
+}
+
+.activity-panel ul {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  line-height: 1.7;
+}
+
+button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+  }
+}`,
+      js: ``,
     },
   },
   {

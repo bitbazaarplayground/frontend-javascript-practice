@@ -2,6 +2,7 @@ import { builderChallenges } from "./builder.js";
 import { interviewChallenges } from "./interview.js";
 import { reactChallenges } from "./react.js";
 import { rookieChallenges } from "./rookie.js";
+import { typescriptChallenges } from "./typescript.js";
 
 function renumberChallenges(challenges) {
   return challenges.map((challenge, index) => {
@@ -23,7 +24,7 @@ export const challengeModes = [
     id: "rookie",
     title: "Rookie",
     description:
-      "Build strong foundations in HTML and CSS with beginner-friendly layout and styling challenges.",
+      "Build HTML and CSS foundations from selectors and spacing through flexbox, grid, responsive sections, polished beginner projects, and first interview-style layout tasks.",
     level: "Beginner",
     challenges: renumberChallenges(rookieChallenges),
   },
@@ -44,10 +45,18 @@ export const challengeModes = [
     challenges: renumberChallenges(reactChallenges),
   },
   {
+    id: "typescript",
+    title: "TypeScript",
+    description:
+      "Move from plain React into typed frontend work with interfaces, unions, typed props, typed forms, async data, and a full TypeScript capstone.",
+    level: "Intermediate to Advanced",
+    challenges: renumberChallenges(typescriptChallenges),
+  },
+  {
     id: "interview",
     title: "Interview Ready",
     description:
-      "Practice hiring-style builds that combine layout, DOM logic, async states, accessibility, debugging, TypeScript, and realistic React take-homes.",
+      "Practice hiring-style builds that combine layout, DOM logic, async states, accessibility, testing, debugging, TypeScript, and realistic React take-homes.",
     level: "Advanced",
     challenges: renumberChallenges(interviewChallenges),
   },

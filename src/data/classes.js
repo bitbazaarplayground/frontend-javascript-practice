@@ -3,6 +3,7 @@ const classPhaseMap = {
   "class-02": "phase-01",
   "class-03": "phase-01",
   "class-04": "phase-01",
+  "class-28": "phase-01",
   "class-15": "phase-01",
   "class-05": "phase-02",
   "class-06": "phase-02",
@@ -16,6 +17,10 @@ const classPhaseMap = {
   "class-13": "phase-05",
   "class-14": "phase-05",
   "class-17": "phase-05",
+  "class-36": "phase-05",
+  "class-37": "phase-05",
+  "class-38": "phase-05",
+  "class-39": "phase-05",
   "class-18": "phase-06",
   "class-19": "phase-06",
   "class-20": "phase-06",
@@ -26,6 +31,13 @@ const classPhaseMap = {
   "class-25": "phase-06",
   "class-26": "phase-06",
   "class-27": "phase-06",
+  "class-29": "phase-06",
+  "class-30": "phase-06",
+  "class-31": "phase-06",
+  "class-32": "phase-06",
+  "class-33": "phase-06",
+  "class-34": "phase-06",
+  "class-35": "phase-06",
 };
 
 const roadmapPhases = [
@@ -36,26 +48,26 @@ const roadmapPhases = [
       es: "Fase 1 - Fundamentos",
     },
     duration: {
-      en: "2-3 weeks",
-      es: "2-3 semanas",
+      en: "5-7 weeks",
+      es: "5-7 semanas",
     },
     summary: {
-      en: "Learn the visual language of the web: structure, layout, forms, responsive sections, and the first small interactions.",
-      es: "Aprende el lenguaje visual de la web: estructura, layout, formularios, secciones responsive y primeras interacciones.",
+      en: "Learn the visual language of the web from selectors and the box model through flexbox, grid, responsive design, forms, and the first small UI patterns.",
+      es: "Aprende el lenguaje visual de la web desde selectores y modelo de caja hasta flexbox, grid, diseno responsive, formularios y los primeros patrones pequenos de UI.",
     },
     focus: {
       en: [
-        "HTML and CSS confidence",
-        "Visual polish and spacing",
-        "Beginner-friendly portfolio pieces",
+        "Selectors, spacing, and layout confidence",
+        "Responsive sections that look more professional",
+        "Beginner-friendly UI pieces, bug-fixing, and portfolio blocks",
       ],
       es: [
-        "Confianza con HTML y CSS",
-        "Pulido visual y espaciado",
-        "Primeras piezas para portfolio",
+        "Confianza con selectores, espaciado y layout",
+        "Secciones responsive con mejor aspecto",
+        "Primeras piezas de UI, correccion de bugs y bloques para portfolio",
       ],
     },
-    classIds: ["class-01", "class-02", "class-03", "class-04", "class-15"],
+    classIds: ["class-01", "class-02", "class-03", "class-04", "class-28", "class-15"],
   },
   {
     id: "phase-02",
@@ -152,22 +164,33 @@ const roadmapPhases = [
       es: "4-6 semanas",
     },
     summary: {
-      en: "Build portfolio-grade React features with routing, auth flows, persistence, accessibility, composition, and capstones.",
-      es: "Construye funcionalidades de React para portfolio con routing, auth, persistencia, accesibilidad, composicion y capstones.",
+      en: "Build portfolio-grade React features with routing, auth flows, persistence, accessibility, composition, TypeScript foundations, and capstones.",
+      es: "Construye funcionalidades de React para portfolio con routing, auth, persistencia, accesibilidad, composicion, fundamentos de TypeScript y capstones.",
     },
     focus: {
       en: [
         "Larger React flows",
         "Routing and protected screens",
+        "Typed frontend habits with TypeScript",
         "Portfolio-ready capstones",
       ],
       es: [
         "Flujos React mas grandes",
         "Routing y pantallas protegidas",
+        "Habitos de frontend tipado con TypeScript",
         "Capstones listos para portfolio",
       ],
     },
-    classIds: ["class-12", "class-13", "class-14", "class-17"],
+    classIds: [
+      "class-12",
+      "class-13",
+      "class-14",
+      "class-17",
+      "class-36",
+      "class-37",
+      "class-38",
+      "class-39",
+    ],
   },
   {
     id: "phase-06",
@@ -176,22 +199,22 @@ const roadmapPhases = [
       es: "Fase 6 - Entrevistas y pruebas tecnicas",
     },
     duration: {
-      en: "2-4 weeks",
-      es: "2-4 semanas",
+      en: "3-6 weeks",
+      es: "3-6 semanas",
     },
     summary: {
-      en: "Practice take-homes, accessibility checks, TypeScript, shipping quality, and several bug-fix drills that feel much closer to real hiring.",
-      es: "Practica take-homes, accesibilidad, TypeScript, calidad de envio y varias pruebas de depuracion mucho mas cercanas a una contratacion real.",
+      en: "Practice take-homes, accessibility work, testing, TypeScript, shipping quality, and several bug-fix drills that feel much closer to real hiring.",
+      es: "Practica take-homes, accesibilidad, testing, TypeScript, calidad de envio y varias pruebas de depuracion mucho mas cercanas a una contratacion real.",
     },
     focus: {
       en: [
         "Interview-style builds",
-        "Debugging and repair work",
+        "Accessibility, testing, and debugging under pressure",
         "Quality-focused decision making",
       ],
       es: [
         "Builds tipo entrevista",
-        "Depuracion y trabajo de reparacion",
+        "Accesibilidad, testing y depuracion bajo presion",
         "Toma de decisiones centrada en calidad",
       ],
     },
@@ -201,16 +224,239 @@ const roadmapPhases = [
       "class-20",
       "class-21",
       "class-22",
+      "class-29",
+      "class-30",
       "class-23",
       "class-24",
       "class-25",
       "class-26",
+      "class-31",
+      "class-32",
+      "class-33",
+      "class-34",
+      "class-35",
       "class-27",
     ],
   },
 ];
 
 const classSections = {
+  "class-01": [
+    {
+      title: {
+        en: "Selectors in action",
+        es: "Selectores en accion",
+      },
+      summary: {
+        en: "Learn how CSS points at the right element with simple selector patterns.",
+        es: "Aprende como CSS apunta al elemento correcto con patrones de selectores sencillos.",
+      },
+      challengeIds: [
+        "styled-heading",
+        "styled-button",
+        "selector-playground-card",
+        "nav-link-hover-styles",
+      ],
+    },
+    {
+      title: {
+        en: "Box model control",
+        es: "Control del modelo de caja",
+      },
+      summary: {
+        en: "Practice inner space, outer space, borders, size, and calmer box sizing.",
+        es: "Practica espacio interior, espacio exterior, bordes, tamano y un box sizing mas claro.",
+      },
+      challengeIds: [
+        "box-model-profile-tile",
+        "border-box-info-panel",
+        "centered-box",
+        "styled-info-badge",
+      ],
+    },
+    {
+      title: {
+        en: "Mini build",
+        es: "Mini build",
+      },
+      summary: {
+        en: "Put the basics together in one small styled section.",
+        es: "Une lo basico en una pequena seccion estilizada.",
+      },
+      challengeIds: ["intro-block-capstone"],
+    },
+  ],
+  "class-02": [
+    {
+      title: {
+        en: "Display and alignment",
+        es: "Display y alineacion",
+      },
+      summary: {
+        en: "See how small elements behave in a row, a block, or disappear from the page.",
+        es: "Comprende como se comportan elementos pequenos en fila, en bloque o cuando desaparecen de la pagina.",
+      },
+      challengeIds: [
+        "display-mode-announcement",
+        "center-circle",
+      ],
+    },
+    {
+      title: {
+        en: "Flexbox patterns",
+        es: "Patrones de flexbox",
+      },
+      summary: {
+        en: "Use flexbox to center, share space, and wrap repeated UI pieces.",
+        es: "Usa flexbox para centrar, repartir espacio y envolver piezas repetidas de UI.",
+      },
+      challengeIds: [
+        "two-column-layout",
+        "flex-service-row",
+        "flex-wrap-chip-row",
+      ],
+    },
+    {
+      title: {
+        en: "Common UI blocks",
+        es: "Bloques comunes de UI",
+      },
+      summary: {
+        en: "Build the kinds of cards, navbars, and hero copy sections learners see on real sites.",
+        es: "Construye los tipos de tarjetas, navbars y heroes de texto que se ven en webs reales.",
+      },
+      challengeIds: ["profile-card", "simple-navbar", "hero-copy-stack"],
+    },
+    {
+      title: {
+        en: "Section build",
+        es: "Build de seccion",
+      },
+      summary: {
+        en: "Combine the patterns into one landing-style header section.",
+        es: "Combina estos patrones en una seccion inicial tipo landing.",
+      },
+      challengeIds: ["landing-header-capstone"],
+    },
+  ],
+  "class-03": [
+    {
+      title: {
+        en: "Grid and responsive structure",
+        es: "Grid y estructura responsive",
+      },
+      summary: {
+        en: "Move from fixed rows into card boards, galleries, and layouts that adapt to screen size.",
+        es: "Pasa de filas fijas a tableros, galerias y layouts que se adaptan al tamano de pantalla.",
+      },
+      challengeIds: [
+        "grid-feature-board",
+        "css-grid-gallery",
+        "responsive-card-grid",
+        "media-query-stack-layout",
+        "fluid-container-shell",
+        "dashboard-stats-layout",
+      ],
+    },
+    {
+      title: {
+        en: "Visual polish",
+        es: "Pulido visual",
+      },
+      summary: {
+        en: "Add the finishing layer that makes beginner projects feel more professional.",
+        es: "Anade la capa final que hace que los proyectos de principiante se vean mas profesionales.",
+      },
+      challengeIds: [
+        "polished-pricing-card",
+        "gradient-hero-callout",
+        "responsive-feature-strip",
+      ],
+    },
+    {
+      title: {
+        en: "Portfolio-ready build",
+        es: "Build listo para portfolio",
+      },
+      summary: {
+        en: "Use responsive layout and polish in one section that could live in a portfolio.",
+        es: "Usa layout responsive y pulido en una seccion que podria vivir en un portfolio.",
+      },
+      challengeIds: ["portfolio-section-capstone"],
+    },
+  ],
+  "class-04": [
+    {
+      title: {
+        en: "Forms and content blocks",
+        es: "Formularios y bloques de contenido",
+      },
+      summary: {
+        en: "Build readable forms, content cards, and semantic sections that feel useful.",
+        es: "Construye formularios legibles, tarjetas de contenido y secciones semanticas que se sientan utiles.",
+      },
+      challengeIds: [
+        "semantic-article-layout",
+        "login-form-ui",
+        "product-card",
+        "accessible-form-labels",
+        "newsletter-signup-ui",
+      ],
+    },
+    {
+      title: {
+        en: "First UI patterns",
+        es: "Primeros patrones de UI",
+      },
+      summary: {
+        en: "Use tiny interactions to see how buttons can change what the user sees.",
+        es: "Usa interacciones pequenas para ver como los botones cambian lo que el usuario ve.",
+      },
+      challengeIds: ["toggle-theme", "counter-app", "show-hide-password"],
+    },
+    {
+      title: {
+        en: "All-in-one page",
+        es: "Pagina integradora",
+      },
+      summary: {
+        en: "Finish the block with a one-page build that combines layout, forms, and a first interaction.",
+        es: "Termina el bloque con una web de una pagina que combina layout, formularios y una primera interaccion.",
+      },
+      challengeIds: ["one-page-site-capstone"],
+    },
+  ],
+  "class-28": [
+    {
+      title: {
+        en: "CSS bug-fix drills",
+        es: "Retos de correccion de bugs CSS",
+      },
+      summary: {
+        en: "Repair broken card, navbar, and responsive layout styles the way a junior often has to during an interview or a first real job.",
+        es: "Repara estilos rotos de tarjetas, navbars y layouts responsive como suele tocar en entrevistas o en un primer trabajo junior.",
+      },
+      challengeIds: [
+        "debug-broken-profile-card-css",
+        "debug-broken-navbar-layout",
+        "debug-broken-responsive-grid",
+      ],
+    },
+    {
+      title: {
+        en: "Mock layout copy tests",
+        es: "Pruebas de copiar layouts desde un brief",
+      },
+      summary: {
+        en: "Practice brief-driven layout work with two interview-style tasks that feel closer to assessment-day frontend work.",
+        es: "Practica trabajo de layout guiado por brief con dos tareas estilo entrevista mas cercanas a una prueba tecnica real.",
+      },
+      challengeIds: [
+        "copy-mock-pricing-section",
+        "copy-mock-dashboard-overview",
+      ],
+    },
+  ],
   "class-05": [
     {
       title: {
@@ -282,8 +528,20 @@ const classSections = {
       challengeIds: [
         "simple-form-validation",
         "contact-form-validation",
+        "login-form-submit-object",
+        "booking-form-reset",
         "password-strength-checker",
         "password-rules-validation",
+      ],
+    },
+    {
+      title: {
+        en: "Form objects and submission flows",
+        es: "Objetos de formulario y flujos de envio",
+      },
+      challengeIds: [
+        "reservation-form-summary",
+        "form-data-preview",
       ],
     },
     {
@@ -342,6 +600,21 @@ const classSections = {
       challengeIds: [
         "save-notes-localstorage",
         "save-load-todos-localstorage",
+        "saved-favourites-localstorage",
+        "cart-items-localstorage",
+      ],
+    },
+    {
+      title: {
+        en: "Fetch mini apps",
+        es: "Mini apps con fetch",
+      },
+      challengeIds: [
+        "mock-product-search",
+        "github-profile-finder",
+        "weather-search-panel",
+        "recipe-search-app",
+        "promise-all-user-posts",
       ],
     },
     {
@@ -351,8 +624,6 @@ const classSections = {
       },
       challengeIds: [
         "shopping-cart-total",
-        "mock-product-search",
-        "promise-all-user-posts",
         "filter-sort-products",
       ],
     },
@@ -362,6 +633,37 @@ const classSections = {
         es: "Checkpoint de dashboard async",
       },
       challengeIds: ["async-dashboard-capstone"],
+    },
+  ],
+  "class-08": [
+    {
+      title: {
+        en: "Rendering and event patterns",
+        es: "Patrones de renderizado y eventos",
+      },
+      challengeIds: [
+        "render-users-from-array",
+        "event-delegation-todo-actions",
+        "dropdown-menu-toggle",
+      ],
+    },
+    {
+      title: {
+        en: "Async search and tables",
+        es: "Busqueda asincrona y tablas",
+      },
+      challengeIds: [
+        "async-product-search",
+        "paginated-table",
+        "kpi-dashboard-calculator",
+      ],
+    },
+    {
+      title: {
+        en: "Admin checkpoint",
+        es: "Checkpoint administrativo",
+      },
+      challengeIds: ["admin-dashboard-capstone"],
     },
   ],
   "class-09": [
@@ -458,6 +760,7 @@ const classSections = {
         "lift-state-up",
         "reusable-button-component",
         "react-form-validation",
+        "react-booking-form-app",
         "react-modal-component",
         "react-accordion-item",
         "react-tabs-component",
@@ -494,8 +797,8 @@ const classSections = {
       },
       challengeIds: [
         "react-loaded-category-filter",
-        "react-custom-data-hook",
         "react-sort-products",
+        "react-movie-search-app",
         "react-toggle-favourites",
       ],
     },
@@ -505,6 +808,7 @@ const classSections = {
         es: "Persistencia y pulido async",
       },
       challengeIds: [
+        "react-custom-data-hook",
         "react-theme-localstorage",
         "react-disable-submit-loading",
         "react-debounced-search",
@@ -531,6 +835,7 @@ const classSections = {
       },
       challengeIds: [
         "react-usereducer-todos",
+        "react-contact-manager",
         "react-context-theme",
         "react-view-mode-context",
       ],
@@ -567,6 +872,7 @@ const classSections = {
         "react-router-basic-pages",
         "react-route-tab-navigation",
         "react-router-dynamic-user",
+        "react-router-product-detail",
       ],
     },
     {
@@ -580,6 +886,74 @@ const classSections = {
       ],
     },
   ],
+  "class-36": [
+    {
+      title: {
+        en: "Typed shapes first",
+        es: "Primero, formas tipadas",
+      },
+      summary: {
+        en: "Start with the core habit: describe your UI data shape before you render it.",
+        es: "Empieza con el habito central: describe la forma de tus datos antes de renderizarlos.",
+      },
+      challengeIds: [
+        "ts-typed-profile-card",
+        "ts-interface-feature-list",
+        "ts-union-status-badge",
+        "ts-optional-note-card",
+      ],
+    },
+  ],
+  "class-37": [
+    {
+      title: {
+        en: "Typed events and forms",
+        es: "Eventos y formularios tipados",
+      },
+      summary: {
+        en: "Use TypeScript in the places where juniors often feel shaky: clicks, inputs, submit handlers, and narrowing unclear values.",
+        es: "Usa TypeScript en los puntos donde mucha gente junior duda: clicks, inputs, submit handlers y narrowing de valores poco claros.",
+      },
+      challengeIds: [
+        "ts-typed-click-counter",
+        "ts-controlled-booking-form",
+        "ts-narrowing-feedback-panel",
+        "ts-filtered-directory",
+      ],
+    },
+  ],
+  "class-38": [
+    {
+      title: {
+        en: "Typed data flows",
+        es: "Flujos de datos tipados",
+      },
+      summary: {
+        en: "Practice updating objects safely, fetching typed data, and rendering realistic UI from known shapes.",
+        es: "Practica actualizar objetos con seguridad, cargar datos tipados y renderizar UI realista desde formas conocidas.",
+      },
+      challengeIds: [
+        "ts-spread-settings-panel",
+        "ts-fetch-menu-board",
+        "ts-favourites-toggle-list",
+        "ts-typed-search-results",
+        "ts-refactor-feedback-board",
+      ],
+    },
+  ],
+  "class-39": [
+    {
+      title: {
+        en: "TypeScript capstone",
+        es: "Capstone de TypeScript",
+      },
+      summary: {
+        en: "Bring typed props, state, data rendering, filters, and async UI together in one practical dashboard.",
+        es: "Une props tipadas, estado, renderizado de datos, filtros y UI asincrona en un dashboard practico.",
+      },
+      challengeIds: ["ts-all-in-one-dashboard-capstone"],
+    },
+  ],
 };
 
 const classModules = [
@@ -590,28 +964,32 @@ const classModules = [
     challengeIds: [
       "styled-heading",
       "styled-button",
-      "centered-box",
+      "selector-playground-card",
+      "nav-link-hover-styles",
+      "box-model-profile-tile",
+      "border-box-info-panel",
       "styled-info-badge",
+      "centered-box",
       "intro-block-capstone",
     ],
     title: {
-      en: "HTML structure and visual foundations",
-      es: "Estructura HTML y bases visuales",
+      en: "Selectors, box model, and first layout wins",
+      es: "Selectores, modelo de caja y primeras victorias de layout",
     },
     summary: {
-      en: "Students learn how a page is built, how elements are selected, and how CSS changes the visual result.",
-      es: "El alumnado aprende como se construye una pagina, como seleccionar elementos y como CSS cambia el resultado visual.",
+      en: "Students learn how CSS finds elements, how boxes take up space, and how a few simple layout rules create a visible result quickly.",
+      es: "El alumnado aprende como CSS encuentra elementos, como las cajas ocupan espacio y como unas pocas reglas de layout ya crean un resultado visible.",
     },
     outcomes: {
       en: [
-        "Write valid HTML elements",
-        "Connect classes to CSS rules",
-        "Use spacing, borders, and color intentionally",
+        "Use element, class, and id selectors on purpose",
+        "Understand margin, padding, border, and box-sizing",
+        "Create clean early UI blocks with spacing and color",
       ],
       es: [
-        "Escribir elementos HTML validos",
-        "Conectar clases con reglas CSS",
-        "Usar espaciado, bordes y color con intencion",
+        "Usar selectores de elemento, clase e id con intencion",
+        "Entender margin, padding, border y box-sizing",
+        "Crear bloques de UI limpios con espaciado y color",
       ],
     },
     project: {
@@ -624,36 +1002,39 @@ const classModules = [
     number: "02",
     modeId: "rookie",
     challengeIds: [
-      "profile-card",
-      "simple-navbar",
+      "display-mode-announcement",
       "center-circle",
       "two-column-layout",
+      "flex-service-row",
+      "flex-wrap-chip-row",
+      "profile-card",
+      "simple-navbar",
       "hero-copy-stack",
       "landing-header-capstone",
     ],
     title: {
-      en: "Layout, cards, and navigation",
-      es: "Layout, tarjetas y navegacion",
+      en: "Display, flexbox, and common UI patterns",
+      es: "Display, flexbox y patrones comunes de UI",
     },
     summary: {
-      en: "A practical pass through flexbox, reusable sections, page rhythm, and common UI building blocks.",
-      es: "Un recorrido practico por flexbox, secciones reutilizables, ritmo visual y bloques habituales de UI.",
+      en: "A practical pass through display rules, flexbox alignment, repeated card patterns, and the kinds of layout pieces beginners see on real websites.",
+      es: "Un recorrido practico por reglas de display, alineacion con flexbox, patrones repetidos de tarjetas y piezas de layout que se ven en webs reales.",
     },
     outcomes: {
       en: [
-        "Center content with flexbox",
-        "Build cards and navbars",
-        "Create simple responsive structures",
+        "Understand block, inline-block, and flexible rows",
+        "Build cards, navbars, and repeated service layouts",
+        "Use flexbox to center, align, wrap, and share space",
       ],
       es: [
-        "Centrar contenido con flexbox",
-        "Crear tarjetas y barras de navegacion",
-        "Construir estructuras responsive sencillas",
+        "Entender block, inline-block y filas flexibles",
+        "Crear tarjetas, navbars y layouts repetidos de servicios",
+        "Usar flexbox para centrar, alinear, envolver y repartir espacio",
       ],
     },
     project: {
-      en: "A profile card landing section",
-      es: "Una seccion inicial con tarjeta de perfil",
+      en: "A small landing header section",
+      es: "Una pequena seccion inicial de landing",
     },
   },
   {
@@ -661,37 +1042,40 @@ const classModules = [
     number: "03",
     modeId: "rookie",
     challengeIds: [
-      "login-form-ui",
-      "product-card",
-      "toggle-theme",
-      "counter-app",
-      "show-hide-password",
-      "newsletter-signup-ui",
-      "one-page-site-capstone",
+      "grid-feature-board",
+      "css-grid-gallery",
+      "responsive-card-grid",
+      "media-query-stack-layout",
+      "fluid-container-shell",
+      "dashboard-stats-layout",
+      "polished-pricing-card",
+      "gradient-hero-callout",
+      "responsive-feature-strip",
+      "portfolio-section-capstone",
     ],
     title: {
-      en: "Forms, product UI, and first interactions",
-      es: "Formularios, UI de producto y primeras interacciones",
+      en: "Grid, responsive design, and CSS polish",
+      es: "Grid, diseno responsive y pulido CSS",
     },
     summary: {
-      en: "Students move from static UI into forms and small JavaScript-powered interactions.",
-      es: "El alumnado pasa de UI estatica a formularios e interacciones pequenas con JavaScript.",
+      en: "Students move from simple rows into grids, responsive sections, container patterns, and the visual polish that makes beginner work feel more professional.",
+      es: "El alumnado pasa de filas sencillas a grids, secciones responsive, patrones de contenedor y el pulido visual que hace que el trabajo se vea mas profesional.",
     },
     outcomes: {
       en: [
-        "Build usable form layouts",
-        "Understand button-driven UI changes",
-        "Connect simple JavaScript to the page",
+        "Use Grid for boards, galleries, and card sections",
+        "Make layouts adapt across desktop, tablet, and mobile",
+        "Apply polish with shadow, hover, focus, and gradients",
       ],
       es: [
-        "Crear formularios usables",
-        "Entender cambios de UI activados por botones",
-        "Conectar JavaScript sencillo con la pagina",
+        "Usar Grid para tableros, galerias y secciones de tarjetas",
+        "Hacer que los layouts se adapten a escritorio, tablet y movil",
+        "Aplicar pulido con sombras, hover, focus y gradientes",
       ],
     },
     project: {
-      en: "A sign-in and product card interface",
-      es: "Una interfaz de login y tarjeta de producto",
+      en: "A polished portfolio section",
+      es: "Una seccion de portfolio pulida",
     },
   },
   {
@@ -700,41 +1084,79 @@ const classModules = [
     modeId: "rookie",
     challengeIds: [
       "semantic-article-layout",
+      "login-form-ui",
+      "product-card",
+      "newsletter-signup-ui",
       "accessible-form-labels",
-      "css-grid-gallery",
-      "responsive-card-grid",
-      "dashboard-stats-layout",
-      "responsive-feature-strip",
-      "portfolio-section-capstone",
+      "toggle-theme",
+      "counter-app",
+      "show-hide-password",
+      "one-page-site-capstone",
     ],
     title: {
-      en: "Responsive CSS, accessibility, and portfolio sections",
-      es: "CSS responsive, accesibilidad y secciones de portfolio",
+      en: "Forms, content sections, and first UI patterns",
+      es: "Formularios, secciones de contenido y primeros patrones de UI",
     },
     summary: {
-      en: "A job-readiness bridge from basic layouts into semantic, accessible, responsive sections a portfolio can actually use.",
-      es: "Un puente hacia empleabilidad con secciones semanticas, accesibles y responsive que pueden vivir en un portfolio real.",
+      en: "A bridge from polished CSS into usable forms, semantic content blocks, and the first tiny JavaScript-powered UI changes.",
+      es: "Un puente desde CSS pulido hacia formularios usables, bloques de contenido semantico y los primeros cambios pequenos de UI con JavaScript.",
     },
     outcomes: {
       en: [
-        "Use semantic HTML for real content",
-        "Build accessible forms and focus states",
-        "Create responsive portfolio and dashboard sections",
+        "Build forms and card-based content sections",
+        "Use semantic HTML and accessible labels",
+        "Understand the first small button-driven UI changes",
       ],
       es: [
-        "Usar HTML semantico para contenido real",
-        "Crear formularios accesibles y estados focus",
-        "Construir secciones responsive de portfolio y dashboard",
+        "Crear formularios y secciones de contenido basadas en tarjetas",
+        "Usar HTML semantico y labels accesibles",
+        "Entender los primeros pequenos cambios de UI activados por botones",
       ],
     },
     project: {
-      en: "A responsive portfolio work section",
-      es: "Una seccion responsive de trabajos para portfolio",
+      en: "A one-page practice website",
+      es: "Una web de practica de una pagina",
+    },
+  },
+  {
+    id: "class-28",
+    number: "05",
+    modeId: "rookie",
+    challengeIds: [
+      "debug-broken-profile-card-css",
+      "debug-broken-navbar-layout",
+      "debug-broken-responsive-grid",
+      "copy-mock-pricing-section",
+      "copy-mock-dashboard-overview",
+    ],
+    title: {
+      en: "Debugging broken CSS and mock assessments",
+      es: "Depurar CSS roto y practicar layouts de entrevista",
+    },
+    summary: {
+      en: "A final HTML/CSS interview-prep block focused on bug fixing and layout-copy tasks that feel much closer to what juniors are often asked to do.",
+      es: "Un bloque final de preparacion HTML/CSS para entrevistas centrado en corregir bugs y copiar layouts, mucho mas cercano a lo que suelen pedir a un junior.",
+    },
+    outcomes: {
+      en: [
+        "Read broken CSS calmly and repair the smallest real cause",
+        "Copy a structured layout from a brief instead of from memory",
+        "Explain layout decisions the way a junior would in an assessment",
+      ],
+      es: [
+        "Leer CSS roto con calma y reparar la causa real mas pequena",
+        "Copiar un layout estructurado desde un brief y no solo de memoria",
+        "Explicar decisiones de layout como lo haria un junior en una prueba",
+      ],
+    },
+    project: {
+      en: "Two mock interview layouts and three bug-fix drills",
+      es: "Dos layouts tipo entrevista y tres retos de correccion",
     },
   },
   {
     id: "class-15",
-    number: "05",
+    number: "06",
     modeId: "rookie",
     challengeIds: ["rookie-all-in-one-restaurant-site"],
     title: {
@@ -824,6 +1246,10 @@ const classModules = [
     challengeIds: [
       "simple-form-validation",
       "contact-form-validation",
+      "login-form-submit-object",
+      "booking-form-reset",
+      "reservation-form-summary",
+      "form-data-preview",
       "prevent-duplicate-items",
       "add-item-to-list",
       "add-goal-to-list",
@@ -843,17 +1269,19 @@ const classModules = [
       es: "Formularios, arrays y logica reutilizable de UI",
     },
     summary: {
-      en: "Students practice the core patterns used in real frontends: validation, rendering lists, filtering, sorting, and tabs.",
-      es: "El alumnado practica patrones reales de frontend: validacion, renderizado de listas, filtros, ordenacion y pestanas.",
+      en: "Students practice the core patterns used in real frontends: validation, turning form input into objects, list updates, filtering, sorting, and tabs.",
+      es: "El alumnado practica patrones reales de frontend: validacion, convertir formularios en objetos, actualizar listas, filtrar, ordenar y usar pestanas.",
     },
     outcomes: {
       en: [
         "Validate user input",
+        "Turn submitted form values into useful objects",
         "Render arrays into the DOM",
         "Refactor repeated UI updates into functions",
       ],
       es: [
         "Validar datos del usuario",
+        "Convertir valores enviados en objetos utiles",
         "Renderizar arrays en el DOM",
         "Refactorizar actualizaciones repetidas en funciones",
       ],
@@ -874,36 +1302,43 @@ const classModules = [
       "await-user-card",
       "async-save-button",
       "save-notes-localstorage",
-      "shopping-cart-total",
-      "mock-product-search",
-      "promise-all-user-posts",
-      "filter-sort-products",
       "save-load-todos-localstorage",
+      "saved-favourites-localstorage",
+      "cart-items-localstorage",
+      "mock-product-search",
+      "github-profile-finder",
+      "weather-search-panel",
+      "recipe-search-app",
+      "promise-all-user-posts",
+      "shopping-cart-total",
+      "filter-sort-products",
       "async-dashboard-capstone",
     ],
     title: {
-      en: "Async JavaScript and browser storage",
-      es: "JavaScript asincrono y almacenamiento del navegador",
+      en: "Async JavaScript, APIs, and browser storage",
+      es: "JavaScript asincrono, APIs y almacenamiento del navegador",
     },
     summary: {
-      en: "A job-readiness bridge into promises, async/await, loading states, retry flows, and localStorage.",
-      es: "Un puente hacia empleabilidad con promesas, async/await, estados de carga, reintentos y localStorage.",
+      en: "A job-readiness bridge into promises, async/await, loading states, fetch mini apps, and saved browser data.",
+      es: "Un puente hacia empleabilidad con promesas, async/await, estados de carga, mini apps con fetch y datos guardados en el navegador.",
     },
     outcomes: {
       en: [
         "Handle loading, error, and success states",
         "Use promises and async/await",
-        "Persist small pieces of app data",
+        "Persist useful pieces of app data",
+        "Explain how fetch-driven UI updates happen step by step",
       ],
       es: [
         "Manejar estados de carga, error y exito",
         "Usar promesas y async/await",
-        "Persistir pequenos datos de la app",
+        "Persistir datos utiles de la app",
+        "Explicar paso a paso como una UI se actualiza tras fetch",
       ],
     },
     project: {
-      en: "A mini dashboard fed by mock data",
-      es: "Un mini dashboard con datos simulados",
+      en: "A mini dashboard with async and saved state",
+      es: "Un mini dashboard con async y estado guardado",
     },
   },
   {
@@ -913,7 +1348,6 @@ const classModules = [
     challengeIds: [
       "render-users-from-array",
       "event-delegation-todo-actions",
-      "form-data-preview",
       "dropdown-menu-toggle",
       "async-product-search",
       "paginated-table",
@@ -925,8 +1359,8 @@ const classModules = [
       es: "Patrones profesionales de UI con JavaScript",
     },
     summary: {
-      en: "Students practice the patterns that show up in junior frontend tasks: rendering from data, delegated events, form objects, async search, pagination, and KPI calculations.",
-      es: "El alumnado practica patrones habituales en tareas junior: renderizar desde datos, eventos delegados, objetos de formulario, busqueda asincrona, paginacion y KPIs.",
+      en: "Students practice the patterns that show up in junior frontend tasks: rendering from data, delegated events, menu interactions, async search, pagination, and KPI calculations.",
+      es: "El alumnado practica patrones habituales en tareas junior: renderizar desde datos, eventos delegados, interacciones de menu, busqueda asincrona, paginacion y KPIs.",
     },
     outcomes: {
       en: [
@@ -1071,6 +1505,7 @@ const classModules = [
       "lift-state-up",
       "reusable-button-component",
       "react-form-validation",
+      "react-booking-form-app",
       "react-modal-component",
       "react-accordion-item",
       "react-tabs-component",
@@ -1088,8 +1523,8 @@ const classModules = [
       es: "Patrones de app y efectos en React",
     },
     summary: {
-      en: "This section focuses on state ownership, reusable components, effects, custom hooks, and resilient async UI.",
-      es: "Esta seccion se centra en propiedad del estado, componentes reutilizables, efectos, hooks propios y UI asincrona robusta.",
+      en: "This section focuses on state ownership, reusable components, practical form flows, effects, custom hooks, and resilient async UI.",
+      es: "Esta seccion se centra en propiedad del estado, componentes reutilizables, formularios utiles, efectos, hooks propios y UI asincrona robusta.",
     },
     outcomes: {
       en: [
@@ -1114,9 +1549,10 @@ const classModules = [
     modeId: "react",
     challengeIds: [
       "react-loaded-category-filter",
-      "react-custom-data-hook",
       "react-sort-products",
+      "react-movie-search-app",
       "react-toggle-favourites",
+      "react-custom-data-hook",
       "react-theme-localstorage",
       "react-disable-submit-loading",
       "react-debounced-search",
@@ -1130,8 +1566,8 @@ const classModules = [
       es: "Flujos React con nivel de portfolio",
     },
     summary: {
-      en: "The final class connects filtering, sorting, favorites, debouncing, pagination, and polished submission states.",
-      es: "La clase final conecta filtros, ordenacion, favoritos, debounce, paginacion y estados de envio pulidos.",
+      en: "The final class connects filtering, sorting, movie-search style apps, favorites, debouncing, pagination, and polished submission states.",
+      es: "La clase final conecta filtros, ordenacion, apps tipo busqueda de peliculas, favoritos, debounce, paginacion y estados de envio pulidos.",
     },
     outcomes: {
       en: [
@@ -1156,6 +1592,7 @@ const classModules = [
     modeId: "react",
     challengeIds: [
       "react-usereducer-todos",
+      "react-contact-manager",
       "react-context-theme",
       "react-view-mode-context",
       "react-accessible-form-errors",
@@ -1169,8 +1606,8 @@ const classModules = [
       es: "Capstones de React para empleabilidad",
     },
     summary: {
-      en: "The final React block combines reducers, context, accessibility, optimistic UI, persistence, composition, and a job-board take-home project.",
-      es: "El bloque final de React combina reducers, context, accesibilidad, UI optimista, persistencia, composicion y un proyecto tipo prueba tecnica.",
+      en: "The final React block combines reducers, contact-style CRUD, context, accessibility, optimistic UI, persistence, composition, and a job-board take-home project.",
+      es: "El bloque final de React combina reducers, CRUD tipo agenda de contactos, context, accesibilidad, UI optimista, persistencia, composicion y un proyecto tipo prueba tecnica.",
     },
     outcomes: {
       en: [
@@ -1197,6 +1634,7 @@ const classModules = [
       "react-router-basic-pages",
       "react-route-tab-navigation",
       "react-router-dynamic-user",
+      "react-router-product-detail",
       "react-auth-guard-state",
       "react-routed-directory-capstone",
     ],
@@ -1212,11 +1650,13 @@ const classModules = [
       en: [
         "Build multi-page React experiences with React Router",
         "Use URL params for detail pages",
+        "Explain how one route pattern can render many items",
         "Protect routes with authentication state",
       ],
       es: [
         "Crear experiencias React multipagina con React Router",
         "Usar parametros de URL para paginas de detalle",
+        "Explicar como una ruta puede renderizar muchos items",
         "Proteger rutas con estado de autenticacion",
       ],
     },
@@ -1256,9 +1696,146 @@ const classModules = [
     },
   },
   {
+    id: "class-36",
+    number: "01",
+    modeId: "typescript",
+    challengeIds: [
+      "ts-typed-profile-card",
+      "ts-interface-feature-list",
+      "ts-union-status-badge",
+      "ts-optional-note-card",
+    ],
+    title: {
+      en: "TypeScript foundations for React UI",
+      es: "Fundamentos de TypeScript para UI con React",
+    },
+    summary: {
+      en: "Students begin by naming data shapes clearly with interfaces, simple types, unions, and optional properties before the UI grows.",
+      es: "El alumnado empieza nombrando bien las formas de los datos con interfaces, tipos sencillos, unions y propiedades opcionales antes de que la UI crezca.",
+    },
+    outcomes: {
+      en: [
+        "Describe simple UI data with type aliases or interfaces",
+        "Use unions for small state choices",
+        "Understand why optional properties matter in real UI",
+      ],
+      es: [
+        "Describir datos sencillos de UI con type aliases o interfaces",
+        "Usar unions para pequenas decisiones de estado",
+        "Entender por que las propiedades opcionales importan en UI real",
+      ],
+    },
+    project: {
+      en: "A typed UI starter kit",
+      es: "Un kit inicial de UI tipada",
+    },
+  },
+  {
+    id: "class-37",
+    number: "02",
+    modeId: "typescript",
+    challengeIds: [
+      "ts-typed-click-counter",
+      "ts-controlled-booking-form",
+      "ts-narrowing-feedback-panel",
+      "ts-filtered-directory",
+    ],
+    title: {
+      en: "Typed state, events, and form flow",
+      es: "Estado, eventos y flujo de formularios tipados",
+    },
+    summary: {
+      en: "This block makes TypeScript feel practical by typing state, event handlers, and form logic that juniors actually use.",
+      es: "Este bloque hace que TypeScript se sienta practico tipando estado, event handlers y logica de formularios que una persona junior de verdad usa.",
+    },
+    outcomes: {
+      en: [
+        "Type everyday React state with confidence",
+        "Use typed events for click, change, and submit flows",
+        "Apply narrowing when data is not fully known yet",
+      ],
+      es: [
+        "Tipar con confianza el estado cotidiano de React",
+        "Usar eventos tipados en flujos de click, cambio y envio",
+        "Aplicar narrowing cuando los datos aun no estan del todo claros",
+      ],
+    },
+    project: {
+      en: "A typed booking and feedback flow",
+      es: "Un flujo tipado de reserva y feedback",
+    },
+  },
+  {
+    id: "class-38",
+    number: "03",
+    modeId: "typescript",
+    challengeIds: [
+      "ts-spread-settings-panel",
+      "ts-fetch-menu-board",
+      "ts-favourites-toggle-list",
+      "ts-typed-search-results",
+      "ts-refactor-feedback-board",
+    ],
+    title: {
+      en: "Typed data, async work, and safer updates",
+      es: "Datos tipados, trabajo async y actualizaciones mas seguras",
+    },
+    summary: {
+      en: "Students move beyond toy examples into typed updates, typed fetch flows, search rendering, and refactoring unsafe UI into clearer code.",
+      es: "El alumnado pasa de ejemplos pequenos a actualizaciones tipadas, flujos fetch tipados, renderizado con busqueda y refactor de UI insegura a codigo mas claro.",
+    },
+    outcomes: {
+      en: [
+        "Update objects and arrays without losing data shape",
+        "Type fetched data before rendering it",
+        "Refactor JavaScript habits into safer TypeScript habits",
+      ],
+      es: [
+        "Actualizar objetos y arrays sin perder la forma de los datos",
+        "Tipar datos cargados antes de renderizarlos",
+        "Convertir habitos de JavaScript en habitos de TypeScript mas seguros",
+      ],
+    },
+    project: {
+      en: "A typed data workspace",
+      es: "Un workspace de datos tipados",
+    },
+  },
+  {
+    id: "class-39",
+    number: "04",
+    modeId: "typescript",
+    challengeIds: ["ts-all-in-one-dashboard-capstone"],
+    title: {
+      en: "TypeScript all-in-one capstone",
+      es: "Capstone integrador de TypeScript",
+    },
+    summary: {
+      en: "The learner closes the path with one realistic dashboard that combines typed props, state, filters, async rendering, and calmer frontend decisions.",
+      es: "La persona cierra la ruta con un dashboard realista que combina props tipadas, estado, filtros, renderizado async y decisiones de frontend mas tranquilas.",
+    },
+    outcomes: {
+      en: [
+        "Combine typed UI patterns in one practical feature",
+        "Keep async, filtering, and state logic understandable",
+        "Finish with a portfolio-grade typed React build",
+      ],
+      es: [
+        "Combinar patrones de UI tipada en una sola funcionalidad practica",
+        "Mantener comprensible la logica async, de filtros y de estado",
+        "Terminar con un build tipado de React listo para portfolio",
+      ],
+    },
+    project: {
+      en: "A typed operations dashboard",
+      es: "Un dashboard de operaciones tipado",
+    },
+  },
+  {
     id: "class-18",
     number: "01",
     modeId: "interview",
+    timeLimitMinutes: 75,
     challengeIds: ["interview-html-css-build-test"],
     title: {
       en: "Interview test 1: responsive build",
@@ -1289,6 +1866,7 @@ const classModules = [
     id: "class-19",
     number: "02",
     modeId: "interview",
+    timeLimitMinutes: 60,
     challengeIds: ["interview-dom-logic-test"],
     title: {
       en: "Interview test 2: DOM logic",
@@ -1319,6 +1897,7 @@ const classModules = [
     id: "class-20",
     number: "03",
     modeId: "interview",
+    timeLimitMinutes: 75,
     challengeIds: ["interview-async-api-test"],
     title: {
       en: "Interview test 3: async dashboard",
@@ -1349,6 +1928,7 @@ const classModules = [
     id: "class-21",
     number: "04",
     modeId: "interview",
+    timeLimitMinutes: 90,
     challengeIds: ["interview-react-takehome-test"],
     title: {
       en: "Interview test 4: React take-home",
@@ -1379,6 +1959,7 @@ const classModules = [
     id: "class-22",
     number: "05",
     modeId: "interview",
+    timeLimitMinutes: 60,
     challengeIds: ["interview-accessibility-qa-test"],
     title: {
       en: "Interview test 5: accessibility and QA",
@@ -1406,9 +1987,72 @@ const classModules = [
     },
   },
   {
-    id: "class-23",
+    id: "class-29",
     number: "06",
     modeId: "interview",
+    timeLimitMinutes: 45,
+    challengeIds: ["interview-accessible-modal-test"],
+    title: {
+      en: "Interview test 6: accessible modal",
+      es: "Prueba 6: modal accesible",
+    },
+    summary: {
+      en: "A keyboard-first modal brief that checks ARIA, focus movement, Escape handling, and visible focus styling.",
+      es: "Una prueba de modal pensada para teclado que evalua ARIA, movimiento de foco, cierre con Escape y estilos focus visibles.",
+    },
+    outcomes: {
+      en: [
+        "Build a modal that works without a mouse",
+        "Move focus intentionally on open and close",
+        "Explain why dialog accessibility is product quality, not decoration",
+      ],
+      es: [
+        "Construir un modal usable sin raton",
+        "Mover el foco con intencion al abrir y cerrar",
+        "Explicar por que la accesibilidad del dialogo es calidad de producto",
+      ],
+    },
+    project: {
+      en: "An accessible support modal",
+      es: "Un modal accesible de soporte",
+    },
+  },
+  {
+    id: "class-30",
+    number: "07",
+    modeId: "interview",
+    timeLimitMinutes: 45,
+    challengeIds: ["interview-accessible-tabs-test"],
+    title: {
+      en: "Interview test 7: accessible tabs",
+      es: "Prueba 7: tabs accesibles",
+    },
+    summary: {
+      en: "A tabs challenge that checks ARIA roles, keyboard navigation, visible focus, and whether the right panel is shown at the right time.",
+      es: "Una prueba de tabs que evalua roles ARIA, navegacion por teclado, focus visible y si el panel correcto aparece en el momento correcto.",
+    },
+    outcomes: {
+      en: [
+        "Build a practical ARIA tabs pattern",
+        "Support keyboard-only navigation",
+        "Keep UI state and accessibility state aligned",
+      ],
+      es: [
+        "Construir un patron practico de tabs con ARIA",
+        "Dar soporte a navegacion solo con teclado",
+        "Mantener alineados estado visual y estado accesible",
+      ],
+    },
+    project: {
+      en: "An accessible restaurant info tabs UI",
+      es: "Una UI accesible de tabs informativos",
+    },
+  },
+  {
+    id: "class-23",
+    number: "08",
+    modeId: "interview",
+    timeLimitMinutes: 60,
     challengeIds: ["interview-debug-dom-test"],
     title: {
       en: "Interview test 6: debug DOM logic",
@@ -1437,8 +2081,9 @@ const classModules = [
   },
   {
     id: "class-24",
-    number: "07",
+    number: "09",
     modeId: "interview",
+    timeLimitMinutes: 60,
     challengeIds: ["interview-debug-async-test"],
     title: {
       en: "Interview test 7: debug async state",
@@ -1467,8 +2112,9 @@ const classModules = [
   },
   {
     id: "class-25",
-    number: "08",
+    number: "10",
     modeId: "interview",
+    timeLimitMinutes: 60,
     challengeIds: ["interview-typescript-react-test"],
     title: {
       en: "Interview test 8: TypeScript React",
@@ -1497,8 +2143,9 @@ const classModules = [
   },
   {
     id: "class-26",
-    number: "09",
+    number: "11",
     modeId: "interview",
+    timeLimitMinutes: 75,
     challengeIds: ["interview-debug-react-test"],
     title: {
       en: "Interview test 9: debug React state",
@@ -1526,9 +2173,165 @@ const classModules = [
     },
   },
   {
-    id: "class-27",
-    number: "10",
+    id: "class-31",
+    number: "12",
     modeId: "interview",
+    timeLimitMinutes: 60,
+    challengeIds: ["interview-debug-routing-test"],
+    title: {
+      en: "Interview test 12: debug React routing",
+      es: "Prueba 12: depurar routing en React",
+    },
+    summary: {
+      en: "A routing repair task that checks whether the learner can fix links, params, detail lookup, and fallback behavior without rebuilding the whole app.",
+      es: "Una prueba de reparacion de routing que evalua si el alumno puede arreglar links, params, detalle y fallbacks sin rehacer toda la app.",
+    },
+    outcomes: {
+      en: [
+        "Repair broken route configuration calmly",
+        "Use URL params to render the correct detail screen",
+        "Explain the relationship between links, paths, and data lookup",
+      ],
+      es: [
+        "Reparar con calma una configuracion de rutas rota",
+        "Usar params de URL para mostrar el detalle correcto",
+        "Explicar la relacion entre links, rutas y busqueda de datos",
+      ],
+    },
+    project: {
+      en: "A repaired routed lesson board",
+      es: "Un tablero con rutas reparadas",
+    },
+  },
+  {
+    id: "class-32",
+    number: "13",
+    modeId: "interview",
+    timeLimitMinutes: 45,
+    challengeIds: ["interview-unit-tests-foundations-test"],
+    title: {
+      en: "Interview test 13: unit test foundations",
+      es: "Prueba 13: bases de unit tests",
+    },
+    summary: {
+      en: "A first testing brief where the learner writes focused tests around small helpers instead of only building UI.",
+      es: "Una primera prueba de testing donde el alumno escribe tests enfocados sobre helpers pequenos en lugar de solo construir UI.",
+    },
+    outcomes: {
+      en: [
+        "Write small tests with clear intent",
+        "Cover both normal and edge cases",
+        "Explain what behavior a unit test is protecting",
+      ],
+      es: [
+        "Escribir tests pequenos con intencion clara",
+        "Cubrir casos normales y algunos edge cases",
+        "Explicar que comportamiento protege un unit test",
+      ],
+    },
+    project: {
+      en: "A tested helper utilities file",
+      es: "Un archivo de utilidades con tests",
+    },
+  },
+  {
+    id: "class-33",
+    number: "14",
+    modeId: "interview",
+    timeLimitMinutes: 45,
+    challengeIds: ["interview-rtl-interaction-test"],
+    title: {
+      en: "Interview test 14: Testing Library interactions",
+      es: "Prueba 14: interacciones con Testing Library",
+    },
+    summary: {
+      en: "A React Testing Library exercise that checks whether the learner can render UI, query it accessibly, and test a real interaction.",
+      es: "Una prueba con React Testing Library que evalua si el alumno puede renderizar UI, consultarla de forma accesible y probar una interaccion real.",
+    },
+    outcomes: {
+      en: [
+        "Render a component in a test harness",
+        "Query UI using roles and visible text",
+        "Simulate user interaction and assert the result",
+      ],
+      es: [
+        "Renderizar un componente dentro de un test",
+        "Consultar la UI por roles y texto visible",
+        "Simular una interaccion y comprobar el resultado",
+      ],
+    },
+    project: {
+      en: "A tested save interaction panel",
+      es: "Un panel de guardado probado con tests",
+    },
+  },
+  {
+    id: "class-34",
+    number: "15",
+    modeId: "interview",
+    timeLimitMinutes: 60,
+    challengeIds: ["interview-form-validation-tests-test"],
+    title: {
+      en: "Interview test 15: form validation tests",
+      es: "Prueba 15: tests de validacion de formularios",
+    },
+    summary: {
+      en: "A test-writing exercise focused on validation rules, submission flow, and user-facing error or success messages.",
+      es: "Una prueba de escritura de tests centrada en reglas de validacion, flujo de envio y mensajes visibles de error o exito.",
+    },
+    outcomes: {
+      en: [
+        "Test a form like a user would fill and submit it",
+        "Protect validation feedback with assertions",
+        "Explain the difference between form logic and form tests",
+      ],
+      es: [
+        "Probar un formulario como lo rellenaria y enviaria una persona usuaria",
+        "Proteger el feedback de validacion con asserts",
+        "Explicar la diferencia entre logica de formulario y tests de formulario",
+      ],
+    },
+    project: {
+      en: "A tested signup form",
+      es: "Un formulario de registro cubierto por tests",
+    },
+  },
+  {
+    id: "class-35",
+    number: "16",
+    modeId: "interview",
+    timeLimitMinutes: 60,
+    challengeIds: ["interview-loading-error-tests-test"],
+    title: {
+      en: "Interview test 16: loading and error tests",
+      es: "Prueba 16: tests de carga y error",
+    },
+    summary: {
+      en: "A final testing brief that checks whether the learner can test loading, success, and error states in async React UI.",
+      es: "Una prueba final de testing que evalua si el alumno puede probar estados de carga, exito y error en una UI React asincrona.",
+    },
+    outcomes: {
+      en: [
+        "Test async UI without racing the DOM",
+        "Use waitFor for delayed updates",
+        "Talk clearly about loading, success, and error coverage",
+      ],
+      es: [
+        "Probar UI asincrona sin correr contra el DOM",
+        "Usar waitFor para actualizaciones retrasadas",
+        "Explicar con claridad cobertura de carga, exito y error",
+      ],
+    },
+    project: {
+      en: "An async board covered by tests",
+      es: "Un panel asincrono cubierto por tests",
+    },
+  },
+  {
+    id: "class-27",
+    number: "17",
+    modeId: "interview",
+    timeLimitMinutes: 60,
     challengeIds: ["interview-shipping-readiness-test"],
     title: {
       en: "Interview test 10: shipping readiness",
@@ -1573,8 +2376,10 @@ function localizeSections(sections = [], language) {
 function getEstimatedTime(module, language = "en") {
   const isInterview = module.modeId === "interview";
   const isSingleCapstone = module.challengeIds.length === 1 && !isInterview;
+  const timedLabel = module.timeLimitMinutes;
 
   if (language === "es") {
+    if (isInterview && timedLabel) return `Prueba de ${timedLabel} min`;
     if (isInterview) return "60-120 min";
     if (isSingleCapstone) return "2-4 horas";
     if (module.challengeIds.length <= 6) return "60-90 min";
@@ -1584,6 +2389,7 @@ function getEstimatedTime(module, language = "en") {
     return "4-6 horas";
   }
 
+  if (isInterview && timedLabel) return `${timedLabel} min assessment`;
   if (isInterview) return "60-120 min";
   if (isSingleCapstone) return "2-4 hours";
   if (module.challengeIds.length <= 6) return "60-90 min";
@@ -1619,17 +2425,24 @@ export function getLearningRoadmap(language = "en") {
 }
 
 export function getClassModules(language = "en") {
-  return classModules.map((module) => ({
-    ...module,
-    title: pickLocalized(module.title, language),
-    summary: pickLocalized(module.summary, language),
-    outcomes: pickLocalized(module.outcomes, language),
-    project: pickLocalized(module.project, language),
-    phaseId: classPhaseMap[module.id],
-    sections: localizeSections(classSections[module.id] || [], language),
-    estimatedTime: getEstimatedTime(module, language),
-    formatLabel: getFormatLabel(module, language),
-  }));
+  const modeCounts = {};
+
+  return classModules.map((module) => {
+    modeCounts[module.modeId] = (modeCounts[module.modeId] || 0) + 1;
+
+    return {
+      ...module,
+      title: pickLocalized(module.title, language),
+      summary: pickLocalized(module.summary, language),
+      outcomes: pickLocalized(module.outcomes, language),
+      project: pickLocalized(module.project, language),
+      phaseId: classPhaseMap[module.id],
+      sections: localizeSections(classSections[module.id] || [], language),
+      estimatedTime: getEstimatedTime(module, language),
+      formatLabel: getFormatLabel(module, language),
+      trackNumber: String(modeCounts[module.modeId]).padStart(2, "0"),
+    };
+  });
 }
 
 export function getClassStats(module, challengeProgress = {}) {

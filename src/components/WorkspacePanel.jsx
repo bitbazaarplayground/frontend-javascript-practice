@@ -3,17 +3,19 @@ import {
   Code2,
   Columns2,
   Eye,
+  Monitor,
   Redo2,
   RefreshCw,
   RotateCcw,
   Rows2,
   Send,
+  Smartphone,
   Undo2,
 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 
 const HISTORY_LIMIT = 240;
-const HISTORY_GROUP_MS = 900;
+const HISTORY_GROUP_MS = 500;
 
 function createEditorHistory(html = "", css = "", js = "") {
   return {
@@ -29,6 +31,32 @@ function createHistoryMeta() {
     css: { lastRecordedAt: 0 },
     js: { lastRecordedAt: 0 },
   };
+}
+
+function shouldForceHistoryBoundary(previousValue, nextValue) {
+  const lengthDelta = Math.abs(nextValue.length - previousValue.length);
+  const previousHasNewline = previousValue.includes("\n");
+  const nextHasNewline = nextValue.includes("\n");
+
+  return (
+    lengthDelta > 1 ||
+    previousHasNewline !== nextHasNewline ||
+    nextValue.split("\n").length !== previousValue.split("\n").length
+  );
+}
+
+function isUndoShortcut(event) {
+  const key = event.key.toLowerCase();
+  const hasModifier = event.metaKey || event.ctrlKey;
+
+  return hasModifier && key === "z" && !event.shiftKey;
+}
+
+function isRedoShortcut(event) {
+  const key = event.key.toLowerCase();
+  const hasModifier = event.metaKey || event.ctrlKey;
+
+  return hasModifier && (key === "y" || (key === "z" && event.shiftKey));
 }
 
 function getPreviewStorageSetup() {
@@ -80,6 +108,102 @@ function getPreviewStorageSetup() {
   `;
 }
 
+function getPreviewScrollSetup() {
+  return `
+    <script>
+      (function () {
+        const PREVIEW_SCROLL_KEY = "__practicePreviewScroll__";
+
+        function readWindowName() {
+          try {
+            return window.name ? JSON.parse(window.name) : {};
+          } catch (error) {
+            return {};
+          }
+        }
+
+        function writeWindowName(nextValue) {
+          try {
+            window.name = JSON.stringify(nextValue);
+          } catch (error) {
+            window.name = "";
+          }
+        }
+
+        function saveScrollPosition() {
+          const payload = readWindowName();
+          payload[PREVIEW_SCROLL_KEY] = {
+            x: window.scrollX || 0,
+            y: window.scrollY || 0,
+          };
+          writeWindowName(payload);
+        }
+
+        function getSavedScrollPosition() {
+          const payload = readWindowName();
+          return payload[PREVIEW_SCROLL_KEY] || { x: 0, y: 0 };
+        }
+
+        const savedScroll = getSavedScrollPosition();
+
+        window.addEventListener("scroll", saveScrollPosition, {
+          passive: true,
+        });
+
+        window.addEventListener("beforeunload", saveScrollPosition);
+
+        window.addEventListener("load", function () {
+          function restoreScrollPosition() {
+            window.scrollTo(savedScroll.x || 0, savedScroll.y || 0);
+          }
+
+          restoreScrollPosition();
+          requestAnimationFrame(restoreScrollPosition);
+          setTimeout(restoreScrollPosition, 120);
+        });
+
+        document.addEventListener("click", function (event) {
+          const trigger = event.target.closest('a[href^="#"]');
+          if (!trigger) return;
+
+          const hash = trigger.getAttribute("href");
+          if (!hash || hash === "#") return;
+
+          const target = document.querySelector(hash);
+          if (!target) return;
+
+          event.preventDefault();
+
+          const possibleHeader = document.querySelector(
+            ".site-header, .navbar, [data-sticky-header]"
+          );
+          const hasStickyHeader =
+            possibleHeader &&
+            ["sticky", "fixed"].includes(
+              window.getComputedStyle(possibleHeader).position
+            );
+          const headerOffset = hasStickyHeader
+            ? possibleHeader.getBoundingClientRect().height + 12
+            : 0;
+          const targetTop =
+            target.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+          window.scrollTo({
+            top: Math.max(targetTop, 0),
+            behavior: "smooth",
+          });
+
+          try {
+            window.history.replaceState(null, "", hash);
+          } catch (error) {
+            window.location.hash = hash;
+          }
+        });
+      })();
+    </script>
+  `;
+}
+
 export default function WorkspacePanel({
   editorType = "web",
   html,
@@ -97,9 +221,17 @@ export default function WorkspacePanel({
   submissionResult,
   copy,
   language = "en",
+  previewViewport = "desktop",
+  onPreviewViewportChange,
+  solutionEnabled = true,
+  solutionLockedReason = "",
 }) {
   const [activeTab, setActiveTab] = useState(() =>
-    editorType === "react" || editorType === "react-ts" ? "js" : "html"
+    editorType === "react" ||
+    editorType === "react-ts" ||
+    editorType === "react-test"
+      ? "js"
+      : "html"
   );
   const [showSolution, setShowSolution] = useState(false);
   const [layoutMode, setLayoutMode] = useState("split");
@@ -109,16 +241,680 @@ export default function WorkspacePanel({
   );
   const historyMetaRef = useRef(createHistoryMeta());
 
+  const isReactTestChallenge = editorType === "react-test";
   const isReactChallenge =
-    editorType === "react" || editorType === "react-ts";
+    editorType === "react" ||
+    editorType === "react-ts" ||
+    isReactTestChallenge;
   const isTypeScriptChallenge = editorType === "react-ts";
+  const isShowingSolution = solutionEnabled && showSolution;
 
-  const visibleHtml = showSolution ? solution?.html || "" : html || "";
-  const visibleCss = showSolution ? solution?.css || "" : css || "";
-  const visibleJs = showSolution ? solution?.js || "" : js || "";
+  const visibleHtml = isShowingSolution ? solution?.html || "" : html || "";
+  const visibleCss = isShowingSolution ? solution?.css || "" : css || "";
+  const visibleJs = isShowingSolution ? solution?.js || "" : js || "";
 
   const srcDoc = useMemo(() => {
     const previewStorageSetup = getPreviewStorageSetup();
+    const previewScrollSetup = getPreviewScrollSetup();
+
+    if (isReactTestChallenge) {
+      return `
+        <!DOCTYPE html>
+        <html lang="${language}">
+          <head>
+            <meta charset="UTF-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+            <style>
+              html, body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background: white;
+                color: #111827;
+              }
+
+              * {
+                box-sizing: border-box;
+              }
+
+              body {
+                padding: 16px;
+              }
+
+              .test-shell {
+                display: grid;
+                grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+                gap: 16px;
+                min-height: calc(100vh - 32px);
+              }
+
+              .test-column {
+                min-width: 0;
+                padding: 14px;
+                border: 1px solid #dbe3ef;
+                border-radius: 16px;
+                background: #f8fafc;
+              }
+
+              .test-column h2 {
+                margin: 0 0 12px;
+                font-size: 16px;
+              }
+
+              #root {
+                min-height: 120px;
+                border-radius: 12px;
+                background: white;
+                padding: 12px;
+                border: 1px solid #e2e8f0;
+              }
+
+              .test-results {
+                display: grid;
+                gap: 10px;
+              }
+
+              .test-summary {
+                padding: 12px;
+                border-radius: 12px;
+                background: white;
+                border: 1px solid #dbe3ef;
+                font-weight: 700;
+              }
+
+              .test-result {
+                padding: 12px;
+                border-radius: 12px;
+                border: 1px solid #dbe3ef;
+                background: white;
+              }
+
+              .test-result.pass {
+                border-color: #86efac;
+                background: #f0fdf4;
+              }
+
+              .test-result.fail {
+                border-color: #fecaca;
+                background: #fef2f2;
+              }
+
+              .test-result strong,
+              .test-result span {
+                display: block;
+              }
+
+              .test-result span {
+                margin-top: 6px;
+                color: #475569;
+                white-space: pre-wrap;
+                line-height: 1.5;
+              }
+
+              .preview-error {
+                white-space: pre-wrap;
+                color: #b91c1c;
+                background: #fef2f2;
+                border: 1px solid #fecaca;
+                border-radius: 8px;
+                padding: 12px;
+                font-family: monospace;
+                line-height: 1.5;
+              }
+
+              @media (max-width: 840px) {
+                .test-shell {
+                  grid-template-columns: 1fr;
+                }
+              }
+
+              ${visibleCss}
+            </style>
+          </head>
+          <body>
+            <div class="test-shell">
+              <section class="test-column">
+                <h2>${language === "es" ? "Vista del componente" : "Component preview"}</h2>
+                <div id="root"></div>
+              </section>
+              <section class="test-column">
+                <h2>${language === "es" ? "Resultados de tests" : "Test results"}</h2>
+                <div id="testResults" class="test-results"></div>
+              </section>
+            </div>
+
+            ${previewStorageSetup}
+            ${previewScrollSetup}
+
+            <script>
+              function showPreviewError(message) {
+                const resultsEl = document.getElementById("testResults");
+                if (!resultsEl) return;
+
+                resultsEl.innerHTML = "";
+                const errorEl = document.createElement("pre");
+                errorEl.className = "preview-error";
+                errorEl.textContent = message;
+                resultsEl.appendChild(errorEl);
+              }
+
+              window.addEventListener("error", function (event) {
+                showPreviewError(event.message);
+              });
+
+              window.addEventListener("unhandledrejection", function (event) {
+                const message =
+                  event.reason && event.reason.message
+                    ? event.reason.message
+                    : String(event.reason);
+                showPreviewError(message);
+              });
+            </script>
+
+            <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+            <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+            <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+            <script type="text/babel" data-presets="react">
+              try {
+                (async function (localStorage, sessionStorage) {
+                  const previewRoot = document.getElementById("root");
+                  const testResults = document.getElementById("testResults");
+                  const testDefinitions = [];
+                  const reactRoot = ReactDOM.createRoot(previewRoot);
+
+                  function normalizeText(value) {
+                    return String(value || "")
+                      .replace(/\\s+/g, " ")
+                      .trim();
+                  }
+
+                  function matchesMatcher(value, matcher) {
+                    if (matcher == null) return true;
+                    const normalizedValue = normalizeText(value);
+
+                    if (typeof matcher === "string") {
+                      return normalizedValue
+                        .toLowerCase()
+                        .includes(matcher.toLowerCase());
+                    }
+
+                    if (matcher instanceof RegExp) {
+                      return matcher.test(normalizedValue);
+                    }
+
+                    if (typeof matcher === "function") {
+                      return Boolean(matcher(normalizedValue));
+                    }
+
+                    return normalizedValue === String(matcher);
+                  }
+
+                  function getLabelText(control) {
+                    if (!control) return "";
+
+                    if (control.labels && control.labels.length > 0) {
+                      return Array.from(control.labels)
+                        .map((label) => normalizeText(label.textContent))
+                        .join(" ");
+                    }
+
+                    if (control.id) {
+                      const label = document.querySelector('label[for="' + control.id + '"]');
+                      if (label) return normalizeText(label.textContent);
+                    }
+
+                    const wrapper = control.closest("label");
+                    if (wrapper) return normalizeText(wrapper.textContent);
+
+                    return "";
+                  }
+
+                  function getAccessibleName(element) {
+                    if (!element) return "";
+
+                    return normalizeText(
+                      element.getAttribute("aria-label") ||
+                        getLabelText(element) ||
+                        element.textContent ||
+                        element.value ||
+                        ""
+                    );
+                  }
+
+                  function getRoleCandidates(role) {
+                    const selectors = {
+                      button:
+                        'button, input[type="button"], input[type="submit"], input[type="reset"], [role="button"]',
+                      textbox:
+                        'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]), textarea, [role="textbox"]',
+                      link: 'a[href], [role="link"]',
+                      heading: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
+                      tab: '[role="tab"]',
+                      dialog: '[role="dialog"]',
+                      alert: '[role="alert"]',
+                      status: '[role="status"]',
+                    };
+
+                    const selector = selectors[role] || '[role="' + role + '"]';
+                    return Array.from(previewRoot.querySelectorAll(selector));
+                  }
+
+                  function getByText(matcher) {
+                    const elements = [
+                      previewRoot,
+                      ...Array.from(previewRoot.querySelectorAll("*")),
+                    ];
+                    const element = elements.find((item) =>
+                      matchesMatcher(item.textContent, matcher)
+                    );
+
+                    if (!element) {
+                      throw new Error("Unable to find text: " + matcher);
+                    }
+
+                    return element;
+                  }
+
+                  function queryByText(matcher) {
+                    try {
+                      return getByText(matcher);
+                    } catch (error) {
+                      return null;
+                    }
+                  }
+
+                  function getByRole(role, options = {}) {
+                    const candidates = getRoleCandidates(role);
+                    const element = candidates.find((item) =>
+                      matchesMatcher(getAccessibleName(item), options.name)
+                    );
+
+                    if (!element) {
+                      throw new Error("Unable to find role: " + role);
+                    }
+
+                    return element;
+                  }
+
+                  function queryByRole(role, options = {}) {
+                    try {
+                      return getByRole(role, options);
+                    } catch (error) {
+                      return null;
+                    }
+                  }
+
+                  function getAllByRole(role, options = {}) {
+                    const matches = getRoleCandidates(role).filter((item) =>
+                      matchesMatcher(getAccessibleName(item), options.name)
+                    );
+
+                    if (matches.length === 0) {
+                      throw new Error("Unable to find role: " + role);
+                    }
+
+                    return matches;
+                  }
+
+                  function getByLabelText(matcher) {
+                    const labels = Array.from(previewRoot.querySelectorAll("label"));
+                    const label = labels.find((item) =>
+                      matchesMatcher(item.textContent, matcher)
+                    );
+
+                    if (!label) {
+                      throw new Error("Unable to find label: " + matcher);
+                    }
+
+                    const control =
+                      label.control ||
+                      (label.getAttribute("for")
+                        ? previewRoot.querySelector("#" + label.getAttribute("for"))
+                        : label.querySelector("input, textarea, select"));
+
+                    if (!control) {
+                      throw new Error("Label does not control an input: " + matcher);
+                    }
+
+                    return control;
+                  }
+
+                  function getByPlaceholderText(matcher) {
+                    const controls = Array.from(
+                      previewRoot.querySelectorAll("input, textarea")
+                    );
+                    const control = controls.find((item) =>
+                      matchesMatcher(item.getAttribute("placeholder"), matcher)
+                    );
+
+                    if (!control) {
+                      throw new Error("Unable to find placeholder: " + matcher);
+                    }
+
+                    return control;
+                  }
+
+                  function cleanup() {
+                    ReactDOM.flushSync(() => {
+                      reactRoot.render(null);
+                    });
+                  }
+
+                  function render(ui) {
+                    ReactDOM.flushSync(() => {
+                      reactRoot.render(ui);
+                    });
+
+                    return {
+                      container: previewRoot,
+                      rerender(nextUi) {
+                        ReactDOM.flushSync(() => {
+                          reactRoot.render(nextUi);
+                        });
+                      },
+                    };
+                  }
+
+                  function dispatchEvent(element, event) {
+                    if (!element) return;
+                    element.dispatchEvent(event);
+                  }
+
+                  const fireEvent = {
+                    click(element) {
+                      dispatchEvent(
+                        element,
+                        new MouseEvent("click", { bubbles: true, cancelable: true })
+                      );
+                    },
+                    input(element, payload = {}) {
+                      if (payload.target && "value" in payload.target) {
+                        element.value = payload.target.value;
+                      }
+
+                      dispatchEvent(
+                        element,
+                        new Event("input", { bubbles: true, cancelable: true })
+                      );
+                    },
+                    change(element, payload = {}) {
+                      if (payload.target && "value" in payload.target) {
+                        element.value = payload.target.value;
+                      }
+
+                      dispatchEvent(
+                        element,
+                        new Event("input", { bubbles: true, cancelable: true })
+                      );
+                      dispatchEvent(
+                        element,
+                        new Event("change", { bubbles: true, cancelable: true })
+                      );
+                    },
+                    submit(element) {
+                      dispatchEvent(
+                        element,
+                        new Event("submit", { bubbles: true, cancelable: true })
+                      );
+                    },
+                    keyDown(element, payload = {}) {
+                      dispatchEvent(
+                        element,
+                        new KeyboardEvent("keydown", {
+                          key: payload.key || "",
+                          code: payload.code || "",
+                          bubbles: true,
+                          cancelable: true,
+                        })
+                      );
+                    },
+                    focus(element) {
+                      element.focus();
+                    },
+                  };
+
+                  function createAssertionError(message) {
+                    return new Error(message);
+                  }
+
+                  function expect(received) {
+                    const api = {
+                      toBe(expected) {
+                        if (received !== expected) {
+                          throw createAssertionError(
+                            "Expected " + received + " to be " + expected
+                          );
+                        }
+                      },
+                      toEqual(expected) {
+                        const actualString = JSON.stringify(received);
+                        const expectedString = JSON.stringify(expected);
+
+                        if (actualString !== expectedString) {
+                          throw createAssertionError(
+                            "Expected " + actualString + " to equal " + expectedString
+                          );
+                        }
+                      },
+                      toContain(expected) {
+                        if (!received || !received.includes(expected)) {
+                          throw createAssertionError(
+                            "Expected value to contain " + expected
+                          );
+                        }
+                      },
+                      toHaveLength(expected) {
+                        if (!received || received.length !== expected) {
+                          throw createAssertionError(
+                            "Expected length " +
+                              expected +
+                              " but received " +
+                              (received ? received.length : "undefined")
+                          );
+                        }
+                      },
+                      toBeTruthy() {
+                        if (!received) {
+                          throw createAssertionError("Expected value to be truthy.");
+                        }
+                      },
+                      toBeFalsy() {
+                        if (received) {
+                          throw createAssertionError("Expected value to be falsy.");
+                        }
+                      },
+                      toBeInTheDocument() {
+                        if (!(received instanceof Element) || !previewRoot.contains(received)) {
+                          throw createAssertionError("Expected element to be in the document.");
+                        }
+                      },
+                      toHaveTextContent(expected) {
+                        const text = normalizeText(received && received.textContent);
+                        if (!matchesMatcher(text, expected)) {
+                          throw createAssertionError(
+                            "Expected text content to match " + expected
+                          );
+                        }
+                      },
+                      toHaveValue(expected) {
+                        if (!received || received.value !== expected) {
+                          throw createAssertionError(
+                            "Expected value " + expected + " but received " + (received && received.value)
+                          );
+                        }
+                      },
+                      toBeDisabled() {
+                        if (!received || !received.disabled) {
+                          throw createAssertionError("Expected element to be disabled.");
+                        }
+                      },
+                      toHaveAttribute(name, expected) {
+                        if (!(received instanceof Element)) {
+                          throw createAssertionError("Expected an element.");
+                        }
+
+                        const actual = received.getAttribute(name);
+
+                        if (expected === undefined) {
+                          if (actual === null) {
+                            throw createAssertionError(
+                              "Expected element to have attribute " + name
+                            );
+                          }
+                          return;
+                        }
+
+                        if (actual !== expected) {
+                          throw createAssertionError(
+                            "Expected attribute " +
+                              name +
+                              " to be " +
+                              expected +
+                              " but received " +
+                              actual
+                          );
+                        }
+                      },
+                      toHaveFocus() {
+                        if (document.activeElement !== received) {
+                          throw createAssertionError("Expected element to have focus.");
+                        }
+                      },
+                    };
+
+                    api.not = {
+                      toBeInTheDocument() {
+                        if (received instanceof Element && previewRoot.contains(received)) {
+                          throw createAssertionError(
+                            "Expected element not to be in the document."
+                          );
+                        }
+                      },
+                      toBeDisabled() {
+                        if (received && received.disabled) {
+                          throw createAssertionError(
+                            "Expected element not to be disabled."
+                          );
+                        }
+                      },
+                      toHaveTextContent(expected) {
+                        const text = normalizeText(received && received.textContent);
+                        if (matchesMatcher(text, expected)) {
+                          throw createAssertionError(
+                            "Expected text content not to match " + expected
+                          );
+                        }
+                      },
+                    };
+
+                    return api;
+                  }
+
+                  async function waitFor(callback, options = {}) {
+                    const timeout = options.timeout || 1800;
+                    const interval = options.interval || 40;
+                    const startedAt = Date.now();
+                    let lastError = null;
+
+                    while (Date.now() - startedAt < timeout) {
+                      try {
+                        return await callback();
+                      } catch (error) {
+                        lastError = error;
+                        await new Promise((resolve) => setTimeout(resolve, interval));
+                      }
+                    }
+
+                    throw lastError || new Error("waitFor timed out.");
+                  }
+
+                  function test(name, fn) {
+                    testDefinitions.push({ name, fn });
+                  }
+
+                  const it = test;
+
+                  function describe(_name, fn) {
+                    fn();
+                  }
+
+                  const screen = {
+                    getByText,
+                    queryByText,
+                    getByRole,
+                    queryByRole,
+                    getAllByRole,
+                    getByLabelText,
+                    getByPlaceholderText,
+                  };
+
+                  ${visibleJs}
+
+                  async function runTests() {
+                    const results = [];
+
+                    for (const definition of testDefinitions) {
+                      cleanup();
+
+                      try {
+                        await definition.fn();
+                        results.push({
+                          name: definition.name,
+                          status: "pass",
+                          message: "${language === "es" ? "Test superado." : "Test passed."}",
+                        });
+                      } catch (error) {
+                        results.push({
+                          name: definition.name,
+                          status: "fail",
+                          message: error && error.message ? error.message : String(error),
+                        });
+                      }
+                    }
+
+                    const passedCount = results.filter(
+                      (result) => result.status === "pass"
+                    ).length;
+
+                    testResults.innerHTML =
+                      '<div class="test-summary">' +
+                      passedCount +
+                      "/" +
+                      results.length +
+                      " ${language === "es" ? "tests superados" : "tests passed"}" +
+                      "</div>" +
+                      results
+                        .map((result) => {
+                          return (
+                            '<article class="test-result ' +
+                            result.status +
+                            '">' +
+                            "<strong>" +
+                            result.name +
+                            "</strong>" +
+                            "<span>" +
+                            result.message +
+                            "</span>" +
+                            "</article>"
+                          );
+                        })
+                        .join("");
+                  }
+
+                  await runTests();
+                })(window.__previewLocalStorage, window.__previewSessionStorage);
+              } catch (error) {
+                showPreviewError(error.message);
+              }
+            </script>
+          </body>
+        </html>
+      `;
+    }
 
     if (isReactChallenge) {
       return `
@@ -168,6 +964,7 @@ export default function WorkspacePanel({
           <body>
             <div id="root"></div>
             ${previewStorageSetup}
+            ${previewScrollSetup}
 
             <script>
               function showPreviewError(message) {
@@ -288,6 +1085,7 @@ export default function WorkspacePanel({
             ${visibleCss}
           </style>
           ${previewStorageSetup}
+          ${previewScrollSetup}
           ${webRuntime}
         </head>
         <body>
@@ -300,6 +1098,7 @@ export default function WorkspacePanel({
     visibleCss,
     visibleJs,
     isReactChallenge,
+    isReactTestChallenge,
     isTypeScriptChallenge,
     language,
   ]);
@@ -328,9 +1127,13 @@ export default function WorkspacePanel({
 
       if (currentValue === value) return currentHistory;
 
-      const isAtLatestEntry = fieldHistory.index === fieldHistory.items.length - 1;
+      const isAtLatestEntry =
+        fieldHistory.index === fieldHistory.items.length - 1;
       const isShortGap = now - fieldMeta.lastRecordedAt < HISTORY_GROUP_MS;
-      const shouldMergeChange = isAtLatestEntry && isShortGap;
+      const shouldMergeChange =
+        isAtLatestEntry &&
+        isShortGap &&
+        !shouldForceHistoryBoundary(currentValue, value);
 
       let nextItems = [];
       let nextIndex = 0;
@@ -366,7 +1169,7 @@ export default function WorkspacePanel({
   };
 
   const moveHistory = (direction) => {
-    if (showSolution) return;
+    if (isShowingSolution) return;
 
     const fieldHistory = editorHistory[activeTab];
     if (!fieldHistory) return;
@@ -391,18 +1194,16 @@ export default function WorkspacePanel({
   };
 
   const handleEditorKeyDown = (event) => {
-    const key = event.key.toLowerCase();
-    const hasModifier = event.metaKey || event.ctrlKey;
-
-    if (!hasModifier) return;
-
-    if (key === "z") {
+    if (isUndoShortcut(event)) {
       event.preventDefault();
-      moveHistory(event.shiftKey ? 1 : -1);
+      event.stopPropagation();
+      moveHistory(-1);
+      return;
     }
 
-    if (key === "y") {
+    if (isRedoShortcut(event)) {
       event.preventDefault();
+      event.stopPropagation();
       moveHistory(1);
     }
   };
@@ -421,19 +1222,21 @@ export default function WorkspacePanel({
   };
 
   const activeHistory = editorHistory[activeTab] || { items: [""], index: 0 };
-  const canUndo = !showSolution && activeHistory.index > 0;
+  const canUndo = !isShowingSolution && activeHistory.index > 0;
   const canRedo =
-    !showSolution && activeHistory.index < activeHistory.items.length - 1;
+    !isShowingSolution && activeHistory.index < activeHistory.items.length - 1;
 
   const renderEditor = () => (
     <div className="editor-card">
       <div className="editor-label">
-        {showSolution ? copy.workspace.solutionView : copy.workspace.yourCode}{" "}
+        {isShowingSolution ? copy.workspace.solutionView : copy.workspace.yourCode}{" "}
         - {activeTab === "html" && copy.workspace.htmlEditor}
         {activeTab === "css" && copy.workspace.cssEditor}
         {activeTab === "js" &&
           (isReactChallenge
-            ? copy.workspace.reactEditor
+            ? isReactTestChallenge
+              ? copy.workspace.testEditor
+              : copy.workspace.reactEditor
             : copy.workspace.jsEditor)}
       </div>
 
@@ -442,12 +1245,12 @@ export default function WorkspacePanel({
           className="code-editor"
           value={visibleHtml}
           onChange={(e) => {
-            if (!showSolution) commitEditorChange("html", e.target.value);
+            if (!isShowingSolution) commitEditorChange("html", e.target.value);
           }}
-          onKeyDown={handleEditorKeyDown}
-          readOnly={showSolution}
+          onKeyDownCapture={handleEditorKeyDown}
+          readOnly={isShowingSolution}
           spellCheck={false}
-          placeholder={showSolution ? "" : copy.workspace.htmlPlaceholder}
+          placeholder={isShowingSolution ? "" : copy.workspace.htmlPlaceholder}
         />
       )}
 
@@ -456,12 +1259,12 @@ export default function WorkspacePanel({
           className="code-editor"
           value={visibleCss}
           onChange={(e) => {
-            if (!showSolution) commitEditorChange("css", e.target.value);
+            if (!isShowingSolution) commitEditorChange("css", e.target.value);
           }}
-          onKeyDown={handleEditorKeyDown}
-          readOnly={showSolution}
+          onKeyDownCapture={handleEditorKeyDown}
+          readOnly={isShowingSolution}
           spellCheck={false}
-          placeholder={showSolution ? "" : copy.workspace.cssPlaceholder}
+          placeholder={isShowingSolution ? "" : copy.workspace.cssPlaceholder}
         />
       )}
 
@@ -470,16 +1273,18 @@ export default function WorkspacePanel({
           className="code-editor"
           value={visibleJs}
           onChange={(e) => {
-            if (!showSolution) commitEditorChange("js", e.target.value);
+            if (!isShowingSolution) commitEditorChange("js", e.target.value);
           }}
-          onKeyDown={handleEditorKeyDown}
-          readOnly={showSolution}
+          onKeyDownCapture={handleEditorKeyDown}
+          readOnly={isShowingSolution}
           spellCheck={false}
           placeholder={
-            showSolution
+            isShowingSolution
               ? ""
               : isReactChallenge
-              ? copy.workspace.reactPlaceholder
+              ? isReactTestChallenge
+                ? copy.workspace.testPlaceholder
+                : copy.workspace.reactPlaceholder
               : copy.workspace.jsPlaceholder
           }
         />
@@ -492,26 +1297,67 @@ export default function WorkspacePanel({
       <div className="editor-label preview-label">
         <span>
           {copy.workspace.livePreview} -{" "}
-          {showSolution ? copy.workspace.solution : copy.workspace.myCode}
+          {isShowingSolution ? copy.workspace.solution : copy.workspace.myCode}
         </span>
-        <button
-          type="button"
-          className="preview-refresh-btn"
-          onClick={() => setPreviewKey((current) => current + 1)}
-          title={copy.workspace.refreshPreview}
-          aria-label={copy.workspace.refreshPreview}
-        >
-          <RefreshCw size={15} aria-hidden="true" />
-        </button>
+
+        <div className="preview-label-actions">
+          {onPreviewViewportChange && (
+            <div
+              className="preview-viewport-group"
+              role="group"
+              aria-label={copy.workspace.previewViewport}
+            >
+              <button
+                type="button"
+                className={
+                  previewViewport === "desktop"
+                    ? "preview-viewport-btn active"
+                    : "preview-viewport-btn"
+                }
+                onClick={() => onPreviewViewportChange("desktop")}
+                title={copy.workspace.desktopView}
+                aria-label={copy.workspace.desktopView}
+              >
+                <Monitor size={15} aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                className={
+                  previewViewport === "phone"
+                    ? "preview-viewport-btn active"
+                    : "preview-viewport-btn"
+                }
+                onClick={() => onPreviewViewportChange("phone")}
+                title={copy.workspace.phoneView}
+                aria-label={copy.workspace.phoneView}
+              >
+                <Smartphone size={15} aria-hidden="true" />
+              </button>
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="preview-refresh-btn"
+            onClick={() => setPreviewKey((current) => current + 1)}
+            title={copy.workspace.refreshPreview}
+            aria-label={copy.workspace.refreshPreview}
+          >
+            <RefreshCw size={15} aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
-      <iframe
-        key={previewKey}
-        title="preview"
-        srcDoc={srcDoc}
-        className="preview-frame"
-        sandbox="allow-scripts"
-      />
+      <div className={`preview-stage ${previewViewport}`}>
+        <iframe
+          key={previewKey}
+          title="preview"
+          srcDoc={srcDoc}
+          className="preview-frame"
+          sandbox="allow-scripts"
+        />
+      </div>
     </div>
   );
 
@@ -541,7 +1387,13 @@ export default function WorkspacePanel({
             className={activeTab === "js" ? "tab active" : "tab"}
             onClick={() => setActiveTab("js")}
           >
-            {isTypeScriptChallenge ? "TSX" : isReactChallenge ? "React" : "JS"}
+            {isTypeScriptChallenge
+              ? "TSX"
+              : isReactTestChallenge
+                ? "Tests"
+                : isReactChallenge
+                  ? "React"
+                  : "JS"}
           </button>
         </div>
 
@@ -589,19 +1441,25 @@ export default function WorkspacePanel({
             <Redo2 size={18} aria-hidden="true" />
           </button>
 
-          <button
-            className="secondary-btn"
-            onClick={() => setShowSolution((prev) => !prev)}
-          >
-            {showSolution ? (
-              <Code2 size={17} aria-hidden="true" />
-            ) : (
-              <Eye size={17} aria-hidden="true" />
-            )}
-            {showSolution
-              ? copy.workspace.backToCode
-              : copy.workspace.showSolution}
-          </button>
+          {solutionEnabled ? (
+            <button
+              className="secondary-btn"
+              onClick={() => setShowSolution((prev) => !prev)}
+            >
+              {isShowingSolution ? (
+                <Code2 size={17} aria-hidden="true" />
+              ) : (
+                <Eye size={17} aria-hidden="true" />
+              )}
+              {isShowingSolution
+                ? copy.workspace.backToCode
+                : copy.workspace.showSolution}
+            </button>
+          ) : solutionLockedReason ? (
+            <span className="status-pill workspace-lock-pill">
+              {solutionLockedReason}
+            </span>
+          ) : null}
 
           <button className="secondary-btn" onClick={handleReset}>
             <RotateCcw size={17} aria-hidden="true" />

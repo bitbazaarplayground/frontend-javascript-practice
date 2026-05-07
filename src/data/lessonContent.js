@@ -147,6 +147,104 @@ const lessonOverrides = {
 
 const topicTemplates = {
   en: {
+    selectors: {
+      title: "Why selectors matter",
+      summary:
+        "Selectors are how CSS knows what to style. If HTML is the skeleton, selectors are the labels that tell CSS where to put the clothes.",
+      why:
+        "A lot of beginner CSS bugs happen because the style rule is fine, but it is pointing at the wrong element.",
+      learnMore:
+        "You will use a few selector patterns again and again: p styles every paragraph, .card styles any element with class card, #main styles one special element, .nav-links a styles only links inside nav-links, and .button:hover styles the button when the mouse is over it.",
+      examples: [
+        "A site logo can be styled with a class like .logo.",
+        "All paragraph text can be softened with p { color: ... }.",
+        "A menu link can change color with .nav-links a:hover.",
+      ],
+    },
+    boxModel: {
+      title: "Why the box model matters",
+      summary:
+        "Every element on a page is a box. The box model explains why something looks too tight, too big, too far away, or strangely misaligned.",
+      why:
+        "Once a learner understands margin, padding, border, width, height, and box-sizing, layouts stop feeling random.",
+      learnMore:
+        "Padding is space inside the box. Margin is space outside the box. Border is the visible edge. Width and height control size. box-sizing: border-box keeps the math easier because padding and border stay inside the width you set.",
+      examples: [
+        "A card uses padding so the text does not touch the edge.",
+        "A button uses border-radius and padding to feel clickable.",
+        "A profile tile may need margin-top so it is not glued to the header.",
+      ],
+    },
+    display: {
+      title: "Why display matters",
+      summary:
+        "The display property decides how an element behaves in the line-up of the page: full row, small inline piece, flexible box, grid cell, or fully hidden.",
+      why:
+        "This helps beginners understand why one element suddenly jumps to a new line while another sits next to text.",
+      learnMore:
+        "Block elements usually take the full row. Inline elements sit inside a line of text. Inline-block lets you keep them in a row while still giving them width and padding. Flex and Grid are for layout systems. display: none hides an element completely.",
+      examples: [
+        "A heading is usually block-level and starts on a new line.",
+        "A tag or badge can use inline-block to keep padding neatly.",
+        "A helper note can be hidden with display: none.",
+      ],
+    },
+    flexbox: {
+      title: "Why flexbox matters",
+      summary:
+        "Flexbox is the easiest way to line things up in one direction: rows, columns, navbars, centered sections, and card strips.",
+      why:
+        "Junior developers use flexbox constantly because so many real interfaces are just boxes that need to align, space out, wrap, or center cleanly.",
+      learnMore:
+        "Think of flexbox as a team manager for a group of boxes. flex-direction chooses the direction, justify-content controls spacing in that direction, align-items controls the cross direction, gap adds breathing room, flex-wrap lets items move to a new line, and flex: 1 helps boxes share space evenly.",
+      examples: [
+        "A navbar uses flexbox to split logo and links.",
+        "A hero section can use flexbox to center content.",
+        "A row of feature cards can wrap on smaller screens.",
+      ],
+    },
+    grid: {
+      title: "Why grid matters",
+      summary:
+        "Grid is useful when the page needs rows and columns at the same time. It feels a bit like placing cards on graph paper.",
+      why:
+        "As soon as a learner needs a gallery, feature board, project list, or dashboard cards, Grid becomes very helpful.",
+      learnMore:
+        "With Grid, you define columns on the parent and let the children snap into place. repeat(3, 1fr) gives three equal columns. repeat(auto-fit, minmax(250px, 1fr)) creates a layout that can shrink and reflow more naturally on smaller screens.",
+      examples: [
+        "A project gallery can use three columns on desktop.",
+        "A features section can auto-fit into fewer columns on mobile.",
+        "A dashboard can line up stat cards without awkward spacing.",
+      ],
+    },
+    responsive: {
+      title: "Why responsive design matters",
+      summary:
+        "Responsive design means the same page still works when the screen gets bigger or smaller.",
+      why:
+        "Being job-ready means thinking beyond your own laptop. Recruiters and teams expect the page to behave well on phones, tablets, and desktop screens.",
+      learnMore:
+        "A good starting pattern is a centered container with width: 90%, max-width: 1100px, and margin: 0 auto. Then use media queries, flexible units like rem, and responsive layouts so sections can stack, shrink, or wrap instead of breaking.",
+      examples: [
+        "A two-column section stacks into one column on mobile.",
+        "A grid changes from three cards to one card per row.",
+        "A page wrapper stays readable instead of stretching too wide.",
+      ],
+    },
+    polish: {
+      title: "Why CSS polish matters",
+      summary:
+        "Polish is what makes a page feel finished instead of looking like a homework draft.",
+      why:
+        "Small styling choices such as radius, shadow, hover, focus, and motion are often what make a beginner project start looking professional.",
+      learnMore:
+        "border-radius softens shapes, box-shadow lifts elements off the page, transition makes changes feel smoother, transform adds movement, :hover and :focus communicate interaction, opacity softens secondary text, and linear-gradient can add energy when used carefully.",
+      examples: [
+        "A pricing card lifts slightly on hover.",
+        "A form field shows a clear focus ring for keyboard users.",
+        "A callout banner uses a gentle gradient background.",
+      ],
+    },
     layout: {
       title: "Why layout skills matter",
       summary:
@@ -201,6 +299,20 @@ const topicTemplates = {
         "A booking form needs labels and clear error feedback.",
         "A modal needs keyboard focus to stay predictable.",
         "A submit flow should show messages users can notice and understand.",
+      ],
+    },
+    testing: {
+      title: "Why testing matters",
+      summary:
+        "Testing is how a developer proves that a feature still behaves correctly when someone clicks, types, submits, or waits for data.",
+      why:
+        "Teams trust junior developers more when they can write a focused test, explain what it protects, and catch regressions before users do.",
+      learnMore:
+        "Good tests are small and behavior-focused. A simple way to explain them is: render the UI, do what the user would do, then check what should appear, disappear, or change.",
+      examples: [
+        "A save button changes label after a click.",
+        "A form shows an error when the email is missing.",
+        "A dashboard shows loading first, then data or an error.",
       ],
     },
     interactions: {
@@ -387,6 +499,104 @@ const topicTemplates = {
     },
   },
   es: {
+    selectors: {
+      title: "Por que importan los selectores",
+      summary:
+        "Los selectores son la forma en la que CSS sabe que elemento debe estilizar. Si HTML es el esqueleto, los selectores son las etiquetas que le dicen a CSS donde poner la ropa.",
+      why:
+        "Muchos errores de CSS al empezar no vienen de una regla mala, sino de estar apuntando al elemento equivocado.",
+      learnMore:
+        "Hay unos cuantos patrones que usaras mucho: p estiliza todos los parrafos, .card estiliza cualquier elemento con clase card, #main estiliza un elemento especial, .nav-links a estiliza solo los links dentro de nav-links y .button:hover cambia el boton cuando el raton esta encima.",
+      examples: [
+        "Un logo puede recibir estilo con una clase como .logo.",
+        "Todos los parrafos pueden suavizarse con p { color: ... }.",
+        "Un link de menu puede cambiar de color con .nav-links a:hover.",
+      ],
+    },
+    boxModel: {
+      title: "Por que importa el modelo de caja",
+      summary:
+        "Cada elemento de una pagina es una caja. El modelo de caja explica por que algo se ve muy apretado, demasiado grande, muy separado o mal alineado.",
+      why:
+        "Cuando una persona entiende margin, padding, border, width, height y box-sizing, los layouts dejan de parecer aleatorios.",
+      learnMore:
+        "El padding es espacio dentro de la caja. El margin es espacio fuera de la caja. El border es el borde visible. Width y height controlan tamano. box-sizing: border-box hace la cuenta mas sencilla porque el padding y el borde quedan dentro del ancho que defines.",
+      examples: [
+        "Una tarjeta usa padding para que el texto no toque el borde.",
+        "Un boton usa border-radius y padding para sentirse clicable.",
+        "Una tarjeta de perfil puede necesitar margin-top para no pegarse al header.",
+      ],
+    },
+    display: {
+      title: "Por que importa display",
+      summary:
+        "La propiedad display decide como se comporta un elemento en la pagina: ocupa toda la fila, se queda dentro de una linea, funciona como caja flexible, como grid o queda oculto.",
+      why:
+        "Esto ayuda a entender por que un elemento salta a una nueva linea mientras otro se queda junto al texto.",
+      learnMore:
+        "Los elementos block suelen ocupar toda la fila. Los inline viven dentro de una linea de texto. Inline-block permite mantenerlos en fila y aun asi darles ancho y padding. Flex y Grid son sistemas de layout. display: none oculta un elemento por completo.",
+      examples: [
+        "Un titulo suele ser block y empieza en una nueva linea.",
+        "Un badge puede usar inline-block para mantener un padding limpio.",
+        "Una nota de ayuda puede ocultarse con display: none.",
+      ],
+    },
+    flexbox: {
+      title: "Por que importa flexbox",
+      summary:
+        "Flexbox es la forma mas sencilla de alinear cosas en una direccion: filas, columnas, navbars, secciones centradas y filas de tarjetas.",
+      why:
+        "Los junior developers usan flexbox constantemente porque muchas interfaces reales son cajas que necesitan alinearse, separarse, envolverse o centrarse con limpieza.",
+      learnMore:
+        "Piensa en flexbox como un manager de un grupo de cajas. flex-direction elige la direccion, justify-content controla el espacio en esa direccion, align-items controla la direccion cruzada, gap da aire, flex-wrap permite saltar a otra linea y flex: 1 ayuda a repartir el espacio de forma pareja.",
+      examples: [
+        "Una navbar usa flexbox para separar logo y links.",
+        "Una hero section puede usar flexbox para centrar contenido.",
+        "Una fila de tarjetas puede envolver en pantallas pequenas.",
+      ],
+    },
+    grid: {
+      title: "Por que importa grid",
+      summary:
+        "Grid es util cuando la pagina necesita filas y columnas al mismo tiempo. Se parece un poco a colocar tarjetas sobre papel cuadriculado.",
+      why:
+        "En cuanto alguien necesita una galeria, un tablero de funcionalidades, una lista de proyectos o metricas, Grid se vuelve muy util.",
+      learnMore:
+        "Con Grid defines columnas en el contenedor padre y los hijos se colocan en su sitio. repeat(3, 1fr) crea tres columnas iguales. repeat(auto-fit, minmax(250px, 1fr)) crea un layout que se adapta mejor cuando el espacio se reduce.",
+      examples: [
+        "Una galeria de proyectos puede usar tres columnas en escritorio.",
+        "Una seccion de funcionalidades puede pasar a menos columnas en movil.",
+        "Un dashboard puede alinear metricas sin espacios raros.",
+      ],
+    },
+    responsive: {
+      title: "Por que importa el diseno responsive",
+      summary:
+        "Responsive significa que la misma pagina sigue funcionando cuando la pantalla se hace grande o pequena.",
+      why:
+        "Estar listo para un trabajo significa pensar mas alla de tu propio portatil. Los equipos esperan que la pagina funcione en movil, tablet y escritorio.",
+      learnMore:
+        "Un buen patron inicial es un contenedor centrado con width: 90%, max-width: 1100px y margin: 0 auto. Luego usa media queries, unidades flexibles como rem y layouts responsive para que las secciones se apilen, se encojan o se envuelvan sin romperse.",
+      examples: [
+        "Una seccion de dos columnas pasa a una columna en movil.",
+        "Un grid cambia de tres tarjetas a una sola por fila.",
+        "Un wrapper de pagina sigue legible en lugar de hacerse demasiado ancho.",
+      ],
+    },
+    polish: {
+      title: "Por que importa el pulido visual",
+      summary:
+        "El pulido es lo que hace que una pagina se sienta terminada en lugar de parecer una tarea a medio hacer.",
+      why:
+        "Detalles pequenos como radius, sombra, hover, focus y movimiento son los que suelen hacer que un proyecto principiante empiece a verse profesional.",
+      learnMore:
+        "border-radius suaviza formas, box-shadow levanta elementos sobre la pagina, transition hace los cambios mas suaves, transform anade movimiento, :hover y :focus comunican interaccion, opacity suaviza el texto secundario y linear-gradient puede dar energia cuando se usa con cuidado.",
+      examples: [
+        "Una tarjeta de precio se eleva un poco al hacer hover.",
+        "Un campo de formulario muestra un focus claro para teclado.",
+        "Un banner de llamada a la accion usa un fondo con gradiente suave.",
+      ],
+    },
     layout: {
       title: "Por que importan los layouts",
       summary:
@@ -441,6 +651,20 @@ const topicTemplates = {
         "Un formulario de reserva necesita labels y feedback de error claro.",
         "Un modal necesita foco de teclado predecible.",
         "Un flujo de submit debe mostrar mensajes faciles de notar y entender.",
+      ],
+    },
+    testing: {
+      title: "Por que importa el testing",
+      summary:
+        "Testing es como un developer demuestra que una funcionalidad sigue comportandose bien cuando alguien hace click, escribe, envia o espera datos.",
+      why:
+        "Los equipos confian mas en perfiles junior que pueden escribir un test enfocado, explicar que protege y detectar regresiones antes de que lleguen a usuarios.",
+      learnMore:
+        "Los buenos tests son pequenos y van al comportamiento. Una forma sencilla de explicarlos es: renderiza la UI, haz lo que haria la persona usuaria y comprueba que aparece, desaparece o cambia lo correcto.",
+      examples: [
+        "Un boton de guardar cambia de texto despues de un click.",
+        "Un formulario muestra error cuando falta el email.",
+        "Un dashboard muestra carga y despues datos o error.",
       ],
     },
     interactions: {
@@ -657,8 +881,88 @@ function inferTopic(challenge) {
 
   if (text.includes("auth") || text.includes("protected")) return "auth";
   if (text.includes("typescript")) return "typescript";
+  if (
+    text.includes("selector") ||
+    text.includes("class selector") ||
+    text.includes("id selector") ||
+    text.includes("hover selector") ||
+    text.includes("nav links a")
+  ) {
+    return "selectors";
+  }
+  if (
+    text.includes("box model") ||
+    text.includes("box sizing") ||
+    text.includes("box sizing border box") ||
+    text.includes("margin") ||
+    text.includes("padding") ||
+    text.includes("border box")
+  ) {
+    return "boxModel";
+  }
+  if (
+    text.includes("display inline") ||
+    text.includes("display block") ||
+    text.includes("inline block") ||
+    text.includes("display none")
+  ) {
+    return "display";
+  }
+  if (
+    text.includes("flexbox") ||
+    text.includes("display flex") ||
+    text.includes("flex direction") ||
+    text.includes("justify content") ||
+    text.includes("align items") ||
+    text.includes("flex wrap") ||
+    text.includes("flex 1")
+  ) {
+    return "flexbox";
+  }
+  if (
+    text.includes("css grid") ||
+    text.includes("grid template") ||
+    text.includes("minmax") ||
+    text.includes("auto fit")
+  ) {
+    return "grid";
+  }
+  if (
+    text.includes("responsive") ||
+    text.includes("media query") ||
+    text.includes("max width") ||
+    text.includes("width 100") ||
+    text.includes("tablet") ||
+    text.includes("mobile")
+  ) {
+    return "responsive";
+  }
+  if (
+    text.includes("box shadow") ||
+    text.includes("transition") ||
+    text.includes("transform") ||
+    text.includes("linear gradient") ||
+    text.includes("focus state") ||
+    text.includes("hover state") ||
+    text.includes("opacity")
+  ) {
+    return "polish";
+  }
   if (text.includes("accessibility") || text.includes("aria") || text.includes("focus states") || text.includes("keyboard")) {
     return "accessibility";
+  }
+  if (
+    text.includes("unit test") ||
+    text.includes("unit tests") ||
+    text.includes("testing") ||
+    text.includes("testing library") ||
+    text.includes("form validation tests") ||
+    text.includes("loading and error tests") ||
+    text.includes("screen.") ||
+    text.includes("fireevent") ||
+    text.includes("waitfor")
+  ) {
+    return "testing";
   }
   if (text.includes("qa") || text.includes("shipping ready") || text.includes("disabled submit")) {
     return "quality";
@@ -705,7 +1009,8 @@ function getLevelLine(challenge, language) {
   const isReact =
     challenge.modeId === "react" ||
     challenge.editorType === "react" ||
-    challenge.editorType === "react-ts";
+    challenge.editorType === "react-ts" ||
+    challenge.editorType === "react-test";
   const isBuilder = challenge.modeId === "builder";
 
   if (language === "es") {

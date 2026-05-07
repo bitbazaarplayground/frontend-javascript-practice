@@ -1,7 +1,12 @@
 import { useMemo, useState } from "react";
 import { getConcept } from "../../data/concepts";
 
-export default function BriefPanel({ challenge, copy, language }) {
+export default function BriefPanel({
+  challenge,
+  copy,
+  language,
+  variant = "default",
+}) {
   const [openSections, setOpenSections] = useState({
     tips: false,
     approach: false,
@@ -21,12 +26,21 @@ export default function BriefPanel({ challenge, copy, language }) {
       [section]: !prev[section],
     }));
   };
+  const isTimedVariant = variant === "timed";
 
   return (
-    <section className="panel brief-panel">
+    <section
+      className={
+        isTimedVariant ? "panel brief-panel brief-panel-timed" : "panel brief-panel"
+      }
+    >
       <div className="panel-top">
-        <h3>{copy.brief.title}</h3>
+        <h3>{isTimedVariant ? copy.assessment.briefTitle : copy.brief.title}</h3>
       </div>
+
+      {isTimedVariant && (
+        <p className="brief-text">{copy.assessment.briefNote}</p>
+      )}
 
       <div className="brief-block">
         <h4>{copy.brief.goal}</h4>
@@ -42,7 +56,7 @@ export default function BriefPanel({ challenge, copy, language }) {
         </ul>
       </div>
 
-      {challenge.concepts?.length > 0 && (
+      {!isTimedVariant && challenge.concepts?.length > 0 && (
         <div className="brief-block">
           <h4>{copy.brief.concepts}</h4>
           <div className="tag-list">
@@ -93,7 +107,7 @@ export default function BriefPanel({ challenge, copy, language }) {
         </div>
       )}
 
-      {challenge.suggestedApproach?.length > 0 && (
+      {!isTimedVariant && challenge.suggestedApproach?.length > 0 && (
         <div className="brief-block">
           <button
             className="brief-toggle"
@@ -113,7 +127,7 @@ export default function BriefPanel({ challenge, copy, language }) {
         </div>
       )}
 
-      {challenge.commonMistakes?.length > 0 && (
+      {!isTimedVariant && challenge.commonMistakes?.length > 0 && (
         <div className="brief-block">
           <button
             className="brief-toggle"
@@ -133,7 +147,7 @@ export default function BriefPanel({ challenge, copy, language }) {
         </div>
       )}
 
-      {challenge.expectedOutcome && (
+      {!isTimedVariant && challenge.expectedOutcome && (
         <div className="brief-block">
           <button
             className="brief-toggle"
@@ -151,7 +165,7 @@ export default function BriefPanel({ challenge, copy, language }) {
         </div>
       )}
 
-      {challenge.tips?.length > 0 && (
+      {!isTimedVariant && challenge.tips?.length > 0 && (
         <div className="brief-block">
           <button
             className="brief-toggle"

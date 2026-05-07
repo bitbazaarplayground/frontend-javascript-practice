@@ -1126,6 +1126,196 @@ export const reactChallenges = [
     },
   },
   {
+    id: "react-booking-form-app",
+    editorType: "react",
+    title: "Challenge 0 — Booking Form App",
+    difficulty: "Medium",
+    category: "React + Forms",
+    goal: "Build a controlled booking form that validates input, creates a booking summary, and resets after success.",
+    requirements: [
+      "Create controlled inputs for name, email, date, and guests",
+      "Handle form submission with onSubmit",
+      "Validate empty fields and the email format",
+      "Show an error or success message",
+      "Render the booking summary after success",
+      "Clear the form after a valid submit",
+    ],
+    tips: [
+      "This is a very common React interview pattern: controlled form, validation, feedback, and a submitted summary.",
+      "One form object in state keeps the fields together.",
+      "After a successful submit, reset the inputs with setState.",
+    ],
+    concepts: [
+      "controlled forms",
+      "useState",
+      "form submission",
+      "validation",
+      "derived UI",
+    ],
+    suggestedApproach: [
+      "Create one piece of state for the form values.",
+      "Create state for the feedback message and saved booking.",
+      "Update the right field in onChange.",
+      "Validate on submit and then render the submitted booking summary.",
+      "Reset the form only after success.",
+    ],
+    commonMistakes: [
+      "Changing the inputs visually without connecting them to state",
+      "Resetting the form before using the submitted values",
+      "Showing success without saving any submitted booking data",
+    ],
+    expectedOutcome:
+      "A React booking flow that feels like a real product form because it validates, confirms success, and shows the submitted details.",
+    starter: {
+      html: ``,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}`,
+      js: `function Challenge() {
+  const [form, setForm] = React.useState({
+    name: "",
+    email: "",
+    date: "",
+    guests: "1",
+  });
+  const [message, setMessage] = React.useState("");
+  const [submittedBooking, setSubmittedBooking] = React.useState(null);
+
+  function handleChange(event) {
+
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+
+  }
+
+  return (
+    <div>
+
+    </div>
+  );
+}`,
+    },
+    solution: {
+      html: ``,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}
+
+.booking-card {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `function Challenge() {
+  const [form, setForm] = React.useState({
+    name: "",
+    email: "",
+    date: "",
+    guests: "1",
+  });
+  const [message, setMessage] = React.useState("");
+  const [submittedBooking, setSubmittedBooking] = React.useState(null);
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }));
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const trimmedName = form.name.trim();
+    const trimmedEmail = form.email.trim();
+
+    if (!trimmedName || !trimmedEmail || !form.date || !form.guests) {
+      setMessage("Please complete every booking field.");
+      setSubmittedBooking(null);
+      return;
+    }
+
+    if (!trimmedEmail.includes("@")) {
+      setMessage("Please enter a valid email address.");
+      setSubmittedBooking(null);
+      return;
+    }
+
+    const booking = {
+      name: trimmedName,
+      email: trimmedEmail,
+      date: form.date,
+      guests: form.guests,
+    };
+
+    setSubmittedBooking(booking);
+    setMessage("Booking submitted successfully.");
+    setForm({
+      name: "",
+      email: "",
+      date: "",
+      guests: "1",
+    });
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Guest name"
+        />
+        <input
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Email"
+        />
+        <input
+          name="date"
+          type="date"
+          value={form.date}
+          onChange={handleChange}
+        />
+        <input
+          name="guests"
+          type="number"
+          min="1"
+          value={form.guests}
+          onChange={handleChange}
+        />
+        <button type="submit">Book table</button>
+      </form>
+
+      <p>{message}</p>
+
+      {submittedBooking ? (
+        <article className="booking-card">
+          <h3>{submittedBooking.name}</h3>
+          <p>{submittedBooking.email}</p>
+          <p>Date: {submittedBooking.date}</p>
+          <p>Guests: {submittedBooking.guests}</p>
+        </article>
+      ) : null}
+    </div>
+  );
+}`,
+    },
+  },
+  {
     id: "react-modal-component",
     editorType: "react",
     title: "Challenge 16 — Simple Modal Component",
@@ -2806,6 +2996,139 @@ button {
     },
   },
   {
+    id: "react-movie-search-app",
+    editorType: "react",
+    title: "Challenge 0 — Movie Search App",
+    difficulty: "Hard",
+    category: "React + Data",
+    goal: "Build a small movie app with search, genre filtering, and a no-results state.",
+    requirements: [
+      "Create a controlled search input",
+      "Store the selected genre in state",
+      "Filter the movies by title and genre",
+      "Render the matching movie cards",
+      "Show a no-results message when nothing matches",
+    ],
+    tips: [
+      "This is a good beginner React app because the state stays simple but the UI feels real.",
+      "Keep the movies in a plain array and derive the filtered list.",
+      "Try to explain it as state in, filtered UI out.",
+    ],
+    concepts: [
+      "useState",
+      "controlled input",
+      "filter()",
+      "derived UI",
+      "conditional rendering",
+    ],
+    suggestedApproach: [
+      "Create a small movies array.",
+      "Store the search text and selected genre in state.",
+      "Filter the array using both values.",
+      "Render cards for the matching movies or a no-results message.",
+    ],
+    commonMistakes: [
+      "Filtering with only one condition when both search and genre should matter",
+      "Rendering the original array instead of the filtered one",
+      "Forgetting to handle the empty state",
+    ],
+    expectedOutcome:
+      "A movie search mini app that helps the learner practice data, filters, and state in a familiar product format.",
+    starter: {
+      html: ``,
+      css: `.movie-grid {
+  display: grid;
+  gap: 12px;
+}`,
+      js: `function Challenge() {
+  const [search, setSearch] = React.useState("");
+  const [genre, setGenre] = React.useState("All");
+
+  const movies = [
+    { id: 1, title: "Moonlight UI", genre: "Drama", year: 2024 },
+    { id: 2, title: "React Rescue", genre: "Action", year: 2023 },
+    { id: 3, title: "CSS Summer", genre: "Comedy", year: 2022 },
+    { id: 4, title: "Async Nights", genre: "Drama", year: 2025 },
+  ];
+
+  return (
+    <div>
+
+    </div>
+  );
+}`,
+    },
+    solution: {
+      html: ``,
+      css: `.movie-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.movie-card {
+  padding: 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: white;
+}`,
+      js: `function Challenge() {
+  const [search, setSearch] = React.useState("");
+  const [genre, setGenre] = React.useState("All");
+
+  const movies = [
+    { id: 1, title: "Moonlight UI", genre: "Drama", year: 2024 },
+    { id: 2, title: "React Rescue", genre: "Action", year: 2023 },
+    { id: 3, title: "CSS Summer", genre: "Comedy", year: 2022 },
+    { id: 4, title: "Async Nights", genre: "Drama", year: 2025 },
+  ];
+
+  const filteredMovies = movies.filter((movie) => {
+    const matchesSearch = movie.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesGenre = genre === "All" || movie.genre === genre;
+
+    return matchesSearch && matchesGenre;
+  });
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        placeholder="Search movies"
+      />
+
+      <select
+        value={genre}
+        onChange={(event) => setGenre(event.target.value)}
+      >
+        <option value="All">All genres</option>
+        <option value="Drama">Drama</option>
+        <option value="Action">Action</option>
+        <option value="Comedy">Comedy</option>
+      </select>
+
+      {filteredMovies.length === 0 ? (
+        <p>No movies match your filters.</p>
+      ) : (
+        <section className="movie-grid">
+          {filteredMovies.map((movie) => (
+            <article key={movie.id} className="movie-card">
+              <h3>{movie.title}</h3>
+              <p>{movie.genre}</p>
+              <p>{movie.year}</p>
+            </article>
+          ))}
+        </section>
+      )}
+    </div>
+  );
+}`,
+    },
+  },
+  {
     id: "react-usereducer-todos",
     editorType: "react",
     title: "Challenge 34 — Todo List with useReducer",
@@ -2932,6 +3255,155 @@ button {
       </div>
     );
   }`,
+    },
+  },
+  {
+    id: "react-contact-manager",
+    editorType: "react",
+    title: "Challenge 0 — Contact Manager",
+    difficulty: "Hard",
+    category: "React + State",
+    goal: "Build a small contact manager where users can add contacts from a form and remove them from a list.",
+    requirements: [
+      "Create controlled inputs for name and email",
+      "Store contacts in React state",
+      "Add a new contact on form submit",
+      "Render the contact list with map()",
+      "Remove a contact when its button is clicked",
+    ],
+    tips: [
+      "This challenge feels closer to a real CRUD screen, even though it stays beginner-friendly.",
+      "Keep one array of contacts in state and derive the list from it.",
+      "Create a new object for each submitted contact.",
+    ],
+    concepts: [
+      "useState",
+      "arrays of objects",
+      "controlled forms",
+      "map()",
+      "filter()",
+    ],
+    suggestedApproach: [
+      "Create state for the form fields and the contacts list.",
+      "Handle submit with preventDefault().",
+      "Build a new contact object and add it to the list.",
+      "Render the contacts with map().",
+      "Use filter() to remove a contact.",
+    ],
+    commonMistakes: [
+      "Mutating the contacts array directly",
+      "Adding empty contacts because the form is not validated",
+      "Removing the wrong contact because the id is not used clearly",
+    ],
+    expectedOutcome:
+      "A small contact manager that helps learners practice state, forms, and list actions in one realistic React exercise.",
+    starter: {
+      html: ``,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+}`,
+      js: `function Challenge() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [contacts, setContacts] = React.useState([]);
+  const [message, setMessage] = React.useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+
+  }
+
+  function handleRemove(contactId) {
+
+  }
+
+  return (
+    <div>
+
+    </div>
+  );
+}`,
+    },
+    solution: {
+      html: ``,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+}
+
+li {
+  margin: 10px 0;
+}`,
+      js: `function Challenge() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [contacts, setContacts] = React.useState([]);
+  const [message, setMessage] = React.useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedName || !trimmedEmail) {
+      setMessage("Please complete both contact fields.");
+      return;
+    }
+
+    const contact = {
+      id: Date.now(),
+      name: trimmedName,
+      email: trimmedEmail,
+    };
+
+    setContacts((currentContacts) => [...currentContacts, contact]);
+    setName("");
+    setEmail("");
+    setMessage("Contact added.");
+  }
+
+  function handleRemove(contactId) {
+    setContacts((currentContacts) =>
+      currentContacts.filter((contact) => contact.id !== contactId)
+    );
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="Name"
+        />
+        <input
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="Email"
+        />
+        <button type="submit">Add contact</button>
+      </form>
+
+      <p>{message}</p>
+
+      <ul>
+        {contacts.map((contact) => (
+          <li key={contact.id}>
+            <strong>{contact.name}</strong> - {contact.email}
+            <button onClick={() => handleRemove(contact.id)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}`,
     },
   },
   {
@@ -4712,6 +5184,132 @@ function Challenge() {
       <Routes>
         <Route path="/" element={<Users />} />
         <Route path="/users/:id" element={<UserDetails />} />
+      </Routes>
+    </HashRouter>
+  );
+}`,
+    },
+  },
+  {
+    id: "react-router-product-detail",
+    editorType: "react",
+    title: "Challenge 0 — Product Detail Route",
+    difficulty: "Hard",
+    category: "React Routing",
+    goal: "Build a routed products screen with links and a dynamic product detail page using useParams.",
+    requirements: [
+      "Use HashRouter, Routes, Route, Link, and useParams",
+      "Render a list of product links",
+      "Create a /products/:id route",
+      "Show the matching product details from the URL param",
+      "Show a fallback message for an unknown product id",
+    ],
+    tips: [
+      "This repeats dynamic routing in a more product-like context than a plain user profile list.",
+      "The URL param will come in as a string, so compare ids carefully.",
+      "Keep the detail page focused on a few useful fields.",
+    ],
+    concepts: [
+      "routing",
+      "dynamic routes",
+      "useParams",
+      "Link",
+      "conditional rendering",
+    ],
+    suggestedApproach: [
+      "Create a products array with id, name, and description.",
+      "Render links to /products/:id from a list page.",
+      "Use useParams inside the detail component.",
+      "Find the right product and render it or show a fallback message.",
+    ],
+    commonMistakes: [
+      "Using a normal anchor tag instead of Link",
+      "Comparing a string route param directly with a numeric id",
+      "Rendering the same product every time because the param is ignored",
+    ],
+    expectedOutcome:
+      "A routed product detail interface that helps the learner explain how one route pattern can power many detail pages.",
+    starter: {
+      html: ``,
+      css: `a {
+  display: inline-block;
+  margin: 6px 10px 6px 0;
+}`,
+      js: `const { HashRouter, Routes, Route, Link, useParams } = ReactRouterDOM;
+
+const products = [
+  { id: 1, name: "Starter UI Kit", description: "Buttons, cards, and form parts." },
+  { id: 2, name: "React Notes", description: "State, effects, and routing." },
+  { id: 3, name: "API Cheatsheet", description: "Fetch, JSON, and status codes." },
+];
+
+function Challenge() {
+  return (
+    <HashRouter>
+
+    </HashRouter>
+  );
+}`,
+    },
+    solution: {
+      html: ``,
+      css: `a {
+  display: inline-block;
+  margin: 6px 10px 6px 0;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.product-panel {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+}`,
+      js: `const { HashRouter, Routes, Route, Link, useParams } = ReactRouterDOM;
+
+const products = [
+  { id: 1, name: "Starter UI Kit", description: "Buttons, cards, and form parts." },
+  { id: 2, name: "React Notes", description: "State, effects, and routing." },
+  { id: 3, name: "API Cheatsheet", description: "Fetch, JSON, and status codes." },
+];
+
+function ProductsPage() {
+  return (
+    <section>
+      <h2>Products</h2>
+      {products.map((product) => (
+        <Link key={product.id} to={"/products/" + product.id}>
+          {product.name}
+        </Link>
+      ))}
+    </section>
+  );
+}
+
+function ProductDetails() {
+  const { id } = useParams();
+  const product = products.find((item) => item.id === Number(id));
+
+  if (!product) {
+    return <section className="product-panel">Product not found.</section>;
+  }
+
+  return (
+    <section className="product-panel">
+      <h2>{product.name}</h2>
+      <p>{product.description}</p>
+      <Link to="/">Back to products</Link>
+    </section>
+  );
+}
+
+function Challenge() {
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<ProductsPage />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
       </Routes>
     </HashRouter>
   );
