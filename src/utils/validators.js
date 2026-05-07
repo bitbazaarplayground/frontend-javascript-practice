@@ -14,7 +14,11 @@ function countMatches(text, pattern) {
 }
 
 function isReactEditorType(editorType) {
-  return editorType === "react" || editorType === "react-ts";
+  return (
+    editorType === "react" ||
+    editorType === "react-ts" ||
+    editorType === "react-test"
+  );
 }
 
 function createResult({ status, feedback }) {
@@ -22,6 +26,29 @@ function createResult({ status, feedback }) {
     status,
     feedback,
   };
+}
+
+function finalizeScoreResult(score, successAt, closeAt, feedback, language = "en") {
+  const text = getValidatorCopy(language);
+
+  if (score >= successAt) {
+    return createResult({
+      status: "success",
+      feedback: [text.excellent, ...feedback],
+    });
+  }
+
+  if (score >= closeAt) {
+    return createResult({
+      status: "close",
+      feedback: [text.close, ...feedback],
+    });
+  }
+
+  return createResult({
+    status: "needs-work",
+    feedback: [text.needsWork, ...feedback],
+  });
 }
 
 const validatorCopy = {
@@ -182,6 +209,46 @@ const validatorCopy = {
       missingA11ySupport:
         "Add an accessible feedback pattern such as aria-live or similarly clear status text.",
     },
+    interviewAccessibleModal: {
+      hasTrigger: "Good - the modal has a real open trigger and a dialog shell.",
+      missingTrigger:
+        "Add an open button plus a dialog shell that can appear and disappear.",
+      hasAria: "Nice - dialog ARIA attributes are present.",
+      missingAria:
+        "Add dialog semantics such as role dialog, aria-modal, and an accessible label.",
+      hasKeyboard: "Good - keyboard closing is wired in.",
+      missingKeyboard:
+        "Handle Escape so the modal can be closed from the keyboard.",
+      hasFocus: "Nice - focus is moved intentionally when the modal opens or closes.",
+      missingFocus:
+        "Move focus into the modal and return it to the trigger when the modal closes.",
+      hasVisibleState: "Good - the UI clearly shows when the modal is open or closed.",
+      missingVisibleState:
+        "Toggle the modal visibility clearly so users can tell whether it is open.",
+      hasFocusStyles: "Nice - visible focus styling is included.",
+      missingFocusStyles:
+        "Add visible focus styles so keyboard users can track where they are.",
+    },
+    interviewAccessibleTabs: {
+      hasStructure: "Good - the tabs use a real tablist structure.",
+      missingStructure:
+        "Build a real tablist with tab buttons and matching panels.",
+      hasAria: "Nice - the tabs expose accessible state and relationships.",
+      missingAria:
+        "Add ARIA relationships such as tablist, tab, tabpanel, aria-selected, and aria-controls.",
+      hasKeyboard: "Good - the tabs can be changed with the keyboard.",
+      missingKeyboard:
+        "Handle ArrowLeft or ArrowRight so keyboard users can move between tabs.",
+      hasState: "Nice - the active tab state updates the visible panel.",
+      missingState:
+        "Update the active tab and visible panel together when selection changes.",
+      hasFocusStyles: "Good - focus styles are visible on the tabs.",
+      missingFocusStyles:
+        "Add visible focus styles so the current keyboard position is clear.",
+      hasPanelControl: "Nice - inactive panels are properly hidden or de-emphasized.",
+      missingPanelControl:
+        "Hide or clearly control the inactive panels instead of leaving every panel equally visible.",
+    },
     interviewDebugDom: {
       hasFilter: "Good - the list still renders from filtered data.",
       missingFilter:
@@ -258,6 +325,82 @@ const validatorCopy = {
       hasEmptyState: "Nice - the empty state is tied to the filtered result.",
       missingEmptyState:
         "Use the filtered result length to decide when the empty state should show.",
+    },
+    interviewDebugRouting: {
+      hasRouter: "Good - the routed screen still uses router primitives.",
+      missingRouter:
+        "Keep a working router setup with HashRouter, Routes, and Route.",
+      hasLinks: "Nice - navigation links point to valid destinations.",
+      missingLinks:
+        "Fix the navigation links so they match the route paths.",
+      hasParams: "Good - the detail route reads URL params.",
+      missingParams:
+        "Use useParams to read the current route id for the detail view.",
+      hasLookup: "Nice - the detail screen looks up the current item from data.",
+      missingLookup:
+        "Use the route param to find the correct item from the data set.",
+      hasFallback: "Good - a missing item or unknown route is handled clearly.",
+      missingFallback:
+        "Show a clear fallback when the route does not match a known item.",
+      hasRendering: "Nice - the main list still renders from data.",
+      missingRendering:
+        "Keep the primary list rendering with map() instead of hardcoded markup.",
+    },
+    interviewTestingUnit: {
+      hasTestCount: "Good - there are several unit tests in place.",
+      missingTestCount:
+        "Write multiple focused unit tests instead of a single broad test.",
+      hasExpect: "Nice - the tests use clear expectations.",
+      missingExpect:
+        "Use expect() assertions to show exactly what should happen.",
+      hasBehaviorCoverage: "Good - the tests cover more than one behavior path.",
+      missingBehaviorCoverage:
+        "Cover both the normal case and at least one edge or alternate case.",
+      hasSuiteStructure: "Nice - the tests are organised in a readable way.",
+      missingSuiteStructure:
+        "Use test() and optionally describe() so the test file reads clearly.",
+    },
+    interviewTestingUi: {
+      hasRender: "Good - the component is rendered in the test.",
+      missingRender:
+        "Render the component before trying to query or interact with it.",
+      hasScreenQueries: "Nice - the tests query the UI through screen.",
+      missingScreenQueries:
+        "Use screen queries such as getByRole or getByText to inspect the UI.",
+      hasInteractions: "Good - the tests simulate user interaction.",
+      missingInteractions:
+        "Use fireEvent to click, type, or submit like a user would.",
+      hasAssertions: "Nice - the tests check what changes on screen.",
+      missingAssertions:
+        "Assert what the user should see after the interaction runs.",
+    },
+    interviewTestingForms: {
+      hasRender: "Good - the form is rendered inside the test.",
+      missingRender:
+        "Render the form before trying to fill it or submit it.",
+      hasSubmitFlow: "Nice - the submit behavior is exercised directly.",
+      missingSubmitFlow:
+        "Trigger the submit flow so the validation rules actually run.",
+      hasFieldCoverage: "Good - the tests cover inputs and validation feedback.",
+      missingFieldCoverage:
+        "Check field values or validation messages so the form behavior is clearly protected.",
+      hasAssertions: "Nice - the expected result is asserted clearly.",
+      missingAssertions:
+        "Use expect() to show what message or state should appear.",
+    },
+    interviewTestingAsync: {
+      hasRender: "Good - the async component is rendered in the test.",
+      missingRender:
+        "Render the async UI before checking loading or results.",
+      hasWaitFor: "Nice - waitFor is used for delayed UI updates.",
+      missingWaitFor:
+        "Use waitFor so the test can wait for async UI to settle.",
+      hasLoading: "Good - the loading state is covered.",
+      missingLoading:
+        "Check that the loading state appears before the final result.",
+      hasSuccessOrError: "Nice - the final async outcome is asserted.",
+      missingSuccessOrError:
+        "Assert a success or error state after the async request finishes.",
     },
     interviewShipping: {
       hasForm: "Good - the submit flow is built around a controlled form.",
@@ -447,6 +590,55 @@ const validatorCopy = {
       missingA11ySupport:
         "Anade un patron accesible de feedback como aria-live o un texto de estado claro.",
     },
+    interviewAccessibleModal: {
+      hasTrigger:
+        "Bien - el modal tiene un disparador real y una estructura de dialogo.",
+      missingTrigger:
+        "Anade un boton para abrir y una estructura de dialogo que pueda mostrarse y ocultarse.",
+      hasAria: "Bien - existen atributos ARIA de dialogo.",
+      missingAria:
+        "Anade semantica de dialogo como role dialog, aria-modal y un label accesible.",
+      hasKeyboard: "Bien - el cierre por teclado esta conectado.",
+      missingKeyboard:
+        "Maneja Escape para que el modal pueda cerrarse con teclado.",
+      hasFocus:
+        "Bien - el foco se mueve de forma intencional al abrir o cerrar.",
+      missingFocus:
+        "Mueve el foco dentro del modal y devuelvelo al disparador al cerrar.",
+      hasVisibleState:
+        "Bien - la UI deja claro cuando el modal esta abierto o cerrado.",
+      missingVisibleState:
+        "Alterna la visibilidad del modal de forma clara para que se note si esta abierto.",
+      hasFocusStyles: "Bien - hay estilos focus visibles.",
+      missingFocusStyles:
+        "Anade estilos focus visibles para que el usuario de teclado se ubique.",
+    },
+    interviewAccessibleTabs: {
+      hasStructure:
+        "Bien - las tabs usan una estructura real de tablist.",
+      missingStructure:
+        "Construye un tablist real con botones tab y paneles asociados.",
+      hasAria:
+        "Bien - las tabs exponen estado y relaciones accesibles.",
+      missingAria:
+        "Anade relaciones ARIA como tablist, tab, tabpanel, aria-selected y aria-controls.",
+      hasKeyboard:
+        "Bien - las tabs pueden cambiarse con teclado.",
+      missingKeyboard:
+        "Maneja ArrowLeft o ArrowRight para mover tabs con teclado.",
+      hasState:
+        "Bien - el estado activo actualiza el panel visible.",
+      missingState:
+        "Actualiza tab activa y panel visible juntos cuando cambie la seleccion.",
+      hasFocusStyles:
+        "Bien - las tabs tienen estilos focus visibles.",
+      missingFocusStyles:
+        "Anade estilos focus visibles para que el punto actual del teclado se vea claro.",
+      hasPanelControl:
+        "Bien - los paneles inactivos se controlan u ocultan correctamente.",
+      missingPanelControl:
+        "Oculta o controla mejor los paneles inactivos en lugar de dejar todos igual de visibles.",
+    },
     interviewDebugDom: {
       hasFilter: "Bien - la lista sigue renderizando desde datos filtrados.",
       missingFilter:
@@ -526,6 +718,102 @@ const validatorCopy = {
         "Bien - el estado vacio depende del resultado filtrado.",
       missingEmptyState:
         "Usa la longitud del resultado filtrado para decidir el estado vacio.",
+    },
+    interviewDebugRouting: {
+      hasRouter:
+        "Bien - la pantalla mantiene primitivas de routing.",
+      missingRouter:
+        "Mantén una configuracion de router que funcione con HashRouter, Routes y Route.",
+      hasLinks:
+        "Bien - los links de navegacion apuntan a destinos validos.",
+      missingLinks:
+        "Arregla los links para que coincidan con las rutas reales.",
+      hasParams:
+        "Bien - la ruta de detalle lee parametros de URL.",
+      missingParams:
+        "Usa useParams para leer el id actual de la ruta de detalle.",
+      hasLookup:
+        "Bien - la pantalla de detalle busca el item correcto en los datos.",
+      missingLookup:
+        "Usa el parametro de ruta para encontrar el item correcto en el array.",
+      hasFallback:
+        "Bien - un item faltante o una ruta desconocida se manejan con claridad.",
+      missingFallback:
+        "Muestra un fallback claro cuando la ruta no coincide con un item conocido.",
+      hasRendering:
+        "Bien - la lista principal sigue renderizando desde datos.",
+      missingRendering:
+        "Mantén el render principal con map() en lugar de marcarlo todo a mano.",
+    },
+    interviewTestingUnit: {
+      hasTestCount: "Bien - hay varios unit tests escritos.",
+      missingTestCount:
+        "Escribe varios tests enfocados en lugar de un solo test muy amplio.",
+      hasExpect: "Bien - los tests usan expect() con claridad.",
+      missingExpect:
+        "Usa expect() para dejar claro que deberia pasar.",
+      hasBehaviorCoverage:
+        "Bien - los tests cubren mas de un camino de comportamiento.",
+      missingBehaviorCoverage:
+        "Cubre el caso normal y al menos un caso alternativo o borde.",
+      hasSuiteStructure:
+        "Bien - los tests estan organizados de forma legible.",
+      missingSuiteStructure:
+        "Usa test() y opcionalmente describe() para que el archivo se lea con claridad.",
+    },
+    interviewTestingUi: {
+      hasRender:
+        "Bien - el componente se renderiza dentro del test.",
+      missingRender:
+        "Renderiza el componente antes de intentar consultarlo o interactuar con el.",
+      hasScreenQueries:
+        "Bien - los tests consultan la UI a traves de screen.",
+      missingScreenQueries:
+        "Usa queries de screen como getByRole o getByText para inspeccionar la UI.",
+      hasInteractions:
+        "Bien - los tests simulan interacciones de la persona usuaria.",
+      missingInteractions:
+        "Usa fireEvent para hacer click, escribir o enviar como haria alguien real.",
+      hasAssertions:
+        "Bien - los tests comprueban que cambia en pantalla.",
+      missingAssertions:
+        "Haz asserts sobre lo que la persona usuaria deberia ver tras la interaccion.",
+    },
+    interviewTestingForms: {
+      hasRender:
+        "Bien - el formulario se renderiza dentro del test.",
+      missingRender:
+        "Renderiza el formulario antes de completarlo o enviarlo.",
+      hasSubmitFlow:
+        "Bien - el flujo de submit se prueba de forma directa.",
+      missingSubmitFlow:
+        "Activa el submit para que las reglas de validacion se ejecuten de verdad.",
+      hasFieldCoverage:
+        "Bien - los tests cubren inputs y feedback de validacion.",
+      missingFieldCoverage:
+        "Comprueba valores de campos o mensajes de validacion para proteger el comportamiento del formulario.",
+      hasAssertions:
+        "Bien - el resultado esperado esta comprobado con claridad.",
+      missingAssertions:
+        "Usa expect() para dejar claro que mensaje o estado deberia aparecer.",
+    },
+    interviewTestingAsync: {
+      hasRender:
+        "Bien - el componente asincrono se renderiza en el test.",
+      missingRender:
+        "Renderiza la UI asincrona antes de revisar carga o resultados.",
+      hasWaitFor:
+        "Bien - se usa waitFor para actualizaciones retrasadas.",
+      missingWaitFor:
+        "Usa waitFor para que el test espere a que la UI asincrona termine de actualizarse.",
+      hasLoading:
+        "Bien - el estado de carga esta cubierto.",
+      missingLoading:
+        "Comprueba que el estado de carga aparece antes del resultado final.",
+      hasSuccessOrError:
+        "Bien - el resultado final asincrono esta comprobado.",
+      missingSuccessOrError:
+        "Haz un assert sobre un estado final de exito o de error.",
     },
     interviewShipping: {
       hasForm: "Bien - el flujo se construye sobre un formulario controlado.",
@@ -913,6 +1201,414 @@ export function validateProfileCard({ html, css }, language = "en") {
   });
 }
 
+export function validateDebugBrokenProfileCardCss(draft, language = "en") {
+  const source = getSource(draft);
+  const copy =
+    language === "es"
+      ? {
+          hasCenter: "Bien - la tarjeta vuelve a estar centrada en la pagina.",
+          missingCenter:
+            "Centra la tarjeta en la pagina con un layout real, por ejemplo flex o grid.",
+          hasPadding: "Perfecto - ya hay espacio interior suficiente en la tarjeta.",
+          missingPadding: "Anade padding dentro de la tarjeta para que respire.",
+          hasReadableColors:
+            "Bien - los colores ahora permiten leer el contenido con claridad.",
+          missingReadableColors:
+            "Revisa fondo y color de texto para que la tarjeta sea legible.",
+          hasRadius: "Bien - las esquinas redondeadas vuelven a dar forma al bloque.",
+          missingRadius: "Anade border-radius para que la tarjeta no se vea rota.",
+          hasPolish: "Buen toque - la tarjeta ya tiene un detalle de acabado visual.",
+          missingPolish:
+            "Anade un toque final, por ejemplo box-shadow o un borde limpio.",
+        }
+      : {
+          hasCenter: "Good - the card is centered on the page again.",
+          missingCenter:
+            "Center the card on the page with a real layout rule such as flex or grid.",
+          hasPadding: "Nice - the card now has enough inner spacing.",
+          missingPadding: "Add padding inside the card so the content can breathe.",
+          hasReadableColors:
+            "Good - the colors now make the content readable.",
+          missingReadableColors:
+            "Review the background and text color so the card is easy to read.",
+          hasRadius: "Nice - rounded corners are back in place.",
+          missingRadius: "Add border-radius so the card stops looking broken.",
+          hasPolish: "Nice touch - the card includes a finishing detail now.",
+          missingPolish:
+            "Add one finishing detail such as box-shadow or a clean border.",
+        };
+
+  const feedback = [];
+  let score = 0;
+
+  const hasCenter =
+    hasCentering(source) &&
+    (source.compactCss.includes("display:flex") ||
+      source.compactCss.includes("display:grid"));
+  const hasPadding = source.compactCss.includes("padding:");
+  const hasReadableColors =
+    hasCssDeclaration(source, [
+      "background:white",
+      "background:#fff",
+      "background:#ffffff",
+      "background:#f8fafc",
+    ]) &&
+    hasCssDeclaration(source, [
+      "color:#0f172a",
+      "color:#111827",
+      "color:#1e293b",
+      "color:black",
+    ]);
+  const hasRadius = source.compactCss.includes("border-radius:");
+  const hasPolish =
+    source.lowerCss.includes("box-shadow") || source.lowerCss.includes("border:");
+
+  [
+    [hasCenter, copy.hasCenter, copy.missingCenter],
+    [hasPadding, copy.hasPadding, copy.missingPadding],
+    [hasReadableColors, copy.hasReadableColors, copy.missingReadableColors],
+    [hasRadius, copy.hasRadius, copy.missingRadius],
+    [hasPolish, copy.hasPolish, copy.missingPolish],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 3, feedback, language);
+}
+
+export function validateDebugBrokenNavbarLayout(draft, language = "en") {
+  const source = getSource(draft);
+  const copy =
+    language === "es"
+      ? {
+          hasNavFlex:
+            "Bien - la navbar ya usa un layout real para separar logo y links.",
+          missingNavFlex:
+            "Convierte la navbar en un contenedor de layout real para separar izquierda y derecha.",
+          hasAlignment:
+            "Perfecto - la alineacion horizontal de la barra ya se siente estable.",
+          missingAlignment:
+            "Revisa justify-content y align-items para que la barra quede bien alineada.",
+          hasLinksRow:
+            "Bien - los links ya se muestran en una fila en lugar de una lista rota.",
+          missingLinksRow:
+            "Haz que los links se muestren en una fila con flexbox y algo de gap.",
+          hasListReset: "Bien - la lista ya no enseña bullets ni sangria rara.",
+          missingListReset:
+            "Quita bullets y padding por defecto de la lista de navegacion.",
+          hasSurface:
+            "Buen trabajo - la navbar ya tiene espaciado y una superficie visible.",
+          missingSurface:
+            "Anade padding y una superficie clara u oscura para que la navbar se vea terminada.",
+        }
+      : {
+          hasNavFlex:
+            "Good - the navbar now uses a real layout system to split logo and links.",
+          missingNavFlex:
+            "Turn the navbar into a real layout container so left and right can separate properly.",
+          hasAlignment:
+            "Nice - the horizontal alignment now feels stable.",
+          missingAlignment:
+            "Review justify-content and align-items so the bar lines up correctly.",
+          hasLinksRow:
+            "Good - the links now sit in one row instead of a broken list.",
+          missingLinksRow:
+            "Make the links sit in one row with flexbox and some gap.",
+          hasListReset:
+            "Nice - the list no longer shows bullets or odd indentation.",
+          missingListReset:
+            "Remove the default list bullets and padding from the nav list.",
+          hasSurface:
+            "Nice work - the navbar now has spacing and a visible surface.",
+          missingSurface:
+            "Add padding and a clear background or surface so the navbar feels finished.",
+        };
+
+  const feedback = [];
+  let score = 0;
+
+  const hasNavFlex = source.compactCss.includes("display:flex");
+  const hasAlignment =
+    source.compactCss.includes("justify-content:space-between") &&
+    source.compactCss.includes("align-items:center");
+  const hasLinksRow =
+    countMatches(source.css, /display\s*:\s*flex/gi) >= 2 &&
+    source.compactCss.includes("gap:");
+  const hasListReset =
+    source.lowerCss.includes("list-style: none") ||
+    source.lowerCss.includes("list-style:none");
+  const hasSurface =
+    source.compactCss.includes("padding:") &&
+    (source.lowerCss.includes("background:") ||
+      source.lowerCss.includes("background-color:"));
+
+  [
+    [hasNavFlex, copy.hasNavFlex, copy.missingNavFlex],
+    [hasAlignment, copy.hasAlignment, copy.missingAlignment],
+    [hasLinksRow, copy.hasLinksRow, copy.missingLinksRow],
+    [hasListReset, copy.hasListReset, copy.missingListReset],
+    [hasSurface, copy.hasSurface, copy.missingSurface],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 3, feedback, language);
+}
+
+export function validateDebugBrokenResponsiveGrid(draft, language = "en") {
+  const source = getSource(draft);
+  const copy =
+    language === "es"
+      ? {
+          hasGrid: "Bien - el layout ya usa Grid de verdad.",
+          missingGrid: "Convierte la seccion en un layout Grid real.",
+          hasColumns:
+            "Perfecto - las columnas ya se definen con una regla de grid clara.",
+          missingColumns:
+            "Define columnas de grid claras en lugar de dejar que todo caiga en bloque.",
+          hasResponsive:
+            "Bien - la solucion ya piensa en pantallas pequenas.",
+          missingResponsive:
+            "Haz que el layout sea responsive con minmax, auto-fit o una media query.",
+          hasGap: "Bien - las tarjetas ya tienen aire entre ellas.",
+          missingGap: "Anade gap para separar visualmente las tarjetas.",
+          hasCardSpacing:
+            "Buen trabajo - las tarjetas recuperaron espacio interior y forma.",
+          missingCardSpacing:
+            "Revisa padding y border-radius en las tarjetas para que no se vean rotas.",
+        }
+      : {
+          hasGrid: "Good - the layout now uses real Grid.",
+          missingGrid: "Turn the section into a real Grid layout.",
+          hasColumns:
+            "Nice - the columns are defined with a clear grid rule now.",
+          missingColumns:
+            "Define clear grid columns instead of leaving the layout as a block flow.",
+          hasResponsive:
+            "Good - the solution now thinks about smaller screens.",
+          missingResponsive:
+            "Make the layout responsive with minmax, auto-fit, or a media query.",
+          hasGap: "Nice - the cards now have space between them.",
+          missingGap: "Add gap so the cards separate visually.",
+          hasCardSpacing:
+            "Good work - the cards regained inner space and shape.",
+          missingCardSpacing:
+            "Review padding and border-radius on the cards so they stop looking broken.",
+        };
+
+  const feedback = [];
+  let score = 0;
+
+  const hasGrid = source.compactCss.includes("display:grid");
+  const hasColumns = source.lowerCss.includes("grid-template-columns");
+  const hasResponsive =
+    source.lowerCss.includes("minmax(") ||
+    source.lowerCss.includes("auto-fit") ||
+    source.lowerCss.includes("@media");
+  const hasGap = source.compactCss.includes("gap:");
+  const hasCardSpacing =
+    source.compactCss.includes("padding:") &&
+    source.compactCss.includes("border-radius:");
+
+  [
+    [hasGrid, copy.hasGrid, copy.missingGrid],
+    [hasColumns, copy.hasColumns, copy.missingColumns],
+    [hasResponsive, copy.hasResponsive, copy.missingResponsive],
+    [hasGap, copy.hasGap, copy.missingGap],
+    [hasCardSpacing, copy.hasCardSpacing, copy.missingCardSpacing],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 3, feedback, language);
+}
+
+export function validateCopyMockPricingSection(draft, language = "en") {
+  const source = getSource(draft);
+  const copy =
+    language === "es"
+      ? {
+          hasIntro:
+            "Bien - la seccion tiene cabecera y texto de apoyo como en un brief real.",
+          missingIntro:
+            "Anade una cabecera de seccion con titulo y texto de apoyo.",
+          hasCards: "Perfecto - ya hay tres tarjetas de precios visibles.",
+          missingCards: "Crea tres tarjetas de precios para comparar planes.",
+          hasActions:
+            "Bien - cada tarjeta ya incluye una accion clara para el usuario.",
+          missingActions:
+            "Asegurate de que cada tarjeta tenga un boton o llamada a la accion.",
+          hasFeatured:
+            "Bien - una de las tarjetas se diferencia como plan destacado.",
+          missingFeatured:
+            "Haz que una tarjeta se vea destacada con una clase o estilo especial.",
+          hasResponsive:
+            "Buen trabajo - la fila de tarjetas ya se adapta a pantallas pequenas.",
+          missingResponsive:
+            "Haz que la fila de tarjetas sea responsive con grid, minmax o media queries.",
+          hasPolish:
+            "Bien - la seccion ya transmite ese punto de pulido que suelen mirar en entrevistas.",
+          missingPolish:
+            "Anade pulido visual con radius, shadow, espaciado o una jerarquia mas clara.",
+        }
+      : {
+          hasIntro:
+            "Good - the section includes a heading and supporting copy like a real brief.",
+          missingIntro:
+            "Add a section header with a title and short supporting paragraph.",
+          hasCards: "Nice - there are three visible pricing cards now.",
+          missingCards: "Create three pricing cards so the plans can be compared.",
+          hasActions:
+            "Good - each card includes a clear action for the user.",
+          missingActions:
+            "Make sure each card has a button or clear call to action.",
+          hasFeatured:
+            "Nice - one of the cards is visually featured.",
+          missingFeatured:
+            "Make one card stand out with a featured class or a clearly different style.",
+          hasResponsive:
+            "Good work - the card row now adapts to smaller screens.",
+          missingResponsive:
+            "Make the card row responsive with grid, minmax, or media queries.",
+          hasPolish:
+            "Nice - the section now has the level of polish these interview tasks often test.",
+          missingPolish:
+            "Add polish with radius, shadow, spacing, or clearer hierarchy.",
+        };
+
+  const feedback = [];
+  let score = 0;
+
+  const hasIntro = hasTag(source.html, ["h1", "h2", "h3"]) && hasTag(source.html, ["p"]);
+  const hasCards = countMatches(source.html, /<article\b/gi) >= 3;
+  const hasActions =
+    countMatches(source.html, /<button\b/gi) >= 3 ||
+    countMatches(source.html, /<a\b/gi) >= 3;
+  const hasFeatured = includesAny(source.lowerAll, [
+    "featured",
+    "popular",
+    "highlight",
+    ":nth-child(2)",
+  ]);
+  const hasResponsive =
+    source.lowerCss.includes("minmax(") ||
+    source.lowerCss.includes("auto-fit") ||
+    source.lowerCss.includes("@media");
+  const hasPolish =
+    source.lowerCss.includes("box-shadow") &&
+    source.lowerCss.includes("border-radius");
+
+  [
+    [hasIntro, copy.hasIntro, copy.missingIntro],
+    [hasCards, copy.hasCards, copy.missingCards],
+    [hasActions, copy.hasActions, copy.missingActions],
+    [hasFeatured, copy.hasFeatured, copy.missingFeatured],
+    [hasResponsive, copy.hasResponsive, copy.missingResponsive],
+    [hasPolish, copy.hasPolish, copy.missingPolish],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateCopyMockDashboardOverview(draft, language = "en") {
+  const source = getSource(draft);
+  const copy =
+    language === "es"
+      ? {
+          hasSidebar:
+            "Bien - el layout ya incluye una sidebar o columna de navegacion.",
+          missingSidebar:
+            "Anade una sidebar o columna lateral para que el dashboard tenga una estructura real.",
+          hasHeader:
+            "Perfecto - el area principal ya tiene una cabecera clara.",
+          missingHeader:
+            "Anade una cabecera superior al area principal del dashboard.",
+          hasStats:
+            "Bien - ya hay cuatro tarjetas de metricas para escanear el estado general.",
+          missingStats:
+            "Crea cuatro tarjetas de estadisticas o metricas.",
+          hasActivity:
+            "Bien - hay un panel de actividad o actualizaciones dentro del dashboard.",
+          missingActivity:
+            "Anade un panel de actividad reciente, updates o una zona de contenido secundario.",
+          hasLayout:
+            "Buen trabajo - la estructura principal del dashboard ya usa layout real.",
+          missingLayout:
+            "Usa grid o flex para construir la estructura principal del dashboard.",
+          hasResponsive:
+            "Bien - el dashboard ya piensa en pantallas pequenas.",
+          missingResponsive:
+            "Haz que el dashboard se adapte a pantallas pequenas con media query o columnas fluidas.",
+        }
+      : {
+          hasSidebar:
+            "Good - the layout includes a sidebar or navigation column now.",
+          missingSidebar:
+            "Add a sidebar or side navigation column so the dashboard has real structure.",
+          hasHeader:
+            "Nice - the main area includes a clear top header now.",
+          missingHeader:
+            "Add a top header area to the main dashboard content.",
+          hasStats:
+            "Good - there are four stat cards to scan the overview.",
+          missingStats:
+            "Create four stat cards or metric panels for the overview.",
+          hasActivity:
+            "Nice - the dashboard includes an activity or updates panel.",
+          missingActivity:
+            "Add a recent activity, updates, or secondary content panel.",
+          hasLayout:
+            "Good work - the dashboard uses a real layout system now.",
+          missingLayout:
+            "Use grid or flex to build the main dashboard shell.",
+          hasResponsive:
+            "Nice - the dashboard now thinks about smaller screens.",
+          missingResponsive:
+            "Make the dashboard adapt on smaller screens with a media query or fluid columns.",
+        };
+
+  const feedback = [];
+  let score = 0;
+
+  const hasSidebar =
+    hasTag(source.html, ["aside", "nav"]) || includesAny(source.lowerHtml, ["sidebar"]);
+  const hasHeader =
+    hasTag(source.html, ["header"]) || includesAny(source.lowerHtml, ["topbar"]);
+  const hasStats = countMatches(source.html, /<article\b/gi) >= 4;
+  const hasActivity = includesAny(source.lowerHtml, [
+    "activity",
+    "updates",
+    "recent",
+    "<ul",
+    "<table",
+  ]);
+  const hasLayout =
+    source.compactCss.includes("display:grid") ||
+    source.compactCss.includes("display:flex");
+  const hasResponsive =
+    source.lowerCss.includes("@media") || source.lowerCss.includes("minmax(");
+
+  [
+    [hasSidebar, copy.hasSidebar, copy.missingSidebar],
+    [hasHeader, copy.hasHeader, copy.missingHeader],
+    [hasStats, copy.hasStats, copy.missingStats],
+    [hasActivity, copy.hasActivity, copy.missingActivity],
+    [hasLayout, copy.hasLayout, copy.missingLayout],
+    [hasResponsive, copy.hasResponsive, copy.missingResponsive],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
 function shouldCheckHtml(challenge) {
   if (isReactEditorType(challenge?.editorType)) return false;
 
@@ -1016,6 +1712,52 @@ function checkRequirement(requirement, source, challenge) {
   }
   if (text.includes("form")) {
     return isReact ? source.lowerJs.includes("<form") : hasTag(source.html, ["form"]);
+  }
+  if (
+    text.includes("type or interface") ||
+    text.includes("type alias") ||
+    text.includes("interface")
+  ) {
+    return includesAny(source.lowerJs, ["interface ", "type "]);
+  }
+  if (text.includes("typed array")) {
+    return (
+      /:\s*[A-Za-z0-9_]+\[\]\s*=/.test(source.js) ||
+      /:\s*Array<[^>]+>\s*=/.test(source.js)
+    );
+  }
+  if (text.includes("typed props")) {
+    return (
+      /function\s+[A-Z][A-Za-z0-9]*\s*\(\s*\{[^)]*\}\s*:\s*[A-Za-z0-9_]+/.test(
+        source.js
+      ) ||
+      /\(\s*\{[^)]*\}\s*:\s*[A-Za-z0-9_]+/.test(source.js)
+    );
+  }
+  if (text.includes("union")) {
+    return /\|\s*["'{A-Za-z0-9_]/.test(source.js);
+  }
+  if (text.includes("optional propert") || text.includes("optional field")) {
+    return /[A-Za-z0-9_]+\?\s*:/.test(source.js);
+  }
+  if (text.includes("typed state")) {
+    return /useState<[^>]+>\(/.test(source.js);
+  }
+  if (text.includes("typed event")) {
+    return includesAny(source.lowerJs, [
+      "react.mouseevent",
+      "react.changeevent",
+      "react.formevent",
+      "react.keyboardevent",
+    ]);
+  }
+  if (text.includes("narrow")) {
+    return includesAny(source.lowerJs, [
+      "typeof",
+      "instanceof",
+      "array.isarray",
+      " in ",
+    ]);
   }
   if (text.includes("list") || text.includes("items") || text.includes("cards")) {
     return (
@@ -1460,6 +2202,107 @@ export function validateInterviewAccessibilityTest(draft, language = "en") {
   });
 }
 
+export function validateInterviewAccessibleModalTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const hasTrigger =
+    hasTag(source.html, ["button"]) &&
+    includesAny(source.lowerHtml, ["role=\"dialog\"", "role='dialog'", "<dialog"]);
+  const hasAria = includesAny(source.lowerHtml, [
+    "aria-modal",
+    "aria-labelledby",
+    "aria-label",
+  ]);
+  const hasKeyboard = includesAny(source.lowerJs, ["keydown", "escape"]);
+  const hasFocus = includesAny(source.lowerJs, [
+    ".focus(",
+    "document.activeelement",
+    "lastactive",
+    "lastfocused",
+  ]);
+  const hasVisibleState = includesAny(source.lowerAll, [
+    "hidden",
+    "showmodal",
+    "closemodal",
+    "classlist.add(\"open\"",
+    "classlist.remove(\"open\"",
+    "classlist.toggle(\"open\"",
+  ]);
+  const hasFocusStyles = source.lowerCss.includes(":focus");
+
+  [
+    [hasTrigger, text.interviewAccessibleModal.hasTrigger, text.interviewAccessibleModal.missingTrigger],
+    [hasAria, text.interviewAccessibleModal.hasAria, text.interviewAccessibleModal.missingAria],
+    [hasKeyboard, text.interviewAccessibleModal.hasKeyboard, text.interviewAccessibleModal.missingKeyboard],
+    [hasFocus, text.interviewAccessibleModal.hasFocus, text.interviewAccessibleModal.missingFocus],
+    [hasVisibleState, text.interviewAccessibleModal.hasVisibleState, text.interviewAccessibleModal.missingVisibleState],
+    [hasFocusStyles, text.interviewAccessibleModal.hasFocusStyles, text.interviewAccessibleModal.missingFocusStyles],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateInterviewAccessibleTabsTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const tabCount = countMatches(source.html, /role=["']tab["']/gi);
+  const hasStructure =
+    includesAny(source.lowerHtml, ["role=\"tablist\"", "role='tablist'"]) &&
+    tabCount >= 2 &&
+    includesAny(source.lowerHtml, ["role=\"tabpanel\"", "role='tabpanel'"]);
+  const hasAria = includesAny(source.lowerHtml, [
+    "aria-selected",
+    "aria-controls",
+    "aria-labelledby",
+  ]);
+  const hasKeyboard = includesAny(source.lowerJs, [
+    "keydown",
+    "arrowright",
+    "arrowleft",
+    "home",
+    "end",
+  ]);
+  const hasState = includesAny(source.lowerAll, [
+    "activetab",
+    "currenttab",
+    "selectedindex",
+    "aria-selected",
+    ".hidden =",
+    "classlist.toggle",
+  ]);
+  const hasFocusStyles = source.lowerCss.includes(":focus");
+  const hasPanelControl = includesAny(source.lowerAll, [
+    "hidden",
+    "aria-hidden",
+    "tabpanel.hidden",
+    "setattribute(\"hidden\"",
+    "removeattribute(\"hidden\"",
+  ]);
+
+  [
+    [hasStructure, text.interviewAccessibleTabs.hasStructure, text.interviewAccessibleTabs.missingStructure],
+    [hasAria, text.interviewAccessibleTabs.hasAria, text.interviewAccessibleTabs.missingAria],
+    [hasKeyboard, text.interviewAccessibleTabs.hasKeyboard, text.interviewAccessibleTabs.missingKeyboard],
+    [hasState, text.interviewAccessibleTabs.hasState, text.interviewAccessibleTabs.missingState],
+    [hasFocusStyles, text.interviewAccessibleTabs.hasFocusStyles, text.interviewAccessibleTabs.missingFocusStyles],
+    [hasPanelControl, text.interviewAccessibleTabs.hasPanelControl, text.interviewAccessibleTabs.missingPanelControl],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
 export function validateInterviewDebugDomTest(draft, language = "en") {
   const text = getValidatorCopy(language);
   const source = getSource(draft);
@@ -1696,6 +2539,171 @@ export function validateInterviewDebugReactTest(draft, language = "en") {
   });
 }
 
+export function validateInterviewDebugRoutingTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const hasRouter = includesAny(source.js, [
+    "HashRouter",
+    "ReactRouterDOM.HashRouter",
+    "Routes",
+    "Route",
+  ]);
+  const hasLinks =
+    includesAny(source.js, ["Link", "NavLink"]) &&
+    includesAny(source.lowerJs, ["to=\"/", "to={'/", "to={`/"]);
+  const hasParams = includesAny(source.js, [
+    "useParams",
+    "ReactRouterDOM.useParams",
+  ]);
+  const hasLookup =
+    source.lowerJs.includes(".find(") &&
+    includesAny(source.lowerJs, ["params", "routeid", "itemid", "lessonid"]);
+  const hasFallback = includesAny(source.lowerJs, [
+    "not found",
+    "missing",
+    "path=\"*\"",
+    "path='*'",
+  ]);
+  const hasRendering = source.lowerJs.includes(".map(");
+
+  [
+    [hasRouter, text.interviewDebugRouting.hasRouter, text.interviewDebugRouting.missingRouter],
+    [hasLinks, text.interviewDebugRouting.hasLinks, text.interviewDebugRouting.missingLinks],
+    [hasParams, text.interviewDebugRouting.hasParams, text.interviewDebugRouting.missingParams],
+    [hasLookup, text.interviewDebugRouting.hasLookup, text.interviewDebugRouting.missingLookup],
+    [hasFallback, text.interviewDebugRouting.hasFallback, text.interviewDebugRouting.missingFallback],
+    [hasRendering, text.interviewDebugRouting.hasRendering, text.interviewDebugRouting.missingRendering],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateInterviewTestingUnitTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const hasTestCount = countMatches(source.js, /\b(test|it)\s*\(/g) >= 3;
+  const hasExpect = countMatches(source.js, /\bexpect\s*\(/g) >= 3;
+  const coveredHelpers = [
+    "normalizecandidatename",
+    "countopenroles",
+    "buildstatuslabel",
+  ].filter((name) => source.lowerJs.includes(name)).length;
+  const hasBehaviorCoverage = coveredHelpers >= 2;
+  const hasSuiteStructure = includesAny(source.lowerJs, ["describe(", "test("]);
+
+  [
+    [hasTestCount, text.interviewTestingUnit.hasTestCount, text.interviewTestingUnit.missingTestCount],
+    [hasExpect, text.interviewTestingUnit.hasExpect, text.interviewTestingUnit.missingExpect],
+    [hasBehaviorCoverage, text.interviewTestingUnit.hasBehaviorCoverage, text.interviewTestingUnit.missingBehaviorCoverage],
+    [hasSuiteStructure, text.interviewTestingUnit.hasSuiteStructure, text.interviewTestingUnit.missingSuiteStructure],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 4, 3, feedback, language);
+}
+
+export function validateInterviewTestingUiTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const hasRender = includesAny(source.lowerJs, ["render("]);
+  const hasScreenQueries = includesAny(source.lowerJs, [
+    "screen.getbyrole",
+    "screen.getbytext",
+    "screen.querybytext",
+  ]);
+  const hasInteractions = includesAny(source.lowerJs, [
+    "fireevent.click",
+    "fireevent.change",
+    "fireevent.input",
+  ]);
+  const hasAssertions = countMatches(source.js, /\bexpect\s*\(/g) >= 3;
+
+  [
+    [hasRender, text.interviewTestingUi.hasRender, text.interviewTestingUi.missingRender],
+    [hasScreenQueries, text.interviewTestingUi.hasScreenQueries, text.interviewTestingUi.missingScreenQueries],
+    [hasInteractions, text.interviewTestingUi.hasInteractions, text.interviewTestingUi.missingInteractions],
+    [hasAssertions, text.interviewTestingUi.hasAssertions, text.interviewTestingUi.missingAssertions],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 4, 3, feedback, language);
+}
+
+export function validateInterviewTestingFormsTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const hasRender = includesAny(source.lowerJs, ["render("]);
+  const hasSubmitFlow =
+    includesAny(source.lowerJs, ["fireevent.submit", "fireevent.click"]) &&
+    source.lowerJs.includes("submit");
+  const hasFieldCoverage =
+    includesAny(source.lowerJs, ["getbylabeltext", "getbyplaceholdertext"]) &&
+    includesAny(source.lowerJs, ["fireevent.change", "fireevent.input"]);
+  const hasAssertions = countMatches(source.js, /\bexpect\s*\(/g) >= 3;
+
+  [
+    [hasRender, text.interviewTestingForms.hasRender, text.interviewTestingForms.missingRender],
+    [hasSubmitFlow, text.interviewTestingForms.hasSubmitFlow, text.interviewTestingForms.missingSubmitFlow],
+    [hasFieldCoverage, text.interviewTestingForms.hasFieldCoverage, text.interviewTestingForms.missingFieldCoverage],
+    [hasAssertions, text.interviewTestingForms.hasAssertions, text.interviewTestingForms.missingAssertions],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 4, 3, feedback, language);
+}
+
+export function validateInterviewTestingAsyncTest(draft, language = "en") {
+  const text = getValidatorCopy(language);
+  const source = getSource(draft);
+  const feedback = [];
+  let score = 0;
+
+  const hasRender = includesAny(source.lowerJs, ["render("]);
+  const hasWaitFor = includesAny(source.lowerJs, ["waitfor("]);
+  const hasLoading = includesAny(source.lowerJs, [
+    "loading",
+    "getbyrole(\"status\"",
+    "getbyrole('status'",
+    "getbytext(/loading",
+  ]);
+  const hasSuccessOrError =
+    countMatches(source.js, /\bexpect\s*\(/g) >= 2 &&
+    includesAny(source.lowerJs, ["loaded", "ready", "failed", "error"]);
+
+  [
+    [hasRender, text.interviewTestingAsync.hasRender, text.interviewTestingAsync.missingRender],
+    [hasWaitFor, text.interviewTestingAsync.hasWaitFor, text.interviewTestingAsync.missingWaitFor],
+    [hasLoading, text.interviewTestingAsync.hasLoading, text.interviewTestingAsync.missingLoading],
+    [hasSuccessOrError, text.interviewTestingAsync.hasSuccessOrError, text.interviewTestingAsync.missingSuccessOrError],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 4, 3, feedback, language);
+}
+
 export function validateInterviewShippingReadinessTest(
   draft,
   language = "en"
@@ -1781,13 +2789,25 @@ export function validateChallenge(challengeOrId, draft, language = "en") {
     "styled-button": validateStyledButton,
     "centered-box": validateCenteredBox,
     "profile-card": validateProfileCard,
+    "debug-broken-profile-card-css": validateDebugBrokenProfileCardCss,
+    "debug-broken-navbar-layout": validateDebugBrokenNavbarLayout,
+    "debug-broken-responsive-grid": validateDebugBrokenResponsiveGrid,
+    "copy-mock-pricing-section": validateCopyMockPricingSection,
+    "copy-mock-dashboard-overview": validateCopyMockDashboardOverview,
     "builder-all-in-one-practice-lab": validateBuilderPracticeLab,
     "react-all-in-one-restaurant-app": validateReactRestaurantCapstone,
     "interview-accessibility-qa-test": validateInterviewAccessibilityTest,
+    "interview-accessible-modal-test": validateInterviewAccessibleModalTest,
+    "interview-accessible-tabs-test": validateInterviewAccessibleTabsTest,
     "interview-debug-dom-test": validateInterviewDebugDomTest,
     "interview-debug-async-test": validateInterviewDebugAsyncTest,
     "interview-typescript-react-test": validateInterviewTypeScriptReactTest,
     "interview-debug-react-test": validateInterviewDebugReactTest,
+    "interview-debug-routing-test": validateInterviewDebugRoutingTest,
+    "interview-unit-tests-foundations-test": validateInterviewTestingUnitTest,
+    "interview-rtl-interaction-test": validateInterviewTestingUiTest,
+    "interview-form-validation-tests-test": validateInterviewTestingFormsTest,
+    "interview-loading-error-tests-test": validateInterviewTestingAsyncTest,
     "interview-shipping-readiness-test":
       validateInterviewShippingReadinessTest,
   };

@@ -1023,6 +1023,355 @@ reservationForm.addEventListener("submit", (event) => {
     },
   },
   {
+    id: "interview-accessible-modal-test",
+    editorType: "web",
+    title: "Challenge 6 — Interview Test: Accessible Support Modal",
+    difficulty: "Hard",
+    category: "Accessibility + QA",
+    goal: "Build a support modal with dialog semantics, keyboard support, focus management, and visible focus states.",
+    requirements: [
+      "Add a real button that opens the modal",
+      "Use accessible dialog attributes",
+      "Move focus into the modal when it opens",
+      "Return focus to the trigger when it closes",
+      "Close the modal with Escape and the close button",
+      "Show visible focus styles",
+    ],
+    tips: [
+      "This challenge is less about decoration and more about keyboard behavior.",
+      "Start with the open and close flow before polishing the modal card.",
+      "A modal is only helpful if users can open it, understand it, and leave it predictably.",
+    ],
+    concepts: [
+      "accessibility",
+      "keyboard navigation",
+      "focus management",
+      "ARIA",
+      "UI feedback",
+    ],
+    suggestedApproach: [
+      "Create the trigger button and the hidden modal shell first.",
+      "Add dialog semantics and a clear heading for the modal.",
+      "Wire the open and close actions, including Escape.",
+      "Finish by moving focus intentionally and styling focus states clearly.",
+    ],
+    commonMistakes: [
+      "Opening the modal without moving focus",
+      "Closing the modal but leaving focus lost somewhere on the page",
+      "Using a clickable div instead of a real button",
+    ],
+    expectedOutcome:
+      "A support modal that feels calm, accessible, and realistic enough for a junior interview exercise.",
+    starter: {
+      html: `<section class="modal-lab">
+  <button id="supportModalTrigger" type="button">Open support request</button>
+
+  <section id="supportModal" hidden>
+  </section>
+</section>`,
+      css: `.modal-lab {
+  display: grid;
+  gap: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="modal-lab">
+  <button id="supportModalTrigger" class="modal-trigger" type="button">
+    Open support request
+  </button>
+
+  <section
+    id="supportModal"
+    class="support-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="supportModalTitle"
+    hidden
+  >
+    <div class="support-modal-card">
+      <h2 id="supportModalTitle">Need help with a reservation?</h2>
+      <p>Leave a short note and the host team will follow up.</p>
+
+      <label for="supportMessage">Support message</label>
+      <textarea id="supportMessage" rows="4"></textarea>
+
+      <div class="modal-actions">
+        <button id="supportModalClose" type="button">Close</button>
+        <button type="button">Save draft</button>
+      </div>
+    </div>
+  </section>
+</section>`,
+      css: `.modal-lab {
+  display: grid;
+  gap: 16px;
+}
+
+.modal-trigger,
+.modal-actions button,
+textarea {
+  font: inherit;
+}
+
+.modal-trigger,
+.modal-actions button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #0f172a;
+  color: white;
+  font-weight: 700;
+}
+
+.support-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.support-modal-card {
+  width: min(460px, 100%);
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid #dbe3ef;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+}
+
+button:focus,
+textarea:focus {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}`,
+      js: `const supportModalTrigger = document.getElementById("supportModalTrigger");
+const supportModal = document.getElementById("supportModal");
+const supportModalClose = document.getElementById("supportModalClose");
+const supportMessage = document.getElementById("supportMessage");
+
+let lastFocusedElement = null;
+
+function openSupportModal() {
+  lastFocusedElement = document.activeElement;
+  supportModal.hidden = false;
+  supportMessage.focus();
+}
+
+function closeSupportModal() {
+  supportModal.hidden = true;
+
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
+}
+
+supportModalTrigger.addEventListener("click", openSupportModal);
+supportModalClose.addEventListener("click", closeSupportModal);
+
+document.addEventListener("keydown", (event) => {
+  if (!supportModal.hidden && event.key === "Escape") {
+    closeSupportModal();
+  }
+});`,
+    },
+  },
+  {
+    id: "interview-accessible-tabs-test",
+    editorType: "web",
+    title: "Challenge 7 — Interview Test: Accessible Restaurant Tabs",
+    difficulty: "Hard",
+    category: "Accessibility + QA",
+    goal: "Build an accessible tabs interface with ARIA roles, keyboard navigation, visible focus states, and the correct panel behavior.",
+    requirements: [
+      "Add a tablist with at least 3 tabs",
+      "Connect tabs and panels with ARIA",
+      "Use aria-selected on the active tab",
+      "Allow keyboard navigation with arrow keys",
+      "Show only the active panel content",
+      "Add visible focus styles",
+    ],
+    tips: [
+      "Think of tabs as a relationship between controls and panels, not just buttons that change color.",
+      "A good keyboard experience is part of the challenge, not an extra bonus.",
+      "Keep the active tab state in one place and let the UI derive from it.",
+    ],
+    concepts: [
+      "accessibility",
+      "keyboard navigation",
+      "ARIA",
+      "state",
+      "focus states",
+    ],
+    suggestedApproach: [
+      "Create the buttons and panels with matching ids first.",
+      "Write one function that updates tabs and panels together.",
+      "Handle click events before you add arrow key support.",
+      "Finish by styling the tabs so focus and selection both feel clear.",
+    ],
+    commonMistakes: [
+      "Switching the panel visually but forgetting to update aria-selected",
+      "Leaving every panel visible at the same time",
+      "Handling click only and ignoring the keyboard requirement",
+    ],
+    expectedOutcome:
+      "An accessible tabs component that feels like a practical product UI rather than a decorative demo.",
+    starter: {
+      html: `<section class="tabs-lab">
+  <div id="restaurantTabs">
+  </div>
+</section>`,
+      css: `.tabs-lab {
+  display: grid;
+  gap: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="tabs-lab">
+  <div class="tabs-shell">
+    <div class="tabs-row" role="tablist" aria-label="Restaurant information">
+      <button
+        id="tab-about"
+        class="tab-btn"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-controls="panel-about"
+        tabindex="0"
+      >
+        About
+      </button>
+      <button
+        id="tab-menu"
+        class="tab-btn"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-menu"
+        tabindex="-1"
+      >
+        Menu
+      </button>
+      <button
+        id="tab-contact"
+        class="tab-btn"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-contact"
+        tabindex="-1"
+      >
+        Contact
+      </button>
+    </div>
+
+    <section id="panel-about" class="tab-panel" role="tabpanel" aria-labelledby="tab-about">
+      <p>Small team, seasonal menu, and a calm dining room.</p>
+    </section>
+    <section
+      id="panel-menu"
+      class="tab-panel"
+      role="tabpanel"
+      aria-labelledby="tab-menu"
+      hidden
+    >
+      <p>Fresh pasta, grilled vegetables, and dessert tasting plates.</p>
+    </section>
+    <section
+      id="panel-contact"
+      class="tab-panel"
+      role="tabpanel"
+      aria-labelledby="tab-contact"
+      hidden
+    >
+      <p>Open Tuesday to Sunday. Bookings from 6pm.</p>
+    </section>
+  </div>
+</section>`,
+      css: `.tabs-shell {
+  display: grid;
+  gap: 16px;
+}
+
+.tabs-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: white;
+  font: inherit;
+  font-weight: 700;
+}
+
+.tab-btn[aria-selected="true"] {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: white;
+}
+
+.tab-btn:focus {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.tab-panel {
+  padding: 18px;
+  border: 1px solid #dbe3ef;
+  border-radius: 18px;
+  background: white;
+}`,
+      js: `const tabButtons = Array.from(document.querySelectorAll('[role="tab"]'));
+const tabPanels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+function updateTabs(nextIndex) {
+  tabButtons.forEach((button, index) => {
+    const isActive = index === nextIndex;
+    button.setAttribute("aria-selected", String(isActive));
+    button.tabIndex = isActive ? 0 : -1;
+    tabPanels[index].hidden = !isActive;
+  });
+}
+
+tabButtons.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    updateTabs(index);
+  });
+
+  button.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+
+    const direction = event.key === "ArrowRight" ? 1 : -1;
+    const nextIndex = (index + direction + tabButtons.length) % tabButtons.length;
+    updateTabs(nextIndex);
+    tabButtons[nextIndex].focus();
+  });
+});`,
+    },
+  },
+  {
     id: "interview-debug-dom-test",
     editorType: "web",
     title: "Challenge 6 — Interview Test: Debug a Broken DOM Filter",
@@ -1797,6 +2146,755 @@ function Challenge() {
     </section>
   );
 }`,
+    },
+  },
+  {
+    id: "interview-debug-routing-test",
+    editorType: "react",
+    title: "Challenge 12 — Interview Test: Debug Broken React Routing",
+    difficulty: "Hard",
+    category: "React Routing",
+    goal: "Fix a broken routed React workspace so navigation, params, detail lookup, and fallback states all behave correctly again.",
+    requirements: [
+      "Keep the router setup working",
+      "Fix the navigation links",
+      "Use URL params in the detail screen",
+      "Find the correct item from the data",
+      "Show a clear fallback when no item is found",
+      "Keep the lesson cards rendering with map()",
+    ],
+    tips: [
+      "Routing bugs are often small mismatches between the link, the path, and the param name.",
+      "Do not rebuild the app from scratch. Repair the smallest broken connections first.",
+      "A good fallback state is part of the feature, not an afterthought.",
+    ],
+    concepts: [
+      "routing",
+      "dynamic routes",
+      "useParams",
+      "debugging",
+      "data rendering",
+    ],
+    suggestedApproach: [
+      "Check the router setup and the link destinations first.",
+      "Make sure the route path and the param name match each other.",
+      "Use the param to find the right lesson from the data array.",
+      "Finish with a missing-item fallback and keep the list view clean.",
+    ],
+    commonMistakes: [
+      "Changing the route path but forgetting the links",
+      "Reading the wrong param name in the detail screen",
+      "Assuming the item exists and skipping the fallback case",
+    ],
+    expectedOutcome:
+      "A repaired routed workspace that feels like a realistic React interview bug-fix task.",
+    starter: {
+      html: ``,
+      css: `.route-shell {
+  display: grid;
+  gap: 16px;
+}
+
+.route-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.route-card,
+.route-detail {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `const { HashRouter, Routes, Route, Link, useParams } = ReactRouterDOM;
+
+const lessons = [
+  { id: "html-layout", title: "HTML layout review", level: "Rookie" },
+  { id: "dom-search", title: "DOM search patterns", level: "Builder" },
+  { id: "react-routing", title: "React routing", level: "React" },
+];
+
+function LessonList() {
+  return (
+    <section className="route-shell">
+      <nav className="route-nav">
+        <Link to="/">Home</Link>
+        <Link to="/lessons/react-routing">Routing lesson</Link>
+      </nav>
+
+      {lessons.map((lesson) => (
+        <article className="route-card" key={lesson.id}>
+          <h2>{lesson.title}</h2>
+          <p>{lesson.level}</p>
+          <Link to={"/lesson/" + lesson.id}>Open lesson</Link>
+        </article>
+      ))}
+    </section>
+  );
+}
+
+function LessonDetail() {
+  const { slug } = useParams();
+  const lesson = lessons.find((item) => item.slug === slug);
+
+  return (
+    <article className="route-detail">
+      <h2>{lesson.title}</h2>
+      <p>{lesson.level}</p>
+      <Link to="/home">Back</Link>
+    </article>
+  );
+}
+
+function Challenge() {
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<LessonList />} />
+        <Route path="/lesson/:lessonId" element={<LessonDetail />} />
+      </Routes>
+    </HashRouter>
+  );
+}`,
+    },
+    solution: {
+      html: ``,
+      css: `.route-shell {
+  display: grid;
+  gap: 16px;
+}
+
+.route-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.route-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.route-card,
+.route-detail {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `const { HashRouter, Routes, Route, Link, useParams } = ReactRouterDOM;
+
+const lessons = [
+  { id: "html-layout", title: "HTML layout review", level: "Rookie" },
+  { id: "dom-search", title: "DOM search patterns", level: "Builder" },
+  { id: "react-routing", title: "React routing", level: "React" },
+];
+
+function LessonList() {
+  return (
+    <section className="route-shell">
+      <nav className="route-nav">
+        <Link to="/">Home</Link>
+        <Link to="/lesson/react-routing">Routing lesson</Link>
+      </nav>
+
+      <section className="route-grid">
+        {lessons.map((lesson) => (
+          <article className="route-card" key={lesson.id}>
+            <h2>{lesson.title}</h2>
+            <p>{lesson.level}</p>
+            <Link to={"/lesson/" + lesson.id}>Open lesson</Link>
+          </article>
+        ))}
+      </section>
+    </section>
+  );
+}
+
+function LessonDetail() {
+  const { lessonId } = useParams();
+  const lesson = lessons.find((item) => item.id === lessonId);
+
+  if (!lesson) {
+    return (
+      <article className="route-detail">
+        <h2>Lesson not found</h2>
+        <Link to="/">Back to the lesson board</Link>
+      </article>
+    );
+  }
+
+  return (
+    <article className="route-detail">
+      <h2>{lesson.title}</h2>
+      <p>{lesson.level}</p>
+      <Link to="/">Back to the lesson board</Link>
+    </article>
+  );
+}
+
+function Challenge() {
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<LessonList />} />
+        <Route path="/lesson/:lessonId" element={<LessonDetail />} />
+        <Route
+          path="*"
+          element={
+            <article className="route-detail">
+              <h2>Route not found</h2>
+              <Link to="/">Return home</Link>
+            </article>
+          }
+        />
+      </Routes>
+    </HashRouter>
+  );
+}`,
+    },
+  },
+  {
+    id: "interview-unit-tests-foundations-test",
+    editorType: "react-test",
+    title: "Challenge 13 — Interview Test: Unit Test Foundations",
+    difficulty: "Hard",
+    category: "Testing + QA",
+    goal: "Write a focused unit test file for small helper functions so you practice checking logic without building a full screen.",
+    requirements: [
+      "Write multiple tests with test() or it()",
+      "Use expect() to describe the expected result clearly",
+      "Cover at least 2 different helper functions",
+      "Include at least 1 edge or alternate case",
+    ],
+    tips: [
+      "A unit test file should read like a list of promises about what the code should do.",
+      "Keep each test small. One behavior per test is usually enough.",
+      "Do not overthink the tooling here. The skill is describing behavior clearly.",
+    ],
+    concepts: [
+      "testing",
+      "unit tests",
+      "expect",
+      "problem solving",
+    ],
+    suggestedApproach: [
+      "Read the helper functions and pick the most important behaviors first.",
+      "Write one small test per behavior instead of one large mixed test.",
+      "Add one edge case that proves the helper is resilient.",
+    ],
+    commonMistakes: [
+      "Writing one broad test instead of several focused tests",
+      "Using expect() without making the scenario clear in the test name",
+      "Covering only the happy path and skipping the awkward input",
+    ],
+    expectedOutcome:
+      "A readable unit test file that shows you can protect small logic intentionally.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function normalizeCandidateName(name) {
+  return name
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function countOpenRoles(roles) {
+  return roles.filter((role) => role.status === "open").length;
+}
+
+function buildStatusLabel(status) {
+  if (status === "hired") return "Hired";
+  if (status === "interview") return "Interviewing";
+  return "Reviewing";
+}
+
+// Write your tests below.`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function normalizeCandidateName(name) {
+  return name
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function countOpenRoles(roles) {
+  return roles.filter((role) => role.status === "open").length;
+}
+
+function buildStatusLabel(status) {
+  if (status === "hired") return "Hired";
+  if (status === "interview") return "Interviewing";
+  return "Reviewing";
+}
+
+describe("candidate helpers", () => {
+  test("normalizeCandidateName trims and formats the name", () => {
+    expect(normalizeCandidateName("  aNA   loPEz ")).toBe("Ana Lopez");
+  });
+
+  test("countOpenRoles returns only open roles", () => {
+    expect(
+      countOpenRoles([
+        { status: "open" },
+        { status: "closed" },
+        { status: "open" },
+      ])
+    ).toBe(2);
+  });
+
+  test("buildStatusLabel maps interview status correctly", () => {
+    expect(buildStatusLabel("interview")).toBe("Interviewing");
+  });
+
+  test("buildStatusLabel falls back to reviewing for unknown statuses", () => {
+    expect(buildStatusLabel("applied")).toBe("Reviewing");
+  });
+});`,
+    },
+  },
+  {
+    id: "interview-rtl-interaction-test",
+    editorType: "react-test",
+    title: "Challenge 14 — Interview Test: Testing Library Interaction Check",
+    difficulty: "Hard",
+    category: "Testing + QA",
+    goal: "Write interaction tests for a small React UI so you practice rendering, querying by role, clicking, and checking what changes on screen.",
+    requirements: [
+      "Render the component in your tests",
+      "Query the UI with screen",
+      "Use fireEvent for the interaction",
+      "Assert the visible change after the click",
+    ],
+    tips: [
+      "Testing Library wants you to think like a user, not like the component internals.",
+      "Buttons are easiest to query by role and accessible name.",
+      "A short, readable test is stronger than a very clever one.",
+    ],
+    concepts: [
+      "testing",
+      "React Testing Library",
+      "render",
+      "screen",
+      "fireEvent",
+    ],
+    suggestedApproach: [
+      "Render the component first.",
+      "Find the button and any text the user would see.",
+      "Trigger the click and assert the updated label or message.",
+    ],
+    commonMistakes: [
+      "Querying something that was never rendered",
+      "Clicking the button but forgetting to assert the result",
+      "Testing internal state instead of the visible UI",
+    ],
+    expectedOutcome:
+      "A compact UI interaction test file that feels like real junior-level React QA work.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function SavePanel() {
+  const [saved, setSaved] = React.useState(false);
+
+  return (
+    <section>
+      <h1>Candidate shortlist</h1>
+      <button type="button" onClick={() => setSaved((current) => !current)}>
+        {saved ? "Saved" : "Save candidate"}
+      </button>
+      <p>{saved ? "Candidate added to shortlist." : "Nothing saved yet."}</p>
+    </section>
+  );
+}
+
+// Write your tests below.`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function SavePanel() {
+  const [saved, setSaved] = React.useState(false);
+
+  return (
+    <section>
+      <h1>Candidate shortlist</h1>
+      <button type="button" onClick={() => setSaved((current) => !current)}>
+        {saved ? "Saved" : "Save candidate"}
+      </button>
+      <p>{saved ? "Candidate added to shortlist." : "Nothing saved yet."}</p>
+    </section>
+  );
+}
+
+test("shows the default shortlist message", () => {
+  render(<SavePanel />);
+
+  expect(screen.getByText("Nothing saved yet.")).toBeInTheDocument();
+});
+
+test("clicking the button changes the label", () => {
+  render(<SavePanel />);
+
+  fireEvent.click(screen.getByRole("button", { name: "Save candidate" }));
+
+  expect(screen.getByRole("button", { name: "Saved" })).toBeInTheDocument();
+});
+
+test("clicking the button shows the saved message", () => {
+  render(<SavePanel />);
+
+  fireEvent.click(screen.getByRole("button", { name: "Save candidate" }));
+
+  expect(screen.getByText("Candidate added to shortlist.")).toBeInTheDocument();
+});`,
+    },
+  },
+  {
+    id: "interview-form-validation-tests-test",
+    editorType: "react-test",
+    title: "Challenge 15 — Interview Test: Form Validation Tests",
+    difficulty: "Hard",
+    category: "Testing + QA",
+    goal: "Write tests for a signup form so validation rules and success feedback stay protected over time.",
+    requirements: [
+      "Render the form in the test",
+      "Fill inputs with fireEvent",
+      "Trigger the submit flow",
+      "Assert validation or success messages clearly",
+    ],
+    tips: [
+      "This is about proving the form behavior, not rewriting the form.",
+      "Use label-based queries when the form already has labels.",
+      "Test one invalid state and one valid state to build confidence quickly.",
+    ],
+    concepts: [
+      "testing",
+      "form validation",
+      "React Testing Library",
+      "screen",
+      "fireEvent",
+    ],
+    suggestedApproach: [
+      "Render the form and try submitting it empty first.",
+      "Fill the inputs and submit again for the valid path.",
+      "Assert the user-facing feedback after each action.",
+    ],
+    commonMistakes: [
+      "Typing into the inputs but never submitting the form",
+      "Using a query that does not match the visible label",
+      "Checking too many things in one test instead of one clear behavior",
+    ],
+    expectedOutcome:
+      "A clear form test file that protects both validation and success feedback.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function SignupForm() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!name.trim() || !email.includes("@")) {
+      setMessage("Please add your name and a valid email.");
+      return;
+    }
+
+    setMessage("Signup looks ready.");
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="signupName">Name</label>
+      <input
+        id="signupName"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
+
+      <label htmlFor="signupEmail">Email</label>
+      <input
+        id="signupEmail"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
+
+      <button type="submit">Review signup</button>
+      <p>{message}</p>
+    </form>
+  );
+}
+
+// Write your tests below.`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function SignupForm() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!name.trim() || !email.includes("@")) {
+      setMessage("Please add your name and a valid email.");
+      return;
+    }
+
+    setMessage("Signup looks ready.");
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="signupName">Name</label>
+      <input
+        id="signupName"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
+
+      <label htmlFor="signupEmail">Email</label>
+      <input
+        id="signupEmail"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
+
+      <button type="submit">Review signup</button>
+      <p>{message}</p>
+    </form>
+  );
+}
+
+test("shows a validation message when the form is empty", () => {
+  render(<SignupForm />);
+
+  fireEvent.submit(screen.getByRole("button", { name: "Review signup" }).closest("form"));
+
+  expect(screen.getByText("Please add your name and a valid email.")).toBeInTheDocument();
+});
+
+test("accepts a valid name and email", () => {
+  render(<SignupForm />);
+
+  fireEvent.change(screen.getByLabelText("Name"), {
+    target: { value: "Ava" },
+  });
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "ava@example.com" },
+  });
+  fireEvent.submit(screen.getByRole("button", { name: "Review signup" }).closest("form"));
+
+  expect(screen.getByText("Signup looks ready.")).toBeInTheDocument();
+});
+
+test("stores the typed values before submit", () => {
+  render(<SignupForm />);
+
+  fireEvent.change(screen.getByLabelText("Name"), {
+    target: { value: "Luca" },
+  });
+
+  expect(screen.getByLabelText("Name")).toHaveValue("Luca");
+});`,
+    },
+  },
+  {
+    id: "interview-loading-error-tests-test",
+    editorType: "react-test",
+    title: "Challenge 16 — Interview Test: Loading and Error State Tests",
+    difficulty: "Hard",
+    category: "Testing + QA",
+    goal: "Write tests for an async React component so loading, success, and error states are all covered cleanly.",
+    requirements: [
+      "Render the async component in a test",
+      "Check the loading state first",
+      "Use waitFor for the async result",
+      "Assert a success state and an error state",
+    ],
+    tips: [
+      "Async UI changes over time, so your test should reflect that timeline.",
+      "Loading first, final state second is the clean mental model.",
+      "waitFor is there to help you wait for the screen, not to guess timing blindly.",
+    ],
+    concepts: [
+      "testing",
+      "loading state",
+      "async/await",
+      "waitFor",
+      "error handling",
+    ],
+    suggestedApproach: [
+      "Render the component with one successful request function and one failing request function.",
+      "Assert the loading state right after render.",
+      "Use waitFor to check the final UI after the promise resolves or rejects.",
+    ],
+    commonMistakes: [
+      "Skipping the loading state and only checking the final text",
+      "Using a success-only test and forgetting the failing request",
+      "Not waiting for the async UI to finish before asserting",
+    ],
+    expectedOutcome:
+      "A realistic async test file that shows you can protect loading and error behavior, not just happy paths.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: `function AsyncBoard({ request }) {
+  const [status, setStatus] = React.useState("loading");
+  const [items, setItems] = React.useState([]);
+  const [message, setMessage] = React.useState("");
+
+  React.useEffect(() => {
+    let active = true;
+
+    setStatus("loading");
+    setMessage("Loading insights...");
+
+    request()
+      .then((data) => {
+        if (!active) return;
+        setItems(data);
+        setStatus("success");
+        setMessage("Insights loaded.");
+      })
+      .catch(() => {
+        if (!active) return;
+        setStatus("error");
+        setMessage("Request failed.");
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [request]);
+
+  if (status === "loading") {
+    return <p role="status">{message}</p>;
+  }
+
+  if (status === "error") {
+    return <p role="alert">{message}</p>;
+  }
+
+  return (
+    <section>
+      <p>{message}</p>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>{item.label}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// Write your tests below.`,
+    },
+    solution: {
+      html: ``,
+      css: ``,
+      js: `function AsyncBoard({ request }) {
+  const [status, setStatus] = React.useState("loading");
+  const [items, setItems] = React.useState([]);
+  const [message, setMessage] = React.useState("");
+
+  React.useEffect(() => {
+    let active = true;
+
+    setStatus("loading");
+    setMessage("Loading insights...");
+
+    request()
+      .then((data) => {
+        if (!active) return;
+        setItems(data);
+        setStatus("success");
+        setMessage("Insights loaded.");
+      })
+      .catch(() => {
+        if (!active) return;
+        setStatus("error");
+        setMessage("Request failed.");
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [request]);
+
+  if (status === "loading") {
+    return <p role="status">{message}</p>;
+  }
+
+  if (status === "error") {
+    return <p role="alert">{message}</p>;
+  }
+
+  return (
+    <section>
+      <p>{message}</p>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>{item.label}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+test("shows the loading state first", () => {
+  render(
+    <AsyncBoard
+      request={() =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve([{ id: 1, label: "Open roles" }]), 60)
+        )
+      }
+    />
+  );
+
+  expect(screen.getByRole("status")).toHaveTextContent("Loading insights...");
+});
+
+test("shows loaded data after a successful request", async () => {
+  render(
+    <AsyncBoard
+      request={() =>
+        Promise.resolve([{ id: 1, label: "Open roles" }])
+      }
+    />
+  );
+
+  await waitFor(() => {
+    expect(screen.getByText("Insights loaded.")).toBeInTheDocument();
+  });
+
+  expect(screen.getByText("Open roles")).toBeInTheDocument();
+});
+
+test("shows an error message when the request fails", async () => {
+  render(<AsyncBoard request={() => Promise.reject(new Error("No data"))} />);
+
+  await waitFor(() => {
+    expect(screen.getByRole("alert")).toHaveTextContent("Request failed.");
+  });
+});`,
     },
   },
   {

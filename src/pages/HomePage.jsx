@@ -1,16 +1,26 @@
 import {
+  ArrowLeft,
   BookOpen,
   CheckCircle2,
-  Clock3,
   Code2,
   GraduationCap,
-  Layers3,
   PlayCircle,
 } from "lucide-react";
+import { useState } from "react";
 import LanguageToggle from "../components/LanguageToggle";
+import MiloGuide from "../components/MiloGuide";
 import ThemeToggle from "../components/ThemeToggle";
-import { getClassStats, getLearningRoadmap } from "../data/classes";
+import { getClassStats } from "../data/classes";
 import { getCopy } from "../data/i18n";
+
+function getPreviewTitle(title = "") {
+  return title
+    .replace(/^Challenge\s+\d+\s+—\s+/, "")
+    .replace(/^Capstone\s+—\s+/, "")
+    .replace(/^Reto\s+\d+\s+-\s+/, "")
+    .replace(/^Proyecto final\s+-\s+/, "")
+    .trim();
+}
 
 function getModeStats(challenges, challengeProgress) {
   const total = challenges.length;
@@ -47,24 +57,21 @@ function getDashboardStats(modes, classModules, challengeProgress) {
   };
 }
 
-function getPhaseStats(phase, classModules, challengeProgress) {
-  const modules = classModules.filter((module) => phase.classIds.includes(module.id));
-  const moduleStats = modules.map((module) => getClassStats(module, challengeProgress));
-
-  return {
-    modules,
-    classCount: modules.length,
-    challengeCount: moduleStats.reduce((total, stats) => total + stats.total, 0),
-    completedChallenges: moduleStats.reduce(
-      (total, stats) => total + stats.completed,
-      0
-    ),
-  };
+function getInterviewAnswerStats(categories = []) {
+  return categories.reduce(
+    (stats, category) => ({
+      categories: stats.categories + 1,
+      questions: stats.questions + (category.questions?.length || 0),
+    }),
+    { categories: 0, questions: 0 }
+  );
 }
 
 export default function HomePage({
   modes,
   classModules,
+  onOpenGuide,
+  onOpenLearnPage,
   onSelectMode,
   onSelectClass,
   challengeProgress = {},
@@ -73,22 +80,30 @@ export default function HomePage({
   onLanguageChange,
   theme = "light",
   onThemeChange,
+  interviewAnswerLibrary = [],
 }) {
+  const [selectedHomeModeId, setSelectedHomeModeId] = useState(null);
   const dashboardStats = getDashboardStats(
     modes,
     classModules,
     challengeProgress
   );
+  const interviewStats = getInterviewAnswerStats(interviewAnswerLibrary);
+  const challengeMap = new Map(
+    modes.flatMap((mode) =>
+      mode.challenges.map((challenge) => [challenge.id, challenge])
+    )
+  );
+
   const modulesByMode = modes.map((mode) => ({
     mode,
     modules: classModules
       .filter((module) => module.modeId === mode.id)
-      .sort((a, b) => Number(a.number) - Number(b.number)),
+      .sort((a, b) => Number(a.trackNumber || a.number) - Number(b.trackNumber || b.number)),
   }));
-  const roadmap = getLearningRoadmap(language).map((phase) => ({
-    ...phase,
-    stats: getPhaseStats(phase, classModules, challengeProgress),
-  }));
+
+  const selectedModeGroup =
+    modulesByMode.find(({ mode }) => mode.id === selectedHomeModeId) || null;
 
   return (
     <main className="home-page">
@@ -152,269 +167,311 @@ export default function HomePage({
       <section className="home-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">{copy.home.roadmap}</p>
-            <h2>{copy.home.roadmap}</h2>
+            <p className="eyebrow">{copy.guide.badge}</p>
+            <h2>{copy.home.guidedStudio}</h2>
           </div>
-          <p>{copy.home.roadmapIntro}</p>
+          <p>{copy.home.guidedStudioIntro}</p>
         </div>
 
-        <div className="roadmap-grid">
-          {roadmap.map((phase, index) => {
-            const firstModule = phase.stats.modules[0];
-            const completionLabel = copy.home.completedOf(
-              phase.stats.completedChallenges,
-              phase.stats.challengeCount
-            );
+        <article className="guide-entry-card panel">
+          <div className="guide-entry-copy">
+            <MiloGuide
+              compact
+              eyebrow={copy.guide.mentorLabel}
+              title={copy.home.guidedStudio}
+              message={copy.home.guidedStudioMessage}
+            />
 
-            return (
-              <article className="roadmap-card" key={phase.id}>
-                <div className="roadmap-card-top">
-                  <span className="class-number roadmap-number">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="mode-count">{completionLabel}</span>
-                </div>
+            <div className="guide-entry-meta">
+              <span className="mode-count">{copy.home.guidedThemes}</span>
+              <div className="class-section-chip-row">
+                <span className="status-pill not-started">Creature Quest</span>
+                <span className="status-pill not-started">Travel Journal</span>
+              </div>
+            </div>
+          </div>
 
-                <h3>{phase.title}</h3>
-                <p>{phase.summary}</p>
-
-                <div className="roadmap-meta-grid">
-                  <div className="roadmap-meta-item">
-                    <Clock3 size={16} aria-hidden="true" />
-                    <div>
-                      <span>{copy.home.typicalTime}</span>
-                      <strong>{phase.duration}</strong>
-                    </div>
-                  </div>
-
-                  <div className="roadmap-meta-item">
-                    <Layers3 size={16} aria-hidden="true" />
-                    <div>
-                      <span>{copy.home.classPath}</span>
-                      <strong>
-                        {copy.home.phaseClasses(phase.stats.classCount)} ·{" "}
-                        {copy.home.phaseChallenges(phase.stats.challengeCount)}
-                      </strong>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="class-outcomes roadmap-focus">
-                  <span>{copy.home.phaseFocus}</span>
-                  <ul>
-                    {phase.focus.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                {firstModule && (
-                  <button
-                    className="secondary-btn class-action"
-                    onClick={() => onSelectClass(firstModule.id)}
-                  >
-                    <PlayCircle size={17} aria-hidden="true" />
-                    {copy.home.roadmapStart}
-                  </button>
-                )}
-              </article>
-            );
-          })}
-        </div>
+          <div className="guide-entry-actions">
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={() => onOpenGuide("first-website")}
+            >
+              <PlayCircle size={17} aria-hidden="true" />
+              {copy.guide.openGuide}
+            </button>
+          </div>
+        </article>
       </section>
 
       <section className="home-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">{copy.home.classPath}</p>
-            <h2>{copy.home.classPath}</h2>
+            <p className="eyebrow">{copy.learn.badge}</p>
+            <h2>{copy.home.learnConcepts}</h2>
           </div>
-          <p>{copy.home.classIntro}</p>
+          <p>{copy.home.learnConceptsIntro}</p>
         </div>
 
-        <div className="track-stack">
+        <article className="guide-entry-card panel">
+          <div className="guide-entry-copy">
+            <MiloGuide
+              compact
+              eyebrow={copy.learn.mentorLabel}
+              title={copy.home.learnConcepts}
+              message={copy.home.learnConceptsMessage}
+            />
+
+            <div className="guide-entry-meta">
+              <span className="mode-count">
+                {copy.learn.questionCount(interviewStats.questions)}
+              </span>
+              <div className="class-section-chip-row">
+                {interviewAnswerLibrary.slice(0, 6).map((category) => (
+                  <span className="status-pill not-started" key={category.id}>
+                    {category.title}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="guide-entry-actions guide-entry-actions-stack">
+            <span className="mode-count">
+              {copy.learn.categoryCount(interviewStats.categories)}
+            </span>
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={() => onOpenLearnPage("interview-answers")}
+            >
+              <BookOpen size={17} aria-hidden="true" />
+              {copy.learn.openLibrary}
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <section className="home-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">{copy.home.learningTracks}</p>
+            <h2>{copy.home.learningTracks}</h2>
+          </div>
+          <p>{copy.home.trackIntro}</p>
+        </div>
+
+        <div className="mode-grid">
           {modulesByMode.map(({ mode, modules }) => {
             const modeStats = getModeStats(mode.challenges, challengeProgress);
 
             return (
-              <article className="track-section" key={mode.id}>
-                <div className="track-header">
-                  <div>
-                    <span className="mode-badge">{mode.title}</span>
-                    <h3>{mode.title}</h3>
-                    <p>{mode.description}</p>
-                  </div>
-
-                  <div className="track-summary">
-                    <strong>
-                      {copy.home.completedOf(
-                        modeStats.completed,
-                        modeStats.total
-                      )}
-                    </strong>
-                    <span>{copy.home.progress}</span>
-                  </div>
-                </div>
-
-                <div className="class-grid">
-                  {modules.map((module) => {
-                    const stats = getClassStats(module, challengeProgress);
-
-                    return (
-                      <article className="class-card" key={module.id}>
-                        <div className="class-card-top">
-                          <span className="class-number">{module.number}</span>
-                          <span className="mode-count">
-                            {copy.home.completedOf(
-                              stats.completed,
-                              stats.total
-                            )}
-                          </span>
-                        </div>
-
-                        <h4>{module.title}</h4>
-                        <p>{module.summary}</p>
-
-                        <div className="class-meta-row">
-                          <span>{copy.home.projectLabel}</span>
-                          <strong>{module.project}</strong>
-                        </div>
-
-                        <div className="class-meta-grid">
-                          <div className="class-meta-item">
-                            <span>{copy.home.typicalTime}</span>
-                            <strong>{module.estimatedTime}</strong>
-                          </div>
-                          <div className="class-meta-item">
-                            <span>{copy.home.practiceModes}</span>
-                            <strong>{module.formatLabel}</strong>
-                          </div>
-                        </div>
-
-                        {module.sections?.length > 0 && (
-                          <div className="class-section-groups">
-                            <span>{copy.home.practiceGroups}</span>
-                            <div className="class-section-chip-row">
-                              {module.sections.map((section) => (
-                                <span className="status-pill not-started" key={section.title}>
-                                  {section.title}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="class-outcomes">
-                          <span>{copy.home.outcomesLabel}</span>
-                          <ul>
-                            {module.outcomes.map((outcome) => (
-                              <li key={outcome}>{outcome}</li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="mode-progress-block">
-                          <div className="mode-progress-label-row">
-                            <span>{copy.home.linkedPractice}</span>
-                            <span>{stats.percentage}%</span>
-                          </div>
-
-                          <div className="mode-progress-bar">
-                            <div
-                              className="mode-progress-fill"
-                              style={{ width: `${stats.percentage}%` }}
-                            />
-                          </div>
-
-                          <div className="mode-progress-summary">
-                            <span>
-                              {copy.home.inProgressCount(stats.inProgress)}
-                            </span>
-                            <span>
-                              {copy.home.completedOf(
-                                stats.completed,
-                                stats.total
-                              )}
-                            </span>
-                          </div>
-                        </div>
-
-                        <button
-                          className="secondary-btn class-action"
-                          onClick={() => onSelectClass(module.id)}
-                        >
-                          <PlayCircle size={17} aria-hidden="true" />
-                          {copy.home.openBlock}
-                        </button>
-                      </article>
-                    );
-                  })}
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="home-section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">{copy.home.practiceModes}</p>
-            <h2>{copy.home.practiceModes}</h2>
-          </div>
-          <p>{copy.home.practiceIntro}</p>
-        </div>
-
-        <div className="mode-grid">
-          {modes.map((mode) => {
-            const stats = getModeStats(mode.challenges, challengeProgress);
-
-            return (
               <button
                 key={mode.id}
-                className="mode-card"
-                onClick={() => onSelectMode(mode.id)}
+                className={`mode-card ${
+                  selectedHomeModeId === mode.id ? "active" : ""
+                }`}
+                onClick={() => setSelectedHomeModeId(mode.id)}
               >
                 <div className="mode-card-top">
                   <span className="mode-badge">{mode.title}</span>
                   <span className="mode-count">
-                    {copy.home.completedOf(stats.completed, stats.total)}
+                    {copy.home.completedOf(modeStats.completed, modeStats.total)}
                   </span>
                 </div>
 
                 <h3>{mode.title}</h3>
                 <p>{mode.description}</p>
 
+                <div className="mode-meta-row">
+                  <span>{copy.home.blocksCount(modules.length)}</span>
+                  <span>{copy.home.phaseChallenges(modeStats.total)}</span>
+                </div>
+
                 <div className="mode-progress-block">
                   <div className="mode-progress-label-row">
                     <span>{copy.home.progress}</span>
-                    <span>{stats.percentage}%</span>
+                    <span>{modeStats.percentage}%</span>
                   </div>
 
                   <div className="mode-progress-bar">
                     <div
                       className="mode-progress-fill"
-                      style={{ width: `${stats.percentage}%` }}
+                      style={{ width: `${modeStats.percentage}%` }}
                     />
                   </div>
 
                   <div className="mode-progress-summary">
-                    <span>{copy.home.inProgressCount(stats.inProgress)}</span>
-                    <span>{copy.home.completedOf(stats.completed, stats.total)}</span>
+                    <span>{copy.home.inProgressCount(modeStats.inProgress)}</span>
+                    <span>{copy.home.completedOf(modeStats.completed, modeStats.total)}</span>
                   </div>
                 </div>
 
                 <span className="mode-link">
                   <PlayCircle size={17} aria-hidden="true" />
-                  {stats.completed > 0
-                    ? copy.home.continueMode
-                    : copy.home.startMode}
+                  {copy.home.viewTrack}
                 </span>
               </button>
             );
           })}
         </div>
       </section>
+
+      {selectedModeGroup && (
+        <section className="home-section">
+          <div className="section-heading track-detail-heading">
+            <div>
+              <p className="eyebrow">{selectedModeGroup.mode.title}</p>
+              <h2>{copy.home.classPath}</h2>
+            </div>
+
+            <div className="track-detail-summary">
+              <p>{selectedModeGroup.mode.description}</p>
+
+              <div className="track-detail-actions">
+                <button
+                  className="secondary-btn"
+                  onClick={() => setSelectedHomeModeId(null)}
+                >
+                  <ArrowLeft size={17} aria-hidden="true" />
+                  {copy.home.backToTracks}
+                </button>
+
+                <button
+                  className="secondary-btn"
+                  onClick={() => onSelectMode(selectedModeGroup.mode.id)}
+                >
+                  <PlayCircle size={17} aria-hidden="true" />
+                  {copy.home.openMode}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="class-grid">
+            {selectedModeGroup.modules.map((module) => {
+              const stats = getClassStats(module, challengeProgress);
+
+              return (
+                <article className="class-card" key={module.id}>
+                  <div className="class-card-top">
+                    <span className="class-number">{module.trackNumber}</span>
+                    <span className="mode-count">
+                      {copy.home.completedOf(stats.completed, stats.total)}
+                    </span>
+                  </div>
+
+                  <h4>{module.title}</h4>
+                  <p>{module.summary}</p>
+
+                  <div className="class-meta-row">
+                    <span>{copy.home.projectLabel}</span>
+                    <strong>{module.project}</strong>
+                  </div>
+
+                  <div className="class-meta-grid">
+                    <div className="class-meta-item">
+                      <span>{copy.home.typicalTime}</span>
+                      <strong>{module.estimatedTime}</strong>
+                    </div>
+                    <div className="class-meta-item">
+                      <span>{copy.home.practiceModes}</span>
+                      <strong>{module.formatLabel}</strong>
+                    </div>
+                  </div>
+
+                  {module.sections?.length > 0 && (
+                    <div className="class-section-previews">
+                      <span>{copy.home.insideBlock}</span>
+
+                      <div className="class-section-preview-list">
+                        {module.sections.map((section) => {
+                          const sectionChallenges = section.challengeIds
+                            .map((challengeId) => challengeMap.get(challengeId))
+                            .filter(Boolean);
+                          const previewChallenges = sectionChallenges.slice(0, 3);
+                          const remainingCount =
+                            sectionChallenges.length - previewChallenges.length;
+
+                          return (
+                            <article
+                              className="class-section-preview"
+                              key={section.title}
+                            >
+                              <div className="class-section-preview-top">
+                                <strong>{section.title}</strong>
+                                <span className="section-preview-count">
+                                  {copy.home.challengeCount(sectionChallenges.length)}
+                                </span>
+                              </div>
+
+                              {section.summary && (
+                                <p className="section-preview-summary">
+                                  {section.summary}
+                                </p>
+                              )}
+
+                              <ul className="section-preview-challenges">
+                                {previewChallenges.map((challenge) => (
+                                  <li key={challenge.id}>
+                                    {getPreviewTitle(challenge.title)}
+                                  </li>
+                                ))}
+                              </ul>
+
+                              {remainingCount > 0 && (
+                                <small className="section-preview-more">
+                                  {copy.home.moreChallenges(remainingCount)}
+                                </small>
+                              )}
+                            </article>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="class-outcomes">
+                    <span>{copy.home.outcomesLabel}</span>
+                    <ul>
+                      {module.outcomes.map((outcome) => (
+                        <li key={outcome}>{outcome}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mode-progress-block">
+                    <div className="mode-progress-label-row">
+                      <span>{copy.home.linkedPractice}</span>
+                      <span>{stats.percentage}%</span>
+                    </div>
+
+                    <div className="mode-progress-bar">
+                      <div
+                        className="mode-progress-fill"
+                        style={{ width: `${stats.percentage}%` }}
+                      />
+                    </div>
+
+                    <div className="mode-progress-summary">
+                      <span>{copy.home.inProgressCount(stats.inProgress)}</span>
+                      <span>{copy.home.completedOf(stats.completed, stats.total)}</span>
+                    </div>
+                  </div>
+
+                  <button
+                    className="secondary-btn class-action"
+                    onClick={() => onSelectClass(module.id)}
+                  >
+                    <PlayCircle size={17} aria-hidden="true" />
+                    {copy.home.openBlock}
+                  </button>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

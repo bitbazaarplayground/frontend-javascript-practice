@@ -8,7 +8,7 @@ const modeCopy = {
     rookie: {
       title: "Rookie",
       description:
-        "Build strong foundations in HTML and CSS with beginner-friendly layout and styling challenges.",
+        "Build HTML and CSS foundations from selectors and spacing through flexbox, grid, responsive sections, polished beginner projects, and first interview-style layout tasks.",
       level: "Beginner",
     },
     builder: {
@@ -23,10 +23,16 @@ const modeCopy = {
         "Train modern React skills with components, props, state, forms, lists, hooks, and realistic UI patterns.",
       level: "Intermediate",
     },
+    typescript: {
+      title: "TypeScript",
+      description:
+        "Turn React knowledge into safer frontend work with typed props, typed state, unions, interfaces, forms, async data, and one full capstone.",
+      level: "Intermediate to Advanced",
+    },
     interview: {
       title: "Interview Ready",
       description:
-        "Practice hiring-style builds that combine layout, DOM logic, async states, accessibility, debugging, TypeScript, and realistic React take-homes.",
+        "Practice hiring-style builds that combine layout, DOM logic, async states, accessibility, testing, debugging, TypeScript, and realistic React take-homes.",
       level: "Advanced",
     },
   },
@@ -34,7 +40,7 @@ const modeCopy = {
     rookie: {
       title: "Inicial",
       description:
-        "Construye bases solidas de HTML y CSS con retos de layout y estilo pensados para principiantes.",
+        "Construye bases de HTML y CSS desde selectores y espaciado hasta flexbox, grid, secciones responsive, proyectos iniciales mas pulidos y primeras tareas de layout tipo entrevista.",
       level: "Principiante",
     },
     builder: {
@@ -49,10 +55,16 @@ const modeCopy = {
         "Entrena React moderno con componentes, props, estado, formularios, listas, hooks y patrones de UI reales.",
       level: "Intermedio",
     },
+    typescript: {
+      title: "TypeScript",
+      description:
+        "Convierte lo que sabes de React en frontend mas seguro con props tipadas, estado tipado, unions, interfaces, formularios, datos async y un capstone completo.",
+      level: "Intermedio a avanzado",
+    },
     interview: {
       title: "Listo para entrevistas",
       description:
-        "Practica pruebas tipo entrevista que combinan layout, logica DOM, estados asincronos, accesibilidad, depuracion, TypeScript y take-home apps realistas en React.",
+        "Practica pruebas tipo entrevista que combinan layout, logica DOM, estados asincronos, accesibilidad, testing, depuracion, TypeScript y take-home apps realistas en React.",
       level: "Avanzado",
     },
   },
@@ -102,9 +114,15 @@ const categoryCopy = {
     "React + TypeScript": "React + TypeScript",
     "React + Debugging": "React + depuracion",
     "React + QA": "React + QA",
+    "Testing + QA": "Testing + QA",
     "React Routing": "Routing en React",
     "React Capstone": "Capstone de React",
     "Accessibility + QA": "Accesibilidad + QA",
+    "TypeScript + React": "TypeScript + React",
+    "TypeScript + Data": "TypeScript + datos",
+    "TypeScript + Forms": "TypeScript + formularios",
+    "TypeScript + Async": "TypeScript + asincronia",
+    "TypeScript + Capstone": "TypeScript + capstone",
   },
 };
 
@@ -633,23 +651,69 @@ const spanishTitleById = {
   "react-all-in-one-restaurant-app":
     "Proyecto integrador React de app de restaurante",
   "interview-accessibility-qa-test":
-    "Prueba tecnica 5 de accesibilidad y QA",
+    "flujo de reserva accesible",
   "interview-debug-dom-test":
-    "Prueba tecnica 6 de depuracion DOM",
+    "depuracion de logica del DOM",
   "interview-debug-async-test":
-    "Prueba tecnica 7 de depuracion asincrona",
+    "depuracion de estado asincrono",
   "interview-typescript-react-test":
-    "Prueba tecnica 8 de React con TypeScript",
+    "React con TypeScript",
   "interview-debug-react-test":
-    "Prueba tecnica 9 de depuracion en React",
+    "depuracion de dashboard en React",
+  "interview-accessible-modal-test":
+    "modal accesible",
+  "interview-accessible-tabs-test":
+    "tabs accesibles",
+  "interview-debug-routing-test":
+    "depuracion de routing en React",
+  "interview-unit-tests-foundations-test":
+    "bases de unit tests",
+  "interview-rtl-interaction-test":
+    "interacciones con Testing Library",
+  "interview-form-validation-tests-test":
+    "tests de validacion de formularios",
+  "interview-loading-error-tests-test":
+    "tests de carga y error",
   "interview-shipping-readiness-test":
-    "Prueba tecnica 10 de calidad lista para enviar",
-  "interview-html-css-build-test": "Prueba tecnica 1 de HTML y CSS responsive",
-  "interview-dom-logic-test": "Prueba tecnica 2 de logica con DOM",
-  "interview-async-api-test": "Prueba tecnica 3 de asincronia y APIs",
-  "interview-react-takehome-test": "Prueba tecnica 4 de React tipo take-home",
+    "flujo de envio listo para producir",
+  "interview-html-css-build-test": "build responsive de HTML y CSS",
+  "interview-dom-logic-test": "logica del DOM",
+  "interview-async-api-test": "asincronia y APIs",
+  "interview-react-takehome-test": "take-home de React",
   "styled-info-badge": "Badge informativo con estilo",
+  "selector-playground-card": "Tarjeta de practica de selectores",
+  "nav-link-hover-styles": "Estilos hover para links de navegacion",
+  "box-model-profile-tile": "Tarjeta de perfil para practicar el modelo de caja",
+  "border-box-info-panel": "Panel informativo con border-box",
   "hero-copy-stack": "Bloque hero con texto apilado",
+  "display-mode-announcement": "Bloque de anuncio con display",
+  "flex-service-row": "Fila de servicios con flexbox",
+  "flex-wrap-chip-row": "Fila de chips con flex-wrap",
+  "grid-feature-board": "Tablero de funcionalidades con Grid",
+  "media-query-stack-layout": "Layout que se apila con media query",
+  "fluid-container-shell": "Contenedor fluido centrado",
+  "polished-pricing-card": "Tarjeta de precios con pulido visual",
+  "gradient-hero-callout": "Bloque hero con gradiente",
+  "debug-broken-profile-card-css": "Depurar CSS roto de una tarjeta de perfil",
+  "debug-broken-navbar-layout": "Depurar layout roto de una navbar",
+  "debug-broken-responsive-grid": "Depurar grid responsive roto",
+  "copy-mock-pricing-section": "Copiar mock layout de una seccion de precios",
+  "copy-mock-dashboard-overview": "Copiar mock layout de un dashboard",
+  "ts-typed-profile-card": "Tarjeta de perfil con props tipadas",
+  "ts-interface-feature-list": "Lista de funcionalidades con interface",
+  "ts-union-status-badge": "Badge de estado con union type",
+  "ts-optional-note-card": "Tarjeta con nota opcional",
+  "ts-typed-click-counter": "Contador de clicks con estado tipado",
+  "ts-controlled-booking-form": "Formulario de reserva tipado",
+  "ts-narrowing-feedback-panel": "Panel de feedback con narrowing",
+  "ts-filtered-directory": "Directorio filtrado con datos tipados",
+  "ts-spread-settings-panel": "Panel de ajustes con spread tipado",
+  "ts-fetch-menu-board": "Tablero de menu con fetch tipado",
+  "ts-favourites-toggle-list": "Lista de favoritos con toggle tipado",
+  "ts-typed-search-results": "Resultados de busqueda tipados",
+  "ts-refactor-feedback-board": "Refactor de tablero de feedback a TypeScript",
+  "ts-all-in-one-dashboard-capstone":
+    "Capstone de dashboard integral con TypeScript",
   "newsletter-signup-ui": "UI de suscripcion por email",
   "responsive-feature-strip": "Franja responsive de funcionalidades",
   "semantic-article-layout": "Layout semantico de articulo",
@@ -684,6 +748,9 @@ const spanishTitleById = {
   "counter-with-reset": "Contador con reset",
   "simple-form-validation": "Validacion sencilla de formulario",
   "contact-form-validation": "Validacion sencilla de formulario de contacto",
+  "login-form-submit-object": "Formulario de login con objeto enviado",
+  "booking-form-reset": "Formulario de reserva con limpieza",
+  "reservation-form-summary": "Resumen de reserva de restaurante",
   "prevent-duplicate-items": "Evitar items duplicados en una lista",
   "add-item-to-list": "Anadir item a una lista",
   "add-goal-to-list": "Anadir metas a una lista",
@@ -702,8 +769,13 @@ const spanishTitleById = {
   "await-user-card": "Tarjeta de usuario con async/await",
   "async-save-button": "Boton de guardado asincrono",
   "save-notes-localstorage": "Guardar notas en localStorage",
+  "saved-favourites-localstorage": "Guardar favoritos en localStorage",
+  "cart-items-localstorage": "Guardar items del carrito en localStorage",
   "shopping-cart-total": "Total de carrito de compra",
   "mock-product-search": "Busqueda simulada de productos",
+  "github-profile-finder": "Buscador de perfiles tipo GitHub",
+  "weather-search-panel": "Panel de busqueda del tiempo",
+  "recipe-search-app": "App de busqueda de recetas",
   "promise-all-user-posts": "Cargar usuario y posts con Promise.all",
   "filter-sort-products": "Filtrar y ordenar productos",
   "save-load-todos-localstorage": "Guardar y cargar todos con localStorage",
@@ -748,6 +820,7 @@ const spanishTitleById = {
   "lift-state-up": "Subir el estado",
   "reusable-button-component": "Componente Button reutilizable",
   "react-form-validation": "Validacion de email en React",
+  "react-booking-form-app": "App de formulario de reserva",
   "react-modal-component": "Componente modal sencillo",
   "react-accordion-item": "Item de acordeon en React",
   "react-tabs-component": "Componente de pestanas",
@@ -768,10 +841,12 @@ const spanishTitleById = {
   "react-debounced-search": "Input de busqueda con debounce",
   "react-paginated-list": "Lista paginada",
   "react-multi-filter-products": "Lista de productos con multiples filtros",
+  "react-movie-search-app": "App de busqueda de peliculas",
   "react-results-summary": "Resumen de resultados en React",
   "react-product-browser-capstone":
     "Capstone de explorador de productos",
   "react-usereducer-todos": "Lista de todos con useReducer",
+  "react-contact-manager": "Gestor de contactos",
   "react-context-theme": "Tema con Context",
   "react-view-mode-context": "Modo de vista con Context",
   "react-accessible-form-errors": "Errores de formulario accesibles",
@@ -782,6 +857,7 @@ const spanishTitleById = {
   "react-router-basic-pages": "Paginas con React Router",
   "react-route-tab-navigation": "Navegacion por pestanas con rutas",
   "react-router-dynamic-user": "Ruta dinamica de usuario",
+  "react-router-product-detail": "Ruta de detalle de producto",
   "react-auth-guard-state": "Ruta protegida con estado de auth",
   "react-routed-directory-capstone": "Capstone de directorio de productos con rutas",
 };
@@ -897,6 +973,39 @@ const exactSpanishText = {
 };
 
 const conceptLabelCopy = {
+  selectors: "selectores",
+  "element selectors": "selectores de elemento",
+  "class selectors": "selectores de clase",
+  "id selectors": "selectores de id",
+  "descendant selectors": "selectores descendientes",
+  "anchor styling": "estilo de links",
+  "box model": "modelo de caja",
+  "box-sizing": "box-sizing",
+  display: "display",
+  "inline-block": "inline-block",
+  "display: none": "display: none",
+  "flex: 1": "flex: 1",
+  "flex-wrap": "flex-wrap",
+  "grid-template-columns": "grid-template-columns",
+  "media queries": "media queries",
+  "mobile-first thinking": "pensamiento mobile-first",
+  "max-width": "max-width",
+  "width: 100%": "width: 100%",
+  "container pattern": "patron de contenedor",
+  "box-shadow": "box-shadow",
+  transition: "transition",
+  transform: "transform",
+  "linear-gradient": "linear-gradient",
+  "CSS debugging": "depuracion de CSS",
+  readability: "legibilidad",
+  "visual polish": "pulido visual",
+  "nav layout": "layout de navbar",
+  "list reset": "reinicio de listas",
+  "mock layout copy": "copia de layout desde brief",
+  "pricing cards": "tarjetas de precios",
+  "assessment practice": "practica de prueba tecnica",
+  "dashboard shell": "estructura de dashboard",
+  "sidebar layout": "layout con sidebar",
   "HTML headings": "titulos HTML",
   "button elements": "elementos button",
   "hover states": "estados hover",
@@ -979,6 +1088,16 @@ const conceptLabelCopy = {
   totals: "totales",
   "Promise.all": "Promise.all",
   "parallel requests": "requests en paralelo",
+  TypeScript: "TypeScript",
+  "typed props": "props tipadas",
+  interfaces: "interfaces",
+  "type aliases": "type aliases",
+  "union types": "union types",
+  "typed state": "estado tipado",
+  "typed events": "eventos tipados",
+  "typed data": "datos tipados",
+  narrowing: "narrowing",
+  "optional properties": "propiedades opcionales",
   "event delegation": "event delegation",
   "FormData": "FormData",
   "pagination": "paginacion",
@@ -2051,8 +2170,11 @@ function getGeneratedChallengeCopy(challenge) {
     joinSpanishList(concepts.slice(0, 4)) || "el concepto principal del reto";
   const primaryConcept = concepts[0] || "el concepto principal";
   const lowerFocus = focus.charAt(0).toLowerCase() + focus.slice(1);
+  const isReactTest = challenge.editorType === "react-test";
   const isReact =
-    challenge.editorType === "react" || challenge.editorType === "react-ts";
+    isReactTest ||
+    challenge.editorType === "react" ||
+    challenge.editorType === "react-ts";
   const isJavascript =
     !isReact && (challenge.category || "").toLowerCase().includes("javascript");
 
@@ -2061,14 +2183,18 @@ function getGeneratedChallengeCopy(challenge) {
     goal: `Completa este reto de ${lowerFocus} para practicar ${conceptText} en una situacion parecida al trabajo real.`,
     requirements: [
       `Construye una solucion visible para ${lowerFocus}.`,
-      isReact
+      isReactTest
+        ? "Escribe tests claros con test(), expect(), render(), screen, fireEvent o waitFor segun el reto."
+        : isReact
         ? "Trabaja dentro del componente Challenge y devuelve JSX valido."
         : "Crea la estructura y el comportamiento necesarios en el editor.",
       `Aplica estos conceptos: ${conceptText}.`,
       "Comprueba el resultado en el preview antes de enviar.",
     ],
     tips: [
-      isReact
+      isReactTest
+        ? "Piensa como QA: que hace la persona usuaria, que deberia pasar y como compruebas ese resultado con un test pequeno."
+        : isReact
         ? "Antes de escribir JSX, identifica que estado, props o datos necesita la UI."
         : isJavascript
           ? "Empieza por identificar que dato cambia y que evento o funcion lo cambia."
@@ -2079,7 +2205,9 @@ function getGeneratedChallengeCopy(challenge) {
     concepts,
     suggestedApproach: [
       "Lee el objetivo del reto y escribe primero la estructura minima.",
-      isReact
+      isReactTest
+        ? "Renderiza la UI o llama a la funcion, haz la accion necesaria y comprueba el resultado esperado."
+        : isReact
         ? "Decide que valores viven en estado, props o datos derivados."
         : isJavascript
           ? "Conecta los elementos con JavaScript y actualiza la UI cuando cambien los datos."
@@ -2088,7 +2216,9 @@ function getGeneratedChallengeCopy(challenge) {
     ],
     commonMistakes: [
       "Copiar el resultado sin poder explicar que problema resuelve.",
-      isReact
+      isReactTest
+        ? "Comprobar detalles internos en lugar de comprobar lo que cambia para la persona usuaria."
+        : isReact
         ? "Guardar estado que podria ser un valor derivado o colocar el estado demasiado lejos de donde se usa."
         : isJavascript
           ? "Cambiar una variable pero olvidar actualizar lo que ve el usuario."
@@ -2112,14 +2242,27 @@ export const copy = {
       eyebrow: "Zero to job-ready",
       title: "Frontend + JavaScript training lab",
       intro:
-        "A free, guided, bilingual practice space for learning HTML, CSS, JavaScript, and React through classes, focused challenges, live preview, and saved progress.",
+        "A free, guided, bilingual practice space for learning HTML, CSS, JavaScript, TypeScript, and React through classes, focused challenges, live preview, and saved progress.",
       dashboard: "Learning dashboard",
+      guidedStudio: "Guided website studio",
+      guidedStudioIntro:
+        "For true beginners, start here. Milo walks through one complete page so learners can build while seeing how each section fits together.",
+      guidedStudioMessage:
+        "Welcome in. We will build one full website together, one section at a time, so the whole page makes sense from the start.",
+      learnConcepts: "Learn concepts and interview answers",
+      learnConceptsIntro:
+        "Keep the theory short, clear, and speakable. This section helps learners explain what they are building in simple words before an interview ever happens.",
+      learnConceptsMessage:
+        "We keep this part short on purpose. The goal is not to drown you in theory. The goal is to help you explain what you know with calm, clear language.",
+      guidedThemes: "Theme choices",
       roadmap: "Learning roadmap",
       roadmapIntro:
         "Follow the free path in phases so the course feels finishable, not endless. Each phase groups related classes and job-focused practice.",
       classPath: "Class path",
       classIntro:
         "A suggested teaching sequence that turns the challenge bank into a structured course.",
+      trackIntro:
+        "Choose a track first, then open the blocks inside it. This keeps the course clearer for beginners and easier to explore.",
       practiceModes: "Practice modes",
       practiceIntro:
         "Jump into the exercises by level. Progress is saved locally on this device.",
@@ -2128,22 +2271,120 @@ export const copy = {
       learningTracks: "Tracks",
       typicalTime: "Typical time",
       practiceGroups: "Practice groups",
+      insideBlock: "Inside this block",
       phaseFocus: "What this phase builds",
       phaseClasses: (count) => `${count} classes`,
       phaseChallenges: (count) => `${count} challenges`,
+      challengeCount: (count) => `${count} challenges`,
+      moreChallenges: (count) => `+${count} more`,
       roadmapStart: "Start this phase",
       projectLabel: "Class project",
       outcomesLabel: "Outcomes",
       linkedPractice: "Linked practice",
       openMode: "Open practice",
+      viewTrack: "View blocks",
+      backToTracks: "Back to tracks",
       openBlock: "Open block",
       completed: "completed",
       inProgress: "in progress",
       progress: "Progress",
       startMode: "Start mode",
       continueMode: "Continue mode",
+      blocksCount: (count) => `${count} blocks`,
       completedOf: (completed, total) => `${completed}/${total} completed`,
       inProgressCount: (count) => `${count} in progress`,
+    },
+    guide: {
+      badge: "Guided build",
+      mentorLabel: "Meet Milo",
+      backHome: "Back home",
+      openGuide: "Open guided website",
+      currentStep: "Current step",
+      checklist: "Build now",
+      tipLabel: "Milo's tip",
+      codeHelper: "Code helper",
+      codeDecoded: "What this code does",
+      studyPattern: "Study the pattern",
+      keepItSimple: "Short explanation",
+      loadStarter: "Load step base",
+      loadExample: "Load finished example",
+      restart: "Restart this guide",
+      viewExample: "View finished step",
+      backToBuild: "Back to my build",
+      doneStep: "Done with this step",
+      stepCheckIn: "Step check-in",
+      nextPrompt: "Nice work. Ready for the next section?",
+      nextStep: "Next step",
+      finishedBuild: "You finished the guided website.",
+      stepLabel: (current, total) => `Step ${current} of ${total}`,
+    },
+    learn: {
+      badge: "Interview answers",
+      mentorLabel: "Study with Milo",
+      title: "Short answers for real frontend interviews",
+      heroIntro:
+        "Use this page to turn concepts into plain-language answers. Read the quick version, look at the tiny example, and then practise saying the interview answer out loud.",
+      heroMessage:
+        "We are not trying to sound fancy here. We are trying to sound clear, calm, and correct.",
+      backHome: "Back home",
+      openLibrary: "Open interview answers",
+      interviewFocus: "Interview-ready language",
+      categoryCount: (count) => `${count} topic areas`,
+      questionCount: (count) => `${count} answer cards`,
+      compareBadge: "Compare patterns",
+      compareTitle: "One frontend job, several valid ways to solve it",
+      compareIntro:
+        "This section helps learners compare patterns instead of memorising one magic answer. Read the scenario, compare the approaches, and notice when each one fits best.",
+      compareCount: (count) => `${count} compare topics`,
+      compareScenario: "Scenario",
+      compareWhenToUse: "When to use it",
+      compareWatchOut: "Watch out",
+      compareTakeaway: "Main takeaway",
+      stepReadTitle: "1. Read the short answer",
+      stepReadText:
+        "Start with the one-line version so the idea feels simple and memorable.",
+      stepExampleTitle: "2. Picture the example",
+      stepExampleText:
+        "Use the tiny example to connect the concept to real code you might write.",
+      stepSayTitle: "3. Say the interview line",
+      stepSayText:
+        "Practise the answer aloud so you can explain it clearly under pressure.",
+      searchLabel: "Search concepts",
+      searchPlaceholder:
+        "Search semantic HTML, state, fetch, keyboard, debugging...",
+      resultsLabel: "Visible answers",
+      resultsCount: (visible, total) => `${visible} of ${total} visible`,
+      allCategories: "All topics",
+      topicLabel: "Topic area",
+      questionLabel: "Interview question",
+      shortAnswer: "Short answer",
+      easyExplanation: "Easy explanation",
+      tinyExample: "Tiny example",
+      interviewAnswer: "Interview answer",
+      commonMistake: "Common mistake",
+      knowledgeBadge: "Knowledge check",
+      knowledgeCoachTitle: "Before you submit",
+      knowledgeProgress: (answered, total) => `${answered}/${total} answered`,
+      knowledgeQuestionNumber: (number) => `Question ${number}`,
+      knowledgeTypeChoice: "Choose one",
+      knowledgeTypeCode: "Fill the code",
+      submitKnowledge: "Check my answers",
+      resetKnowledge: "Restart test",
+      knowledgeScoreLabel: "Score",
+      knowledgeScore: (score, total, percentage) =>
+        `${score}/${total} correct (${percentage}%)`,
+      knowledgeStrongResult:
+        "Nice work. This looks much closer to active understanding than passive reading.",
+      knowledgeRetryResult:
+        "Good practice. Review the explanations, then try again and say the answers out loud.",
+      knowledgeCorrect: "Correct",
+      knowledgeIncorrect: "Review this one",
+      knowledgeExplanation: "Why this answer works",
+      knowledgeInterviewTip: "How to say it in an interview",
+      noResultsTitle: "No matching answers found",
+      noResultsBody:
+        "Try a broader search term or switch back to all topics.",
+      resetFilters: "Reset filters",
     },
     app: {
       noChallenge: "No challenge found.",
@@ -2153,6 +2394,8 @@ export const copy = {
     },
     header: {
       eyebrow: "Practice challenge",
+      interviewEyebrow: "Timed interview assessment",
+      blockStep: (current, total) => `Block step ${current} of ${total}`,
     },
     primer: {
       eyebrow: "Concept before coding",
@@ -2181,6 +2424,23 @@ export const copy = {
       outcome: "Expected outcome",
       tips: "Tips",
     },
+    assessment: {
+      modeLabel: "Assessment mode",
+      practiceMode: "Practice",
+      timedMode: "Timed",
+      badge: "Assessment mode",
+      title: "Timed interview run",
+      intro:
+        "This version hides guidance so the challenge feels closer to an interview or assessment day task.",
+      rules:
+        "No concept intro, no tips, and no solution button until you finish or the timer runs out.",
+      timeRunning: "Timer running",
+      timeFinished: "Time finished",
+      timeLimit: (minutes) => `${minutes} minute assessment`,
+      briefTitle: "Assessment brief",
+      briefNote:
+        "Read the brief carefully, then build the feature without hints. Treat this like a real interview exercise.",
+    },
     workspace: {
       solutionView: "Solution view",
       yourCode: "Your code",
@@ -2188,9 +2448,13 @@ export const copy = {
       cssEditor: "CSS editor",
       jsEditor: "JavaScript editor",
       reactEditor: "React editor",
+      testEditor: "Test editor",
       livePreview: "Live preview",
       solution: "Solution",
       myCode: "My code",
+      previewViewport: "Preview viewport",
+      desktopView: "Desktop view",
+      phoneView: "Phone view",
       switchStacked: "Switch to preview on top",
       switchSplit: "Switch to side by side",
       undo: "Undo",
@@ -2200,6 +2464,7 @@ export const copy = {
       backToCode: "Back to my code",
       reset: "Reset",
       submit: "Submit solution",
+      solutionLocked: "Solution is locked until the assessment is finished.",
       feedback: "Submission feedback",
       nextPrompt: "Correct. Would you like to go to the next challenge?",
       nextChallenge: "Next challenge",
@@ -2208,6 +2473,22 @@ export const copy = {
       cssPlaceholder: "Write your CSS here...",
       jsPlaceholder: "Write your JavaScript here...",
       reactPlaceholder: "Write your React code here...",
+      testPlaceholder:
+        "Write your tests here using test(), expect(), render(), screen, fireEvent, and waitFor when needed...",
+    },
+    reflection: {
+      title: "Explain your solution",
+      intro:
+        "After a timed run, practice the part many juniors skip: explaining your decisions clearly.",
+      summaryPrompt: "How would you explain what the feature does?",
+      summaryPlaceholder:
+        "Explain the feature in simple words, as if you were talking to an interviewer.",
+      decisionsPrompt: "Why did you choose this approach?",
+      decisionsPlaceholder:
+        "Mention the main state, structure, logic, or accessibility decisions you made.",
+      improvePrompt: "What would you improve with more time?",
+      improvePlaceholder:
+        "Mention one or two improvements, edge cases, tests, or polish steps you would add next.",
     },
     drawer: {
       backToModes: "Back to modes",
@@ -2236,14 +2517,27 @@ export const copy = {
       eyebrow: "De cero a empleable",
       title: "Laboratorio de Frontend + JavaScript",
       intro:
-        "Un espacio gratuito, bilingue y guiado para aprender HTML, CSS, JavaScript y React con clases, retos enfocados, preview en vivo y progreso guardado.",
+        "Un espacio gratuito, bilingue y guiado para aprender HTML, CSS, JavaScript, TypeScript y React con clases, retos enfocados, preview en vivo y progreso guardado.",
       dashboard: "Panel de aprendizaje",
+      guidedStudio: "Taller guiado de paginas web",
+      guidedStudioIntro:
+        "Si alguien empieza desde cero, este es el mejor punto de entrada. Milo acompana una pagina completa para que se vea como encajan las secciones mientras se construyen.",
+      guidedStudioMessage:
+        "Bienvenido. Vamos a construir una pagina completa juntos, seccion por seccion, para que toda la web tenga sentido desde el principio.",
+      learnConcepts: "Aprender conceptos y respuestas de entrevista",
+      learnConceptsIntro:
+        "Mantenemos la teoria corta, clara y facil de decir. Esta seccion ayuda a que la persona entienda lo que construye y pueda explicarlo con palabras sencillas.",
+      learnConceptsMessage:
+        "Aqui no buscamos sonar rebuscados. Buscamos explicar lo que sabemos con calma, claridad y sentido.",
+      guidedThemes: "Temas disponibles",
       roadmap: "Roadmap de aprendizaje",
       roadmapIntro:
         "Sigue la ruta gratuita por fases para que el curso se sienta terminable y no infinito. Cada fase agrupa clases relacionadas y practica orientada al trabajo.",
       classPath: "Ruta de clases",
       classIntro:
         "Una secuencia didactica sugerida que convierte el banco de retos en un curso estructurado.",
+      trackIntro:
+        "Elige primero una ruta y despues abre los bloques dentro de ella. Asi el curso se siente mas claro para principiantes y mas facil de explorar.",
       practiceModes: "Modos de practica",
       practiceIntro:
         "Entra a los ejercicios por nivel. El progreso se guarda localmente en este dispositivo.",
@@ -2252,22 +2546,120 @@ export const copy = {
       learningTracks: "Rutas",
       typicalTime: "Tiempo habitual",
       practiceGroups: "Grupos de practica",
+      insideBlock: "Dentro de este bloque",
       phaseFocus: "Lo que construye esta fase",
       phaseClasses: (count) => `${count} clases`,
       phaseChallenges: (count) => `${count} retos`,
+      challengeCount: (count) => `${count} retos`,
+      moreChallenges: (count) => `+${count} mas`,
       roadmapStart: "Empezar esta fase",
       projectLabel: "Proyecto de clase",
       outcomesLabel: "Objetivos",
       linkedPractice: "Practica asociada",
       openMode: "Abrir practica",
+      viewTrack: "Ver bloques",
+      backToTracks: "Volver a rutas",
       openBlock: "Abrir bloque",
       completed: "completados",
       inProgress: "en progreso",
       progress: "Progreso",
       startMode: "Empezar modo",
       continueMode: "Continuar modo",
+      blocksCount: (count) => `${count} bloques`,
       completedOf: (completed, total) => `${completed}/${total} completados`,
       inProgressCount: (count) => `${count} en progreso`,
+    },
+    guide: {
+      badge: "Build guiado",
+      mentorLabel: "Conoce a Milo",
+      backHome: "Volver al inicio",
+      openGuide: "Abrir web guiada",
+      currentStep: "Paso actual",
+      checklist: "Construye ahora",
+      tipLabel: "Consejo de Milo",
+      codeHelper: "Ayuda de codigo",
+      codeDecoded: "Que hace este codigo",
+      studyPattern: "Estudia el patron",
+      keepItSimple: "Explicacion corta",
+      loadStarter: "Cargar base del paso",
+      loadExample: "Cargar ejemplo terminado",
+      restart: "Reiniciar esta guia",
+      viewExample: "Ver paso terminado",
+      backToBuild: "Volver a mi proyecto",
+      doneStep: "He terminado este paso",
+      stepCheckIn: "Revision del paso",
+      nextPrompt: "Muy bien. Listo para la siguiente seccion?",
+      nextStep: "Siguiente paso",
+      finishedBuild: "Has terminado la web guiada.",
+      stepLabel: (current, total) => `Paso ${current} de ${total}`,
+    },
+    learn: {
+      badge: "Respuestas de entrevista",
+      mentorLabel: "Estudia con Milo",
+      title: "Respuestas cortas para entrevistas reales de frontend",
+      heroIntro:
+        "Usa esta pagina para convertir conceptos en respuestas sencillas. Lee la version corta, mira el ejemplo pequeno y luego practica la respuesta de entrevista en voz alta.",
+      heroMessage:
+        "No intentamos sonar demasiado tecnicos. Intentamos sonar claros, tranquilos y correctos.",
+      backHome: "Volver al inicio",
+      openLibrary: "Abrir respuestas de entrevista",
+      interviewFocus: "Lenguaje listo para entrevista",
+      categoryCount: (count) => `${count} areas tematicas`,
+      questionCount: (count) => `${count} tarjetas de respuesta`,
+      compareBadge: "Comparar patrones",
+      compareTitle: "Un mismo trabajo de frontend puede resolverse de varias maneras",
+      compareIntro:
+        "Esta seccion ayuda a comparar patrones en lugar de memorizar una sola respuesta magica. Lee el escenario, compara los enfoques y fijate en cuando conviene cada uno.",
+      compareCount: (count) => `${count} temas para comparar`,
+      compareScenario: "Escenario",
+      compareWhenToUse: "Cuando usarlo",
+      compareWatchOut: "Ojo con esto",
+      compareTakeaway: "Idea principal",
+      stepReadTitle: "1. Lee la respuesta corta",
+      stepReadText:
+        "Empieza por la version de una linea para que la idea se sienta simple y facil de recordar.",
+      stepExampleTitle: "2. Imagina el ejemplo",
+      stepExampleText:
+        "Usa el ejemplo pequeno para conectar el concepto con codigo real que podrias escribir.",
+      stepSayTitle: "3. Di la respuesta de entrevista",
+      stepSayText:
+        "Practicala en voz alta para poder explicarla con claridad bajo presion.",
+      searchLabel: "Buscar conceptos",
+      searchPlaceholder:
+        "Busca HTML semantico, state, fetch, teclado, depuracion...",
+      resultsLabel: "Respuestas visibles",
+      resultsCount: (visible, total) => `${visible} de ${total} visibles`,
+      allCategories: "Todos los temas",
+      topicLabel: "Area tematica",
+      questionLabel: "Pregunta de entrevista",
+      shortAnswer: "Respuesta corta",
+      easyExplanation: "Explicacion facil",
+      tinyExample: "Ejemplo pequeno",
+      interviewAnswer: "Respuesta para entrevista",
+      commonMistake: "Error comun",
+      knowledgeBadge: "Prueba de conocimientos",
+      knowledgeCoachTitle: "Antes de enviarla",
+      knowledgeProgress: (answered, total) => `${answered}/${total} respondidas`,
+      knowledgeQuestionNumber: (number) => `Pregunta ${number}`,
+      knowledgeTypeChoice: "Elige una",
+      knowledgeTypeCode: "Completa el codigo",
+      submitKnowledge: "Corregir respuestas",
+      resetKnowledge: "Reiniciar prueba",
+      knowledgeScoreLabel: "Puntuacion",
+      knowledgeScore: (score, total, percentage) =>
+        `${score}/${total} correctas (${percentage}%)`,
+      knowledgeStrongResult:
+        "Muy bien. Esto se parece mucho mas a comprension activa que a lectura pasiva.",
+      knowledgeRetryResult:
+        "Buena practica. Revisa las explicaciones, vuelve a intentarlo y di las respuestas en voz alta.",
+      knowledgeCorrect: "Correcta",
+      knowledgeIncorrect: "Revisa esta",
+      knowledgeExplanation: "Por que funciona esta respuesta",
+      knowledgeInterviewTip: "Como decirlo en una entrevista",
+      noResultsTitle: "No se encontraron respuestas",
+      noResultsBody:
+        "Prueba un termino mas general o vuelve a todos los temas.",
+      resetFilters: "Resetear filtros",
     },
     app: {
       noChallenge: "No se encontro el reto.",
@@ -2277,6 +2669,8 @@ export const copy = {
     },
     header: {
       eyebrow: "Reto de practica",
+      interviewEyebrow: "Prueba tecnica con tiempo",
+      blockStep: (current, total) => `Paso ${current} de ${total} del bloque`,
     },
     primer: {
       eyebrow: "Concepto antes de programar",
@@ -2305,6 +2699,23 @@ export const copy = {
       outcome: "Resultado esperado",
       tips: "Pistas",
     },
+    assessment: {
+      modeLabel: "Modo de prueba tecnica",
+      practiceMode: "Practica",
+      timedMode: "Con tiempo",
+      badge: "Modo evaluacion",
+      title: "Simulacion de entrevista con tiempo",
+      intro:
+        "Esta version oculta ayudas para que el reto se parezca mas a una entrevista o a una prueba tecnica real.",
+      rules:
+        "Sin introduccion conceptual, sin pistas y sin boton de solucion hasta terminar o hasta que se acabe el tiempo.",
+      timeRunning: "Tiempo en marcha",
+      timeFinished: "Tiempo terminado",
+      timeLimit: (minutes) => `Prueba de ${minutes} minutos`,
+      briefTitle: "Brief de evaluacion",
+      briefNote:
+        "Lee el brief con calma y construye la solucion sin ayudas. Tratalo como un ejercicio real de entrevista.",
+    },
     workspace: {
       solutionView: "Vista de solucion",
       yourCode: "Tu codigo",
@@ -2312,9 +2723,13 @@ export const copy = {
       cssEditor: "Editor CSS",
       jsEditor: "Editor JavaScript",
       reactEditor: "Editor React",
+      testEditor: "Editor de tests",
       livePreview: "Preview en vivo",
       solution: "Solucion",
       myCode: "Mi codigo",
+      previewViewport: "Vista del preview",
+      desktopView: "Vista escritorio",
+      phoneView: "Vista telefono",
       switchStacked: "Cambiar a preview arriba",
       switchSplit: "Cambiar a lado a lado",
       undo: "Deshacer",
@@ -2324,6 +2739,8 @@ export const copy = {
       backToCode: "Volver a mi codigo",
       reset: "Resetear",
       submit: "Enviar solucion",
+      solutionLocked:
+        "La solucion estara bloqueada hasta que termines la prueba.",
       feedback: "Feedback del envio",
       nextPrompt: "Correcto. Quieres ir al siguiente reto?",
       nextChallenge: "Siguiente reto",
@@ -2332,6 +2749,22 @@ export const copy = {
       cssPlaceholder: "Escribe tu CSS aqui...",
       jsPlaceholder: "Escribe tu JavaScript aqui...",
       reactPlaceholder: "Escribe tu codigo React aqui...",
+      testPlaceholder:
+        "Escribe aqui tus tests con test(), expect(), render(), screen, fireEvent y waitFor cuando haga falta...",
+    },
+    reflection: {
+      title: "Explica tu solucion",
+      intro:
+        "Despues de una prueba con tiempo, practica la parte que mucha gente junior evita: explicar tus decisiones con claridad.",
+      summaryPrompt: "Como explicarias lo que hace esta funcionalidad?",
+      summaryPlaceholder:
+        "Explica la funcionalidad con palabras sencillas, como si hablaras con una persona entrevistadora.",
+      decisionsPrompt: "Por que elegiste este enfoque?",
+      decisionsPlaceholder:
+        "Menciona las decisiones principales de estado, estructura, logica o accesibilidad.",
+      improvePrompt: "Que mejorarias si tuvieras mas tiempo?",
+      improvePlaceholder:
+        "Menciona una o dos mejoras, edge cases, tests o pasos de pulido que anadirias despues.",
     },
     drawer: {
       backToModes: "Volver a modos",

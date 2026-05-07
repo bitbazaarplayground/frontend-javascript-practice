@@ -230,6 +230,69 @@ const conceptLibrary = {
     why:
       "Theme, auth, language, and app settings are common context use cases.",
   },
+  typescript: {
+    title: "TypeScript",
+    summary:
+      "TypeScript adds a type system on top of JavaScript so you can describe what shape your data should have before the app runs.",
+    why:
+      "It catches many frontend mistakes earlier, especially with props, forms, API data, and state updates.",
+  },
+  interfaces: {
+    title: "Interfaces",
+    summary:
+      "Interfaces name the shape of an object so repeated data stays clear and consistent.",
+    why:
+      "They are common in React props, API responses, forms, and any UI that reuses the same data shape.",
+  },
+  typealiases: {
+    title: "Type aliases",
+    summary:
+      "A type alias gives a reusable name to a type, such as a union, object shape, or function signature.",
+    why:
+      "Type aliases make TypeScript code easier to read when the same kind of value appears in several places.",
+  },
+  typedprops: {
+    title: "Typed props",
+    summary:
+      "Typed props tell a React component exactly what data it expects from its parent.",
+    why:
+      "This protects reusable components from missing values, wrong field names, and unclear contracts.",
+  },
+  uniontypes: {
+    title: "Union types",
+    summary:
+      "A union type limits a value to one of a small set of allowed options.",
+    why:
+      "They are great for UI states like loading, success, error, draft, or ready.",
+  },
+  optionalproperties: {
+    title: "Optional properties",
+    summary:
+      "Optional properties mark fields that may exist sometimes, but not always.",
+    why:
+      "Real API data and product data often have missing fields, so the UI needs to handle that safely.",
+  },
+  typedstate: {
+    title: "Typed state",
+    summary:
+      "Typed state makes it clear what kind of value React state should hold over time.",
+    why:
+      "It helps prevent state bugs where a value changes into a shape the rest of the UI was not expecting.",
+  },
+  typedevents: {
+    title: "Typed events",
+    summary:
+      "Typed events describe what kind of element triggered an event like click, change, or submit.",
+    why:
+      "They make forms and interactions easier to write because you know what properties are safe to read.",
+  },
+  narrowing: {
+    title: "Type narrowing",
+    summary:
+      "Narrowing is how TypeScript figures out a more specific type after you check a value.",
+    why:
+      "It is important when data could be one of several shapes and the UI should only use safe fields.",
+  },
   semantichtml: {
     title: "Semantic HTML",
     summary:
@@ -313,6 +376,69 @@ const conceptLibrary = {
       "Node runs JavaScript outside the browser, and Express is a common library for building HTTP endpoints.",
     why:
       "Frontend developers often read backend routes, debug request payloads, and talk clearly with backend teams.",
+  },
+  testing: {
+    title: "Testing",
+    summary:
+      "Testing checks that a feature behaves the way a user expects before bugs reach production.",
+    why:
+      "Frontend tests protect buttons, forms, async states, and critical flows from silently breaking later.",
+  },
+  rtl: {
+    title: "React Testing Library",
+    summary:
+      "React Testing Library renders components and helps you test them the way a user experiences them.",
+    why:
+      "It encourages behavior-focused tests instead of brittle tests that depend on internal implementation details.",
+  },
+  render: {
+    title: "render()",
+    summary:
+      "render() mounts a component into a test environment so you can inspect and interact with it.",
+    why:
+      "Without render(), there is no UI on screen for a test to query or click through.",
+  },
+  screen: {
+    title: "screen",
+    summary:
+      "screen is a shared way to query the rendered UI by text, role, label, and other user-facing signals.",
+    why:
+      "Queries like getByRole and getByLabelText make tests feel closer to real accessibility and user behavior.",
+  },
+  fireevent: {
+    title: "fireEvent",
+    summary:
+      "fireEvent simulates clicks, typing, submits, and key presses during a test.",
+    why:
+      "A feature is only proven when your test drives it through the same interactions a real user would trigger.",
+  },
+  waitfor: {
+    title: "waitFor",
+    summary:
+      "waitFor retries an expectation until async UI finishes updating or the test times out.",
+    why:
+      "Loading and error states often change after a promise resolves, so tests need a way to wait for the final result.",
+  },
+  aria: {
+    title: "ARIA",
+    summary:
+      "ARIA adds accessible meaning and relationships when plain HTML alone is not enough.",
+    why:
+      "Dialogs, tabs, status messages, and more advanced widgets often need ARIA to communicate clearly to assistive technology.",
+  },
+  focusmanagement: {
+    title: "Focus management",
+    summary:
+      "Focus management controls where keyboard focus moves when UI opens, closes, or changes.",
+    why:
+      "Modals, menus, and tabs feel broken to keyboard users when focus gets lost or returns to the wrong place.",
+  },
+  keyboardaccess: {
+    title: "Keyboard access",
+    summary:
+      "Keyboard access means a user can move through and operate the feature without a mouse.",
+    why:
+      "Real accessibility depends on predictable keyboard movement, visible focus, and controls that can actually be triggered.",
   },
   problemsolving: {
     title: "Problem solving",
@@ -556,6 +682,69 @@ const localizedConceptCopy = {
       why:
         "Theme, auth, idioma y ajustes de app son casos comunes para context.",
     },
+    typescript: {
+      title: "TypeScript",
+      summary:
+        "TypeScript anade un sistema de tipos sobre JavaScript para describir la forma de los datos antes de que la app se ejecute.",
+      why:
+        "Detecta muchos errores de frontend antes, sobre todo en props, formularios, datos de API y actualizaciones de estado.",
+    },
+    interfaces: {
+      title: "Interfaces",
+      summary:
+        "Las interfaces nombran la forma de un objeto para que los datos repetidos sean claros y consistentes.",
+      why:
+        "Son muy comunes en props de React, respuestas de API, formularios y cualquier UI que reutiliza la misma forma de datos.",
+    },
+    typealiases: {
+      title: "Type aliases",
+      summary:
+        "Un type alias da un nombre reutilizable a un tipo, como una union, una forma de objeto o una firma de funcion.",
+      why:
+        "Los type aliases hacen que el codigo TypeScript sea mas legible cuando el mismo tipo aparece en varios lugares.",
+    },
+    typedprops: {
+      title: "Props tipadas",
+      summary:
+        "Las props tipadas le dicen a un componente React exactamente que datos espera recibir del padre.",
+      why:
+        "Protegen los componentes reutilizables frente a valores que faltan, nombres de campos incorrectos y contratos poco claros.",
+    },
+    uniontypes: {
+      title: "Union types",
+      summary:
+        "Un union type limita un valor a un pequeno conjunto de opciones permitidas.",
+      why:
+        "Van muy bien para estados de UI como loading, success, error, draft o ready.",
+    },
+    optionalproperties: {
+      title: "Propiedades opcionales",
+      summary:
+        "Las propiedades opcionales marcan campos que a veces existen y otras veces no.",
+      why:
+        "Los datos reales de APIs y producto suelen traer campos ausentes, asi que la UI debe manejarlo con seguridad.",
+    },
+    typedstate: {
+      title: "Estado tipado",
+      summary:
+        "El estado tipado deja claro que clase de valor debe guardar el state de React con el paso del tiempo.",
+      why:
+        "Ayuda a prevenir bugs donde el estado cambia a una forma que el resto de la UI no esperaba.",
+    },
+    typedevents: {
+      title: "Eventos tipados",
+      summary:
+        "Los eventos tipados describen que clase de elemento dispara un evento como click, change o submit.",
+      why:
+        "Hacen que formularios e interacciones sean mas faciles de escribir porque sabes que propiedades puedes leer con seguridad.",
+    },
+    narrowing: {
+      title: "Narrowing de tipos",
+      summary:
+        "El narrowing es como TypeScript descubre un tipo mas especifico despues de comprobar un valor.",
+      why:
+        "Es importante cuando los datos pueden tener varias formas y la UI solo debe usar campos seguros.",
+    },
     semantichtml: {
       title: "HTML semantico",
       summary:
@@ -639,6 +828,69 @@ const localizedConceptCopy = {
         "Node ejecuta JavaScript fuera del navegador, y Express es una libreria comun para crear endpoints HTTP.",
       why:
         "Frontend suele leer rutas backend, depurar payloads y hablar claramente con equipos backend.",
+    },
+    testing: {
+      title: "Testing",
+      summary:
+        "Testing comprueba que una funcionalidad se comporta como espera la persona usuaria antes de que el bug llegue a produccion.",
+      why:
+        "Los tests protegen botones, formularios, estados asincronos y flujos importantes de romperse sin avisar.",
+    },
+    rtl: {
+      title: "React Testing Library",
+      summary:
+        "React Testing Library renderiza componentes y ayuda a probarlos como los vive una persona usuaria.",
+      why:
+        "Empuja a escribir tests centrados en comportamiento en lugar de tests fragiles pegados a detalles internos.",
+    },
+    render: {
+      title: "render()",
+      summary:
+        "render() monta un componente en un entorno de test para que puedas inspeccionarlo e interactuar con el.",
+      why:
+        "Sin render(), no hay UI en pantalla que el test pueda consultar o sobre la que pueda hacer click.",
+    },
+    screen: {
+      title: "screen",
+      summary:
+        "screen es una forma comun de consultar la UI renderizada por texto, rol, label y otras senales visibles para la persona usuaria.",
+      why:
+        "Consultas como getByRole y getByLabelText hacen que los tests se acerquen mas a accesibilidad y uso real.",
+    },
+    fireevent: {
+      title: "fireEvent",
+      summary:
+        "fireEvent simula clicks, escritura, submits y pulsaciones de teclado durante un test.",
+      why:
+        "Una funcionalidad se demuestra de verdad cuando el test la empuja con las mismas interacciones que haria alguien usandola.",
+    },
+    waitfor: {
+      title: "waitFor",
+      summary:
+        "waitFor repite una comprobacion hasta que la UI asincrona termina de actualizarse o se agota el tiempo.",
+      why:
+        "Los estados de carga y error suelen cambiar despues de una promesa, asi que los tests necesitan esperar el resultado final.",
+    },
+    aria: {
+      title: "ARIA",
+      summary:
+        "ARIA anade significado accesible y relaciones cuando HTML por si solo no es suficiente.",
+      why:
+        "Dialogs, tabs, mensajes de estado y widgets mas avanzados suelen necesitar ARIA para ser claros con tecnologia asistiva.",
+    },
+    focusmanagement: {
+      title: "Gestion del focus",
+      summary:
+        "La gestion del focus controla a donde va el foco del teclado cuando una UI se abre, se cierra o cambia.",
+      why:
+        "Modales, menus y tabs se sienten rotos para usuarios de teclado cuando el foco se pierde o vuelve al lugar incorrecto.",
+    },
+    keyboardaccess: {
+      title: "Acceso por teclado",
+      summary:
+        "Acceso por teclado significa que una persona puede recorrer y usar la funcionalidad sin raton.",
+      why:
+        "La accesibilidad real depende de movimiento de teclado predecible, focus visible y controles que de verdad se puedan activar.",
     },
     problemsolving: {
       title: "Resolucion de problemas",
@@ -752,6 +1004,23 @@ const aliases = {
   "event handlers": "eventhandling",
   "event listeners": "eventhandling",
   "input events": "eventhandling",
+  "typescript": "typescript",
+  "typed props": "typedprops",
+  "typed prop": "typedprops",
+  "interface": "interfaces",
+  "interfaces": "interfaces",
+  "type alias": "typealiases",
+  "type aliases": "typealiases",
+  "union type": "uniontypes",
+  "union types": "uniontypes",
+  "unions": "uniontypes",
+  "optional property": "optionalproperties",
+  "optional properties": "optionalproperties",
+  "typed state": "typedstate",
+  "typed events": "typedevents",
+  "typed event": "typedevents",
+  "narrowing": "narrowing",
+  "typed data": "interfaces",
   "backend": "backend",
   "server": "backend",
   "database": "backend",
@@ -759,6 +1028,20 @@ const aliases = {
   "node": "express",
   "express": "express",
   "express basics": "express",
+  "testing": "testing",
+  "tests": "testing",
+  "unit tests": "testing",
+  "react testing library": "rtl",
+  "testing library": "rtl",
+  "render()": "render",
+  "screen": "screen",
+  "fireevent": "fireevent",
+  "waitfor": "waitfor",
+  "aria": "aria",
+  "focus management": "focusmanagement",
+  "focus states": "focusmanagement",
+  "keyboard access": "keyboardaccess",
+  "keyboard navigation": "keyboardaccess",
   "problem solving": "problemsolving",
   "titulos html": "semantichtml",
   "titulo html": "semantichtml",
@@ -773,6 +1056,14 @@ const aliases = {
   "parametros de url": "dynamicroutes",
   "eventos": "eventhandling",
   "manejo de eventos": "eventhandling",
+  "props tipadas": "typedprops",
+  "interfaces tipadas": "interfaces",
+  "tipos union": "uniontypes",
+  "propiedad opcional": "optionalproperties",
+  "propiedades opcionales": "optionalproperties",
+  "estado tipado": "typedstate",
+  "eventos tipados": "typedevents",
+  "narrowing de tipos": "narrowing",
   "bucles": "loops",
   "condicionales": "conditionals",
   "objetos": "objects",
@@ -782,6 +1073,9 @@ const aliases = {
   "html semantico": "semantichtml",
   "accesibilidad": "semantichtml",
   "backend awareness": "backend",
+  "tests de interfaz": "testing",
+  "acceso por teclado": "keyboardaccess",
+  "gestion del focus": "focusmanagement",
   "servidor": "backend",
   "base de datos": "backend",
   "resolucion de problemas": "problemsolving",

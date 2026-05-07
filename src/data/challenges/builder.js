@@ -1739,6 +1739,390 @@ contactForm.addEventListener("submit", (event) => {
     },
   },
   {
+    id: "login-form-submit-object",
+    editorType: "web",
+    title: "Challenge 0 — Login Form Submit Object",
+    difficulty: "Medium",
+    category: "JavaScript + Forms",
+    goal: "Read login form values, validate them, create a user object, and preview the submitted data.",
+    requirements: [
+      "Create a form with email and password fields",
+      "Prevent the default submit behavior",
+      "Validate that both fields have values",
+      "Create an object from the submitted form data",
+      "Show a success message and preview the object",
+      "Clear the form after a valid submit",
+    ],
+    tips: [
+      "This is the pattern juniors use constantly: read values, validate, create an object, update the UI.",
+      "Trim the email value before validating it.",
+      "Use JSON.stringify() to show the created object clearly.",
+    ],
+    concepts: [
+      "form submission",
+      "preventDefault",
+      "objects",
+      "validation",
+      "JSON.stringify()",
+    ],
+    suggestedApproach: [
+      "Create the form, a feedback message, and an output area.",
+      "Listen for the submit event.",
+      "Read the current email and password values.",
+      "If both values are valid, build an object and render it.",
+      "Reset the form only after a successful submit.",
+    ],
+    commonMistakes: [
+      "Reading the values but never using them to build the object",
+      "Showing success before checking for empty fields",
+      "Resetting the form even when validation fails",
+    ],
+    expectedOutcome:
+      "A login form that validates input, creates a user object, previews it on the page, and resets after a valid submit.",
+    starter: {
+      html: `<form id="loginForm">
+  <input id="loginEmail" type="email" placeholder="Email" />
+  <input id="loginPassword" type="password" placeholder="Password" />
+  <button type="submit">Preview login</button>
+</form>
+<p id="loginFeedback"></p>
+<pre id="loginPreview"></pre>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+}
+
+pre {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #e2e8f0;
+  white-space: pre-wrap;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<form id="loginForm">
+  <input id="loginEmail" type="email" placeholder="Email" />
+  <input id="loginPassword" type="password" placeholder="Password" />
+  <button type="submit">Preview login</button>
+</form>
+<p id="loginFeedback"></p>
+<pre id="loginPreview"></pre>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+}
+
+pre {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #e2e8f0;
+  white-space: pre-wrap;
+}`,
+      js: `const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginFeedback = document.getElementById("loginFeedback");
+const loginPreview = document.getElementById("loginPreview");
+
+loginForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const email = loginEmail.value.trim();
+  const password = loginPassword.value.trim();
+
+  if (!email) {
+    loginFeedback.textContent = "Please enter your email.";
+    loginPreview.textContent = "";
+    return;
+  }
+
+  if (!password) {
+    loginFeedback.textContent = "Please enter your password.";
+    loginPreview.textContent = "";
+    return;
+  }
+
+  const user = {
+    email,
+    password,
+  };
+
+  loginFeedback.textContent = "Login data captured successfully.";
+  loginPreview.textContent = JSON.stringify(user, null, 2);
+  loginForm.reset();
+});`,
+    },
+  },
+  {
+    id: "booking-form-reset",
+    editorType: "web",
+    title: "Challenge 0 — Booking Form with Reset",
+    difficulty: "Medium",
+    category: "JavaScript + Forms",
+    goal: "Validate a booking form, show a booking summary, and clear the fields after a valid submit.",
+    requirements: [
+      "Create a form with name, date, and guests fields",
+      "Prevent the default submit behavior",
+      "Show an error when a field is empty or invalid",
+      "Create a booking object after a valid submit",
+      "Render a success summary",
+      "Clear the form after submit",
+    ],
+    tips: [
+      "This is a more real booking pattern: validate first, then build the object, then reset.",
+      "Number() helps you turn the guests field into a real number.",
+      "Keep the success summary small and readable.",
+    ],
+    concepts: [
+      "form submission",
+      "validation",
+      "objects",
+      "Number()",
+      "form.reset()",
+    ],
+    suggestedApproach: [
+      "Add the form and a summary area.",
+      "Read the values inside the submit handler.",
+      "Validate empty values and the guests number.",
+      "Build one booking object and render it.",
+      "Reset the form after success.",
+    ],
+    commonMistakes: [
+      "Treating the guests value like a number before converting it",
+      "Resetting the form before using the current values",
+      "Showing a success message without rendering the submitted booking",
+    ],
+    expectedOutcome:
+      "A booking form that feels closer to a real product flow because it validates, creates a booking object, shows success, and resets cleanly.",
+    starter: {
+      html: `<form id="bookingForm">
+  <input id="bookingName" type="text" placeholder="Guest name" />
+  <input id="bookingDate" type="date" />
+  <input id="bookingGuests" type="number" min="1" placeholder="Guests" />
+  <button type="submit">Save booking</button>
+</form>
+<p id="bookingFeedback"></p>
+<section id="bookingSummary"></section>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}
+
+#bookingSummary {
+  margin-top: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<form id="bookingForm">
+  <input id="bookingName" type="text" placeholder="Guest name" />
+  <input id="bookingDate" type="date" />
+  <input id="bookingGuests" type="number" min="1" placeholder="Guests" />
+  <button type="submit">Save booking</button>
+</form>
+<p id="bookingFeedback"></p>
+<section id="bookingSummary"></section>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}
+
+#bookingSummary {
+  margin-top: 16px;
+}
+
+.booking-card {
+  padding: 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: white;
+}`,
+      js: `const bookingForm = document.getElementById("bookingForm");
+const bookingName = document.getElementById("bookingName");
+const bookingDate = document.getElementById("bookingDate");
+const bookingGuests = document.getElementById("bookingGuests");
+const bookingFeedback = document.getElementById("bookingFeedback");
+const bookingSummary = document.getElementById("bookingSummary");
+
+bookingForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const name = bookingName.value.trim();
+  const date = bookingDate.value;
+  const guests = Number(bookingGuests.value);
+
+  if (!name) {
+    bookingFeedback.textContent = "Please enter the guest name.";
+    return;
+  }
+
+  if (!date) {
+    bookingFeedback.textContent = "Please choose a booking date.";
+    return;
+  }
+
+  if (!guests || guests < 1) {
+    bookingFeedback.textContent = "Please choose at least 1 guest.";
+    return;
+  }
+
+  const booking = {
+    name,
+    date,
+    guests,
+  };
+
+  bookingFeedback.textContent = "Booking saved successfully.";
+  bookingSummary.innerHTML = \`
+    <article class="booking-card">
+      <h3>\${booking.name}</h3>
+      <p>Date: \${booking.date}</p>
+      <p>Guests: \${booking.guests}</p>
+    </article>
+  \`;
+  bookingForm.reset();
+});`,
+    },
+  },
+  {
+    id: "reservation-form-summary",
+    editorType: "web",
+    title: "Challenge 0 — Restaurant Reservation Summary",
+    difficulty: "Medium",
+    category: "JavaScript + Forms",
+    goal: "Build a reservation form that turns form data into a clear reservation summary card.",
+    requirements: [
+      "Create a reservation form with at least 4 fields",
+      "Prevent the default submit behavior",
+      "Create an object from the submitted form data",
+      "Render the reservation details on the page",
+      "Show one clear success message",
+    ],
+    tips: [
+      "This challenge helps learners explain forms as data collection, not just inputs on a screen.",
+      "FormData is useful when several fields belong to one submit action.",
+      "Keep the summary visual so the user can immediately check the result.",
+    ],
+    concepts: [
+      "FormData",
+      "objects",
+      "submit events",
+      "DOM rendering",
+      "success feedback",
+    ],
+    suggestedApproach: [
+      "Create a reservation form with named fields.",
+      "Handle submit and prevent the page reload.",
+      "Use FormData to read the field values.",
+      "Build a reservation object and render it in a summary card.",
+    ],
+    commonMistakes: [
+      "Forgetting name attributes and then wondering why FormData is empty",
+      "Creating the object but not rendering it for the user",
+      "Showing success text with no visible summary of the reservation",
+    ],
+    expectedOutcome:
+      "A small restaurant reservation flow where the user submits details and immediately sees a confirmation summary.",
+    starter: {
+      html: `<form id="reservationForm">
+  <input name="name" placeholder="Guest name" />
+  <input name="email" type="email" placeholder="Email" />
+  <select name="time">
+    <option value="">Choose a time</option>
+    <option value="18:00">18:00</option>
+    <option value="19:30">19:30</option>
+    <option value="21:00">21:00</option>
+  </select>
+  <input name="guests" type="number" min="1" placeholder="Guests" />
+  <button type="submit">Reserve table</button>
+</form>
+<p id="reservationFeedback"></p>
+<section id="reservationCard"></section>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}
+
+#reservationCard {
+  margin-top: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<form id="reservationForm">
+  <input name="name" placeholder="Guest name" />
+  <input name="email" type="email" placeholder="Email" />
+  <select name="time">
+    <option value="">Choose a time</option>
+    <option value="18:00">18:00</option>
+    <option value="19:30">19:30</option>
+    <option value="21:00">21:00</option>
+  </select>
+  <input name="guests" type="number" min="1" placeholder="Guests" />
+  <button type="submit">Reserve table</button>
+</form>
+<p id="reservationFeedback"></p>
+<section id="reservationCard"></section>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}
+
+#reservationCard {
+  margin-top: 16px;
+}
+
+.reservation-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}`,
+      js: `const reservationForm = document.getElementById("reservationForm");
+const reservationFeedback = document.getElementById("reservationFeedback");
+const reservationCard = document.getElementById("reservationCard");
+
+reservationForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(reservationForm);
+  const reservation = {
+    name: String(formData.get("name") || "").trim(),
+    email: String(formData.get("email") || "").trim(),
+    time: String(formData.get("time") || ""),
+    guests: String(formData.get("guests") || "").trim(),
+  };
+
+  if (!reservation.name || !reservation.email || !reservation.time || !reservation.guests) {
+    reservationFeedback.textContent = "Please complete every reservation field.";
+    reservationCard.innerHTML = "";
+    return;
+  }
+
+  reservationFeedback.textContent = "Reservation ready to confirm.";
+  reservationCard.innerHTML = \`
+    <article class="reservation-card">
+      <h3>\${reservation.name}</h3>
+      <p>Email: \${reservation.email}</p>
+      <p>Time: \${reservation.time}</p>
+      <p>Guests: \${reservation.guests}</p>
+    </article>
+  \`;
+});`,
+    },
+  },
+  {
     id: "add-item-to-list",
     editorType: "web",
     title: "Challenge 8 — Add Item to List",
@@ -3445,6 +3829,622 @@ cartTotal.textContent = "Total: £" + total;`,
   });
 
   renderTodos();`,
+    },
+  },
+  {
+    id: "saved-favourites-localstorage",
+    editorType: "web",
+    title: "Challenge 0 — Save Favourites in localStorage",
+    difficulty: "Hard",
+    category: "JavaScript + localStorage",
+    goal: "Let the user save favourite resources and restore them from localStorage on refresh.",
+    requirements: [
+      "Render a list of resources from JavaScript data",
+      "Add a button to save or unsave favourites",
+      "Store favourite ids in localStorage",
+      "Load saved favourites when the page starts",
+      "Show a saved count in the UI",
+    ],
+    tips: [
+      "This is a common real-world pattern for saved articles, liked items, and wishlists.",
+      "Store only the ids in localStorage, not the whole DOM.",
+      "Re-render after each save so the button text stays honest.",
+    ],
+    concepts: [
+      "localStorage",
+      "JSON.stringify()",
+      "JSON.parse()",
+      "arrays of ids",
+      "UI state",
+    ],
+    suggestedApproach: [
+      "Create a resources array in JavaScript.",
+      "Read the saved ids from localStorage when the page loads.",
+      "Render cards with save buttons.",
+      "Toggle the saved ids and store them again after each click.",
+      "Update the count every time the UI re-renders.",
+    ],
+    commonMistakes: [
+      "Saving the whole object list when only ids are needed",
+      "Updating localStorage but forgetting to update the visible UI",
+      "Parsing invalid storage data without a safe fallback",
+    ],
+    expectedOutcome:
+      "A favourites interface that feels more like a real product because saved state survives a refresh.",
+    starter: {
+      html: `<p>Saved resources: <span id="savedCount">0</span></p>
+<section id="resourceGrid"></section>`,
+      css: `#resourceGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.resource-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `const savedCount = document.getElementById("savedCount");
+const resourceGrid = document.getElementById("resourceGrid");`,
+    },
+    solution: {
+      html: `<p>Saved resources: <span id="savedCount">0</span></p>
+<section id="resourceGrid"></section>`,
+      css: `#resourceGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.resource-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `const savedCount = document.getElementById("savedCount");
+const resourceGrid = document.getElementById("resourceGrid");
+
+const resources = [
+  { id: 1, title: "DOM events", level: "Builder" },
+  { id: 2, title: "Forms and validation", level: "Builder" },
+  { id: 3, title: "Async UI states", level: "Builder" },
+];
+
+function readSavedIds() {
+  try {
+    const raw = localStorage.getItem("saved-resource-ids");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+let savedIds = readSavedIds();
+
+function saveIds() {
+  localStorage.setItem("saved-resource-ids", JSON.stringify(savedIds));
+}
+
+function toggleSaved(resourceId) {
+  if (savedIds.includes(resourceId)) {
+    savedIds = savedIds.filter((id) => id !== resourceId);
+  } else {
+    savedIds = [...savedIds, resourceId];
+  }
+
+  saveIds();
+  renderResources();
+}
+
+function renderResources() {
+  savedCount.textContent = savedIds.length;
+  resourceGrid.innerHTML = resources
+    .map((resource) => {
+      const isSaved = savedIds.includes(resource.id);
+
+      return \`
+        <article class="resource-card">
+          <h3>\${resource.title}</h3>
+          <p>\${resource.level}</p>
+          <button data-id="\${resource.id}">
+            \${isSaved ? "Unsave" : "Save"}
+          </button>
+        </article>
+      \`;
+    })
+    .join("");
+
+  resourceGrid.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      toggleSaved(Number(button.dataset.id));
+    });
+  });
+}
+
+renderResources();`,
+    },
+  },
+  {
+    id: "cart-items-localstorage",
+    editorType: "web",
+    title: "Challenge 0 — Save Cart Items in localStorage",
+    difficulty: "Hard",
+    category: "JavaScript + localStorage",
+    goal: "Build a simple cart that saves added items in localStorage and restores them on refresh.",
+    requirements: [
+      "Render at least 3 products with Add to cart buttons",
+      "Store cart items in localStorage",
+      "Load saved cart items on page start",
+      "Show the cart count",
+      "Render the current cart items in a list",
+    ],
+    tips: [
+      "This is the same persistence idea as favourites, but in a cart context.",
+      "Keep the source products separate from the saved cart items.",
+      "Use JSON.stringify() and JSON.parse() because localStorage stores strings.",
+    ],
+    concepts: [
+      "localStorage",
+      "arrays of objects",
+      "rendering lists",
+      "UI state",
+      "JSON",
+    ],
+    suggestedApproach: [
+      "Create a small products array.",
+      "Read the saved cart from localStorage safely.",
+      "Add items to the cart when buttons are clicked.",
+      "Save and re-render after each change.",
+      "Show the cart count and the item names in a list.",
+    ],
+    commonMistakes: [
+      "Saving cart items without parsing them back on load",
+      "Updating localStorage but not the count or visible list",
+      "Replacing the whole cart accidentally when adding one item",
+    ],
+    expectedOutcome:
+      "A small ecommerce-style cart that proves the user understands saved state in a very common frontend feature.",
+    starter: {
+      html: `<p>Cart items: <span id="cartCount">0</span></p>
+<section id="shopGrid"></section>
+<ul id="cartItems"></ul>`,
+      css: `#shopGrid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.shop-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+}`,
+      js: `const cartCount = document.getElementById("cartCount");
+const shopGrid = document.getElementById("shopGrid");
+const cartItems = document.getElementById("cartItems");`,
+    },
+    solution: {
+      html: `<p>Cart items: <span id="cartCount">0</span></p>
+<section id="shopGrid"></section>
+<ul id="cartItems"></ul>`,
+      css: `#shopGrid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.shop-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+}`,
+      js: `const cartCount = document.getElementById("cartCount");
+const shopGrid = document.getElementById("shopGrid");
+const cartItems = document.getElementById("cartItems");
+
+const products = [
+  { id: 1, name: "UI Kit" },
+  { id: 2, name: "React Notes" },
+  { id: 3, name: "API Guide" },
+];
+
+function readCart() {
+  try {
+    const raw = localStorage.getItem("cart-items");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+let cart = readCart();
+
+function saveCart() {
+  localStorage.setItem("cart-items", JSON.stringify(cart));
+}
+
+function addToCart(product) {
+  cart = [...cart, product];
+  saveCart();
+  renderShop();
+}
+
+function renderShop() {
+  cartCount.textContent = cart.length;
+
+  shopGrid.innerHTML = products
+    .map(
+      (product) => \`
+        <article class="shop-card">
+          <h3>\${product.name}</h3>
+          <button data-id="\${product.id}">Add to cart</button>
+        </article>
+      \`
+    )
+    .join("");
+
+  cartItems.innerHTML = cart
+    .map((item) => "<li>" + item.name + "</li>")
+    .join("");
+
+  shopGrid.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const product = products.find((item) => item.id === Number(button.dataset.id));
+
+      if (product) {
+        addToCart(product);
+      }
+    });
+  });
+}
+
+renderShop();`,
+    },
+  },
+  {
+    id: "github-profile-finder",
+    editorType: "web",
+    title: "Challenge 0 — GitHub User Finder",
+    difficulty: "Hard",
+    category: "APIs",
+    goal: "Use fetch(), loading state, and search logic to find a GitHub-style user profile by username.",
+    requirements: [
+      "Create a search input and button",
+      "Use fetch() and response.json()",
+      "Show a loading state while the request runs",
+      "Search the returned profiles by username",
+      "Render the matching profile or a no-results message",
+    ],
+    tips: [
+      "This is a familiar app format for junior portfolios and take-home tests.",
+      "Fetch the data first, then search inside the returned array.",
+      "Keep the profile UI small but informative.",
+    ],
+    concepts: [
+      "fetch()",
+      "async/await",
+      "loading state",
+      "filtering",
+      "DOM rendering",
+    ],
+    suggestedApproach: [
+      "Create a small profiles data URL.",
+      "Handle the search click with an async function.",
+      "Set loading text before the request starts.",
+      "Find the matching profile and render it, or show a no-results message.",
+    ],
+    commonMistakes: [
+      "Searching before the async request finishes",
+      "Ignoring empty or missing matches",
+      "Updating the status text but forgetting to update the profile card",
+    ],
+    expectedOutcome:
+      "A GitHub-style finder that shows juniors how fetch, search, and result rendering connect in one mini app.",
+    starter: {
+      html: `<input id="profileSearch" placeholder="Search username" />
+<button id="profileBtn">Find profile</button>
+<p id="profileStatus"></p>
+<section id="profileResult"></section>`,
+      css: `#profileResult {
+  margin-top: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<input id="profileSearch" placeholder="Search username" />
+<button id="profileBtn">Find profile</button>
+<p id="profileStatus"></p>
+<section id="profileResult"></section>`,
+      css: `#profileResult {
+  margin-top: 16px;
+}
+
+.profile-result-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `const profileSearch = document.getElementById("profileSearch");
+const profileBtn = document.getElementById("profileBtn");
+const profileStatus = document.getElementById("profileStatus");
+const profileResult = document.getElementById("profileResult");
+
+const profiles = [
+  { username: "codeava", name: "Ava", followers: 340, bio: "Frontend learner building UI every day." },
+  { username: "reactnoah", name: "Noah", followers: 512, bio: "React, accessibility, and product thinking." },
+  { username: "lunalogs", name: "Luna", followers: 214, bio: "Learning async JavaScript and APIs." },
+];
+
+const apiUrl =
+  "data:application/json," + encodeURIComponent(JSON.stringify(profiles));
+
+profileBtn.addEventListener("click", async () => {
+  const query = profileSearch.value.trim().toLowerCase();
+
+  profileStatus.textContent = "Loading profile...";
+  profileResult.innerHTML = "";
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    const profile = data.find((item) =>
+      item.username.toLowerCase().includes(query)
+    );
+
+    if (!profile) {
+      profileStatus.textContent = "No profile found.";
+      return;
+    }
+
+    profileStatus.textContent = "Profile loaded.";
+    profileResult.innerHTML = \`
+      <article class="profile-result-card">
+        <h3>\${profile.name}</h3>
+        <p>@\${profile.username}</p>
+        <p>\${profile.bio}</p>
+        <strong>\${profile.followers} followers</strong>
+      </article>
+    \`;
+  } catch (error) {
+    profileStatus.textContent = "Something went wrong while loading profiles.";
+  }
+});`,
+    },
+  },
+  {
+    id: "weather-search-panel",
+    editorType: "web",
+    title: "Challenge 0 — Weather Search Panel",
+    difficulty: "Hard",
+    category: "APIs",
+    goal: "Build a weather-style search panel with fetch(), loading state, and a visible result card.",
+    requirements: [
+      "Create a city input and a search button",
+      "Use fetch() and await response.json()",
+      "Show a loading message",
+      "Render the matching city weather data",
+      "Show an error or empty message when nothing matches",
+    ],
+    tips: [
+      "Weather apps are a great way to explain async work: request starts, loading shows, result arrives.",
+      "Fetch a small array of city data, then search it.",
+      "Keep the final card focused on a few useful fields.",
+    ],
+    concepts: [
+      "fetch()",
+      "async/await",
+      "loading state",
+      "error state",
+      "data rendering",
+    ],
+    suggestedApproach: [
+      "Create a weather data URL in JavaScript.",
+      "Start the request inside an async click handler.",
+      "Show loading text before awaiting the response.",
+      "Find the city and render a small weather card or a no-results message.",
+    ],
+    commonMistakes: [
+      "Never clearing the old weather result before loading again",
+      "Searching the wrong field or comparing with the wrong case",
+      "Leaving the UI stuck on Loading after the request finishes",
+    ],
+    expectedOutcome:
+      "A weather-style mini app that teaches one of the most common async UI patterns in a friendly way.",
+    starter: {
+      html: `<input id="weatherInput" placeholder="Search city" />
+<button id="weatherBtn">Check weather</button>
+<p id="weatherStatus"></p>
+<section id="weatherCard"></section>`,
+      css: `#weatherCard {
+  margin-top: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<input id="weatherInput" placeholder="Search city" />
+<button id="weatherBtn">Check weather</button>
+<p id="weatherStatus"></p>
+<section id="weatherCard"></section>`,
+      css: `#weatherCard {
+  margin-top: 16px;
+}
+
+.weather-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+}`,
+      js: `const weatherInput = document.getElementById("weatherInput");
+const weatherBtn = document.getElementById("weatherBtn");
+const weatherStatus = document.getElementById("weatherStatus");
+const weatherCard = document.getElementById("weatherCard");
+
+const forecastData = [
+  { city: "London", temperature: "16C", condition: "Cloudy" },
+  { city: "Madrid", temperature: "24C", condition: "Sunny" },
+  { city: "Paris", temperature: "18C", condition: "Light rain" },
+];
+
+const weatherUrl =
+  "data:application/json," + encodeURIComponent(JSON.stringify(forecastData));
+
+weatherBtn.addEventListener("click", async () => {
+  const query = weatherInput.value.trim().toLowerCase();
+
+  weatherStatus.textContent = "Loading weather...";
+  weatherCard.innerHTML = "";
+
+  try {
+    const response = await fetch(weatherUrl);
+    const data = await response.json();
+    const forecast = data.find((item) =>
+      item.city.toLowerCase().includes(query)
+    );
+
+    if (!forecast) {
+      weatherStatus.textContent = "No weather data found for that city.";
+      return;
+    }
+
+    weatherStatus.textContent = "Forecast loaded.";
+    weatherCard.innerHTML = \`
+      <article class="weather-card">
+        <h3>\${forecast.city}</h3>
+        <p>Temperature: \${forecast.temperature}</p>
+        <p>Condition: \${forecast.condition}</p>
+      </article>
+    \`;
+  } catch (error) {
+    weatherStatus.textContent = "Something went wrong while loading weather data.";
+  }
+});`,
+    },
+  },
+  {
+    id: "recipe-search-app",
+    editorType: "web",
+    title: "Challenge 0 — Recipe Search App",
+    difficulty: "Hard",
+    category: "APIs",
+    goal: "Use fetch(), search, and map-style rendering to build a small recipe search app.",
+    requirements: [
+      "Create a search input and button",
+      "Use fetch() and response.json()",
+      "Show a loading state",
+      "Search recipe data by title or ingredient",
+      "Render the matching recipe cards",
+      "Show a no-results message when needed",
+    ],
+    tips: [
+      "This is a strong junior portfolio pattern because it mixes async work with visible UI.",
+      "You can search recipes by title and by ingredient.",
+      "Render the results from JavaScript data, not hardcoded cards.",
+    ],
+    concepts: [
+      "fetch()",
+      "async/await",
+      "filter()",
+      "map()",
+      "empty states",
+    ],
+    suggestedApproach: [
+      "Create a recipes data URL.",
+      "Start with loading text and clear the old results.",
+      "Fetch and parse the data, then filter it using the typed query.",
+      "Render cards for the matching recipes or a no-results message.",
+    ],
+    commonMistakes: [
+      "Filtering only the title when the ingredient should also count",
+      "Rendering stale results from the last search",
+      "Forgetting to show the empty state when nothing matches",
+    ],
+    expectedOutcome:
+      "A recipe search mini app that feels like a real frontend exercise instead of a one-line demo.",
+    starter: {
+      html: `<input id="recipeSearch" placeholder="Search recipes" />
+<button id="recipeBtn">Search recipes</button>
+<p id="recipeStatus"></p>
+<section id="recipeResults"></section>`,
+      css: `#recipeResults {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<input id="recipeSearch" placeholder="Search recipes" />
+<button id="recipeBtn">Search recipes</button>
+<p id="recipeStatus"></p>
+<section id="recipeResults"></section>`,
+      css: `#recipeResults {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.recipe-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: white;
+}`,
+      js: `const recipeSearch = document.getElementById("recipeSearch");
+const recipeBtn = document.getElementById("recipeBtn");
+const recipeStatus = document.getElementById("recipeStatus");
+const recipeResults = document.getElementById("recipeResults");
+
+const recipes = [
+  { id: 1, title: "Tomato Pasta", ingredient: "tomato", time: "20 min" },
+  { id: 2, title: "Chicken Wrap", ingredient: "chicken", time: "15 min" },
+  { id: 3, title: "Mango Smoothie", ingredient: "mango", time: "10 min" },
+];
+
+const recipeUrl =
+  "data:application/json," + encodeURIComponent(JSON.stringify(recipes));
+
+recipeBtn.addEventListener("click", async () => {
+  const query = recipeSearch.value.trim().toLowerCase();
+
+  recipeStatus.textContent = "Loading recipes...";
+  recipeResults.innerHTML = "";
+
+  try {
+    const response = await fetch(recipeUrl);
+    const data = await response.json();
+    const matches = data.filter((recipe) => {
+      return (
+        recipe.title.toLowerCase().includes(query) ||
+        recipe.ingredient.toLowerCase().includes(query)
+      );
+    });
+
+    if (matches.length === 0) {
+      recipeStatus.textContent = "No recipes found.";
+      return;
+    }
+
+    recipeStatus.textContent = "Recipes ready.";
+    recipeResults.innerHTML = matches
+      .map(
+        (recipe) => \`
+          <article class="recipe-card">
+            <h3>\${recipe.title}</h3>
+            <p>Main ingredient: \${recipe.ingredient}</p>
+            <p>Time: \${recipe.time}</p>
+          </article>
+        \`
+      )
+      .join("");
+  } catch (error) {
+    recipeStatus.textContent = "Something went wrong while loading recipes.";
+  }
+});`,
     },
   },
   {

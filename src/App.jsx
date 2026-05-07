@@ -1,19 +1,51 @@
 import { CheckCircle2, Menu } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ConceptPrimer from "./components/ConceptPrimer";
+import InterviewReflectionPanel from "./components/InterviewReflectionPanel";
+import ThemeToggle from "./components/ThemeToggle";
 import WorkspacePanel from "./components/WorkspacePanel";
 import BriefPanel from "./components/layout/BriefPanel";
 import ChallengeHeader from "./components/layout/ChallengeHeader";
 import SidebarDrawer from "./components/layout/SidebarDrawer";
-import ThemeToggle from "./components/ThemeToggle";
-import { getClassModules } from "./data/classes";
 import { challengeModes } from "./data/challenges/index.js";
+import { getClassModules } from "./data/classes";
+import { getInterviewAnswerLibrary } from "./data/interviewAnswers";
 import { getCopy, getLocalizedModes } from "./data/i18n";
 import useLocalStorage from "./hooks/useLocalStorage";
+import GuidedBuildPage from "./pages/GuidedBuildPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import InterviewAnswersPage from "./pages/InterviewAnswersPage.jsx";
 import { validateChallenge } from "./utils/validators";
 
+function formatTimeRemaining(milliseconds, language = "en") {
+  const totalSeconds = Math.max(Math.floor(milliseconds / 1000), 0);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const paddedMinutes = String(minutes).padStart(2, "0");
+  const paddedSeconds = String(seconds).padStart(2, "0");
+
+  if (hours > 0) {
+    return `${hours}:${paddedMinutes}:${paddedSeconds}`;
+  }
+
+  if (language === "es") {
+    return `${minutes}:${paddedSeconds}`;
+  }
+
+  return `${minutes}:${paddedSeconds}`;
+}
+
 export default function App() {
+  const [selectedGuideId, setSelectedGuideId] = useLocalStorage(
+    "practice-selected-guide",
+    null
+  );
+  const [selectedLearnPageId, setSelectedLearnPageId] = useLocalStorage(
+    "practice-selected-learn-page",
+    null
+  );
   const [selectedModeId, setSelectedModeId] = useLocalStorage(
     "practice-selected-mode",
     null
@@ -35,6 +67,19 @@ export default function App() {
     "challenge-progress",
     {}
   );
+  const [interviewMode, setInterviewMode] = useLocalStorage(
+    "practice-interview-mode",
+    "practice"
+  );
+  const [timedSessions, setTimedSessions] = useLocalStorage(
+    "practice-timed-sessions",
+    {}
+  );
+  const [interviewReflections, setInterviewReflections] = useLocalStorage(
+    "practice-interview-reflections",
+    {}
+  );
+  const [assessmentNow, setAssessmentNow] = useState(() => Date.now());
 
   const appCopy = useMemo(() => getCopy(language), [language]);
   const localizedModes = useMemo(
@@ -42,10 +87,15 @@ export default function App() {
     [language]
   );
   const classModules = useMemo(() => getClassModules(language), [language]);
+  const interviewAnswerLibrary = useMemo(
+    () => getInterviewAnswerLibrary(language),
+    [language]
+  );
 
   const selectedMode = useMemo(() => {
     return localizedModes.find((mode) => mode.id === selectedModeId) || null;
   }, [localizedModes, selectedModeId]);
+  const isInterviewTrack = selectedMode?.id === "interview";
 
   const selectedClass = useMemo(() => {
     const currentClass =
@@ -99,13 +149,69 @@ export default function App() {
       ? challenges[activeChallengeIndex + 1] || null
       : null;
 
+  const timeLimitMinutes = selectedClass?.timeLimitMinutes || 60;
+  const timedInterviewMode = isInterviewTrack && interviewMode === "timed";
+  const activeTimedSession =
+    timedInterviewMode && activeChallenge
+      ? timedSessions[activeChallenge.id] || null
+      : null;
+  const remainingAssessmentMs = timedInterviewMode
+    ? Math.max((activeTimedSession?.endsAt || 0) - assessmentNow, 0)
+    : 0;
+  const timedAssessmentFinished =
+    !timedInterviewMode ||
+    remainingAssessmentMs === 0 ||
+    Boolean(activeTimedSession?.finishedAt);
+  const currentReflection = activeChallenge
+    ? interviewReflections[activeChallenge.id] || {
+        summary: "",
+        decisions: "",
+        improve: "",
+      }
+    : { summary: "", decisions: "", improve: "" };
+
   const currentDraft = activeChallenge
     ? savedDrafts[activeChallenge.id] || activeChallenge.starter
     : { html: "", css: "", js: "" };
 
+  useEffect(() => {
+    if (!timedInterviewMode || !activeChallenge) return;
+
+    setTimedSessions((currentSessions) => {
+      if (currentSessions[activeChallenge.id]) return currentSessions;
+
+      const startedAt = Date.now();
+
+      return {
+        ...currentSessions,
+        [activeChallenge.id]: {
+          startedAt,
+          endsAt: startedAt + timeLimitMinutes * 60 * 1000,
+        },
+      };
+    });
+  }, [
+    timedInterviewMode,
+    activeChallenge,
+    timeLimitMinutes,
+    setTimedSessions,
+  ]);
+
+  useEffect(() => {
+    if (!timedInterviewMode) return;
+
+    const timer = window.setInterval(() => {
+      setAssessmentNow(Date.now());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [timedInterviewMode, activeChallenge?.id]);
+
   const handleSelectMode = (modeId) => {
     const nextMode = localizedModes.find((mode) => mode.id === modeId);
 
+    setSelectedGuideId(null);
+    setSelectedLearnPageId(null);
     setSelectedModeId(modeId);
     setSelectedClassId(null);
     setActiveId(nextMode?.challenges[0]?.id || "");
@@ -119,9 +225,31 @@ export default function App() {
 
     const firstClassChallenge = nextClass.challengeIds[0] || "";
 
+    setSelectedGuideId(null);
+    setSelectedLearnPageId(null);
     setSelectedModeId(nextClass.modeId);
     setSelectedClassId(nextClass.id);
     setActiveId(firstClassChallenge);
+    setSubmissionResult(null);
+    setDrawerOpen(false);
+  };
+
+  const handleOpenGuide = (guideId) => {
+    setSelectedGuideId(guideId);
+    setSelectedLearnPageId(null);
+    setSelectedModeId(null);
+    setSelectedClassId(null);
+    setActiveId("");
+    setSubmissionResult(null);
+    setDrawerOpen(false);
+  };
+
+  const handleOpenLearnPage = (learnPageId) => {
+    setSelectedLearnPageId(learnPageId);
+    setSelectedGuideId(null);
+    setSelectedModeId(null);
+    setSelectedClassId(null);
+    setActiveId("");
     setSubmissionResult(null);
     setDrawerOpen(false);
   };
@@ -157,6 +285,8 @@ export default function App() {
   };
 
   const handleBackHome = () => {
+    setSelectedGuideId(null);
+    setSelectedLearnPageId(null);
     setSelectedModeId(null);
     setSelectedClassId(null);
     setDrawerOpen(false);
@@ -169,6 +299,23 @@ export default function App() {
 
     const result = validateChallenge(activeChallenge, currentDraft, language);
     setSubmissionResult(result);
+
+    if (timedInterviewMode) {
+      setTimedSessions((currentSessions) => {
+        const existingSession = currentSessions[activeChallenge.id] || {
+          startedAt: Date.now(),
+          endsAt: Date.now() + timeLimitMinutes * 60 * 1000,
+        };
+
+        return {
+          ...currentSessions,
+          [activeChallenge.id]: {
+            ...existingSession,
+            finishedAt: Date.now(),
+          },
+        };
+      });
+    }
 
     if (result.status === "success") {
       setChallengeProgress((currentProgress) => ({
@@ -227,12 +374,51 @@ export default function App() {
     }));
   };
 
+  const handleReflectionChange = (field, value) => {
+    if (!activeChallenge) return;
+
+    setInterviewReflections((currentReflections) => ({
+      ...currentReflections,
+      [activeChallenge.id]: {
+        ...currentReflections[activeChallenge.id],
+        [field]: value,
+      },
+    }));
+  };
+
+  if (selectedGuideId) {
+    return (
+      <GuidedBuildPage
+        language={language}
+        onLanguageChange={setLanguage}
+        theme={theme}
+        onThemeChange={setTheme}
+        onBackHome={handleBackHome}
+      />
+    );
+  }
+
+  if (selectedLearnPageId) {
+    return (
+      <InterviewAnswersPage
+        language={language}
+        onLanguageChange={setLanguage}
+        theme={theme}
+        onThemeChange={setTheme}
+        onBackHome={handleBackHome}
+        categories={interviewAnswerLibrary}
+      />
+    );
+  }
+
   if (!selectedMode) {
     return (
       <div className="theme-root" data-theme={theme}>
         <HomePage
           modes={localizedModes}
           classModules={classModules}
+          onOpenGuide={handleOpenGuide}
+          onOpenLearnPage={handleOpenLearnPage}
           onSelectMode={handleSelectMode}
           onSelectClass={handleSelectClass}
           challengeProgress={challengeProgress}
@@ -241,6 +427,7 @@ export default function App() {
           onLanguageChange={setLanguage}
           theme={theme}
           onThemeChange={setTheme}
+          interviewAnswerLibrary={interviewAnswerLibrary}
         />
       </div>
     );
@@ -285,15 +472,53 @@ export default function App() {
                 ? `${selectedMode.title} - ${selectedClass.title}`
                 : appCopy.app.modeLabel(selectedMode.title)}
             </span>
-            {skippedPrimers[activeChallenge.id] && (
+            {isInterviewTrack && (
+              <div
+                className="assessment-mode-switch"
+                role="group"
+                aria-label={appCopy.assessment.modeLabel}
+              >
+                <button
+                  type="button"
+                  className={
+                    interviewMode === "practice"
+                      ? "secondary-btn active-toggle-btn"
+                      : "secondary-btn"
+                  }
+                  onClick={() => {
+                    setInterviewMode("practice");
+                    setSubmissionResult(null);
+                  }}
+                >
+                  {appCopy.assessment.practiceMode}
+                </button>
+                <button
+                  type="button"
+                  className={
+                    interviewMode === "timed"
+                      ? "secondary-btn active-toggle-btn"
+                      : "secondary-btn"
+                  }
+                  onClick={() => {
+                    setInterviewMode("timed");
+                    setSubmissionResult(null);
+                  }}
+                >
+                  {appCopy.assessment.timedMode}
+                </button>
+              </div>
+            )}
+            {!timedInterviewMode && skippedPrimers[activeChallenge.id] && (
               <button className="secondary-btn" onClick={handleShowPrimer}>
                 {appCopy.primer.reopen}
               </button>
             )}
-            <button className="secondary-btn" onClick={handleMarkComplete}>
-              <CheckCircle2 size={17} aria-hidden="true" />
-              {appCopy.app.markComplete}
-            </button>
+            {!timedInterviewMode && (
+              <button className="secondary-btn" onClick={handleMarkComplete}>
+                <CheckCircle2 size={17} aria-hidden="true" />
+                {appCopy.app.markComplete}
+              </button>
+            )}
             <ThemeToggle
               theme={theme}
               onChange={setTheme}
@@ -301,9 +526,50 @@ export default function App() {
             />
           </div>
 
-          <ChallengeHeader challenge={activeChallenge} copy={appCopy} />
+          <ChallengeHeader
+            challenge={activeChallenge}
+            copy={appCopy}
+            eyebrow={
+              timedInterviewMode
+                ? appCopy.header.interviewEyebrow
+                : appCopy.header.eyebrow
+            }
+            stepLabel={
+              selectedClass
+                ? appCopy.header.blockStep(
+                    activeChallengeIndex + 1,
+                    challenges.length
+                  )
+                : null
+            }
+          />
 
-          {!skippedPrimers[activeChallenge.id] && (
+          {timedInterviewMode && (
+            <section className="assessment-banner">
+              <div className="assessment-banner-copy">
+                <p className="eyebrow">{appCopy.assessment.badge}</p>
+                <h3>{appCopy.assessment.title}</h3>
+                <p>{appCopy.assessment.intro}</p>
+                <small>{appCopy.assessment.rules}</small>
+              </div>
+
+              <div className="assessment-banner-status">
+                <span className="status-pill">
+                  {remainingAssessmentMs === 0
+                    ? appCopy.assessment.timeFinished
+                    : appCopy.assessment.timeRunning}
+                </span>
+                <strong>
+                  {formatTimeRemaining(remainingAssessmentMs, language)}
+                </strong>
+                <span>
+                  {appCopy.assessment.timeLimit(timeLimitMinutes)}
+                </span>
+              </div>
+            </section>
+          )}
+
+          {!timedInterviewMode && !skippedPrimers[activeChallenge.id] && (
             <ConceptPrimer
               key={`primer-${activeChallenge.id}`}
               challenge={activeChallenge}
@@ -314,7 +580,7 @@ export default function App() {
           )}
 
           <div
-            key={`${selectedMode.id}:${activeChallenge.id}:${language}`}
+            key={`${selectedMode.id}:${activeChallenge.id}:${language}:${timedInterviewMode ? "timed" : "practice"}`}
             className="content-grid"
           >
             <BriefPanel
@@ -322,6 +588,7 @@ export default function App() {
               challenge={activeChallenge}
               copy={appCopy}
               language={language}
+              variant={timedInterviewMode ? "timed" : "default"}
             />
             <WorkspacePanel
               key={`workspace-${activeChallenge.id}`}
@@ -341,8 +608,22 @@ export default function App() {
               submissionResult={submissionResult}
               copy={appCopy}
               language={language}
+              solutionEnabled={timedAssessmentFinished}
+              solutionLockedReason={
+                timedInterviewMode && !timedAssessmentFinished
+                  ? appCopy.workspace.solutionLocked
+                  : ""
+              }
             />
           </div>
+
+          {timedInterviewMode && submissionResult && (
+            <InterviewReflectionPanel
+              value={currentReflection}
+              onChange={handleReflectionChange}
+              copy={appCopy}
+            />
+          )}
         </div>
       </div>
     </div>
