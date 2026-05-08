@@ -619,6 +619,257 @@ export const typescriptChallenges = [
     },
   },
   {
+    id: "ts-reducer-task-board",
+    editorType: "react-ts",
+    title: "Challenge 14 — Typed Reducer Task Board",
+    difficulty: "Hard",
+    category: "TypeScript + React",
+    goal:
+      "Use a typed reducer and typed action union so UI state changes stay explicit and safer as the feature grows.",
+    requirements: [
+      "Create a typed state shape for the tasks",
+      "Create a union type for the reducer actions",
+      "Use React.useReducer",
+      "Dispatch an action from the UI",
+      "Render updated task state on screen",
+    ],
+    tips: [
+      "Reducers become useful when one feature has several related state changes.",
+      "The action union should make it obvious which updates are allowed.",
+      "Keep the task board small so the reducer idea stays easy to follow.",
+    ],
+    concepts: [
+      "TypeScript",
+      "union types",
+      "state management",
+      "typed state",
+    ],
+    suggestedApproach: [
+      "Start with the task type and initial data.",
+      "Create one reducer action union for the allowed updates.",
+      "Use React.useReducer to manage the task array.",
+      "Render the count and task rows from the reducer state.",
+    ],
+    commonMistakes: [
+      "Creating a reducer but leaving the action shape too loose",
+      "Updating the state directly instead of returning new arrays",
+      "Dispatching actions but forgetting to render the changed state",
+    ],
+    expectedOutcome:
+      "A compact reducer example that feels much closer to real app state than a single isolated useState value.",
+    starter: {
+      html: ``,
+      css: `.task-board {\n  display: grid;\n  gap: 12px;\n}\n\n.task-row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 12px;\n  border: 1px solid #dbe3ef;\n  border-radius: 12px;\n  background: white;\n}`,
+      js: `function Challenge() {\n  return <section className="task-board"></section>;\n}`,
+    },
+    solution: {
+      html: ``,
+      css: `.task-board {\n  display: grid;\n  gap: 12px;\n}\n\n.task-row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 12px;\n  border: 1px solid #dbe3ef;\n  border-radius: 12px;\n  background: white;\n}\n\n.task-row p {\n  margin: 0;\n}\n\n.task-row.done {\n  border-color: #86efac;\n  background: #f0fdf4;\n}`,
+      js: `interface Task {\n  id: number;\n  title: string;\n  done: boolean;\n}\n\ntype Action =\n  | { type: "toggle"; id: number }\n  | { type: "markAllDone" };\n\nconst initialTasks: Task[] = [\n  { id: 1, title: "Type the props", done: true },\n  { id: 2, title: "Refactor the form state", done: false },\n  { id: 3, title: "Explain the API shape", done: false },\n];\n\nfunction taskReducer(state: Task[], action: Action): Task[] {\n  switch (action.type) {\n    case "toggle":\n      return state.map((task) =>\n        task.id === action.id ? { ...task, done: !task.done } : task\n      );\n    case "markAllDone":\n      return state.map((task) => ({ ...task, done: true }));\n    default:\n      return state;\n  }\n}\n\nfunction Challenge() {\n  const [tasks, dispatch] = React.useReducer(taskReducer, initialTasks);\n  const doneCount = tasks.filter((task) => task.done).length;\n\n  return (\n    <section className="task-board">\n      <p>\n        {doneCount} of {tasks.length} tasks complete\n      </p>\n      <button type="button" onClick={() => dispatch({ type: "markAllDone" })}>\n        Mark all done\n      </button>\n\n      {tasks.map((task) => (\n        <article className={\`task-row \${task.done ? "done" : ""}\`} key={task.id}>\n          <p>{task.title}</p>\n          <button\n            type="button"\n            onClick={() => dispatch({ type: "toggle", id: task.id })}\n          >\n            {task.done ? "Undo" : "Complete"}\n          </button>\n        </article>\n      ))}\n    </section>\n  );\n}`,
+    },
+  },
+  {
+    id: "ts-context-theme-panel",
+    editorType: "react-ts",
+    title: "Challenge 15 — Typed Context Theme Panel",
+    difficulty: "Hard",
+    category: "TypeScript + React",
+    goal:
+      "Create a typed context value so a small shared UI setting can be read safely by nested components.",
+    requirements: [
+      "Create a typed context value",
+      "Use React.createContext and React.useContext",
+      "Store the current theme in typed state",
+      "Read the shared value inside a child component",
+      "Let the user toggle the theme",
+    ],
+    tips: [
+      "Context works best when several nested parts need the same shared value.",
+      "The context type should describe both the current value and the action that updates it.",
+      "Keep the UI small and readable.",
+    ],
+    concepts: [
+      "TypeScript",
+      "Context API",
+      "typed state",
+      "components",
+    ],
+    suggestedApproach: [
+      "Create a theme union and a typed context shape.",
+      "Create the provider in the Challenge component.",
+      "Read the context from a nested child component.",
+      "Use one button to toggle the theme value.",
+    ],
+    commonMistakes: [
+      "Creating the context without typing the shared value",
+      "Reading the context before checking whether it exists",
+      "Keeping the theme only in one child instead of the shared provider",
+    ],
+    expectedOutcome:
+      "A small typed context example that helps learners explain when shared state should move beyond local props.",
+    starter: {
+      html: ``,
+      css: `.theme-shell {\n  padding: 18px;\n  border: 1px solid #dbe3ef;\n  border-radius: 18px;\n  background: white;\n}\n\n.theme-shell[data-theme="dark"] {\n  background: #0f172a;\n  color: white;\n}`,
+      js: `function Challenge() {\n  return <section className="theme-shell"></section>;\n}`,
+    },
+    solution: {
+      html: ``,
+      css: `.theme-shell {\n  display: grid;\n  gap: 12px;\n  padding: 18px;\n  border: 1px solid #dbe3ef;\n  border-radius: 18px;\n  background: white;\n}\n\n.theme-shell[data-theme="dark"] {\n  background: #0f172a;\n  color: white;\n}\n\n.theme-shell p {\n  margin: 0;\n}\n\nbutton {\n  width: fit-content;\n  padding: 12px 14px;\n  border: none;\n  border-radius: 12px;\n  background: #2563eb;\n  color: white;\n  font-weight: 700;\n}`,
+      js: `type Theme = "light" | "dark";\n\ninterface ThemeContextValue {\n  theme: Theme;\n  toggleTheme: () => void;\n}\n\nconst ThemeContext = React.createContext<ThemeContextValue | null>(null);\n\nfunction ThemeSummary() {\n  const context = React.useContext(ThemeContext);\n\n  if (!context) {\n    return null;\n  }\n\n  return (\n    <>\n      <p>Current theme: {context.theme}</p>\n      <button type="button" onClick={context.toggleTheme}>\n        Toggle theme\n      </button>\n    </>\n  );\n}\n\nfunction Challenge() {\n  const [theme, setTheme] = React.useState<Theme>("light");\n\n  const value: ThemeContextValue = {\n    theme,\n    toggleTheme: () =>\n      setTheme((currentTheme) =>\n        currentTheme === "light" ? "dark" : "light"\n      ),\n  };\n\n  return (\n    <ThemeContext.Provider value={value}>\n      <section className="theme-shell" data-theme={theme}>\n        <h2>Study preferences</h2>\n        <ThemeSummary />\n      </section>\n    </ThemeContext.Provider>\n  );\n}`,
+    },
+  },
+  {
+    id: "ts-discriminated-async-panel",
+    editorType: "react-ts",
+    title: "Challenge 16 — Discriminated Async State Panel",
+    difficulty: "Hard",
+    category: "TypeScript + Async",
+    goal:
+      "Model loading, success, and error states with a discriminated union so async UI branches stay explicit.",
+    requirements: [
+      "Create a union type for the async state",
+      "Store the async state in typed React state",
+      "Use async or await to load mock data",
+      "Render different UI for loading, success, and error",
+      "Show at least one typed success branch with rendered data",
+    ],
+    tips: [
+      "This is one of the best TypeScript habits for real async UI.",
+      "The shared status field helps TypeScript narrow each branch safely.",
+      "Use a small fake request so the state model stays easy to read.",
+    ],
+    concepts: [
+      "TypeScript",
+      "union types",
+      "typed state",
+      "async/await",
+      "error handling",
+    ],
+    suggestedApproach: [
+      "Define the different async state shapes first.",
+      "Create one fake request helper.",
+      "Update the state to loading before the request and success or error after it.",
+      "Render one clear branch for each status.",
+    ],
+    commonMistakes: [
+      "Using a plain string for status but leaving the data shape loose",
+      "Trying to read success data inside the loading or error branch",
+      "Forgetting to handle the error path cleanly",
+    ],
+    expectedOutcome:
+      "A typed async panel that looks much closer to production frontend state than a single loose loading boolean.",
+    starter: {
+      html: ``,
+      css: `.async-panel {\n  display: grid;\n  gap: 12px;\n}\n\n.lesson-row {\n  padding: 12px;\n  border: 1px solid #dbe3ef;\n  border-radius: 12px;\n  background: white;\n}`,
+      js: `function Challenge() {\n  return <section className="async-panel"></section>;\n}`,
+    },
+    solution: {
+      html: ``,
+      css: `.async-panel {\n  display: grid;\n  gap: 12px;\n}\n\n.actions {\n  display: flex;\n  gap: 10px;\n  flex-wrap: wrap;\n}\n\n.lesson-row {\n  padding: 12px;\n  border: 1px solid #dbe3ef;\n  border-radius: 12px;\n  background: white;\n}\n\nbutton {\n  padding: 12px 14px;\n  border: none;\n  border-radius: 12px;\n  background: #0f172a;\n  color: white;\n  font-weight: 700;\n}`,
+      js: `interface Lesson {\n  id: number;\n  title: string;\n}\n\ntype AsyncState =\n  | { status: "idle" }\n  | { status: "loading" }\n  | { status: "success"; items: Lesson[] }\n  | { status: "error"; message: string };\n\nconst lessons: Lesson[] = [\n  { id: 1, title: "Typed props pass" },\n  { id: 2, title: "Reducer action review" },\n  { id: 3, title: "Async UI state walkthrough" },\n];\n\nfunction loadLessons(shouldFail: boolean): Promise<Lesson[]> {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (shouldFail) {\n        reject(new Error("Lesson request failed."));\n        return;\n      }\n\n      resolve(lessons);\n    }, 500);\n  });\n}\n\nfunction Challenge() {\n  const [view, setView] = React.useState<AsyncState>({ status: "idle" });\n\n  async function handleLoad(shouldFail: boolean) {\n    setView({ status: "loading" });\n\n    try {\n      const items = await loadLessons(shouldFail);\n      setView({ status: "success", items });\n    } catch (error) {\n      setView({\n        status: "error",\n        message:\n          error instanceof Error ? error.message : "Something went wrong.",\n      });\n    }\n  }\n\n  return (\n    <section className="async-panel">\n      <div className="actions">\n        <button type="button" onClick={() => handleLoad(false)}>\n          Load lessons\n        </button>\n        <button type="button" onClick={() => handleLoad(true)}>\n          Simulate error\n        </button>\n      </div>\n\n      {view.status === "idle" ? <p>Choose a request to start.</p> : null}\n      {view.status === "loading" ? <p>Loading typed lessons...</p> : null}\n      {view.status === "error" ? <p>{view.message}</p> : null}\n\n      {view.status === "success"\n        ? view.items.map((lesson) => (\n            <article className="lesson-row" key={lesson.id}>\n              {lesson.title}\n            </article>\n          ))\n        : null}\n    </section>\n  );\n}`,
+    },
+  },
+  {
+    id: "ts-typed-route-details",
+    editorType: "react-ts",
+    title: "Challenge 17 — Typed Route Details",
+    difficulty: "Hard",
+    category: "TypeScript + React",
+    goal:
+      "Use React Router with typed data and a route param lookup so the learner practices a common real app pattern in TypeScript.",
+    requirements: [
+      "Use HashRouter, Routes, Route, and Link",
+      "Render links from typed data",
+      "Use useParams in the detail screen",
+      "Find the matching typed item from the route param",
+      "Show a clear fallback when no item is found",
+    ],
+    tips: [
+      "This is a realistic pattern for lessons, products, jobs, and user profile screens.",
+      "Type the data first, then look up the item from the route param.",
+      "Keep the layout small so the route idea stays central.",
+    ],
+    concepts: [
+      "TypeScript",
+      "routing",
+      "dynamic routes",
+      "typed data",
+    ],
+    suggestedApproach: [
+      "Create the typed lesson data.",
+      "Build a list screen with links.",
+      "Read the route param in the detail screen.",
+      "Render the matching lesson or a fallback message.",
+    ],
+    commonMistakes: [
+      "Using routes but not typed data for the lookup",
+      "Assuming the route param always matches a real item",
+      "Rendering links without a detail route to receive them",
+    ],
+    expectedOutcome:
+      "A typed route flow that feels much closer to actual frontend app work than a static page exercise.",
+    starter: {
+      html: ``,
+      css: `.route-board {\n  display: grid;\n  gap: 12px;\n}\n\n.route-card {\n  padding: 14px;\n  border: 1px solid #dbe3ef;\n  border-radius: 14px;\n  background: white;\n}`,
+      js: `function Challenge() {\n  return <section className="route-board"></section>;\n}`,
+    },
+    solution: {
+      html: ``,
+      css: `.route-board {\n  display: grid;\n  gap: 12px;\n}\n\n.route-card {\n  padding: 14px;\n  border: 1px solid #dbe3ef;\n  border-radius: 14px;\n  background: white;\n}\n\n.route-card h2,\n.route-card p {\n  margin: 0;\n}\n\n.route-card p {\n  margin-top: 6px;\n  color: #475569;\n}`,
+      js: `const { HashRouter, Routes, Route, Link, useParams } = ReactRouterDOM;\n\ninterface Lesson {\n  id: string;\n  title: string;\n  summary: string;\n}\n\nconst typedLessons: Lesson[] = [\n  { id: "props", title: "Typed props", summary: "Protect component inputs." },\n  { id: "async", title: "Typed async state", summary: "Model loading and error branches." },\n  { id: "routes", title: "Typed routes", summary: "Connect params to real data." },\n];\n\nfunction LessonList() {\n  return (\n    <section className="route-board">\n      {typedLessons.map((lesson) => (\n        <article className="route-card" key={lesson.id}>\n          <h2>{lesson.title}</h2>\n          <p>{lesson.summary}</p>\n          <Link to={\`/lesson/\${lesson.id}\`}>Open details</Link>\n        </article>\n      ))}\n    </section>\n  );\n}\n\nfunction LessonDetails() {\n  const params = useParams<{ lessonId: string }>();\n  const lesson = typedLessons.find((item) => item.id === params.lessonId);\n\n  if (!lesson) {\n    return <p>Lesson not found.</p>;\n  }\n\n  return (\n    <article className="route-card">\n      <h2>{lesson.title}</h2>\n      <p>{lesson.summary}</p>\n      <Link to="/">Back to list</Link>\n    </article>\n  );\n}\n\nfunction Challenge() {\n  return (\n    <HashRouter>\n      <Routes>\n        <Route path="/" element={<LessonList />} />\n        <Route path="/lesson/:lessonId" element={<LessonDetails />} />\n      </Routes>\n    </HashRouter>\n  );\n}`,
+    },
+  },
+  {
+    id: "ts-typed-localstorage-hook",
+    editorType: "react-ts",
+    title: "Challenge 18 — Typed localStorage Hook",
+    difficulty: "Hard",
+    category: "TypeScript + React",
+    goal:
+      "Create a small typed custom hook that syncs one value with localStorage and reuse it in the UI.",
+    requirements: [
+      "Create a reusable hook function",
+      "Use typed state inside the hook",
+      "Read from localStorage on first render",
+      "Write back to localStorage when the value changes",
+      "Use the hook from the Challenge component",
+    ],
+    tips: [
+      "A custom hook is a good place to hide repeat storage logic.",
+      "Keep the stored value simple so the hook stays readable.",
+      "Use JSON.parse and JSON.stringify so the stored value stays safe.",
+    ],
+    concepts: [
+      "TypeScript",
+      "typed state",
+      "useEffect",
+      "localStorage",
+    ],
+    suggestedApproach: [
+      "Create the hook with a typed generic or a typed value shape.",
+      "Read the stored value in the initial state function.",
+      "Write the value back with useEffect.",
+      "Use the hook to power a view-mode toggle in the UI.",
+    ],
+    commonMistakes: [
+      "Reading from localStorage on every render instead of once",
+      "Saving the value but not restoring it on reload",
+      "Creating the hook but still duplicating storage logic in the component",
+    ],
+    expectedOutcome:
+      "A reusable typed storage hook that feels like the kind of helper many teams write in real apps.",
+    starter: {
+      html: ``,
+      css: `.view-board {\n  display: grid;\n  gap: 12px;\n}\n\n.view-card {\n  padding: 14px;\n  border: 1px solid #dbe3ef;\n  border-radius: 14px;\n  background: white;\n}`,
+      js: `function Challenge() {\n  return <section className="view-board"></section>;\n}`,
+    },
+    solution: {
+      html: ``,
+      css: `.view-board {\n  display: grid;\n  gap: 12px;\n}\n\n.view-card {\n  padding: 14px;\n  border: 1px solid #dbe3ef;\n  border-radius: 14px;\n  background: white;\n}\n\nbutton {\n  width: fit-content;\n  padding: 12px 14px;\n  border: none;\n  border-radius: 12px;\n  background: #2563eb;\n  color: white;\n  font-weight: 700;\n}`,
+      js: `type ViewMode = "grid" | "list";\n\nfunction useStoredPreference<T>(key: string, initialValue: T) {\n  const [value, setValue] = React.useState<T>(() => {\n    try {\n      const raw = localStorage.getItem(key);\n      return raw ? (JSON.parse(raw) as T) : initialValue;\n    } catch (error) {\n      return initialValue;\n    }\n  });\n\n  React.useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(value));\n  }, [key, value]);\n\n  return [value, setValue] as const;\n}\n\nfunction Challenge() {\n  const [viewMode, setViewMode] = useStoredPreference<ViewMode>(\n    "ts-view-mode",\n    "grid"\n  );\n\n  return (\n    <section className="view-board">\n      <button\n        type="button"\n        onClick={() =>\n          setViewMode((currentMode) =>\n            currentMode === "grid" ? "list" : "grid"\n          )\n        }\n      >\n        Toggle view mode\n      </button>\n\n      <article className="view-card">\n        <h2>Saved preference</h2>\n        <p>Current view: {viewMode}</p>\n      </article>\n    </section>\n  );\n}`,
+    },
+  },
+  {
     id: "ts-all-in-one-dashboard-capstone",
     editorType: "react-ts",
     title: "Challenge 14 — TypeScript All-in-One Dashboard",

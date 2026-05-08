@@ -20,6 +20,7 @@ const classPhaseMap = {
   "class-36": "phase-05",
   "class-37": "phase-05",
   "class-38": "phase-05",
+  "class-40": "phase-05",
   "class-39": "phase-05",
   "class-18": "phase-06",
   "class-19": "phase-06",
@@ -189,6 +190,7 @@ const roadmapPhases = [
       "class-36",
       "class-37",
       "class-38",
+      "class-40",
       "class-39",
     ],
   },
@@ -675,6 +677,7 @@ const classSections = {
       challengeIds: [
         "destructure-profile-card",
         "spread-settings-merge",
+        "find-priority-ticket",
         "switch-role-permissions",
         "closure-counter-factory",
         "event-loop-order",
@@ -685,7 +688,12 @@ const classSections = {
         en: "Debugging and parsing",
         es: "Depuracion y parsing",
       },
-      challengeIds: ["try-catch-json-parser"],
+      challengeIds: [
+        "debug-broken-form-validation",
+        "try-catch-json-parser",
+        "debug-broken-localstorage-todos",
+        "debug-broken-async-search",
+      ],
     },
     {
       title: {
@@ -938,6 +946,37 @@ const classSections = {
         "ts-favourites-toggle-list",
         "ts-typed-search-results",
         "ts-refactor-feedback-board",
+      ],
+    },
+  ],
+  "class-40": [
+    {
+      title: {
+        en: "Shared typed state",
+        es: "Estado tipado compartido",
+      },
+      summary: {
+        en: "Move beyond small inputs into reducers and context, where TypeScript starts protecting larger UI patterns.",
+        es: "Ve mas alla de inputs pequenos hacia reducers y context, donde TypeScript empieza a proteger patrones de UI mas grandes.",
+      },
+      challengeIds: [
+        "ts-reducer-task-board",
+        "ts-context-theme-panel",
+      ],
+    },
+    {
+      title: {
+        en: "Typed app wiring",
+        es: "Cableado tipado de apps",
+      },
+      summary: {
+        en: "Model async states, typed routes, and reusable persistence helpers like the kind teams often expect in real apps.",
+        es: "Modela estados async, rutas tipadas y helpers reutilizables de persistencia como los que muchos equipos esperan en apps reales.",
+      },
+      challengeIds: [
+        "ts-discriminated-async-panel",
+        "ts-typed-route-details",
+        "ts-typed-localstorage-hook",
       ],
     },
   ],
@@ -1386,8 +1425,12 @@ const classModules = [
     challengeIds: [
       "destructure-profile-card",
       "spread-settings-merge",
+      "find-priority-ticket",
       "switch-role-permissions",
+      "debug-broken-form-validation",
       "try-catch-json-parser",
+      "debug-broken-localstorage-todos",
+      "debug-broken-async-search",
       "closure-counter-factory",
       "event-loop-order",
       "fetch-users-status-codes",
@@ -1802,8 +1845,44 @@ const classModules = [
     },
   },
   {
-    id: "class-39",
+    id: "class-40",
     number: "04",
+    modeId: "typescript",
+    challengeIds: [
+      "ts-reducer-task-board",
+      "ts-context-theme-panel",
+      "ts-discriminated-async-panel",
+      "ts-typed-route-details",
+      "ts-typed-localstorage-hook",
+    ],
+    title: {
+      en: "TypeScript app patterns and architecture",
+      es: "Patrones y arquitectura de apps con TypeScript",
+    },
+    summary: {
+      en: "This block brings TypeScript into reducers, context, typed async models, routing, and reusable hooks so the path feels much closer to modern team code.",
+      es: "Este bloque lleva TypeScript a reducers, context, modelos async tipados, routing y hooks reutilizables para que la ruta se parezca mucho mas al codigo de equipos reales.",
+    },
+    outcomes: {
+      en: [
+        "Use TypeScript with reducers and shared context",
+        "Model async state with safer unions",
+        "Type practical app wiring like routes and storage helpers",
+      ],
+      es: [
+        "Usar TypeScript con reducers y context compartido",
+        "Modelar estado async con unions mas seguras",
+        "Tipar cableado practico de app como rutas y helpers de storage",
+      ],
+    },
+    project: {
+      en: "A typed app patterns workshop",
+      es: "Un taller de patrones de app tipados",
+    },
+  },
+  {
+    id: "class-39",
+    number: "05",
     modeId: "typescript",
     challengeIds: ["ts-all-in-one-dashboard-capstone"],
     title: {

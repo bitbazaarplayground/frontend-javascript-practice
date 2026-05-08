@@ -1867,6 +1867,7 @@ function checkRequirement(requirement, source, challenge) {
   }
   if (text.includes("map")) return source.lowerJs.includes(".map(");
   if (text.includes("filter")) return source.lowerJs.includes(".filter(");
+  if (text.includes("find")) return source.lowerJs.includes(".find(");
   if (text.includes("sort")) return source.lowerJs.includes(".sort(");
   if (text.includes("reduce") || text.includes("total")) {
     return source.lowerJs.includes(".reduce(") || includesAny(source.lowerJs, ["total", "sum"]);
