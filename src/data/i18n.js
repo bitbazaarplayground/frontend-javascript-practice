@@ -694,6 +694,11 @@ const spanishTitleById = {
   "fluid-container-shell": "Contenedor fluido centrado",
   "polished-pricing-card": "Tarjeta de precios con pulido visual",
   "gradient-hero-callout": "Bloque hero con gradiente",
+  "find-priority-ticket": "Encontrar ticket prioritario con find()",
+  "debug-broken-form-validation": "Depurar validacion rota de formulario",
+  "debug-broken-localstorage-todos":
+    "Depurar todos rotos con localStorage",
+  "debug-broken-async-search": "Depurar busqueda asincrona rota",
   "debug-broken-profile-card-css": "Depurar CSS roto de una tarjeta de perfil",
   "debug-broken-navbar-layout": "Depurar layout roto de una navbar",
   "debug-broken-responsive-grid": "Depurar grid responsive roto",
@@ -712,6 +717,11 @@ const spanishTitleById = {
   "ts-favourites-toggle-list": "Lista de favoritos con toggle tipado",
   "ts-typed-search-results": "Resultados de busqueda tipados",
   "ts-refactor-feedback-board": "Refactor de tablero de feedback a TypeScript",
+  "ts-reducer-task-board": "Tablero de tareas con reducer tipado",
+  "ts-context-theme-panel": "Panel de tema con Context tipado",
+  "ts-discriminated-async-panel": "Panel async con estado tipado",
+  "ts-typed-route-details": "Detalle con ruta tipada",
+  "ts-typed-localstorage-hook": "Custom hook tipado con localStorage",
   "ts-all-in-one-dashboard-capstone":
     "Capstone de dashboard integral con TypeScript",
   "newsletter-signup-ui": "UI de suscripcion por email",
@@ -2244,6 +2254,19 @@ export const copy = {
       intro:
         "A free, guided, bilingual practice space for learning HTML, CSS, JavaScript, TypeScript, and React through classes, focused challenges, live preview, and saved progress.",
       dashboard: "Learning dashboard",
+      progressTransferEyebrow: "Progress transfer",
+      progressTransferTitle: "Move your progress between devices",
+      progressTransferIntro:
+        "Export one JSON file with your saved progress, drafts, preferences, interview notes, and current place in the course.",
+      progressTransferNote:
+        "Use export on one computer, then import that same file on the other one after you pull the latest code.",
+      exportProgress: "Export progress",
+      importProgress: "Import progress",
+      exportDone: (fileName) => `Progress exported as ${fileName}`,
+      importDone: (fileName) => `Progress imported from ${fileName}`,
+      importInvalid: "That file does not look like a valid progress export.",
+      importFailed: "I could not import that progress file.",
+      transferFailed: "I could not export your progress file.",
       guidedStudio: "Guided website studio",
       guidedStudioIntro:
         "For true beginners, start here. Milo walks through one complete page so learners can build while seeing how each section fits together.",
@@ -2519,6 +2542,19 @@ export const copy = {
       intro:
         "Un espacio gratuito, bilingue y guiado para aprender HTML, CSS, JavaScript, TypeScript y React con clases, retos enfocados, preview en vivo y progreso guardado.",
       dashboard: "Panel de aprendizaje",
+      progressTransferEyebrow: "Mover progreso",
+      progressTransferTitle: "Mueve tu progreso entre dispositivos",
+      progressTransferIntro:
+        "Exporta un archivo JSON con tu progreso guardado, borradores, preferencias, notas de entrevista y el punto actual del curso.",
+      progressTransferNote:
+        "Usa exportar en un ordenador y luego importa ese mismo archivo en el otro despues de hacer pull del codigo mas reciente.",
+      exportProgress: "Exportar progreso",
+      importProgress: "Importar progreso",
+      exportDone: (fileName) => `Progreso exportado como ${fileName}`,
+      importDone: (fileName) => `Progreso importado desde ${fileName}`,
+      importInvalid: "Ese archivo no parece una exportacion valida de progreso.",
+      importFailed: "No se pudo importar ese archivo de progreso.",
+      transferFailed: "No se pudo exportar el archivo de progreso.",
       guidedStudio: "Taller guiado de paginas web",
       guidedStudioIntro:
         "Si alguien empieza desde cero, este es el mejor punto de entrada. Milo acompana una pagina completa para que se vea como encajan las secciones mientras se construyen.",

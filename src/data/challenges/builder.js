@@ -5298,6 +5298,132 @@ settingsCard.innerHTML =
     },
   },
   {
+    id: "find-priority-ticket",
+    editorType: "web",
+    title: "Challenge 0 — Find a Priority Ticket",
+    difficulty: "Medium",
+    category: "Core JavaScript",
+    goal: "Use find() on an array of objects and render one matching support ticket in the UI.",
+    requirements: [
+      "Create an array of ticket objects",
+      "Use find() to get the selected ticket",
+      "Render one matching ticket card",
+      "Show a fallback message if no ticket is found",
+    ],
+    tips: [
+      "find() returns one matching item instead of a whole filtered array.",
+      "Use the current select value as the lookup id.",
+      "Render a small fallback so the UI still makes sense when nothing matches.",
+    ],
+    concepts: [
+      "arrays",
+      "objects",
+      "find()",
+      "DOM rendering",
+    ],
+    suggestedApproach: [
+      "Create the ticket data first.",
+      "Read the current ticket id from the select element.",
+      "Use find() to get the matching object.",
+      "Render the ticket details or a clear fallback message.",
+    ],
+    commonMistakes: [
+      "Using filter() when you only need one item",
+      "Comparing a string select value to a number without converting it",
+      "Finding the ticket but not updating the visible UI",
+    ],
+    expectedOutcome:
+      "A small ticket lookup panel that makes the difference between find() and filter() feel practical.",
+    starter: {
+      html: `<label>
+  Priority ticket
+  <select id="ticketSelect">
+    <option value="101">Ticket 101</option>
+    <option value="102">Ticket 102</option>
+    <option value="103">Ticket 103</option>
+  </select>
+</label>
+
+<section id="ticketCard"></section>`,
+      css: `label {
+  display: grid;
+  gap: 8px;
+  max-width: 260px;
+}
+
+#ticketCard {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: white;
+}`,
+      js: `const ticketSelect = document.getElementById("ticketSelect");
+const ticketCard = document.getElementById("ticketCard");`,
+    },
+    solution: {
+      html: `<label>
+  Priority ticket
+  <select id="ticketSelect">
+    <option value="101">Ticket 101</option>
+    <option value="102">Ticket 102</option>
+    <option value="103">Ticket 103</option>
+  </select>
+</label>
+
+<section id="ticketCard"></section>`,
+      css: `label {
+  display: grid;
+  gap: 8px;
+  max-width: 260px;
+}
+
+#ticketCard {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: white;
+}
+
+#ticketCard h2,
+#ticketCard p {
+  margin: 0;
+}
+
+#ticketCard p + p {
+  margin-top: 6px;
+  color: #475569;
+}`,
+      js: `const ticketSelect = document.getElementById("ticketSelect");
+const ticketCard = document.getElementById("ticketCard");
+
+const tickets = [
+  { id: 101, title: "Payment button inactive", owner: "Mila", priority: "High" },
+  { id: 102, title: "Menu image is stretched", owner: "Jon", priority: "Medium" },
+  { id: 103, title: "Search placeholder missing", owner: "Asha", priority: "Low" },
+];
+
+function renderTicket() {
+  const selectedId = Number(ticketSelect.value);
+  const ticket = tickets.find((item) => item.id === selectedId);
+
+  if (!ticket) {
+    ticketCard.innerHTML = "<p>No ticket found.</p>";
+    return;
+  }
+
+  ticketCard.innerHTML =
+    "<h2>" + ticket.title + "</h2>" +
+    "<p>Owner: " + ticket.owner + "</p>" +
+    "<p>Priority: " + ticket.priority + "</p>";
+}
+
+ticketSelect.addEventListener("change", renderTicket);
+renderTicket();`,
+    },
+  },
+  {
     id: "switch-role-permissions",
     editorType: "web",
     title: "Challenge 32 — Role Permissions with switch",
@@ -5470,6 +5596,341 @@ parseBtn.addEventListener("click", () => {
   } catch (error) {
     result.textContent = "Invalid JSON: " + error.message;
   }
+});`,
+    },
+  },
+  {
+    id: "debug-broken-form-validation",
+    editorType: "web",
+    title: "Challenge 0 — Debug Broken Form Validation",
+    difficulty: "Medium",
+    category: "Debugging",
+    goal: "Repair a broken contact form so empty fields show an error and a valid submission shows success.",
+    requirements: [
+      "Prevent the form from reloading the page",
+      "Read the name and email values",
+      "Show an error when a field is empty",
+      "Show a success message when the form is valid",
+    ],
+    tips: [
+      "A lot of junior debugging work is simple but important form behavior like this.",
+      "Check the event first, then the values, then the visible message.",
+      "Start by making the empty state work before the success state.",
+    ],
+    concepts: [
+      "form submission",
+      "validation",
+      "debugging",
+      "DOM updates",
+    ],
+    suggestedApproach: [
+      "Read the existing submit handler carefully.",
+      "Fix the parts that stop validation from working.",
+      "Show one clear error message when fields are empty.",
+      "Show one clear success message when the values are valid.",
+    ],
+    commonMistakes: [
+      "Updating the values but forgetting preventDefault()",
+      "Checking the wrong variable names",
+      "Fixing the logic but not updating the visible message",
+    ],
+    expectedOutcome:
+      "A repaired form that behaves like a very common junior assessment task: validate, submit, and explain the fix.",
+    starter: {
+      html: `<form id="contactForm">
+  <input id="nameInput" placeholder="Name" />
+  <input id="emailInput" placeholder="Email" />
+  <button type="submit">Send</button>
+</form>
+
+<p id="message"></p>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 320px;
+}`,
+      js: `const contactForm = document.getElementById("contactForm");
+const nameInput = document.getElementById("nameInput");
+const emailInput = document.getElementById("emailInput");
+const message = document.getElementById("message");
+
+contactForm.addEventListener("submit", (event) => {
+  const name = nameInput.value;
+  const email = emailInput.value;
+
+  if (name && email) {
+    message.textContent = "Please complete every field.";
+    return;
+  }
+
+  message.textContent = "Form sent successfully.";
+});`,
+    },
+    solution: {
+      html: `<form id="contactForm">
+  <input id="nameInput" placeholder="Name" />
+  <input id="emailInput" placeholder="Email" />
+  <button type="submit">Send</button>
+</form>
+
+<p id="message"></p>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 320px;
+}`,
+      js: `const contactForm = document.getElementById("contactForm");
+const nameInput = document.getElementById("nameInput");
+const emailInput = document.getElementById("emailInput");
+const message = document.getElementById("message");
+
+contactForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+
+  if (!name || !email) {
+    message.textContent = "Please complete every field.";
+    return;
+  }
+
+  message.textContent = "Form sent successfully.";
+});`,
+    },
+  },
+  {
+    id: "debug-broken-localstorage-todos",
+    editorType: "web",
+    title: "Challenge 0 — Debug Broken localStorage Todos",
+    difficulty: "Hard",
+    category: "Debugging",
+    goal: "Repair a todo list so saved items render correctly after refresh and new todos stay in sync with localStorage.",
+    requirements: [
+      "Read saved todos from localStorage safely",
+      "Render the todo list on page load",
+      "Add new todos to the list",
+      "Save the updated todos back to localStorage",
+    ],
+    tips: [
+      "This kind of bug is common because localStorage only stores strings.",
+      "Fix the data flow first: read, render, update, save.",
+      "Try to keep one render function and one save step.",
+    ],
+    concepts: [
+      "localStorage",
+      "JSON.parse()",
+      "JSON.stringify()",
+      "debugging",
+    ],
+    suggestedApproach: [
+      "Repair the initial load from localStorage.",
+      "Keep todos in one JavaScript array.",
+      "Render that array after every change.",
+      "Save the updated array back with JSON.stringify().",
+    ],
+    commonMistakes: [
+      "Reading localStorage but forgetting to parse the saved string",
+      "Saving the updated array but never re-rendering it",
+      "Using one key to save and another key to load",
+    ],
+    expectedOutcome:
+      "A repaired persistence flow that feels much closer to real debugging work than a blank-page build.",
+    starter: {
+      html: `<input id="todoInput" placeholder="New todo" />
+<button id="addTodoBtn" type="button">Add todo</button>
+<ul id="todoList"></ul>`,
+      css: `li {
+  margin: 8px 0;
+}`,
+      js: `const todoInput = document.getElementById("todoInput");
+const addTodoBtn = document.getElementById("addTodoBtn");
+const todoList = document.getElementById("todoList");
+
+let todos = localStorage.getItem("debug-todos") || [];
+
+function renderTodos() {
+  todoList.innerHTML = todos
+    .map((todo) => "<li>" + todo + "</li>")
+    .join("");
+}
+
+addTodoBtn.addEventListener("click", () => {
+  todos.push(todoInput.value);
+  localStorage.setItem("debug-todos", todos);
+});
+
+renderTodos();`,
+    },
+    solution: {
+      html: `<input id="todoInput" placeholder="New todo" />
+<button id="addTodoBtn" type="button">Add todo</button>
+<ul id="todoList"></ul>`,
+      css: `li {
+  margin: 8px 0;
+}`,
+      js: `const todoInput = document.getElementById("todoInput");
+const addTodoBtn = document.getElementById("addTodoBtn");
+const todoList = document.getElementById("todoList");
+
+function readTodos() {
+  try {
+    const raw = localStorage.getItem("debug-todos");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+let todos = readTodos();
+
+function renderTodos() {
+  todoList.innerHTML = todos
+    .map((todo) => "<li>" + todo + "</li>")
+    .join("");
+}
+
+addTodoBtn.addEventListener("click", () => {
+  const value = todoInput.value.trim();
+
+  if (!value) {
+    return;
+  }
+
+  todos.push(value);
+  localStorage.setItem("debug-todos", JSON.stringify(todos));
+  todoInput.value = "";
+  renderTodos();
+});
+
+renderTodos();`,
+    },
+  },
+  {
+    id: "debug-broken-async-search",
+    editorType: "web",
+    title: "Challenge 0 — Debug Broken Async Search",
+    difficulty: "Hard",
+    category: "Debugging",
+    goal: "Repair a broken async search flow so loading, success, and empty results behave clearly.",
+    requirements: [
+      "Use async or await in the click handler",
+      "Show a loading message while the request is running",
+      "Render the matching results after the request finishes",
+      "Show a no-results message when nothing matches",
+    ],
+    tips: [
+      "Many async bugs come from treating a promise like finished data.",
+      "Check what should happen before, during, and after the request.",
+      "Clear the old results when a new search begins.",
+    ],
+    concepts: [
+      "async/await",
+      "loading state",
+      "debugging",
+      "DOM updates",
+    ],
+    suggestedApproach: [
+      "Read the broken search flow from top to bottom.",
+      "Fix the click handler so it waits for the promise.",
+      "Render loading first, then results or an empty message.",
+      "Make sure the old output is cleared between searches.",
+    ],
+    commonMistakes: [
+      "Trying to map a promise instead of the resolved data",
+      "Leaving the previous results on screen while loading",
+      "Handling success but forgetting the empty state",
+    ],
+    expectedOutcome:
+      "A repaired async search that helps learners explain request timing and UI feedback more confidently.",
+    starter: {
+      html: `<input id="searchInput" placeholder="Search courses" />
+<button id="searchBtn" type="button">Search</button>
+<p id="status">Search for a course.</p>
+<ul id="results"></ul>`,
+      css: `li {
+  margin: 8px 0;
+}`,
+      js: `const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const status = document.getElementById("status");
+const results = document.getElementById("results");
+
+const courses = ["HTML Foundations", "React State", "TypeScript Basics"];
+
+function searchCourses(query) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(
+        courses.filter((course) =>
+          course.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }, 500);
+  });
+}
+
+searchBtn.addEventListener("click", () => {
+  const query = searchInput.value.trim();
+  const matches = searchCourses(query);
+
+  status.textContent = "Search complete.";
+  results.innerHTML = matches
+    .map((course) => "<li>" + course + "</li>")
+    .join("");
+});`,
+    },
+    solution: {
+      html: `<input id="searchInput" placeholder="Search courses" />
+<button id="searchBtn" type="button">Search</button>
+<p id="status">Search for a course.</p>
+<ul id="results"></ul>`,
+      css: `li {
+  margin: 8px 0;
+}`,
+      js: `const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const status = document.getElementById("status");
+const results = document.getElementById("results");
+
+const courses = ["HTML Foundations", "React State", "TypeScript Basics"];
+
+function searchCourses(query) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(
+        courses.filter((course) =>
+          course.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }, 500);
+  });
+}
+
+searchBtn.addEventListener("click", async () => {
+  const query = searchInput.value.trim();
+
+  if (!query) {
+    status.textContent = "Search for a course.";
+    results.innerHTML = "";
+    return;
+  }
+
+  status.textContent = "Loading results...";
+  results.innerHTML = "";
+
+  const matches = await searchCourses(query);
+
+  if (matches.length === 0) {
+    status.textContent = "No results found.";
+    return;
+  }
+
+  status.textContent = "Search complete.";
+  results.innerHTML = matches
+    .map((course) => "<li>" + course + "</li>")
+    .join("");
 });`,
     },
   },

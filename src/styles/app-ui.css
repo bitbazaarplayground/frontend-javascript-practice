@@ -158,6 +158,86 @@
   align-items: center;
 }
 
+.progress-transfer-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) auto;
+  gap: 22px;
+  padding: 22px;
+  align-items: center;
+}
+
+.progress-transfer-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.progress-transfer-copy h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.progress-transfer-body,
+.progress-transfer-note,
+.progress-transfer-status {
+  margin: 0;
+}
+
+.progress-transfer-body {
+  max-width: 760px;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.progress-transfer-note {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.progress-transfer-actions {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
+.progress-transfer-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.progress-transfer-status.success {
+  color: var(--success);
+  background: rgba(21, 128, 61, 0.08);
+  border-color: rgba(21, 128, 61, 0.2);
+}
+
+.progress-transfer-status.error {
+  color: var(--danger);
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.18);
+}
+
+.sr-only-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .guide-entry-copy {
   display: grid;
   gap: 16px;
@@ -1502,6 +1582,7 @@
 [data-theme="blue"] .class-card,
 [data-theme="blue"] .mode-card,
 [data-theme="blue"] .guide-entry-card,
+[data-theme="blue"] .progress-transfer-card,
 [data-theme="blue"] .stat-item,
 [data-theme="blue"] .track-summary {
   border-radius: 24px;
@@ -1510,6 +1591,7 @@
 [data-theme="blue"] .class-card,
 [data-theme="blue"] .mode-card,
 [data-theme="blue"] .guide-entry-card,
+[data-theme="blue"] .progress-transfer-card,
 [data-theme="blue"] .stat-item,
 [data-theme="blue"] .track-summary,
 [data-theme="blue"] .language-toggle,
@@ -1576,8 +1658,14 @@
 [data-theme="blue"] .learn-answer-pane-accent,
 [data-theme="blue"] .compare-note-warning,
 [data-theme="blue"] .knowledge-score-banner,
-[data-theme="blue"] .knowledge-feedback-card-accent {
+[data-theme="blue"] .knowledge-feedback-card-accent,
+[data-theme="blue"] .progress-transfer-status.success {
   background: rgba(124, 92, 255, 0.12);
+}
+
+[data-theme="blue"] .progress-transfer-status.error {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.28);
 }
 
 [data-theme="blue"] .guide-callout-card code {
@@ -1647,12 +1735,17 @@
   }
 
   .guide-entry-card,
+  .progress-transfer-card,
   .milo-guide {
     grid-template-columns: 1fr;
   }
 
   .guide-entry-actions {
     justify-content: flex-start;
+  }
+
+  .progress-transfer-actions {
+    justify-items: start;
   }
 
   .guided-theme-row {

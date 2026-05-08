@@ -3,10 +3,12 @@ import {
   BookOpen,
   CheckCircle2,
   Code2,
+  Download,
   GraduationCap,
   PlayCircle,
+  Upload,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import LanguageToggle from "../components/LanguageToggle";
 import MiloGuide from "../components/MiloGuide";
 import ThemeToggle from "../components/ThemeToggle";
@@ -81,8 +83,12 @@ export default function HomePage({
   theme = "light",
   onThemeChange,
   interviewAnswerLibrary = [],
+  onExportProgress,
+  onImportProgress,
+  progressTransferStatus = null,
 }) {
   const [selectedHomeModeId, setSelectedHomeModeId] = useState(null);
+  const importInputRef = useRef(null);
   const dashboardStats = getDashboardStats(
     modes,
     classModules,
@@ -104,6 +110,12 @@ export default function HomePage({
 
   const selectedModeGroup =
     modulesByMode.find(({ mode }) => mode.id === selectedHomeModeId) || null;
+
+  const handleOpenImport = () => {
+    if (!importInputRef.current) return;
+    importInputRef.current.value = "";
+    importInputRef.current.click();
+  };
 
   return (
     <main className="home-page">
@@ -162,6 +174,63 @@ export default function HomePage({
             <span>{copy.home.completed}</span>
           </div>
         </div>
+      </section>
+
+      <section className="home-section">
+        <article className="panel progress-transfer-card">
+          <div className="progress-transfer-copy">
+            <div>
+              <p className="eyebrow">{copy.home.progressTransferEyebrow}</p>
+              <h2>{copy.home.progressTransferTitle}</h2>
+            </div>
+            <p className="progress-transfer-body">
+              {copy.home.progressTransferIntro}
+            </p>
+            <p className="progress-transfer-note">
+              {copy.home.progressTransferNote}
+            </p>
+            {progressTransferStatus && (
+              <p
+                className={`progress-transfer-status ${progressTransferStatus.tone}`}
+                role="status"
+              >
+                {progressTransferStatus.message}
+              </p>
+            )}
+          </div>
+
+          <div className="progress-transfer-actions">
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={onExportProgress}
+            >
+              <Download size={17} aria-hidden="true" />
+              {copy.home.exportProgress}
+            </button>
+
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={handleOpenImport}
+            >
+              <Upload size={17} aria-hidden="true" />
+              {copy.home.importProgress}
+            </button>
+
+            <input
+              ref={importInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="sr-only-input"
+              onChange={(event) => {
+                const file = event.target.files?.[0] || null;
+                onImportProgress?.(file);
+                event.target.value = "";
+              }}
+            />
+          </div>
+        </article>
       </section>
 
       <section className="home-section">

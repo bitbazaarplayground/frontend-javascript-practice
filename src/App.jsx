@@ -17,6 +17,25 @@ import HomePage from "./pages/HomePage.jsx";
 import InterviewAnswersPage from "./pages/InterviewAnswersPage.jsx";
 import { validateChallenge } from "./utils/validators";
 
+const PROGRESS_EXPORT_VERSION = 1;
+
+function readStoredJson(key) {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredJson(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error("Error writing imported localStorage key:", key, error);
+  }
+}
+
 function formatTimeRemaining(milliseconds, language = "en") {
   const totalSeconds = Math.max(Math.floor(milliseconds / 1000), 0);
   const hours = Math.floor(totalSeconds / 3600);
@@ -80,6 +99,7 @@ export default function App() {
     {}
   );
   const [assessmentNow, setAssessmentNow] = useState(() => Date.now());
+  const [progressTransferStatus, setProgressTransferStatus] = useState(null);
 
   const appCopy = useMemo(() => getCopy(language), [language]);
   const localizedModes = useMemo(
@@ -252,6 +272,203 @@ export default function App() {
     setActiveId("");
     setSubmissionResult(null);
     setDrawerOpen(false);
+  };
+
+  const handleExportProgress = () => {
+    try {
+      const payload = {
+        kind: "frontend-practice-progress",
+        version: PROGRESS_EXPORT_VERSION,
+        exportedAt: new Date().toISOString(),
+        data: {
+          language,
+          theme,
+          selectedGuideId,
+          selectedLearnPageId,
+          selectedModeId,
+          selectedClassId,
+          activeId,
+          skippedPrimers,
+          savedDrafts,
+          challengeProgress,
+          interviewMode,
+          timedSessions,
+          interviewReflections,
+          guidedBuildState: readStoredJson("guided-build-state"),
+          guidedBuildPreviewViewport: readStoredJson(
+            "guided-build-preview-viewport"
+          ),
+        },
+      };
+
+      const fileName = `frontend-practice-progress-${new Date()
+        .toISOString()
+        .slice(0, 10)}.json`;
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {
+        type: "application/json",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setProgressTransferStatus({
+        tone: "success",
+        message: appCopy.home.exportDone(fileName),
+      });
+    } catch {
+      setProgressTransferStatus({
+        tone: "error",
+        message: appCopy.home.transferFailed,
+      });
+    }
+  };
+
+  const handleImportProgress = async (file) => {
+    if (!file) return;
+
+    try {
+      const raw = await file.text();
+      const parsed = JSON.parse(raw);
+
+      if (
+        parsed?.kind !== "frontend-practice-progress" ||
+        !parsed?.data ||
+        typeof parsed.data !== "object"
+      ) {
+        setProgressTransferStatus({
+          tone: "error",
+          message: appCopy.home.importInvalid,
+        });
+        return;
+      }
+
+      const imported = parsed.data;
+
+      if (typeof imported.language === "string") {
+        setLanguage(imported.language);
+      }
+
+      if (typeof imported.theme === "string") {
+        setTheme(imported.theme);
+      }
+
+      if (
+        imported.selectedGuideId === null ||
+        typeof imported.selectedGuideId === "string"
+      ) {
+        setSelectedGuideId(imported.selectedGuideId);
+      }
+
+      if (
+        imported.selectedLearnPageId === null ||
+        typeof imported.selectedLearnPageId === "string"
+      ) {
+        setSelectedLearnPageId(imported.selectedLearnPageId);
+      }
+
+      if (
+        imported.selectedModeId === null ||
+        typeof imported.selectedModeId === "string"
+      ) {
+        setSelectedModeId(imported.selectedModeId);
+      }
+
+      if (
+        imported.selectedClassId === null ||
+        typeof imported.selectedClassId === "string"
+      ) {
+        setSelectedClassId(imported.selectedClassId);
+      }
+
+      if (typeof imported.activeId === "string") {
+        setActiveId(imported.activeId);
+      }
+
+      if (
+        imported.skippedPrimers &&
+        typeof imported.skippedPrimers === "object" &&
+        !Array.isArray(imported.skippedPrimers)
+      ) {
+        setSkippedPrimers(imported.skippedPrimers);
+      }
+
+      if (
+        imported.savedDrafts &&
+        typeof imported.savedDrafts === "object" &&
+        !Array.isArray(imported.savedDrafts)
+      ) {
+        setSavedDrafts(imported.savedDrafts);
+      }
+
+      if (
+        imported.challengeProgress &&
+        typeof imported.challengeProgress === "object" &&
+        !Array.isArray(imported.challengeProgress)
+      ) {
+        setChallengeProgress(imported.challengeProgress);
+      }
+
+      if (
+        typeof imported.interviewMode === "string" &&
+        (imported.interviewMode === "practice" ||
+          imported.interviewMode === "timed")
+      ) {
+        setInterviewMode(imported.interviewMode);
+      }
+
+      if (
+        imported.timedSessions &&
+        typeof imported.timedSessions === "object" &&
+        !Array.isArray(imported.timedSessions)
+      ) {
+        setTimedSessions(imported.timedSessions);
+      }
+
+      if (
+        imported.interviewReflections &&
+        typeof imported.interviewReflections === "object" &&
+        !Array.isArray(imported.interviewReflections)
+      ) {
+        setInterviewReflections(imported.interviewReflections);
+      }
+
+      if (
+        imported.guidedBuildState &&
+        typeof imported.guidedBuildState === "object" &&
+        !Array.isArray(imported.guidedBuildState)
+      ) {
+        writeStoredJson("guided-build-state", imported.guidedBuildState);
+      }
+
+      if (
+        typeof imported.guidedBuildPreviewViewport === "string" &&
+        (imported.guidedBuildPreviewViewport === "desktop" ||
+          imported.guidedBuildPreviewViewport === "mobile")
+      ) {
+        writeStoredJson(
+          "guided-build-preview-viewport",
+          imported.guidedBuildPreviewViewport
+        );
+      }
+
+      setSubmissionResult(null);
+      setDrawerOpen(false);
+      setAssessmentNow(Date.now());
+      setProgressTransferStatus({
+        tone: "success",
+        message: appCopy.home.importDone(file.name),
+      });
+    } catch {
+      setProgressTransferStatus({
+        tone: "error",
+        message: appCopy.home.importFailed,
+      });
+    }
   };
 
   const handleSelectChallenge = (challengeId) => {
@@ -428,6 +645,9 @@ export default function App() {
           theme={theme}
           onThemeChange={setTheme}
           interviewAnswerLibrary={interviewAnswerLibrary}
+          onExportProgress={handleExportProgress}
+          onImportProgress={handleImportProgress}
+          progressTransferStatus={progressTransferStatus}
         />
       </div>
     );
