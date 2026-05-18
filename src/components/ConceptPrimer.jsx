@@ -2,12 +2,64 @@ import { BookOpen, ChevronDown, ChevronUp, Play, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getChallengeLesson } from "../data/lessonContent";
 
+function getLocalizedGuide(guide, language) {
+  if (!guide) return null;
+  if (guide[language]) return guide[language];
+  if (guide.en) return guide.en;
+  return guide;
+}
+
+function getDefaultJavaScriptGuide(challenge, copy) {
+  const category = (challenge.category || "").toLowerCase();
+  const concepts = (challenge.concepts || []).join(" ").toLowerCase();
+  const goal = (challenge.goal || "").toLowerCase();
+  const text = `${category} ${concepts} ${goal}`;
+
+  if (!category.includes("javascript")) return null;
+
+  const eventName = text.includes("submit")
+    ? "submit"
+    : text.includes("input") ||
+        text.includes("typing") ||
+        text.includes("search") ||
+        text.includes("filter")
+      ? "input"
+      : "click";
+  const readStep =
+    eventName === "input" || eventName === "submit"
+      ? copy.primer.howToReadInputStep
+      : copy.primer.howToReadStateStep;
+  const updateStep = text.includes("filter") || text.includes("search")
+    ? copy.primer.howToFilterStep
+    : copy.primer.howToUpdateStep;
+
+  return {
+    title: copy.primer.howToDefaultTitle,
+    intro: copy.primer.howToDefaultIntro,
+    steps: [
+      copy.primer.howToSelectStep,
+      copy.primer.howToListenStep(eventName),
+      readStep,
+      updateStep,
+    ],
+  };
+}
+
 export default function ConceptPrimer({ challenge, copy, language, onSkip }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isSolutionExpanded, setIsSolutionExpanded] = useState(false);
   const lesson = useMemo(
     () => getChallengeLesson(challenge, language),
     [challenge, language]
   );
+  const beginnerGuide = useMemo(() => {
+    const challengeGuide = getLocalizedGuide(challenge.beginnerGuide, language);
+
+    return (
+      challengeGuide ||
+      getDefaultJavaScriptGuide(challenge, copy)
+    );
+  }, [challenge, copy, language]);
 
   const title = lesson.title || challenge.category;
   const summary = lesson.summary || copy.primer.fallbackSummary;
@@ -70,6 +122,48 @@ export default function ConceptPrimer({ challenge, copy, language, onSkip }) {
                   <li key={example}>{example}</li>
                 ))}
               </ul>
+            </div>
+          )}
+
+          {beginnerGuide && (
+            <div className="beginner-guide concept-primer-guide">
+              <h4>{beginnerGuide.title || copy.primer.howToDefaultTitle}</h4>
+              {beginnerGuide.intro && <p>{beginnerGuide.intro}</p>}
+
+              {beginnerGuide.steps?.length > 0 && (
+                <ol className="beginner-guide-steps">
+                  {beginnerGuide.steps.map((step, index) => (
+                    <li key={index}>{step}</li>
+                  ))}
+                </ol>
+              )}
+
+              {beginnerGuide.code && (
+                <>
+                  <button
+                    type="button"
+                    className="secondary-btn concept-primer-solution-btn"
+                    onClick={() =>
+                      setIsSolutionExpanded((current) => !current)
+                    }
+                  >
+                    {isSolutionExpanded ? (
+                      <ChevronUp size={17} aria-hidden="true" />
+                    ) : (
+                      <ChevronDown size={17} aria-hidden="true" />
+                    )}
+                    {isSolutionExpanded
+                      ? copy.primer.hideSolution
+                      : copy.primer.learnSolution}
+                  </button>
+
+                  {isSolutionExpanded && (
+                    <pre className="beginner-guide-code">
+                      <code>{beginnerGuide.code}</code>
+                    </pre>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>

@@ -362,6 +362,56 @@ const conceptLibrary = {
       "Event handling connects user actions, such as clicks and typing, to code that updates the UI.",
     why:
       "Most interactive features start with events: forms, menus, filters, modals, counters, and buttons.",
+    example: `const button = document.getElementById("saveBtn");
+
+button.addEventListener("click", () => {
+  console.log("The user clicked");
+});`,
+  },
+  domselection: {
+    title: "DOM selection",
+    summary:
+      "DOM selection means finding an HTML element from JavaScript so your code can read it or change it.",
+    why:
+      "Before JavaScript can update a button, message, input, card, or list item, it needs a reference to that element.",
+    example: `const message = document.getElementById("message");
+const cards = document.querySelectorAll(".card");`,
+  },
+  domupdates: {
+    title: "DOM updates",
+    summary:
+      "DOM updates are changes JavaScript makes to the visible page after the user does something.",
+    why:
+      "Interactive UI only feels alive when the HTML on screen changes after clicks, typing, filtering, or submitting.",
+    example: `message.textContent = "Saved";
+message.hidden = false;`,
+  },
+  styleupdates: {
+    title: "Style updates",
+    summary:
+      "Style updates change the visual look of an element from JavaScript, often by changing inline styles or toggling classes.",
+    why:
+      "They let the page respond visually, such as hiding a message, highlighting a card, or showing an active state.",
+    example: `message.style.display = "none";
+card.classList.toggle("is-active");`,
+  },
+  textcontent: {
+    title: "textContent",
+    summary:
+      "textContent reads or replaces the text inside an HTML element.",
+    why:
+      "Counters, feedback messages, button labels, and status text all need JavaScript to update visible words.",
+    example: `count.textContent = 3;
+button.textContent = "Hide details";`,
+  },
+  classlist: {
+    title: "classList",
+    summary:
+      "classList lets JavaScript add, remove, or toggle CSS classes on an element.",
+    why:
+      "This keeps styling in CSS while JavaScript decides when a visual state should turn on or off.",
+    example: `card.classList.add("is-active");
+card.classList.toggle("is-highlighted");`,
   },
   backend: {
     title: "Backend awareness",
@@ -814,6 +864,56 @@ const localizedConceptCopy = {
         "El manejo de eventos conecta acciones del usuario, como clicks y escritura, con codigo que actualiza la UI.",
       why:
         "La mayoria de features interactivas empiezan con eventos: formularios, menus, filtros, modales y botones.",
+      example: `const button = document.getElementById("saveBtn");
+
+button.addEventListener("click", () => {
+  console.log("La persona hizo click");
+});`,
+    },
+    domselection: {
+      title: "Seleccion del DOM",
+      summary:
+        "Seleccionar el DOM significa encontrar un elemento HTML desde JavaScript para poder leerlo o cambiarlo.",
+      why:
+        "Antes de actualizar un boton, mensaje, input, tarjeta o lista, JavaScript necesita una referencia a ese elemento.",
+      example: `const message = document.getElementById("message");
+const cards = document.querySelectorAll(".card");`,
+    },
+    domupdates: {
+      title: "Actualizaciones del DOM",
+      summary:
+        "Actualizar el DOM significa que JavaScript cambia lo que se ve en la pagina despues de una accion.",
+      why:
+        "La UI solo se siente interactiva cuando el HTML visible cambia despues de clicks, escritura, filtros o submits.",
+      example: `message.textContent = "Guardado";
+message.hidden = false;`,
+    },
+    styleupdates: {
+      title: "Cambios de estilo",
+      summary:
+        "Los cambios de estilo modifican el aspecto visual de un elemento desde JavaScript, con estilos inline o clases.",
+      why:
+        "Permiten que la pagina responda visualmente, por ejemplo ocultando un mensaje o resaltando una tarjeta.",
+      example: `message.style.display = "none";
+card.classList.toggle("is-active");`,
+    },
+    textcontent: {
+      title: "textContent",
+      summary:
+        "textContent lee o reemplaza el texto dentro de un elemento HTML.",
+      why:
+        "Contadores, mensajes, labels de botones y estados necesitan actualizar texto visible.",
+      example: `count.textContent = 3;
+button.textContent = "Ocultar detalles";`,
+    },
+    classlist: {
+      title: "classList",
+      summary:
+        "classList permite anadir, quitar o alternar clases CSS en un elemento.",
+      why:
+        "Asi el estilo vive en CSS y JavaScript decide cuando activar o desactivar un estado visual.",
+      example: `card.classList.add("is-active");
+card.classList.toggle("is-highlighted");`,
     },
     backend: {
       title: "Conciencia de backend",
@@ -1003,7 +1103,22 @@ const aliases = {
   "event handling": "eventhandling",
   "event handlers": "eventhandling",
   "event listeners": "eventhandling",
+  "click events": "eventhandling",
   "input events": "eventhandling",
+  "dom selection": "domselection",
+  "DOM selection": "domselection",
+  "query selectors": "domselection",
+  "dom updates": "domupdates",
+  "DOM updates": "domupdates",
+  "dom manipulation": "domupdates",
+  "DOM manipulation": "domupdates",
+  "style updates": "styleupdates",
+  "style changes": "styleupdates",
+  "class toggling": "classlist",
+  "classList.toggle": "classlist",
+  "classList.toggle()": "classlist",
+  "textContent": "textcontent",
+  "textcontent": "textcontent",
   "typescript": "typescript",
   "typed props": "typedprops",
   "typed prop": "typedprops",
@@ -1056,6 +1171,9 @@ const aliases = {
   "parametros de url": "dynamicroutes",
   "eventos": "eventhandling",
   "manejo de eventos": "eventhandling",
+  "seleccion del dom": "domselection",
+  "actualizaciones del dom": "domupdates",
+  "cambios de estilo": "styleupdates",
   "props tipadas": "typedprops",
   "interfaces tipadas": "interfaces",
   "tipos union": "uniontypes",

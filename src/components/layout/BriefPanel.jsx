@@ -102,6 +102,14 @@ export default function BriefPanel({
               <p>{selectedConceptDetails.summary}</p>
               <strong>{copy.brief.whyItMatters}</strong>
               <p>{selectedConceptDetails.why}</p>
+              {selectedConceptDetails.example && (
+                <>
+                  <strong>{copy.brief.tinyExample}</strong>
+                  <pre className="concept-code">
+                    <code>{selectedConceptDetails.example}</code>
+                  </pre>
+                </>
+              )}
             </div>
           )}
         </div>

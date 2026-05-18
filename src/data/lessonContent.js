@@ -70,6 +70,146 @@ const lessonOverrides = {
         "A SaaS navbar might show Product, Pricing, Docs, and Login.",
       ],
     },
+    "css-grid-gallery": {
+      title: "Why Grid starts with the parent",
+      summary:
+        "In earlier layouts, flexbox helped you line items up in one direction. This challenge switches to CSS Grid, where the parent creates columns and the children fill those columns.",
+      why:
+        "A gallery is a perfect Grid exercise because you are arranging repeated items across rows and columns, not just pushing boxes along one line.",
+      learnMore:
+        "Put display: grid on the gallery container, then define the column pattern with grid-template-columns. The pattern repeat(auto-fit, minmax(160px, 1fr)) means: create as many columns as fit, never let a column shrink below 160px, and share leftover space evenly.",
+      examples: [
+        "A project gallery can show several tiles per row on desktop.",
+        "The same gallery can collapse naturally on mobile.",
+        "Gap belongs on the grid parent because it controls space between all grid cells.",
+      ],
+    },
+    "grid-feature-board": {
+      title: "Why three-column Grid matters",
+      summary:
+        "This challenge introduces the basic Grid move: make the parent a grid container, then tell it how many columns to create.",
+      why:
+        "Before responsive layouts get clever, learners need to see the direct relationship between display: grid and grid-template-columns.",
+      learnMore:
+        "display: grid turns the parent into a grid formatting context. grid-template-columns: repeat(3, 1fr) creates three equal columns, and gap controls the space between the child cards.",
+      examples: [
+        "A features board can show three benefits side by side.",
+        "A pricing comparison can start as three equal plan cards.",
+        "A dashboard row can use the same equal-column idea for stats.",
+      ],
+    },
+    "responsive-card-grid": {
+      title: "Why responsive card grids matter",
+      summary:
+        "Card grids are everywhere: services, projects, products, lessons, and team members. The goal is to create one repeated card pattern and let Grid decide how many fit per row.",
+      why:
+        "This is where learners move from manually placing boxes to describing a layout rule the browser can reuse at different widths.",
+      learnMore:
+        "Use display: grid on the card-grid parent and grid-template-columns with repeat(auto-fit, minmax(220px, 1fr)). The cards stay consistent because each article uses the same inner structure: title, supporting text, and link.",
+      examples: [
+        "A portfolio can use the pattern for three featured projects.",
+        "A course page can use it for lesson cards.",
+        "A product page can use it for related items.",
+      ],
+    },
+    "media-query-stack-layout": {
+      title: "Why media queries matter",
+      summary:
+        "Responsive design is not only flexible units. Sometimes you deliberately change the layout at a specific screen width.",
+      why:
+        "This challenge teaches the breakpoint pattern: two columns can be useful on desktop, but the same content should stack when the screen gets narrow.",
+      learnMore:
+        "Use flexbox for the two-column desktop layout, then add @media (max-width: 700px) and change flex-direction to column. That tells the browser when the layout rule should change.",
+      examples: [
+        "A promo image and text block can sit side by side on desktop.",
+        "The same block stacks on mobile to avoid cramped text.",
+        "Forms, hero sections, and product layouts often use this pattern.",
+      ],
+    },
+    "fluid-container-shell": {
+      title: "Why containers matter",
+      summary:
+        "A page container keeps content readable. Without one, text and sections can stretch awkwardly across large screens.",
+      why:
+        "This challenge focuses on the outer page shell: width controls small screens, max-width controls large screens, and margin auto keeps the content centered.",
+      learnMore:
+        "The pattern width: 90%; max-width: 1100px; margin: 0 auto; is a dependable beginner container. It gives the layout side breathing room while preventing the content from becoming too wide.",
+      examples: [
+        "A blog uses a container so paragraphs stay readable.",
+        "A portfolio uses a container to align sections.",
+        "A dashboard may use a container to keep cards from spreading too far apart.",
+      ],
+    },
+    "dashboard-stats-layout": {
+      title: "Why dashboard stats use Grid",
+      summary:
+        "Dashboard stats are repeated boxes that need to line up evenly. Flexbox can place boxes in a row, but Grid lets you say exactly how many columns the row should have.",
+      why:
+        "Challenge 17 is about changing approach: instead of relying on display: flex, use display: grid plus grid-template-columns to create three equal stat cards.",
+      learnMore:
+        "Set the parent to display: grid, then use grid-template-columns: repeat(3, minmax(0, 1fr)). That gives three equal columns. Add a media query that changes the columns to 1fr on small screens, so the same cards stack cleanly.",
+      examples: [
+        "A sales dashboard might show revenue, users, and orders.",
+        "An admin panel might show tickets, response time, and satisfaction.",
+        "A portfolio case study might show visits, conversions, and performance.",
+      ],
+    },
+    "polished-pricing-card": {
+      title: "Why polish needs states",
+      summary:
+        "Visual polish is more than making a box pretty. Real UI elements should respond when users hover, focus, and prepare to click.",
+      why:
+        "This challenge teaches the difference between static styling and interaction polish: shadow, radius, transition, transform, hover, and focus all work together.",
+      learnMore:
+        "A small transform on hover makes the card feel interactive. A transition prevents the motion from snapping. A visible focus outline keeps the action usable for keyboard users.",
+      examples: [
+        "A pricing card can lift slightly on hover.",
+        "A checkout button needs a visible focus state.",
+        "A settings panel can use shadow and radius to feel finished.",
+      ],
+    },
+    "gradient-hero-callout": {
+      title: "Why gradients need restraint",
+      summary:
+        "A gradient can make a section feel energetic, but the layout still depends on readable text, contrast, spacing, and a clear action.",
+      why:
+        "This challenge teaches learners to put the visual effect on the wrapper while keeping the content hierarchy clean.",
+      learnMore:
+        "Use linear-gradient as the background on the callout, then use padding and border-radius to frame it. Keep the heading, paragraph, and action readable instead of adding extra decoration.",
+      examples: [
+        "A course announcement can use a gradient callout.",
+        "A product page can highlight a trial offer.",
+        "A portfolio can use a gradient banner for a featured section.",
+      ],
+    },
+    "responsive-feature-strip": {
+      title: "Why repeatable Grid sections matter",
+      summary:
+        "A feature strip is a repeated card pattern. Grid lets the browser place those repeated cards cleanly as the screen changes.",
+      why:
+        "This reinforces the responsive Grid pattern after learners have seen it in galleries and card grids.",
+      learnMore:
+        "Use display: grid on the feature-strip parent and repeat(auto-fit, minmax(220px, 1fr)) for the columns. Each card should keep the same structure, spacing, and visual weight.",
+      examples: [
+        "A landing page can show three product benefits.",
+        "A course page can show three learning steps.",
+        "A service page can show three ways to work together.",
+      ],
+    },
+    "portfolio-section-capstone": {
+      title: "Why this section combines the block",
+      summary:
+        "The portfolio capstone pulls this class together: semantic section structure, repeated cards, responsive Grid, tags, links, and visual polish.",
+      why:
+        "A portfolio section is a realistic beginner deliverable because it needs to look good, scan quickly, and adapt across screen sizes.",
+      learnMore:
+        "Build the section header first, then create exactly three project cards. The project grid should use display: grid and responsive grid-template-columns. Tags and links make each card feel like real portfolio content instead of placeholder boxes.",
+      examples: [
+        "A recruiter can scan project titles, summaries, tags, and links.",
+        "A mobile visitor sees the projects stacked cleanly.",
+        "A desktop visitor sees a polished multi-card section.",
+      ],
+    },
   },
   es: {
     "styled-heading": {

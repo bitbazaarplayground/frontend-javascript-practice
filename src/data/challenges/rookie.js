@@ -1158,13 +1158,14 @@ button {
     category: "HTML + CSS",
     goal: "Build a 3-column feature board with CSS Grid.",
     requirements: [
-      "Create at least 3 cards",
-      "Use CSS Grid on the parent",
-      "Use 3 equal columns",
+      "Create exactly 3 cards",
+      "Use display: grid on the feature-board parent",
+      "Use grid-template-columns to create 3 equal columns",
       "Add spacing with gap",
       "Give each card padding and a background",
     ],
     tips: [
+      "This is the first direct Grid layout in the block: parent first, columns second.",
       "repeat(3, 1fr) is a good starting point for equal columns.",
       "Grid works well when you want rows and columns together.",
       "Keep the card pattern repeated and balanced.",
@@ -1177,9 +1178,10 @@ button {
       "card layout",
     ],
     suggestedApproach: [
-      "Create one parent wrapper and three child cards.",
-      "Turn the parent into a grid container.",
-      "Define 3 equal columns with repeat(3, 1fr).",
+      "Create one parent wrapper with class feature-board.",
+      "Add exactly three child cards inside it.",
+      "Turn the parent into a grid container with display: grid.",
+      "Define three equal columns with grid-template-columns: repeat(3, 1fr).",
       "Add gap, padding, and card styling so the board feels polished.",
     ],
     commonMistakes: [
@@ -1908,13 +1910,15 @@ button {
     goal: "Build a responsive image gallery using CSS Grid.",
     requirements: [
       "Create a gallery container",
-      "Add at least 6 gallery items",
-      "Use CSS Grid",
-      "Make the grid responsive",
-      "Give every item a consistent height",
+      "Add exactly 6 gallery items",
+      "Use display: grid on the gallery parent",
+      "Use grid-template-columns with repeat(), auto-fit, and minmax()",
+      "Add gap on the gallery parent",
+      "Give every item the same min-height",
     ],
     tips: [
-      "repeat(auto-fit, minmax()) is useful for responsive grids.",
+      "This challenge is about Grid, not flexbox.",
+      "repeat(auto-fit, minmax()) lets the browser decide how many columns fit.",
       "Use placeholder background colors if you do not have images.",
       "Gap creates clean spacing between items.",
     ],
@@ -1927,12 +1931,14 @@ button {
     ],
     suggestedApproach: [
       "Create a div with class gallery.",
-      "Add six child items.",
-      "Use grid-template-columns with auto-fit and minmax.",
-      "Style each item with height, background, and border-radius.",
+      "Add exactly six direct child items inside it.",
+      "Set .gallery to display: grid.",
+      "Use grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); so the layout creates as many columns as will fit.",
+      "Add gap on the parent and the same min-height on every gallery item.",
     ],
     commonMistakes: [
-      "Using fixed columns that break on mobile",
+      "Using display: flex instead of display: grid",
+      "Writing grid-template-columns on the cards instead of the gallery parent",
       "Forgetting gap",
       "Letting every item have a different height by accident",
     ],
@@ -1978,14 +1984,15 @@ button {
     category: "HTML + CSS",
     goal: "Create a card grid that looks good on mobile and desktop.",
     requirements: [
-      "Add at least 3 cards",
-      "Use a responsive grid layout",
+      "Add exactly 3 cards",
+      "Use display: grid on the card-grid parent",
+      "Use grid-template-columns with repeat(auto-fit, minmax(...))",
       "Each card should include a title, text, and link",
-      "Cards should stack on small screens",
       "Use consistent spacing",
     ],
     tips: [
-      "Use minmax() so cards resize naturally.",
+      "You already practiced flexbox earlier; here the parent should be a Grid container.",
+      "Use minmax() so cards resize naturally instead of relying on fixed widths.",
       "Cards need enough padding to feel readable.",
       "Keep links visually distinct.",
     ],
@@ -1998,11 +2005,13 @@ button {
     ],
     suggestedApproach: [
       "Create a section for the card grid.",
-      "Add three article cards.",
-      "Use grid-template-columns with repeat and minmax.",
+      "Add exactly three article cards.",
+      "Set .card-grid to display: grid.",
+      "Use grid-template-columns with repeat(auto-fit, minmax(220px, 1fr)).",
       "Style the cards with padding, border, and spacing.",
     ],
     commonMistakes: [
+      "Using flexbox for the main card layout",
       "Hard-coding widths that overflow mobile screens",
       "Using inconsistent card spacing",
       "Making links look like normal text",
@@ -2070,14 +2079,15 @@ a {
     goal: "Build a 2-column section that stacks into one column on smaller screens.",
     requirements: [
       "Create 2 content areas",
-      "Place them side by side on larger screens",
-      "Use a media query",
-      "Stack the layout on mobile",
-      "Add spacing and padding",
+      "Place them side by side on larger screens with flexbox",
+      "Use @media (max-width: 700px)",
+      "Change the layout to one column on mobile",
+      "Add gap and padding",
     ],
     tips: [
-      "Flexbox is a simple choice for the larger-screen layout.",
-      "Use @media (max-width: 700px) to change the direction.",
+      "This exercise is about the breakpoint: the layout should deliberately change when the screen gets narrow.",
+      "Flexbox is a simple choice for the larger-screen layout because there are only two areas.",
+      "Use @media (max-width: 700px) to change flex-direction.",
       "This is one of the most common responsive patterns on the web.",
     ],
     concepts: [
@@ -2091,7 +2101,7 @@ a {
       "Create one parent wrapper with two child sections.",
       "Use flexbox and gap for the larger-screen layout.",
       "Add padding so the section breathes.",
-      "Use a media query to switch to one column on smaller screens.",
+      "Use @media (max-width: 700px) to switch flex-direction to column.",
     ],
     commonMistakes: [
       "Forgetting the media query entirely",
@@ -2149,10 +2159,11 @@ a {
       "Create one main container",
       "Use width: 90%",
       "Use max-width",
-      "Center the container with auto margins",
+      "Center the container with margin: 0 auto",
       "Add padding or section spacing inside it",
     ],
     tips: [
+      "This challenge is not about cards first. It is about the outer page shell.",
       "This pattern appears on a huge number of real websites.",
       "The container stops text from stretching too wide.",
       "Combine width and max-width so the layout feels flexible and controlled.",
@@ -2165,8 +2176,9 @@ a {
       "layout structure",
     ],
     suggestedApproach: [
-      "Create a main wrapper and one or two sections inside it.",
-      "Set the wrapper width to 90% and add a max-width value.",
+      "Create a main wrapper with class container.",
+      "Set the wrapper to width: 90%.",
+      "Add max-width so the page stops growing on large screens.",
       "Center it with margin: 0 auto.",
       "Add inner spacing so the content feels readable.",
     ],
@@ -2210,15 +2222,18 @@ a {
     title: "Challenge 17 — Dashboard Stats Layout",
     difficulty: "Medium",
     category: "HTML + CSS",
-    goal: "Build a small dashboard row with summary statistic cards.",
+    goal: "Build a dashboard stats row with three summary cards using CSS Grid.",
     requirements: [
-      "Create 4 stat cards",
+      "Create exactly 3 stat cards",
       "Each card should show a label and number",
-      "Use a responsive grid",
+      "Use display: grid on the stats-grid parent",
+      "Use grid-template-columns to create 3 equal columns",
       "Make numbers visually prominent",
-      "Use consistent alignment and spacing",
+      "Use a media query to stack the cards on small screens",
     ],
     tips: [
+      "This is the moment to move from flexbox rows to Grid columns.",
+      "grid-template-columns: repeat(3, minmax(0, 1fr)) creates three equal dashboard columns.",
       "Dashboards need clear visual hierarchy.",
       "Use strong typography for numbers.",
       "The same card pattern should work for all stats.",
@@ -2226,23 +2241,28 @@ a {
     concepts: [
       "dashboard UI",
       "visual hierarchy",
-      "responsive grid",
+      "CSS Grid",
+      "grid-template-columns",
+      "media queries",
       "typography",
-      "card consistency",
     ],
     suggestedApproach: [
       "Create a stats section.",
-      "Add four cards with a label and number.",
-      "Use grid for layout.",
+      "Add exactly three article cards, each with a small label and a strong number.",
+      "Set .stats-grid to display: grid.",
+      "Use grid-template-columns: repeat(3, minmax(0, 1fr)); for the desktop layout.",
+      "Add a media query that changes the grid to one column on narrow screens.",
       "Style numbers larger than labels.",
     ],
     commonMistakes: [
+      "Using display: flex because it worked in earlier challenges",
+      "Only adding display: grid but forgetting grid-template-columns",
+      "Creating four cards when the brief asks for three",
       "Making labels and numbers the same size",
       "Using uneven spacing between cards",
-      "Forgetting mobile behavior",
     ],
     expectedOutcome:
-      "A dashboard stat row that can be used in admin panels, SaaS dashboards, or portfolio case studies.",
+      "Three dashboard stat cards placed next to each other on desktop and stacked cleanly on small screens.",
     starter: {
       html: ``,
       css: ``,
@@ -2262,14 +2282,10 @@ a {
     <span>Orders</span>
     <strong>342</strong>
   </article>
-  <article>
-    <span>Conversion</span>
-    <strong>8.7%</strong>
-  </article>
 </section>`,
       css: `.stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -2290,6 +2306,12 @@ span {
 
 strong {
   font-size: 30px;
+}
+
+@media (max-width: 700px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }`,
       js: ``,
     },
@@ -2304,11 +2326,12 @@ strong {
     requirements: [
       "Create a pricing card",
       "Add border-radius and box-shadow",
-      "Add a hover effect",
-      "Add transition and transform",
+      "Add a :hover effect on the card",
+      "Use transition and transform for the hover movement",
       "Style a clear focus state on the button or link",
     ],
     tips: [
+      "This challenge is about polish, so the card needs interaction states, not only static styles.",
       "This is where beginner work starts to feel more professional.",
       "Keep the hover movement small and tidy.",
       "Focus styles matter for keyboard users, not just for design.",
@@ -2323,7 +2346,7 @@ strong {
     suggestedApproach: [
       "Create a card with a plan name, price, short list, and button.",
       "Add radius and shadow so the card lifts off the page.",
-      "Use transition and transform for a small hover motion.",
+      "Use transition on the card and transform it slightly on :hover.",
       "Add a strong focus style to the main action.",
     ],
     commonMistakes: [
@@ -2390,10 +2413,11 @@ button:focus {
       "Create a callout or hero block",
       "Add a heading and paragraph",
       "Use a button or link button",
-      "Add a linear-gradient background",
+      "Add a linear-gradient background to the callout wrapper",
       "Use padding and rounded corners",
     ],
     tips: [
+      "The gradient belongs on the main wrapper, while the text and action need enough contrast to remain readable.",
       "Gradients work best when the rest of the layout stays simple.",
       "Keep the text readable by using good contrast.",
       "This is a nice place to practice visual hierarchy.",
@@ -2468,10 +2492,10 @@ a {
     category: "HTML + CSS",
     goal: "Build a responsive strip of feature cards that wraps cleanly on smaller screens.",
     requirements: [
-      "Create 3 feature cards",
+      "Create exactly 3 feature cards",
       "Each card should have a heading and short description",
-      "Use grid or flexbox for the layout",
-      "Make the section adapt on smaller screens",
+      "Use display: grid on the feature-strip parent",
+      "Use grid-template-columns with repeat(auto-fit, minmax(...))",
       "Keep spacing and alignment consistent",
     ],
     tips: [
@@ -2489,10 +2513,11 @@ a {
     suggestedApproach: [
       "Create one section wrapper and three cards inside it.",
       "Add heading and paragraph content to each card.",
-      "Use CSS grid or flexbox to place the cards side by side.",
-      "Add responsive rules so the layout still works on narrow screens.",
+      "Set the wrapper to display: grid.",
+      "Use grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)).",
     ],
     commonMistakes: [
+      "Using flexbox even though this exercise is practicing responsive Grid",
       "Using different spacing in each card",
       "Forgetting to test the layout on a narrower width",
       "Making the text hierarchy too weak to scan quickly",
@@ -2557,13 +2582,13 @@ p {
     goal: "Build a polished portfolio project section with responsive cards.",
     requirements: [
       "Create a section with a heading and intro text",
-      "Add at least 3 project cards",
+      "Add exactly 3 project cards",
       "Each project should include title, description, tags, and a link",
-      "Use responsive layout",
+      "Use a responsive CSS Grid for the project cards",
       "Make the section look portfolio-ready",
     ],
     tips: [
-      "This should combine semantic structure, card layout, and responsive CSS.",
+      "This is the block capstone: combine section structure, responsive Grid, repeated cards, and polish.",
       "Use tags to show technologies.",
       "Think about how a recruiter would scan the section.",
     ],
@@ -2577,12 +2602,14 @@ p {
     suggestedApproach: [
       "Create a section with a header.",
       "Build one project card first.",
-      "Duplicate the pattern for three projects.",
-      "Use responsive grid and polished spacing.",
+      "Duplicate the pattern until there are exactly three projects.",
+      "Use display: grid and grid-template-columns with repeat(auto-fit, minmax(...)) for the project grid.",
+      "Add tags, links, spacing, and shadow so the section feels portfolio-ready.",
     ],
     commonMistakes: [
       "Only listing project names without context",
       "Forgetting technology tags",
+      "Using a single column layout on desktop",
       "Building a layout that only works at one screen size",
     ],
     expectedOutcome:

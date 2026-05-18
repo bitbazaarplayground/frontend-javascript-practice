@@ -599,13 +599,21 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
+  gap: 6px;
+  min-width: 30px;
   height: 30px;
+  padding: 0 10px;
   border: none;
   border-radius: 999px;
   background: transparent;
   color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
   transition: 0.18s ease;
+}
+
+.preview-viewport-btn span {
+  white-space: nowrap;
 }
 
 .preview-viewport-btn.active {
@@ -651,7 +659,7 @@ a {
   width: 100%;
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -660,6 +668,24 @@ a {
 
 .preview-stage.desktop {
   padding: 0;
+}
+
+.preview-frame-shell {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+}
+
+.preview-stage.desktop .preview-frame-shell {
+  flex: none;
+  overflow: hidden;
+}
+
+.preview-stage.desktop .preview-frame {
+  width: 960px;
+  max-width: none;
+  flex: none;
+  transform-origin: top left;
 }
 
 .preview-stage.phone {
@@ -675,8 +701,13 @@ a {
   background: white;
 }
 
-.preview-stage.phone .preview-frame {
+.preview-stage.phone .preview-frame-shell {
   width: min(390px, 100%);
+  flex: none;
+}
+
+.preview-stage.phone .preview-frame {
+  width: 100%;
   max-width: 100%;
   flex: none;
   border: 1px solid var(--border);
@@ -830,6 +861,19 @@ a {
   margin-bottom: 6px;
 }
 
+.concept-code {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #172033;
+  color: #f4f7fb;
+  overflow-x: auto;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
 .concept-close {
   display: inline-grid;
   place-items: center;
@@ -910,6 +954,51 @@ a {
 
 .brief-dropdown-content {
   margin-top: 10px;
+}
+
+.beginner-guide {
+  padding: 14px;
+  border: 1px solid var(--accent-soft-border);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.beginner-guide .brief-text {
+  margin: 0;
+}
+
+.beginner-guide-steps {
+  margin: 12px 0 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.beginner-guide-code {
+  margin: 14px 0 0;
+  padding: 14px;
+  border-radius: 8px;
+  background: #172033;
+  color: #f4f7fb;
+  overflow-x: auto;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.concept-primer-guide {
+  background: var(--surface);
+}
+
+.concept-primer-guide h4 {
+  margin: 0 0 8px;
+}
+
+.concept-primer-solution-btn {
+  margin-top: 14px;
 }
 
 .icon-toggle-btn {

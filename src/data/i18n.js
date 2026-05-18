@@ -2433,6 +2433,23 @@ export const copy = {
       mentalModelText:
         "Read the goal, identify the structure first, then add the smallest CSS or JavaScript needed to make the result work.",
       examples: "Useful examples",
+      learnSolution: "Learn the solution",
+      hideSolution: "Hide solution",
+      howToDefaultTitle: "How to think about the JavaScript",
+      howToDefaultIntro:
+        "Most Builder challenges follow the same small loop: find the HTML, listen for the user action, read the current value or state, then update what the user sees.",
+      howToSelectStep:
+        "Find the HTML elements you need with getElementById() or querySelector().",
+      howToListenStep: (eventName) =>
+        `Listen for the ${eventName} event with addEventListener().`,
+      howToReadInputStep:
+        "Inside the event, read the current input value with .value.",
+      howToReadStateStep:
+        "Inside the event, check the current UI state, such as a style, class, text, or variable.",
+      howToUpdateStep:
+        "Update the DOM with textContent, classList, hidden, or style so the page visibly changes.",
+      howToFilterStep:
+        "Compare each item with the current value, then show the matches and hide or reset the rest.",
     },
     brief: {
       title: "Challenge brief",
@@ -2441,6 +2458,7 @@ export const copy = {
       concepts: "Concepts practiced",
       learnConcept: "Learn concept",
       whyItMatters: "Why it matters",
+      tinyExample: "Tiny example",
       closeConcept: "Close concept",
       approach: "Suggested approach",
       mistakes: "Common mistakes",
@@ -2721,6 +2739,23 @@ export const copy = {
       mentalModelText:
         "Lee el objetivo, identifica primero la estructura y luego anade el CSS o JavaScript minimo para que el resultado funcione.",
       examples: "Ejemplos utiles",
+      learnSolution: "Aprender la solucion",
+      hideSolution: "Ocultar solucion",
+      howToDefaultTitle: "Como pensar el JavaScript",
+      howToDefaultIntro:
+        "La mayoria de retos Builder siguen el mismo bucle pequeno: encontrar el HTML, escuchar la accion del usuario, leer el valor o estado actual y actualizar lo que ve el usuario.",
+      howToSelectStep:
+        "Encuentra los elementos HTML que necesitas con getElementById() o querySelector().",
+      howToListenStep: (eventName) =>
+        `Escucha el evento ${eventName} con addEventListener().`,
+      howToReadInputStep:
+        "Dentro del evento, lee el valor actual del input con .value.",
+      howToReadStateStep:
+        "Dentro del evento, revisa el estado actual de la UI, como un estilo, clase, texto o variable.",
+      howToUpdateStep:
+        "Actualiza el DOM con textContent, classList, hidden o style para que la pagina cambie de forma visible.",
+      howToFilterStep:
+        "Compara cada item con el valor actual, luego muestra los que coinciden y oculta o resetea el resto.",
     },
     brief: {
       title: "Brief del reto",
@@ -2729,6 +2764,7 @@ export const copy = {
       concepts: "Conceptos practicados",
       learnConcept: "Aprender concepto",
       whyItMatters: "Por que importa",
+      tinyExample: "Ejemplo pequeno",
       closeConcept: "Cerrar concepto",
       approach: "Enfoque sugerido",
       mistakes: "Errores comunes",

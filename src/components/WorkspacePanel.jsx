@@ -12,10 +12,11 @@ import {
   Smartphone,
   Undo2,
 } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const HISTORY_LIMIT = 240;
 const HISTORY_GROUP_MS = 500;
+const DESKTOP_PREVIEW_WIDTH = 960;
 
 function createEditorHistory(html = "", css = "", js = "") {
   return {
@@ -236,10 +237,14 @@ export default function WorkspacePanel({
   const [showSolution, setShowSolution] = useState(false);
   const [layoutMode, setLayoutMode] = useState("split");
   const [previewKey, setPreviewKey] = useState(0);
+  const [previewStageWidth, setPreviewStageWidth] = useState(
+    DESKTOP_PREVIEW_WIDTH
+  );
   const [editorHistory, setEditorHistory] = useState(() =>
     createEditorHistory(html || "", css || "", js || "")
   );
   const historyMetaRef = useRef(createHistoryMeta());
+  const previewStageRef = useRef(null);
 
   const isReactTestChallenge = editorType === "react-test";
   const isReactChallenge =
@@ -248,10 +253,27 @@ export default function WorkspacePanel({
     isReactTestChallenge;
   const isTypeScriptChallenge = editorType === "react-ts";
   const isShowingSolution = solutionEnabled && showSolution;
+  const desktopPreviewScale =
+    previewViewport === "desktop"
+      ? Math.max(0.25, Math.min(1, previewStageWidth / DESKTOP_PREVIEW_WIDTH))
+      : 1;
 
   const visibleHtml = isShowingSolution ? solution?.html || "" : html || "";
   const visibleCss = isShowingSolution ? solution?.css || "" : css || "";
   const visibleJs = isShowingSolution ? solution?.js || "" : js || "";
+
+  useEffect(() => {
+    const stage = previewStageRef.current;
+    if (!stage || typeof ResizeObserver === "undefined") return undefined;
+
+    const observer = new ResizeObserver(([entry]) => {
+      setPreviewStageWidth(entry.contentRect.width || DESKTOP_PREVIEW_WIDTH);
+    });
+
+    observer.observe(stage);
+
+    return () => observer.disconnect();
+  }, []);
 
   const srcDoc = useMemo(() => {
     const previewStorageSetup = getPreviewStorageSetup();
@@ -1319,6 +1341,7 @@ export default function WorkspacePanel({
                 aria-label={copy.workspace.desktopView}
               >
                 <Monitor size={15} aria-hidden="true" />
+                <span>{copy.workspace.desktopView}</span>
               </button>
 
               <button
@@ -1333,6 +1356,7 @@ export default function WorkspacePanel({
                 aria-label={copy.workspace.phoneView}
               >
                 <Smartphone size={15} aria-hidden="true" />
+                <span>{copy.workspace.phoneView}</span>
               </button>
             </div>
           )}
@@ -1349,14 +1373,33 @@ export default function WorkspacePanel({
         </div>
       </div>
 
-      <div className={`preview-stage ${previewViewport}`}>
-        <iframe
-          key={previewKey}
-          title="preview"
-          srcDoc={srcDoc}
-          className="preview-frame"
-          sandbox="allow-scripts"
-        />
+      <div ref={previewStageRef} className={`preview-stage ${previewViewport}`}>
+        <div
+          className="preview-frame-shell"
+          style={
+            previewViewport === "desktop"
+              ? {
+                  width: `${DESKTOP_PREVIEW_WIDTH * desktopPreviewScale}px`,
+                }
+              : undefined
+          }
+        >
+          <iframe
+            key={previewKey}
+            title="preview"
+            srcDoc={srcDoc}
+            className="preview-frame"
+            sandbox="allow-scripts"
+            style={
+              previewViewport === "desktop"
+                ? {
+                    height: `${100 / desktopPreviewScale}%`,
+                    transform: `scale(${desktopPreviewScale})`,
+                  }
+                : undefined
+            }
+          />
+        </div>
       </div>
     </div>
   );

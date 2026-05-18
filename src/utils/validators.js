@@ -871,6 +871,15 @@ function hasTag(html, tags) {
   return tags.some((tag) => lowerHtml.includes(`<${tag}`));
 }
 
+function countTags(html, tags) {
+  const lowerHtml = html.toLowerCase();
+
+  return tags.reduce((total, tag) => {
+    const matches = lowerHtml.match(new RegExp(`<${tag}\\b`, "g"));
+    return total + (matches ? matches.length : 0);
+  }, 0);
+}
+
 function hasAnyCode(...values) {
   return values.some((value) => (value || "").trim().length > 0);
 }
@@ -893,6 +902,35 @@ function hasCentering(source) {
     (source.compactCss.includes("display:flex") &&
       (source.compactCss.includes("justify-content:center") ||
         source.compactCss.includes("align-items:center")))
+  );
+}
+
+function hasGridColumns(source) {
+  return source.lowerCss.includes("grid-template-columns");
+}
+
+function hasResponsiveGridColumns(source) {
+  return (
+    hasGridColumns(source) &&
+    source.lowerCss.includes("repeat(") &&
+    source.lowerCss.includes("minmax(") &&
+    (source.lowerCss.includes("auto-fit") ||
+      source.lowerCss.includes("auto-fill"))
+  );
+}
+
+function hasThreeEqualGridColumns(source) {
+  return (
+    /grid-template-columns\s*:\s*repeat\s*\(\s*3\s*,\s*minmax\s*\(\s*0\s*,\s*1fr\s*\)\s*\)/i.test(
+      source.css
+    ) ||
+    /grid-template-columns\s*:\s*repeat\s*\(\s*3\s*,\s*1fr\s*\)/i.test(
+      source.css
+    ) ||
+    /grid-template-columns\s*:\s*1fr\s+1fr\s+1fr/i.test(source.css) ||
+    /grid-template-columns\s*:\s*(minmax\s*\(\s*0\s*,\s*1fr\s*\)\s*){3}/i.test(
+      source.css
+    )
   );
 }
 
@@ -1199,6 +1237,525 @@ export function validateProfileCard({ html, css }, language = "en") {
     status: "needs-work",
     feedback: [text.needsWork, ...feedback],
   });
+}
+
+export function validateCssGridGallery(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+  const itemCount = countTags(source.html, [
+    "div",
+    "article",
+    "figure",
+    "section",
+  ]);
+
+  const checks = [
+    [
+      itemCount >= 7,
+      isSpanish
+        ? "Bien - la galeria tiene un contenedor y seis piezas visibles."
+        : "Good - the gallery has a parent container and six visible items.",
+      isSpanish
+        ? "Crea un contenedor de galeria con exactamente seis piezas dentro."
+        : "Create a gallery parent with exactly six items inside it.",
+    ],
+    [
+      source.compactCss.includes("display:grid"),
+      isSpanish
+        ? "Bien - el contenedor usa display: grid."
+        : "Good - the parent layout uses display: grid.",
+      isSpanish
+        ? "Usa display: grid en el contenedor de la galeria."
+        : "Use display: grid on the gallery parent.",
+    ],
+    [
+      hasResponsiveGridColumns(source),
+      isSpanish
+        ? "Perfecto - grid-template-columns usa repeat(), auto-fit/auto-fill y minmax()."
+        : "Nice - grid-template-columns uses repeat(), auto-fit/auto-fill, and minmax().",
+      isSpanish
+        ? "Usa grid-template-columns con repeat(auto-fit, minmax(...))."
+        : "Use grid-template-columns with repeat(auto-fit, minmax(...)).",
+    ],
+    [
+      source.compactCss.includes("gap:"),
+      isSpanish ? "Bien - el gap separa las piezas del grid." : "Good - gap separates the grid items.",
+      isSpanish ? "Anade gap al contenedor grid." : "Add gap to the grid parent.",
+    ],
+    [
+      source.compactCss.includes("min-height:") ||
+        source.compactCss.includes("height:"),
+      isSpanish
+        ? "Bien - las piezas tienen una altura consistente."
+        : "Good - the items have a consistent height.",
+      isSpanish
+        ? "Da a las piezas una altura o min-height consistente."
+        : "Give the items a consistent height or min-height.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateGridFeatureBoard(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+  const articleCount = countTags(source.html, ["article"]);
+
+  const checks = [
+    [
+      articleCount === 3,
+      isSpanish ? "Bien - hay exactamente tres tarjetas." : "Good - there are exactly three cards.",
+      isSpanish ? "Crea exactamente tres tarjetas." : "Create exactly three cards.",
+    ],
+    [
+      source.compactCss.includes("display:grid"),
+      isSpanish ? "Bien - el contenedor usa Grid." : "Good - the parent uses Grid.",
+      isSpanish ? "Usa display: grid en el padre." : "Use display: grid on the parent.",
+    ],
+    [
+      hasThreeEqualGridColumns(source),
+      isSpanish
+        ? "Bien - las columnas crean tres espacios iguales."
+        : "Good - the columns create three equal spaces.",
+      isSpanish
+        ? "Usa grid-template-columns para crear tres columnas iguales."
+        : "Use grid-template-columns to create three equal columns.",
+    ],
+    [
+      source.compactCss.includes("gap:"),
+      isSpanish ? "Bien - el grid usa gap." : "Good - the grid uses gap.",
+      isSpanish ? "Anade gap al grid." : "Add gap to the grid.",
+    ],
+    [
+      source.compactCss.includes("padding:") &&
+        (source.compactCss.includes("background:") ||
+          source.compactCss.includes("background-color:")),
+      isSpanish
+        ? "Bien - las tarjetas tienen padding y fondo."
+        : "Good - the cards have padding and a background.",
+      isSpanish
+        ? "Da padding y fondo a las tarjetas."
+        : "Give the cards padding and a background.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateResponsiveCardGrid(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+  const articleCount = countTags(source.html, ["article"]);
+
+  const checks = [
+    [
+      articleCount === 3,
+      isSpanish ? "Bien - hay exactamente tres tarjetas." : "Good - there are exactly three cards.",
+      isSpanish ? "Crea exactamente tres tarjetas article." : "Create exactly three article cards.",
+    ],
+    [
+      source.compactCss.includes("display:grid"),
+      isSpanish ? "Bien - el layout principal usa Grid." : "Good - the main layout uses Grid.",
+      isSpanish
+        ? "Usa display: grid en el contenedor card-grid."
+        : "Use display: grid on the card-grid parent.",
+    ],
+    [
+      hasResponsiveGridColumns(source),
+      isSpanish
+        ? "Bien - las columnas son responsive con repeat(), auto-fit/auto-fill y minmax()."
+        : "Good - the columns are responsive with repeat(), auto-fit/auto-fill, and minmax().",
+      isSpanish
+        ? "Usa grid-template-columns con repeat(auto-fit, minmax(...))."
+        : "Use grid-template-columns with repeat(auto-fit, minmax(...)).",
+    ],
+    [
+      countTags(source.html, ["h2", "h3", "h4"]) >= 3 &&
+        countTags(source.html, ["p"]) >= 3 &&
+        countTags(source.html, ["a"]) >= 3,
+      isSpanish
+        ? "Bien - cada tarjeta tiene titulo, texto y link."
+        : "Good - the cards include titles, text, and links.",
+      isSpanish
+        ? "Cada tarjeta debe incluir titulo, texto y link."
+        : "Each card should include a title, text, and link.",
+    ],
+    [
+      source.compactCss.includes("gap:") &&
+        source.compactCss.includes("padding:"),
+      isSpanish
+        ? "Bien - el grid y las tarjetas tienen espaciado."
+        : "Good - the grid and cards include spacing.",
+      isSpanish
+        ? "Anade gap al grid y padding a las tarjetas."
+        : "Add gap to the grid and padding to the cards.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateDashboardStatsLayout(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+  const articleCount = countTags(source.html, ["article"]);
+
+  const checks = [
+    [
+      articleCount === 3,
+      isSpanish
+        ? "Bien - hay exactamente tres tarjetas de metricas."
+        : "Good - there are exactly three stat cards.",
+      isSpanish
+        ? "Crea exactamente tres tarjetas de metricas."
+        : "Create exactly three stat cards.",
+    ],
+    [
+      countTags(source.html, ["span", "p"]) >= 3 &&
+        countTags(source.html, ["strong", "b"]) >= 3,
+      isSpanish
+        ? "Bien - cada tarjeta tiene etiqueta y numero destacado."
+        : "Good - each card has a label and prominent number.",
+      isSpanish
+        ? "Cada tarjeta necesita una etiqueta y un numero destacado."
+        : "Each card needs a label and a prominent number.",
+    ],
+    [
+      source.compactCss.includes("display:grid"),
+      isSpanish ? "Bien - el contenedor usa display: grid." : "Good - the parent uses display: grid.",
+      isSpanish ? "Usa display: grid en .stats-grid." : "Use display: grid on .stats-grid.",
+    ],
+    [
+      hasThreeEqualGridColumns(source),
+      isSpanish
+        ? "Perfecto - grid-template-columns crea tres columnas iguales."
+        : "Nice - grid-template-columns creates three equal columns.",
+      isSpanish
+        ? "Usa grid-template-columns para crear tres columnas iguales."
+        : "Use grid-template-columns to create three equal columns.",
+    ],
+    [
+      source.lowerCss.includes("@media") &&
+        /grid-template-columns\s*:\s*1fr/i.test(source.css),
+      isSpanish
+        ? "Bien - el grid se apila en pantallas pequenas."
+        : "Good - the grid stacks on small screens.",
+      isSpanish
+        ? "Anade una media query que cambie el grid a una columna."
+        : "Add a media query that changes the grid to one column.",
+    ],
+    [
+      source.compactCss.includes("gap:") &&
+        source.compactCss.includes("padding:"),
+      isSpanish
+        ? "Bien - las tarjetas tienen espacio consistente."
+        : "Good - the cards have consistent spacing.",
+      isSpanish
+        ? "Anade gap al grid y padding a las tarjetas."
+        : "Add gap to the grid and padding to the cards.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 6, 5, feedback, language);
+}
+
+export function validateMediaQueryStackLayout(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const checks = [
+    [
+      countTags(source.html, ["div", "section", "article"]) >= 3,
+      isSpanish ? "Bien - hay un padre y dos areas de contenido." : "Good - there is a parent and two content areas.",
+      isSpanish ? "Crea un contenedor con dos areas de contenido." : "Create a container with two content areas.",
+    ],
+    [
+      source.compactCss.includes("display:flex"),
+      isSpanish ? "Bien - el layout grande usa flexbox." : "Good - the large layout uses flexbox.",
+      isSpanish ? "Usa display: flex para el layout de escritorio." : "Use display: flex for the desktop layout.",
+    ],
+    [
+      source.compactCss.includes("gap:") &&
+        source.compactCss.includes("padding:"),
+      isSpanish ? "Bien - hay gap y padding." : "Good - gap and padding are present.",
+      isSpanish ? "Anade gap y padding." : "Add gap and padding.",
+    ],
+    [
+      source.lowerCss.includes("@media") &&
+        source.lowerCss.includes("max-width"),
+      isSpanish ? "Bien - hay una media query con max-width." : "Good - there is a max-width media query.",
+      isSpanish ? "Anade @media con max-width." : "Add an @media rule with max-width.",
+    ],
+    [
+      source.compactCss.includes("flex-direction:column"),
+      isSpanish ? "Bien - el layout se apila en movil." : "Good - the layout stacks on mobile.",
+      isSpanish ? "Cambia flex-direction a column en movil." : "Change flex-direction to column on mobile.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateFluidContainerShell(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const checks = [
+    [
+      hasTag(source.html, ["main", "section", "div"]),
+      isSpanish ? "Bien - existe un contenedor principal." : "Good - there is a main container.",
+      isSpanish ? "Crea un contenedor principal." : "Create one main container.",
+    ],
+    [
+      /width\s*:\s*90%/i.test(source.css),
+      isSpanish ? "Bien - el contenedor usa width: 90%." : "Good - the container uses width: 90%.",
+      isSpanish ? "Usa width: 90% en el contenedor." : "Use width: 90% on the container.",
+    ],
+    [
+      source.lowerCss.includes("max-width"),
+      isSpanish ? "Bien - max-width controla el ancho grande." : "Good - max-width controls the large-screen width.",
+      isSpanish ? "Anade max-width al contenedor." : "Add max-width to the container.",
+    ],
+    [
+      source.compactCss.includes("margin:0auto"),
+      isSpanish ? "Bien - margin: 0 auto centra el contenedor." : "Good - margin: 0 auto centers the container.",
+      isSpanish ? "Centra el contenedor con margin: 0 auto." : "Center the container with margin: 0 auto.",
+    ],
+    [
+      source.compactCss.includes("padding:"),
+      isSpanish ? "Bien - hay espacio interior o vertical." : "Good - spacing is present.",
+      isSpanish ? "Anade padding o espacio de seccion." : "Add padding or section spacing.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validatePolishedPricingCard(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const checks = [
+    [
+      countTags(source.html, ["article", "section", "div"]) >= 1 &&
+        hasTag(source.html, ["button", "a"]),
+      isSpanish ? "Bien - hay una tarjeta con accion." : "Good - there is a card with an action.",
+      isSpanish ? "Crea una tarjeta de precio con boton o link." : "Create a pricing card with a button or link.",
+    ],
+    [
+      source.compactCss.includes("border-radius:") &&
+        source.lowerCss.includes("box-shadow"),
+      isSpanish ? "Bien - radius y shadow dan pulido." : "Good - radius and shadow add polish.",
+      isSpanish ? "Anade border-radius y box-shadow." : "Add border-radius and box-shadow.",
+    ],
+    [
+      source.lowerCss.includes(":hover"),
+      isSpanish ? "Bien - la tarjeta tiene hover." : "Good - the card has a hover state.",
+      isSpanish ? "Anade un estado :hover." : "Add a :hover state.",
+    ],
+    [
+      source.lowerCss.includes("transition") &&
+        source.lowerCss.includes("transform"),
+      isSpanish ? "Bien - transition y transform suavizan el movimiento." : "Good - transition and transform smooth the movement.",
+      isSpanish ? "Usa transition y transform." : "Use transition and transform.",
+    ],
+    [
+      source.lowerCss.includes(":focus") &&
+        source.lowerCss.includes("outline"),
+      isSpanish ? "Bien - hay focus visible." : "Good - there is a visible focus state.",
+      isSpanish ? "Anade un focus visible con outline." : "Add a visible focus state with outline.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateGradientHeroCallout(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const checks = [
+    [
+      hasTag(source.html, ["section", "article", "div"]),
+      isSpanish ? "Bien - hay un wrapper para el callout." : "Good - there is a callout wrapper.",
+      isSpanish ? "Crea un wrapper para el callout." : "Create a wrapper for the callout.",
+    ],
+    [
+      countTags(source.html, ["h1", "h2", "h3"]) >= 1 &&
+        countTags(source.html, ["p"]) >= 1,
+      isSpanish ? "Bien - hay titulo y texto." : "Good - there is a heading and supporting text.",
+      isSpanish ? "Anade titulo y parrafo." : "Add a heading and paragraph.",
+    ],
+    [
+      hasTag(source.html, ["button", "a"]),
+      isSpanish ? "Bien - hay una accion." : "Good - there is an action.",
+      isSpanish ? "Anade un boton o link." : "Add a button or link.",
+    ],
+    [
+      source.lowerCss.includes("linear-gradient"),
+      isSpanish ? "Bien - el wrapper usa linear-gradient." : "Good - the wrapper uses linear-gradient.",
+      isSpanish ? "Usa linear-gradient en el fondo." : "Use linear-gradient in the background.",
+    ],
+    [
+      source.compactCss.includes("padding:") &&
+        source.compactCss.includes("border-radius:"),
+      isSpanish ? "Bien - padding y radius enmarcan el callout." : "Good - padding and radius frame the callout.",
+      isSpanish ? "Anade padding y border-radius." : "Add padding and border-radius.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validateResponsiveFeatureStrip(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+  const articleCount = countTags(source.html, ["article"]);
+
+  const checks = [
+    [
+      articleCount === 3,
+      isSpanish ? "Bien - hay exactamente tres features." : "Good - there are exactly three feature cards.",
+      isSpanish ? "Crea exactamente tres tarjetas feature." : "Create exactly three feature cards.",
+    ],
+    [
+      countTags(source.html, ["h2", "h3", "h4"]) >= 3 &&
+        countTags(source.html, ["p"]) >= 3,
+      isSpanish ? "Bien - cada feature tiene titulo y descripcion." : "Good - each feature has a heading and description.",
+      isSpanish ? "Cada feature necesita titulo y descripcion." : "Each feature needs a heading and description.",
+    ],
+    [
+      source.compactCss.includes("display:grid"),
+      isSpanish ? "Bien - el strip usa Grid." : "Good - the strip uses Grid.",
+      isSpanish ? "Usa display: grid en el padre." : "Use display: grid on the parent.",
+    ],
+    [
+      hasResponsiveGridColumns(source),
+      isSpanish ? "Bien - las columnas son responsive." : "Good - the columns are responsive.",
+      isSpanish ? "Usa repeat(auto-fit, minmax(...))." : "Use repeat(auto-fit, minmax(...)).",
+    ],
+    [
+      source.compactCss.includes("gap:") &&
+        source.compactCss.includes("padding:"),
+      isSpanish ? "Bien - hay spacing consistente." : "Good - spacing is consistent.",
+      isSpanish ? "Anade gap y padding." : "Add gap and padding.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+export function validatePortfolioSectionCapstone(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+  const articleCount = countTags(source.html, ["article"]);
+
+  const checks = [
+    [
+      hasTag(source.html, ["section"]) &&
+        countTags(source.html, ["h1", "h2", "h3"]) >= 4,
+      isSpanish ? "Bien - la seccion tiene cabecera y titulos de proyecto." : "Good - the section has a heading and project titles.",
+      isSpanish ? "Crea una seccion con cabecera y titulos de proyecto." : "Create a section with a heading and project titles.",
+    ],
+    [
+      articleCount === 3,
+      isSpanish ? "Bien - hay exactamente tres proyectos." : "Good - there are exactly three projects.",
+      isSpanish ? "Crea exactamente tres tarjetas de proyecto." : "Create exactly three project cards.",
+    ],
+    [
+      countTags(source.html, ["p"]) >= 4 &&
+        countTags(source.html, ["a"]) >= 3 &&
+        countTags(source.html, ["span"]) >= 6,
+      isSpanish ? "Bien - los proyectos tienen descripcion, tags y links." : "Good - projects include descriptions, tags, and links.",
+      isSpanish ? "Cada proyecto necesita descripcion, tags y link." : "Each project needs a description, tags, and a link.",
+    ],
+    [
+      source.compactCss.includes("display:grid") &&
+        hasResponsiveGridColumns(source),
+      isSpanish ? "Bien - las tarjetas usan Grid responsive." : "Good - the cards use responsive Grid.",
+      isSpanish ? "Usa Grid responsive para las tarjetas." : "Use responsive Grid for the cards.",
+    ],
+    [
+      source.compactCss.includes("padding:") &&
+        (source.lowerCss.includes("box-shadow") ||
+          source.compactCss.includes("border-radius:")),
+      isSpanish ? "Bien - la seccion tiene pulido visual." : "Good - the section has visual polish.",
+      isSpanish ? "Anade padding y pulido como shadow o radius." : "Add padding and polish such as shadow or radius.",
+    ],
+  ];
+
+  checks.forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
 }
 
 export function validateDebugBrokenProfileCardCss(draft, language = "en") {
@@ -2790,6 +3347,16 @@ export function validateChallenge(challengeOrId, draft, language = "en") {
     "styled-button": validateStyledButton,
     "centered-box": validateCenteredBox,
     "profile-card": validateProfileCard,
+    "grid-feature-board": validateGridFeatureBoard,
+    "css-grid-gallery": validateCssGridGallery,
+    "responsive-card-grid": validateResponsiveCardGrid,
+    "media-query-stack-layout": validateMediaQueryStackLayout,
+    "fluid-container-shell": validateFluidContainerShell,
+    "dashboard-stats-layout": validateDashboardStatsLayout,
+    "polished-pricing-card": validatePolishedPricingCard,
+    "gradient-hero-callout": validateGradientHeroCallout,
+    "responsive-feature-strip": validateResponsiveFeatureStrip,
+    "portfolio-section-capstone": validatePortfolioSectionCapstone,
     "debug-broken-profile-card-css": validateDebugBrokenProfileCardCss,
     "debug-broken-navbar-layout": validateDebugBrokenNavbarLayout,
     "debug-broken-responsive-grid": validateDebugBrokenResponsiveGrid,

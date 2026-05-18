@@ -462,35 +462,23 @@ const classSections = {
   "class-05": [
     {
       title: {
-        en: "Toggle patterns",
-        es: "Patrones toggle",
+        en: "Toggle foundations",
+        es: "Bases de toggles",
       },
       challengeIds: [
         "toggle-message",
         "toggle-background-color",
         "toggle-button-label",
         "toggle-card-class",
-        "theme-toggle-saved",
-        "faq-toggle",
       ],
     },
     {
       title: {
-        en: "Counters and live text",
-        es: "Contadores y texto en vivo",
+        en: "Live text and search basics",
+        es: "Texto en vivo y busqueda basica",
       },
       challengeIds: [
         "character-counter",
-        "counter-with-reset",
-        "button-click-counter",
-      ],
-    },
-    {
-      title: {
-        en: "Search basics",
-        es: "Busqueda basica",
-      },
-      challengeIds: [
         "live-search-filter",
         "fruit-partial-match-list",
         "city-search-list",
@@ -510,7 +498,19 @@ const classSections = {
         "bold-matching-fruits",
         "search-cards-layout",
         "filter-products-name-price",
+      ],
+    },
+    {
+      title: {
+        en: "More event patterns",
+        es: "Mas patrones de eventos",
+      },
+      challengeIds: [
+        "faq-toggle",
+        "theme-toggle-saved",
+        "counter-with-reset",
         "password-visibility-toggle",
+        "button-click-counter",
       ],
     },
     {
@@ -524,16 +524,15 @@ const classSections = {
   "class-06": [
     {
       title: {
-        en: "Validation basics",
-        es: "Validacion basica",
+        en: "Validation and submit basics",
+        es: "Validacion y bases de envio",
       },
       challengeIds: [
         "simple-form-validation",
+        "prevent-duplicate-items",
         "contact-form-validation",
         "login-form-submit-object",
         "booking-form-reset",
-        "password-strength-checker",
-        "password-rules-validation",
       ],
     },
     {
@@ -552,22 +551,23 @@ const classSections = {
         es: "Listas y cambios",
       },
       challengeIds: [
-        "prevent-duplicate-items",
         "add-item-to-list",
         "add-goal-to-list",
         "remove-item-from-list",
         "remove-saved-item",
-        "todo-complete-toggle",
       ],
     },
     {
       title: {
-        en: "Sorting, filtering, and tabs",
-        es: "Ordenacion, filtros y tabs",
+        en: "Sorting, filtering, and UI state",
+        es: "Ordenacion, filtros y estado de UI",
       },
       challengeIds: [
         "sort-products",
         "filter-products",
+        "todo-complete-toggle",
+        "password-strength-checker",
+        "password-rules-validation",
         "tab-switcher",
         "restaurant-tabs-panel",
       ],
@@ -1284,12 +1284,12 @@ const classModules = [
     modeId: "builder",
     challengeIds: [
       "simple-form-validation",
+      "prevent-duplicate-items",
       "contact-form-validation",
       "login-form-submit-object",
       "booking-form-reset",
       "reservation-form-summary",
       "form-data-preview",
-      "prevent-duplicate-items",
       "add-item-to-list",
       "add-goal-to-list",
       "remove-item-from-list",
@@ -1427,12 +1427,12 @@ const classModules = [
       "spread-settings-merge",
       "find-priority-ticket",
       "switch-role-permissions",
+      "closure-counter-factory",
+      "event-loop-order",
       "debug-broken-form-validation",
       "try-catch-json-parser",
       "debug-broken-localstorage-todos",
       "debug-broken-async-search",
-      "closure-counter-factory",
-      "event-loop-order",
       "fetch-users-status-codes",
       "post-json-with-headers",
       "query-param-search",

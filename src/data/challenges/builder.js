@@ -36,6 +36,70 @@ export const builderChallenges = [
     ],
     expectedOutcome:
       "A button that lets the user show and hide a message on the page.",
+    beginnerGuide: {
+      en: {
+        title: "Show me how to think about the JavaScript",
+        intro:
+          "This first Builder challenge is not about memorising code. It is about learning the basic interaction pattern: select the elements, listen for a click, check the current state, then update the page.",
+        steps: [
+          "The button is the thing the user interacts with, so JavaScript needs a variable for it.",
+          "The message is the thing that changes, so JavaScript needs a variable for that too.",
+          "addEventListener() says: when this button is clicked, run this function.",
+          "The if statement checks whether the message is hidden right now.",
+          "The two branches update message.style.display so the change is visible in the preview.",
+        ],
+        code: `// Find the button element in the HTML
+// and store it inside the variable "toggleBtn"
+const toggleBtn = document.getElementById("toggleBtn");
+
+// Find the paragraph/message element in the HTML
+// and store it inside the variable "message"
+const message = document.getElementById("message");
+
+// Listen for a click on the button
+toggleBtn.addEventListener("click", () => {
+  // Check if the message is currently hidden
+  if (message.style.display === "none") {
+    // If hidden, show the message
+    message.style.display = "block";
+  } else {
+    // Otherwise, hide the message
+    message.style.display = "none";
+  }
+});`,
+      },
+      es: {
+        title: "Ver como pensar el JavaScript",
+        intro:
+          "Este primer reto Builder no va de memorizar codigo. Va de aprender el patron basico de interaccion: seleccionar elementos, escuchar un click, revisar el estado actual y actualizar la pagina.",
+        steps: [
+          "El boton es lo que usa la persona, asi que JavaScript necesita una variable para guardarlo.",
+          "El mensaje es lo que cambia, asi que JavaScript tambien necesita una variable para guardarlo.",
+          "addEventListener() significa: cuando este boton reciba click, ejecuta esta funcion.",
+          "El if revisa si el mensaje esta oculto ahora mismo.",
+          "Las dos ramas actualizan message.style.display para que el cambio se vea en el preview.",
+        ],
+        code: `// Encuentra el boton en el HTML
+// y guardalo dentro de la variable "toggleBtn"
+const toggleBtn = document.getElementById("toggleBtn");
+
+// Encuentra el mensaje en el HTML
+// y guardalo dentro de la variable "message"
+const message = document.getElementById("message");
+
+// Escucha un click en el boton
+toggleBtn.addEventListener("click", () => {
+  // Revisa si el mensaje esta oculto ahora mismo
+  if (message.style.display === "none") {
+    // Si esta oculto, muestra el mensaje
+    message.style.display = "block";
+  } else {
+    // Si no, oculta el mensaje
+    message.style.display = "none";
+  }
+});`,
+      },
+    },
     starter: {
       html: `<button id="toggleBtn">Toggle Message</button>
 <p id="message">Hello! I can be shown or hidden.</p>`,
@@ -65,7 +129,7 @@ toggleBtn.addEventListener("click", () => {
   {
     id: "toggle-background-color",
     editorType: "web",
-    title: "Challenge 0 — Toggle Background Color",
+    title: "Challenge 2 — Toggle Background Color",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Change a preview card background color when the button is clicked.",
@@ -138,7 +202,7 @@ colorBtn.addEventListener("click", () => {
   {
     id: "toggle-button-label",
     editorType: "web",
-    title: "Challenge 0 — Toggle Button Label",
+    title: "Challenge 3 — Toggle Button Label",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Toggle a details panel and update the button text between Show and Hide.",
@@ -199,7 +263,7 @@ detailsBtn.addEventListener("click", () => {
   {
     id: "toggle-card-class",
     editorType: "web",
-    title: "Challenge 0 — Toggle Card Class",
+    title: "Challenge 4 — Toggle Card Class",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Toggle a highlighted class on a card so it changes appearance when clicked.",
@@ -282,7 +346,7 @@ highlightBtn.addEventListener("click", () => {
   {
     id: "character-counter",
     editorType: "web",
-    title: "Challenge 2 — Character Counter",
+    title: "Challenge 5 — Character Counter",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Update a live character counter as the user types.",
@@ -337,7 +401,7 @@ messageInput.addEventListener("input", () => {
   {
     id: "live-search-filter",
     editorType: "web",
-    title: "Challenge 3 — Live Search Filter",
+    title: "Challenge 6 — Live Search Filter",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Filter a list of items based on what the user types.",
@@ -365,6 +429,94 @@ messageInput.addEventListener("input", () => {
     ],
     expectedOutcome:
       "A searchable list where matching items stay visible and non-matching items are hidden.",
+    beginnerGuide: {
+      en: {
+        title: "How to think about live search",
+        intro:
+          "Live search is the same pattern repeated quickly: listen while the user types, read the current search text, compare it with every item, then update each item's visibility.",
+        steps: [
+          "Select the input because it contains what the user types.",
+          "Select every fruit item because each one may need to show or hide.",
+          "Listen for the input event because it fires on every keystroke.",
+          "Lowercase both pieces of text so Apple still matches apple.",
+          "Use includes() to decide whether each fruit should stay visible.",
+        ],
+        code: `const searchInput = document.getElementById("searchInput");
+// Find the input box
+
+const items = document.querySelectorAll("#fruitList li");
+// Find all <li> items inside the element with id="fruitList"
+
+searchInput.addEventListener("input", () => {
+  // Every time the user types in the input, run this code
+
+  const searchValue = searchInput.value.toLowerCase();
+  // Get what the user typed and make it lowercase
+
+  items.forEach((item) => {
+    // Go through each fruit item one by one
+
+    const itemText = item.textContent.toLowerCase();
+    // Get the text of the current fruit and make it lowercase
+
+    if (itemText.includes(searchValue)) {
+      // If the fruit text includes what the user typed
+
+      item.style.display = "list-item";
+      // Show this fruit
+    } else {
+      // Otherwise
+
+      item.style.display = "none";
+      // Hide this fruit
+    }
+  });
+});`,
+      },
+      es: {
+        title: "Como pensar una busqueda en vivo",
+        intro:
+          "Una busqueda en vivo repite el mismo patron rapidamente: escuchar mientras la persona escribe, leer el texto actual, compararlo con cada item y actualizar la visibilidad.",
+        steps: [
+          "Selecciona el input porque contiene lo que escribe la persona.",
+          "Selecciona cada fruta porque cada una puede necesitar mostrarse u ocultarse.",
+          "Escucha el evento input porque se ejecuta con cada tecla.",
+          "Convierte ambos textos a minusculas para que Apple tambien coincida con apple.",
+          "Usa includes() para decidir si cada fruta debe seguir visible.",
+        ],
+        code: `const searchInput = document.getElementById("searchInput");
+// Encuentra el input de busqueda
+
+const items = document.querySelectorAll("#fruitList li");
+// Encuentra todos los <li> dentro del elemento con id="fruitList"
+
+searchInput.addEventListener("input", () => {
+  // Cada vez que la persona escribe en el input, ejecuta este codigo
+
+  const searchValue = searchInput.value.toLowerCase();
+  // Lee lo que escribio la persona y pasalo a minusculas
+
+  items.forEach((item) => {
+    // Recorre cada fruta una por una
+
+    const itemText = item.textContent.toLowerCase();
+    // Lee el texto de esta fruta y pasalo a minusculas
+
+    if (itemText.includes(searchValue)) {
+      // Si el texto de la fruta incluye lo que se escribio
+
+      item.style.display = "list-item";
+      // Muestra esta fruta
+    } else {
+      // Si no
+
+      item.style.display = "none";
+      // Oculta esta fruta
+    }
+  });
+});`,
+      },
+    },
     starter: {
       html: `<input id="searchInput" type="text" placeholder="Search fruits..." />
 <ul id="fruitList">
@@ -406,7 +558,7 @@ searchInput.addEventListener("input", () => {
   {
     id: "fruit-partial-match-list",
     editorType: "web",
-    title: "Challenge 0 — Search 10 Fruits with Partial Matches",
+    title: "Challenge 7 — Search 10 Fruits with Partial Matches",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Search a longer fruit list and keep items visible when the typed text matches only part of the word.",
@@ -484,7 +636,7 @@ fruitSearchInput.addEventListener("input", () => {
   {
     id: "city-search-list",
     editorType: "web",
-    title: "Challenge 0 — Search a List of Cities",
+    title: "Challenge 8 — Search a List of Cities",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Search a list of city names and show only the matching cities.",
@@ -551,7 +703,7 @@ citySearchInput.addEventListener("input", () => {
   {
     id: "movie-search-list",
     editorType: "web",
-    title: "Challenge 0 — Search a List of Movies",
+    title: "Challenge 9 — Search a List of Movies",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Search a list of movie titles and show only the matching results.",
@@ -618,7 +770,7 @@ movieSearchInput.addEventListener("input", () => {
   {
     id: "case-insensitive-book-search",
     editorType: "web",
-    title: "Challenge 0 — Case-Insensitive Search",
+    title: "Challenge 10 — Case-Insensitive Search",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Search book titles even when the user types with a different letter case.",
@@ -686,7 +838,7 @@ bookSearchInput.addEventListener("input", () => {
   {
     id: "username-search-filter",
     editorType: "web",
-    title: "Challenge 0 — Search Users by Username",
+    title: "Challenge 11 — Search Users by Username",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Search a list of usernames and show only the matching users.",
@@ -754,7 +906,7 @@ userSearchInput.addEventListener("input", () => {
   {
     id: "no-results-search-state",
     editorType: "web",
-    title: "Challenge 0 — No Results Found State",
+    title: "Challenge 12 — No Results Found State",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Search a list and show a No results found message when nothing matches.",
@@ -829,7 +981,7 @@ drinkSearchInput.addEventListener("input", () => {
   {
     id: "clear-search-button",
     editorType: "web",
-    title: "Challenge 0 — Clear the Search",
+    title: "Challenge 13 — Clear the Search",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Add a clear button that empties the search field and restores all results.",
@@ -905,7 +1057,7 @@ clearSearchBtn.addEventListener("click", () => {
   {
     id: "bold-matching-fruits",
     editorType: "web",
-    title: "Challenge 0 — Make Matching Fruits Bold",
+    title: "Challenge 14 — Make Matching Fruits Bold",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Highlight matching fruits by making them bold while the user types.",
@@ -973,7 +1125,7 @@ boldFruitInput.addEventListener("input", () => {
   {
     id: "search-cards-layout",
     editorType: "web",
-    title: "Challenge 0 — Search Cards Instead of List Items",
+    title: "Challenge 15 — Search Cards Instead of List Items",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Search a group of cards and show only the cards that match the typed text.",
@@ -1059,7 +1211,7 @@ cardSearchInput.addEventListener("input", () => {
   {
     id: "filter-products-name-price",
     editorType: "web",
-    title: "Challenge 0 — Filter Products by Name and Price",
+    title: "Challenge 16 — Filter Products by Name and Price",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Filter a product list using both a search input and a maximum price input.",
@@ -1136,7 +1288,7 @@ renderFilteredProducts();`,
   {
     id: "faq-toggle",
     editorType: "web",
-    title: "Challenge 4 — FAQ Toggle",
+    title: "Challenge 17 — FAQ Toggle",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Show and hide an FAQ answer when the question is clicked.",
@@ -1200,7 +1352,7 @@ faqBtn.addEventListener("click", () => {
   {
     id: "theme-toggle-saved",
     editorType: "web",
-    title: "Challenge 5 — Theme Toggle with Saved Preference",
+    title: "Challenge 18 — Theme Toggle with Saved Preference",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Toggle between light and dark mode and save the user's choice in localStorage.",
@@ -1297,7 +1449,7 @@ themeBtn.addEventListener("click", () => {
   {
     id: "counter-with-reset",
     editorType: "web",
-    title: "Challenge 6 — Counter with Reset",
+    title: "Challenge 19 — Counter with Reset",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Build a counter with increase, decrease, and reset buttons.",
@@ -1375,7 +1527,7 @@ resetBtn.addEventListener("click", () => {
   {
     id: "password-visibility-toggle",
     editorType: "web",
-    title: "Challenge 0 — Password Show / Hide",
+    title: "Challenge 20 — Password Show / Hide",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Build a password field with a button that shows and hides the password text.",
@@ -1442,7 +1594,7 @@ passwordToggleBtn.addEventListener("click", () => {
   {
     id: "button-click-counter",
     editorType: "web",
-    title: "Challenge 0 — Button Click Counter",
+    title: "Challenge 21 — Button Click Counter",
     difficulty: "Easy",
     category: "JavaScript + DOM",
     goal: "Count how many times a button has been clicked and show the total on the page.",
@@ -1500,7 +1652,7 @@ clickCounterBtn.addEventListener("click", () => {
   {
     id: "simple-form-validation",
     editorType: "web",
-    title: "Challenge 7 — Simple Form Validation",
+    title: "Challenge 22 — Simple Form Validation",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a form so the user cannot submit empty fields.",
@@ -1568,7 +1720,7 @@ signupForm.addEventListener("submit", (event) => {
   {
     id: "prevent-duplicate-items",
     editorType: "web",
-    title: "Challenge 0 — Prevent Duplicate Items",
+    title: "Challenge 23 — Prevent Duplicate Items",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Let the user add items to a list, but stop duplicates from being added twice.",
@@ -1659,7 +1811,7 @@ renderTopics();`,
   {
     id: "contact-form-validation",
     editorType: "web",
-    title: "Challenge 0 — Simple Contact Form Validation",
+    title: "Challenge 24 — Simple Contact Form Validation",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a small contact form so the user must enter a name and a valid email before success is shown.",
@@ -1741,7 +1893,7 @@ contactForm.addEventListener("submit", (event) => {
   {
     id: "login-form-submit-object",
     editorType: "web",
-    title: "Challenge 0 — Login Form Submit Object",
+    title: "Challenge 25 — Login Form Submit Object",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Read login form values, validate them, create a user object, and preview the submitted data.",
@@ -1863,7 +2015,7 @@ loginForm.addEventListener("submit", (event) => {
   {
     id: "booking-form-reset",
     editorType: "web",
-    title: "Challenge 0 — Booking Form with Reset",
+    title: "Challenge 26 — Booking Form with Reset",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a booking form, show a booking summary, and clear the fields after a valid submit.",
@@ -1996,7 +2148,7 @@ bookingForm.addEventListener("submit", (event) => {
   {
     id: "reservation-form-summary",
     editorType: "web",
-    title: "Challenge 0 — Restaurant Reservation Summary",
+    title: "Challenge 27 — Restaurant Reservation Summary",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Build a reservation form that turns form data into a clear reservation summary card.",
@@ -2123,9 +2275,114 @@ reservationForm.addEventListener("submit", (event) => {
     },
   },
   {
+    id: "form-data-preview",
+    editorType: "web",
+    title: "Challenge 28 — Form Data Preview",
+    difficulty: "Medium",
+    category: "JavaScript + Forms",
+    goal: "Collect form values and preview the submitted data on the page.",
+    requirements: [
+      "Create a form with name, email, and role fields",
+      "Prevent the default submit behavior",
+      "Read the submitted values",
+      "Render a preview card with the submitted data",
+    ],
+    tips: [
+      "Use the submit event on the form.",
+      "FormData can read values from named inputs.",
+      "The preview should update after each submit.",
+    ],
+    concepts: [
+      "submit events",
+      "preventDefault",
+      "FormData",
+      "DOM rendering",
+    ],
+    suggestedApproach: [
+      "Add name attributes to your fields.",
+      "Listen for form submit.",
+      "Create a FormData object from the form.",
+      "Render the values into the preview container.",
+    ],
+    commonMistakes: [
+      "Forgetting name attributes",
+      "Reading values before preventDefault",
+      "Not updating the preview after submit",
+    ],
+    expectedOutcome:
+      "A form that shows a clean preview of the submitted user data.",
+    starter: {
+      html: `<form id="profileForm">
+  <input name="name" placeholder="Name" />
+  <input name="email" placeholder="Email" />
+  <select name="role">
+    <option>Frontend Developer</option>
+    <option>Designer</option>
+    <option>Project Manager</option>
+  </select>
+  <button type="submit">Preview</button>
+</form>
+<section id="preview"></section>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+}`,
+      js: `const profileForm = document.getElementById("profileForm");
+const preview = document.getElementById("preview");`,
+    },
+    solution: {
+      html: `<form id="profileForm">
+  <input name="name" placeholder="Name" />
+  <input name="email" placeholder="Email" />
+  <select name="role">
+    <option>Frontend Developer</option>
+    <option>Designer</option>
+    <option>Project Manager</option>
+  </select>
+  <button type="submit">Preview</button>
+</form>
+<section id="preview"></section>`,
+      css: `form {
+  display: grid;
+  gap: 10px;
+  max-width: 360px;
+}
+
+input,
+select,
+button {
+  padding: 10px;
+}
+
+#preview {
+  margin-top: 18px;
+}`,
+      js: `const profileForm = document.getElementById("profileForm");
+const preview = document.getElementById("preview");
+
+profileForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(profileForm);
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const role = formData.get("role");
+
+  preview.innerHTML = \`
+    <article>
+      <h3>\${name}</h3>
+      <p>\${email}</p>
+      <strong>\${role}</strong>
+    </article>
+  \`;
+});`,
+    },
+  },
+  {
     id: "add-item-to-list",
     editorType: "web",
-    title: "Challenge 8 — Add Item to List",
+    title: "Challenge 29 — Add Item to List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Let the user add new items to a list.",
@@ -2190,7 +2447,7 @@ addBtn.addEventListener("click", () => {
   {
     id: "add-goal-to-list",
     editorType: "web",
-    title: "Challenge 0 — Add Item to a List",
+    title: "Challenge 30 — Add Item to a List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Let the user add goals to a list and show how many items have been added.",
@@ -2264,7 +2521,7 @@ goalAddBtn.addEventListener("click", () => {
   {
     id: "remove-item-from-list",
     editorType: "web",
-    title: "Challenge 9 — Remove Item from List",
+    title: "Challenge 31 — Remove Item from List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Allow the user to remove items from a list.",
@@ -2325,7 +2582,7 @@ removeButtons.forEach((button) => {
   {
     id: "remove-saved-item",
     editorType: "web",
-    title: "Challenge 0 — Remove Item from a List",
+    title: "Challenge 32 — Remove Item from a List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Allow the user to remove saved links from a list and show an empty message when none remain.",
@@ -2399,7 +2656,7 @@ updateSavedEmptyState();`,
   {
     id: "sort-products",
     editorType: "web",
-    title: "Challenge 10 — Sort Products",
+    title: "Challenge 33 — Sort Products",
     difficulty: "Medium",
     category: "JavaScript + Arrays",
     goal: "Sort a small list of products by price.",
@@ -2472,7 +2729,7 @@ renderProducts();`,
   {
     id: "filter-products",
     editorType: "web",
-    title: "Challenge 11 — Filter Products by Category",
+    title: "Challenge 34 — Filter Products by Category",
     difficulty: "Medium",
     category: "JavaScript + Arrays",
     goal: "Show only products from a selected category.",
@@ -2555,7 +2812,7 @@ renderProducts(products);`,
   {
     id: "todo-complete-toggle",
     editorType: "web",
-    title: "Challenge 12 — Todo Complete Toggle",
+    title: "Challenge 35 — Todo Complete Toggle",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Let the user mark todo items as complete.",
@@ -2620,7 +2877,7 @@ todoButtons.forEach((button) => {
   {
     id: "password-strength-checker",
     editorType: "web",
-    title: "Challenge 13 — Password Strength Checker",
+    title: "Challenge 36 — Password Strength Checker",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Display whether a password is weak or strong as the user types.",
@@ -2678,7 +2935,7 @@ passwordInput.addEventListener("input", () => {
   {
     id: "password-rules-validation",
     editorType: "web",
-    title: "Challenge 0 — Password Validation Rules",
+    title: "Challenge 37 — Password Validation Rules",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a password against basic rules and show which rules are currently passing.",
@@ -2754,7 +3011,7 @@ rulesPasswordInput.addEventListener("input", () => {
   {
     id: "tab-switcher",
     editorType: "web",
-    title: "Challenge 14 — Tab Switcher",
+    title: "Challenge 38 — Tab Switcher",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Switch visible content when the user clicks different tabs.",
@@ -2822,7 +3079,7 @@ tab2Btn.addEventListener("click", () => {
   {
     id: "restaurant-tabs-panel",
     editorType: "web",
-    title: "Challenge 0 — Tabs: About / Menu / Contact",
+    title: "Challenge 39 — Tabs: About / Menu / Contact",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Build a restaurant info panel where About, Menu, and Contact buttons switch the visible content.",
@@ -2921,7 +3178,7 @@ renderRestaurantTab("about");`,
   {
     id: "mock-fetch-loading",
     editorType: "web",
-    title: "Challenge 15 — Mock Fetch with Loading State",
+    title: "Challenge 40 — Mock Fetch with Loading State",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Simulate loading data with a fake API call and show a loading message first.",
@@ -2981,7 +3238,7 @@ loadBtn.addEventListener("click", async () => {
   {
     id: "mock-fetch-error-retry",
     editorType: "web",
-    title: "Challenge 16 — Mock Fetch Error and Retry",
+    title: "Challenge 41 — Mock Fetch Error and Retry",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Simulate an API request that can fail and show an error message with retry support.",
@@ -3051,7 +3308,7 @@ retryBtn.addEventListener("click", async () => {
   {
     id: "promise-chain-practice",
     editorType: "web",
-    title: "Challenge 17 — Promise Chain Practice",
+    title: "Challenge 42 — Promise Chain Practice",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Use .then() to handle a Promise and display the result.",
@@ -3112,7 +3369,7 @@ runPromiseBtn.addEventListener("click", () => {
   {
     id: "await-user-card",
     editorType: "web",
-    title: "Challenge 18 — Async Await User Card",
+    title: "Challenge 43 — Async Await User Card",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Use async/await to load mock user data and show it in a small card.",
@@ -3176,7 +3433,7 @@ loadUserBtn.addEventListener("click", async () => {
   {
     id: "async-save-button",
     editorType: "web",
-    title: "Challenge 0 — Async Save Button",
+    title: "Challenge 44 — Async Save Button",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Simulate saving data with a button that shows loading, success, and disabled states.",
@@ -3249,7 +3506,7 @@ saveBtn.addEventListener("click", async () => {
   {
     id: "save-notes-localstorage",
     editorType: "web",
-    title: "Challenge 19 — Save Notes in localStorage",
+    title: "Challenge 45 — Save Notes in localStorage",
     difficulty: "Medium",
     category: "JavaScript + localStorage",
     goal: "Save notes in localStorage so they remain after refresh.",
@@ -3318,421 +3575,9 @@ saveNoteBtn.addEventListener("click", () => {
     },
   },
   {
-    id: "shopping-cart-total",
-    editorType: "web",
-    title: "Challenge 20 — Shopping Cart Total",
-    difficulty: "Medium",
-    category: "JavaScript + Arrays",
-    goal: "Calculate and display the total price of cart items.",
-    requirements: [
-      "Use an array of cart items with prices",
-      "Display the items",
-      "Calculate and show the total price",
-    ],
-    tips: [
-      "Use reduce() if you want a modern approach.",
-      "You can also use a loop if you prefer.",
-      "Render both the items and the final total.",
-    ],
-    concepts: ["arrays of objects", "reduce()", "rendering lists", "totals"],
-    suggestedApproach: [
-      "Create a cart array with item names and prices.",
-      "Render the items into a list.",
-      "Calculate the total of all prices.",
-      "Display the total below the list.",
-    ],
-    commonMistakes: [
-      "Adding strings instead of numbers",
-      "Calculating the total but never showing it",
-      "Using the wrong property name for price",
-    ],
-    expectedOutcome:
-      "A small cart summary showing the items and the total price of everything combined.",
-    starter: {
-      html: `<ul id="cartList"></ul>
-<p id="cartTotal"></p>`,
-      css: ``,
-      js: ``,
-    },
-    solution: {
-      html: `<ul id="cartList"></ul>
-<p id="cartTotal"></p>`,
-      css: ``,
-      js: `const cartList = document.getElementById("cartList");
-const cartTotal = document.getElementById("cartTotal");
-
-const cartItems = [
-  { name: "T-shirt", price: 15 },
-  { name: "Jeans", price: 35 },
-  { name: "Shoes", price: 50 },
-];
-
-cartItems.forEach((item) => {
-  const li = document.createElement("li");
-  li.textContent = item.name + " - £" + item.price;
-  cartList.appendChild(li);
-});
-
-const total = cartItems.reduce((sum, item) => {
-  return sum + item.price;
-}, 0);
-
-cartTotal.textContent = "Total: £" + total;`,
-    },
-  },
-  {
-    id: "mock-product-search",
-    editorType: "web",
-    title: "Challenge 21 — Mock Product Search",
-    difficulty: "Medium",
-    category: "JavaScript + Async",
-    goal: "Search mock products asynchronously and render the matching results.",
-    requirements: [
-      "Use an async function",
-      "Search products by text",
-      "Show a loading message",
-      "Render the matching results",
-    ],
-    tips: [
-      "Use a fake request with Promise and setTimeout.",
-      "Update the DOM before and after the request.",
-      "Filter the products based on the input text.",
-    ],
-    concepts: ["promises", "async/await", "loading state", "filtering"],
-    suggestedApproach: [
-      "Create a small products array.",
-      "Create a fake async search function.",
-      "Show loading text while waiting.",
-      "Render the filtered products after the Promise resolves.",
-    ],
-    commonMistakes: [
-      "Trying to return data before awaiting it",
-      "Not clearing old results",
-      "Forgetting to show loading state",
-    ],
-    expectedOutcome:
-      "A small product search interface that loads mock results asynchronously.",
-    starter: {
-      html: `<input id="searchInput" type="text" placeholder="Search products..." />
-  <button id="searchBtn">Search</button>
-  <p id="statusText"></p>
-  <ul id="resultsList"></ul>`,
-      css: ``,
-      js: `const searchInput = document.getElementById("searchInput");
-  const searchBtn = document.getElementById("searchBtn");
-  const statusText = document.getElementById("statusText");
-  const resultsList = document.getElementById("resultsList");
-
-  const products = [
-    { id: 1, name: "Laptop" },
-    { id: 2, name: "Chair" },
-    { id: 3, name: "Phone" },
-    { id: 4, name: "Desk Lamp" },
-  ];
-
-  function searchProducts(term) {
-
-  }
-
-  searchBtn.addEventListener("click", async () => {
-
-  });`,
-    },
-    solution: {
-      html: `<input id="searchInput" type="text" placeholder="Search products..." />
-  <button id="searchBtn">Search</button>
-  <p id="statusText"></p>
-  <ul id="resultsList"></ul>`,
-      css: ``,
-      js: `const searchInput = document.getElementById("searchInput");
-  const searchBtn = document.getElementById("searchBtn");
-  const statusText = document.getElementById("statusText");
-  const resultsList = document.getElementById("resultsList");
-
-  const products = [
-    { id: 1, name: "Laptop" },
-    { id: 2, name: "Chair" },
-    { id: 3, name: "Phone" },
-    { id: 4, name: "Desk Lamp" },
-  ];
-
-  function searchProducts(term) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const filteredProducts = products.filter((product) =>
-          product.name.toLowerCase().includes(term.toLowerCase())
-        );
-
-        resolve(filteredProducts);
-      }, 1000);
-    });
-  }
-
-  searchBtn.addEventListener("click", async () => {
-    statusText.textContent = "Loading...";
-    resultsList.innerHTML = "";
-
-    const results = await searchProducts(searchInput.value);
-
-    statusText.textContent = "";
-
-    if (results.length === 0) {
-      statusText.textContent = "No products found.";
-      return;
-    }
-
-    results.forEach((product) => {
-      const li = document.createElement("li");
-      li.textContent = product.name;
-      resultsList.appendChild(li);
-    });
-  });`,
-    },
-  },
-  {
-    id: "promise-all-user-posts",
-    editorType: "web",
-    title: "Challenge 22 — Load User and Posts with Promise.all",
-    difficulty: "Hard",
-    category: "JavaScript + Async",
-    goal: "Load mock user and post data at the same time using Promise.all and render both results.",
-    requirements: [
-      "Create 2 fake async functions",
-      "Use Promise.all to wait for both results",
-      "Show a loading message first",
-      "Render the user and posts after both requests finish",
-    ],
-    tips: [
-      "Use Promise.all([promise1, promise2]).",
-      "Both fake functions can use setTimeout.",
-      "Only render the results after both promises resolve.",
-    ],
-    concepts: [
-      "Promise.all",
-      "async/await",
-      "parallel requests",
-      "DOM rendering",
-    ],
-    suggestedApproach: [
-      "Create one fake function for the user and another for the posts.",
-      "Set loading text before starting.",
-      "Await both functions with Promise.all.",
-      "Render the user name and the post titles.",
-    ],
-    commonMistakes: [
-      "Awaiting each request separately instead of using Promise.all",
-      "Trying to use the results before both promises finish",
-      "Forgetting to clear old content before rendering new data",
-    ],
-    expectedOutcome:
-      "A small UI that first shows loading text and then displays one user and a list of post titles.",
-    starter: {
-      html: `<button id="loadBtn">Load Dashboard</button>
-  <p id="statusText"></p>
-  <div id="userBox"></div>
-  <ul id="postList"></ul>`,
-      css: ``,
-      js: `const loadBtn = document.getElementById("loadBtn");
-  const statusText = document.getElementById("statusText");
-  const userBox = document.getElementById("userBox");
-  const postList = document.getElementById("postList");
-
-  function fetchUser() {
-
-  }
-
-  function fetchPosts() {
-
-  }
-
-  loadBtn.addEventListener("click", async () => {
-
-  });`,
-    },
-    solution: {
-      html: `<button id="loadBtn">Load Dashboard</button>
-  <p id="statusText"></p>
-  <div id="userBox"></div>
-  <ul id="postList"></ul>`,
-      css: ``,
-      js: `const loadBtn = document.getElementById("loadBtn");
-  const statusText = document.getElementById("statusText");
-  const userBox = document.getElementById("userBox");
-  const postList = document.getElementById("postList");
-
-  function fetchUser() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ id: 1, name: "Nico" });
-      }, 1000);
-    });
-  }
-
-  function fetchPosts() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          { id: 1, title: "Getting started with React" },
-          { id: 2, title: "Understanding async JavaScript" },
-        ]);
-      }, 1000);
-    });
-  }
-
-  loadBtn.addEventListener("click", async () => {
-    statusText.textContent = "Loading...";
-    userBox.textContent = "";
-    postList.innerHTML = "";
-
-    const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
-
-    statusText.textContent = "";
-    userBox.textContent = "User: " + user.name;
-
-    posts.forEach((post) => {
-      const li = document.createElement("li");
-      li.textContent = post.title;
-      postList.appendChild(li);
-    });
-  });`,
-    },
-  },
-  {
-    id: "filter-sort-products",
-    editorType: "web",
-    title: "Challenge 23 — Filter and Sort Products",
-    difficulty: "Hard",
-    category: "JavaScript + Arrays",
-    goal: "Filter products by category and sort the visible products by price.",
-    requirements: [
-      "Use an array of product objects",
-      "Add category filter buttons",
-      "Add a sort by price button",
-      "Render the updated product list",
-    ],
-    tips: [
-      "Keep the original product data in JavaScript.",
-      "Use filter() for category changes.",
-      "Use sort() on a copied array when sorting.",
-    ],
-    concepts: ["filter()", "sort()", "arrays of objects", "DOM rendering"],
-    suggestedApproach: [
-      "Create an array of products with category and price.",
-      "Write a render function for the list.",
-      "Filter the products when category buttons are clicked.",
-      "Sort the currently visible products by price when the sort button is pressed.",
-    ],
-    commonMistakes: [
-      "Sorting the wrong array",
-      "Filtering correctly but rendering the old list",
-      "Mutating data without understanding the effect",
-    ],
-    expectedOutcome:
-      "A product list that can be filtered by category and sorted by price.",
-    starter: {
-      html: `<button id="allBtn">All</button>
-  <button id="techBtn">Tech</button>
-  <button id="homeBtn">Home</button>
-  <button id="sortBtn">Sort by Price</button>
-  <ul id="productList"></ul>`,
-      css: ``,
-      js: `const allBtn = document.getElementById("allBtn");
-  const techBtn = document.getElementById("techBtn");
-  const homeBtn = document.getElementById("homeBtn");
-  const sortBtn = document.getElementById("sortBtn");
-  const productList = document.getElementById("productList");
-
-  const products = [
-    { id: 1, name: "Laptop", category: "Tech", price: 899 },
-    { id: 2, name: "Chair", category: "Home", price: 120 },
-    { id: 3, name: "Phone", category: "Tech", price: 699 },
-    { id: 4, name: "Lamp", category: "Home", price: 35 },
-  ];
-
-  let visibleProducts = products;
-
-  function renderProducts(items) {
-
-  }
-
-  allBtn.addEventListener("click", () => {
-
-  });
-
-  techBtn.addEventListener("click", () => {
-
-  });
-
-  homeBtn.addEventListener("click", () => {
-
-  });
-
-  sortBtn.addEventListener("click", () => {
-
-  });
-
-  renderProducts(visibleProducts);`,
-    },
-    solution: {
-      html: `<button id="allBtn">All</button>
-  <button id="techBtn">Tech</button>
-  <button id="homeBtn">Home</button>
-  <button id="sortBtn">Sort by Price</button>
-  <ul id="productList"></ul>`,
-      css: ``,
-      js: `const allBtn = document.getElementById("allBtn");
-  const techBtn = document.getElementById("techBtn");
-  const homeBtn = document.getElementById("homeBtn");
-  const sortBtn = document.getElementById("sortBtn");
-  const productList = document.getElementById("productList");
-
-  const products = [
-    { id: 1, name: "Laptop", category: "Tech", price: 899 },
-    { id: 2, name: "Chair", category: "Home", price: 120 },
-    { id: 3, name: "Phone", category: "Tech", price: 699 },
-    { id: 4, name: "Lamp", category: "Home", price: 35 },
-  ];
-
-  let visibleProducts = products;
-
-  function renderProducts(items) {
-    productList.innerHTML = "";
-
-    items.forEach((product) => {
-      const li = document.createElement("li");
-      li.textContent =
-        product.name + " - " + product.category + " - £" + product.price;
-      productList.appendChild(li);
-    });
-  }
-
-  allBtn.addEventListener("click", () => {
-    visibleProducts = products;
-    renderProducts(visibleProducts);
-  });
-
-  techBtn.addEventListener("click", () => {
-    visibleProducts = products.filter((product) => product.category === "Tech");
-    renderProducts(visibleProducts);
-  });
-
-  homeBtn.addEventListener("click", () => {
-    visibleProducts = products.filter((product) => product.category === "Home");
-    renderProducts(visibleProducts);
-  });
-
-  sortBtn.addEventListener("click", () => {
-    visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
-    renderProducts(visibleProducts);
-  });
-
-  renderProducts(visibleProducts);`,
-    },
-  },
-  {
     id: "save-load-todos-localstorage",
     editorType: "web",
-    title: "Challenge 24 — Save and Load Todos with localStorage",
+    title: "Challenge 46 — Save and Load Todos with localStorage",
     difficulty: "Hard",
     category: "JavaScript + localStorage",
     goal: "Let the user add todos, save them in localStorage, and load them on refresh.",
@@ -3834,7 +3679,7 @@ cartTotal.textContent = "Total: £" + total;`,
   {
     id: "saved-favourites-localstorage",
     editorType: "web",
-    title: "Challenge 0 — Save Favourites in localStorage",
+    title: "Challenge 47 — Save Favourites in localStorage",
     difficulty: "Hard",
     category: "JavaScript + localStorage",
     goal: "Let the user save favourite resources and restore them from localStorage on refresh.",
@@ -3969,7 +3814,7 @@ renderResources();`,
   {
     id: "cart-items-localstorage",
     editorType: "web",
-    title: "Challenge 0 — Save Cart Items in localStorage",
+    title: "Challenge 48 — Save Cart Items in localStorage",
     difficulty: "Hard",
     category: "JavaScript + localStorage",
     goal: "Build a simple cart that saves added items in localStorage and restores them on refresh.",
@@ -4105,9 +3950,118 @@ renderShop();`,
     },
   },
   {
+    id: "mock-product-search",
+    editorType: "web",
+    title: "Challenge 49 — Mock Product Search",
+    difficulty: "Medium",
+    category: "JavaScript + Async",
+    goal: "Search mock products asynchronously and render the matching results.",
+    requirements: [
+      "Use an async function",
+      "Search products by text",
+      "Show a loading message",
+      "Render the matching results",
+    ],
+    tips: [
+      "Use a fake request with Promise and setTimeout.",
+      "Update the DOM before and after the request.",
+      "Filter the products based on the input text.",
+    ],
+    concepts: ["promises", "async/await", "loading state", "filtering"],
+    suggestedApproach: [
+      "Create a small products array.",
+      "Create a fake async search function.",
+      "Show loading text while waiting.",
+      "Render the filtered products after the Promise resolves.",
+    ],
+    commonMistakes: [
+      "Trying to return data before awaiting it",
+      "Not clearing old results",
+      "Forgetting to show loading state",
+    ],
+    expectedOutcome:
+      "A small product search interface that loads mock results asynchronously.",
+    starter: {
+      html: `<input id="searchInput" type="text" placeholder="Search products..." />
+  <button id="searchBtn">Search</button>
+  <p id="statusText"></p>
+  <ul id="resultsList"></ul>`,
+      css: ``,
+      js: `const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const statusText = document.getElementById("statusText");
+  const resultsList = document.getElementById("resultsList");
+
+  const products = [
+    { id: 1, name: "Laptop" },
+    { id: 2, name: "Chair" },
+    { id: 3, name: "Phone" },
+    { id: 4, name: "Desk Lamp" },
+  ];
+
+  function searchProducts(term) {
+
+  }
+
+  searchBtn.addEventListener("click", async () => {
+
+  });`,
+    },
+    solution: {
+      html: `<input id="searchInput" type="text" placeholder="Search products..." />
+  <button id="searchBtn">Search</button>
+  <p id="statusText"></p>
+  <ul id="resultsList"></ul>`,
+      css: ``,
+      js: `const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const statusText = document.getElementById("statusText");
+  const resultsList = document.getElementById("resultsList");
+
+  const products = [
+    { id: 1, name: "Laptop" },
+    { id: 2, name: "Chair" },
+    { id: 3, name: "Phone" },
+    { id: 4, name: "Desk Lamp" },
+  ];
+
+  function searchProducts(term) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const filteredProducts = products.filter((product) =>
+          product.name.toLowerCase().includes(term.toLowerCase())
+        );
+
+        resolve(filteredProducts);
+      }, 1000);
+    });
+  }
+
+  searchBtn.addEventListener("click", async () => {
+    statusText.textContent = "Loading...";
+    resultsList.innerHTML = "";
+
+    const results = await searchProducts(searchInput.value);
+
+    statusText.textContent = "";
+
+    if (results.length === 0) {
+      statusText.textContent = "No products found.";
+      return;
+    }
+
+    results.forEach((product) => {
+      const li = document.createElement("li");
+      li.textContent = product.name;
+      resultsList.appendChild(li);
+    });
+  });`,
+    },
+  },
+  {
     id: "github-profile-finder",
     editorType: "web",
-    title: "Challenge 0 — GitHub User Finder",
+    title: "Challenge 50 — GitHub User Finder",
     difficulty: "Hard",
     category: "APIs",
     goal: "Use fetch(), loading state, and search logic to find a GitHub-style user profile by username.",
@@ -4218,7 +4172,7 @@ profileBtn.addEventListener("click", async () => {
   {
     id: "weather-search-panel",
     editorType: "web",
-    title: "Challenge 0 — Weather Search Panel",
+    title: "Challenge 51 — Weather Search Panel",
     difficulty: "Hard",
     category: "APIs",
     goal: "Build a weather-style search panel with fetch(), loading state, and a visible result card.",
@@ -4328,7 +4282,7 @@ weatherBtn.addEventListener("click", async () => {
   {
     id: "recipe-search-app",
     editorType: "web",
-    title: "Challenge 0 — Recipe Search App",
+    title: "Challenge 52 — Recipe Search App",
     difficulty: "Hard",
     category: "APIs",
     goal: "Use fetch(), search, and map-style rendering to build a small recipe search app.",
@@ -4448,9 +4402,312 @@ recipeBtn.addEventListener("click", async () => {
     },
   },
   {
+    id: "promise-all-user-posts",
+    editorType: "web",
+    title: "Challenge 53 — Load User and Posts with Promise.all",
+    difficulty: "Hard",
+    category: "JavaScript + Async",
+    goal: "Load mock user and post data at the same time using Promise.all and render both results.",
+    requirements: [
+      "Create 2 fake async functions",
+      "Use Promise.all to wait for both results",
+      "Show a loading message first",
+      "Render the user and posts after both requests finish",
+    ],
+    tips: [
+      "Use Promise.all([promise1, promise2]).",
+      "Both fake functions can use setTimeout.",
+      "Only render the results after both promises resolve.",
+    ],
+    concepts: [
+      "Promise.all",
+      "async/await",
+      "parallel requests",
+      "DOM rendering",
+    ],
+    suggestedApproach: [
+      "Create one fake function for the user and another for the posts.",
+      "Set loading text before starting.",
+      "Await both functions with Promise.all.",
+      "Render the user name and the post titles.",
+    ],
+    commonMistakes: [
+      "Awaiting each request separately instead of using Promise.all",
+      "Trying to use the results before both promises finish",
+      "Forgetting to clear old content before rendering new data",
+    ],
+    expectedOutcome:
+      "A small UI that first shows loading text and then displays one user and a list of post titles.",
+    starter: {
+      html: `<button id="loadBtn">Load Dashboard</button>
+  <p id="statusText"></p>
+  <div id="userBox"></div>
+  <ul id="postList"></ul>`,
+      css: ``,
+      js: `const loadBtn = document.getElementById("loadBtn");
+  const statusText = document.getElementById("statusText");
+  const userBox = document.getElementById("userBox");
+  const postList = document.getElementById("postList");
+
+  function fetchUser() {
+
+  }
+
+  function fetchPosts() {
+
+  }
+
+  loadBtn.addEventListener("click", async () => {
+
+  });`,
+    },
+    solution: {
+      html: `<button id="loadBtn">Load Dashboard</button>
+  <p id="statusText"></p>
+  <div id="userBox"></div>
+  <ul id="postList"></ul>`,
+      css: ``,
+      js: `const loadBtn = document.getElementById("loadBtn");
+  const statusText = document.getElementById("statusText");
+  const userBox = document.getElementById("userBox");
+  const postList = document.getElementById("postList");
+
+  function fetchUser() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ id: 1, name: "Nico" });
+      }, 1000);
+    });
+  }
+
+  function fetchPosts() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([
+          { id: 1, title: "Getting started with React" },
+          { id: 2, title: "Understanding async JavaScript" },
+        ]);
+      }, 1000);
+    });
+  }
+
+  loadBtn.addEventListener("click", async () => {
+    statusText.textContent = "Loading...";
+    userBox.textContent = "";
+    postList.innerHTML = "";
+
+    const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
+
+    statusText.textContent = "";
+    userBox.textContent = "User: " + user.name;
+
+    posts.forEach((post) => {
+      const li = document.createElement("li");
+      li.textContent = post.title;
+      postList.appendChild(li);
+    });
+  });`,
+    },
+  },
+  {
+    id: "shopping-cart-total",
+    editorType: "web",
+    title: "Challenge 54 — Shopping Cart Total",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays",
+    goal: "Calculate and display the total price of cart items.",
+    requirements: [
+      "Use an array of cart items with prices",
+      "Display the items",
+      "Calculate and show the total price",
+    ],
+    tips: [
+      "Use reduce() if you want a modern approach.",
+      "You can also use a loop if you prefer.",
+      "Render both the items and the final total.",
+    ],
+    concepts: ["arrays of objects", "reduce()", "rendering lists", "totals"],
+    suggestedApproach: [
+      "Create a cart array with item names and prices.",
+      "Render the items into a list.",
+      "Calculate the total of all prices.",
+      "Display the total below the list.",
+    ],
+    commonMistakes: [
+      "Adding strings instead of numbers",
+      "Calculating the total but never showing it",
+      "Using the wrong property name for price",
+    ],
+    expectedOutcome:
+      "A small cart summary showing the items and the total price of everything combined.",
+    starter: {
+      html: `<ul id="cartList"></ul>
+<p id="cartTotal"></p>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<ul id="cartList"></ul>
+<p id="cartTotal"></p>`,
+      css: ``,
+      js: `const cartList = document.getElementById("cartList");
+const cartTotal = document.getElementById("cartTotal");
+
+const cartItems = [
+  { name: "T-shirt", price: 15 },
+  { name: "Jeans", price: 35 },
+  { name: "Shoes", price: 50 },
+];
+
+cartItems.forEach((item) => {
+  const li = document.createElement("li");
+  li.textContent = item.name + " - £" + item.price;
+  cartList.appendChild(li);
+});
+
+const total = cartItems.reduce((sum, item) => {
+  return sum + item.price;
+}, 0);
+
+cartTotal.textContent = "Total: £" + total;`,
+    },
+  },
+  {
+    id: "filter-sort-products",
+    editorType: "web",
+    title: "Challenge 55 — Filter and Sort Products",
+    difficulty: "Hard",
+    category: "JavaScript + Arrays",
+    goal: "Filter products by category and sort the visible products by price.",
+    requirements: [
+      "Use an array of product objects",
+      "Add category filter buttons",
+      "Add a sort by price button",
+      "Render the updated product list",
+    ],
+    tips: [
+      "Keep the original product data in JavaScript.",
+      "Use filter() for category changes.",
+      "Use sort() on a copied array when sorting.",
+    ],
+    concepts: ["filter()", "sort()", "arrays of objects", "DOM rendering"],
+    suggestedApproach: [
+      "Create an array of products with category and price.",
+      "Write a render function for the list.",
+      "Filter the products when category buttons are clicked.",
+      "Sort the currently visible products by price when the sort button is pressed.",
+    ],
+    commonMistakes: [
+      "Sorting the wrong array",
+      "Filtering correctly but rendering the old list",
+      "Mutating data without understanding the effect",
+    ],
+    expectedOutcome:
+      "A product list that can be filtered by category and sorted by price.",
+    starter: {
+      html: `<button id="allBtn">All</button>
+  <button id="techBtn">Tech</button>
+  <button id="homeBtn">Home</button>
+  <button id="sortBtn">Sort by Price</button>
+  <ul id="productList"></ul>`,
+      css: ``,
+      js: `const allBtn = document.getElementById("allBtn");
+  const techBtn = document.getElementById("techBtn");
+  const homeBtn = document.getElementById("homeBtn");
+  const sortBtn = document.getElementById("sortBtn");
+  const productList = document.getElementById("productList");
+
+  const products = [
+    { id: 1, name: "Laptop", category: "Tech", price: 899 },
+    { id: 2, name: "Chair", category: "Home", price: 120 },
+    { id: 3, name: "Phone", category: "Tech", price: 699 },
+    { id: 4, name: "Lamp", category: "Home", price: 35 },
+  ];
+
+  let visibleProducts = products;
+
+  function renderProducts(items) {
+
+  }
+
+  allBtn.addEventListener("click", () => {
+
+  });
+
+  techBtn.addEventListener("click", () => {
+
+  });
+
+  homeBtn.addEventListener("click", () => {
+
+  });
+
+  sortBtn.addEventListener("click", () => {
+
+  });
+
+  renderProducts(visibleProducts);`,
+    },
+    solution: {
+      html: `<button id="allBtn">All</button>
+  <button id="techBtn">Tech</button>
+  <button id="homeBtn">Home</button>
+  <button id="sortBtn">Sort by Price</button>
+  <ul id="productList"></ul>`,
+      css: ``,
+      js: `const allBtn = document.getElementById("allBtn");
+  const techBtn = document.getElementById("techBtn");
+  const homeBtn = document.getElementById("homeBtn");
+  const sortBtn = document.getElementById("sortBtn");
+  const productList = document.getElementById("productList");
+
+  const products = [
+    { id: 1, name: "Laptop", category: "Tech", price: 899 },
+    { id: 2, name: "Chair", category: "Home", price: 120 },
+    { id: 3, name: "Phone", category: "Tech", price: 699 },
+    { id: 4, name: "Lamp", category: "Home", price: 35 },
+  ];
+
+  let visibleProducts = products;
+
+  function renderProducts(items) {
+    productList.innerHTML = "";
+
+    items.forEach((product) => {
+      const li = document.createElement("li");
+      li.textContent =
+        product.name + " - " + product.category + " - £" + product.price;
+      productList.appendChild(li);
+    });
+  }
+
+  allBtn.addEventListener("click", () => {
+    visibleProducts = products;
+    renderProducts(visibleProducts);
+  });
+
+  techBtn.addEventListener("click", () => {
+    visibleProducts = products.filter((product) => product.category === "Tech");
+    renderProducts(visibleProducts);
+  });
+
+  homeBtn.addEventListener("click", () => {
+    visibleProducts = products.filter((product) => product.category === "Home");
+    renderProducts(visibleProducts);
+  });
+
+  sortBtn.addEventListener("click", () => {
+    visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
+    renderProducts(visibleProducts);
+  });
+
+  renderProducts(visibleProducts);`,
+    },
+  },
+  {
     id: "render-users-from-array",
     editorType: "web",
-    title: "Challenge 25 — Render Users from an Array",
+    title: "Challenge 56 — Render Users from an Array",
     difficulty: "Medium",
     category: "JavaScript + Data Rendering",
     goal: "Render a list of user cards from an array of objects.",
@@ -4537,7 +4794,7 @@ userList.innerHTML = users
   {
     id: "event-delegation-todo-actions",
     editorType: "web",
-    title: "Challenge 26 — Todo Actions with Event Delegation",
+    title: "Challenge 57 — Todo Actions with Event Delegation",
     difficulty: "Hard",
     category: "JavaScript + DOM",
     goal: "Use event delegation to complete and remove todo items.",
@@ -4619,114 +4876,9 @@ todoList.addEventListener("click", (event) => {
     },
   },
   {
-    id: "form-data-preview",
-    editorType: "web",
-    title: "Challenge 27 — Form Data Preview",
-    difficulty: "Medium",
-    category: "JavaScript + Forms",
-    goal: "Collect form values and preview the submitted data on the page.",
-    requirements: [
-      "Create a form with name, email, and role fields",
-      "Prevent the default submit behavior",
-      "Read the submitted values",
-      "Render a preview card with the submitted data",
-    ],
-    tips: [
-      "Use the submit event on the form.",
-      "FormData can read values from named inputs.",
-      "The preview should update after each submit.",
-    ],
-    concepts: [
-      "submit events",
-      "preventDefault",
-      "FormData",
-      "DOM rendering",
-    ],
-    suggestedApproach: [
-      "Add name attributes to your fields.",
-      "Listen for form submit.",
-      "Create a FormData object from the form.",
-      "Render the values into the preview container.",
-    ],
-    commonMistakes: [
-      "Forgetting name attributes",
-      "Reading values before preventDefault",
-      "Not updating the preview after submit",
-    ],
-    expectedOutcome:
-      "A form that shows a clean preview of the submitted user data.",
-    starter: {
-      html: `<form id="profileForm">
-  <input name="name" placeholder="Name" />
-  <input name="email" placeholder="Email" />
-  <select name="role">
-    <option>Frontend Developer</option>
-    <option>Designer</option>
-    <option>Project Manager</option>
-  </select>
-  <button type="submit">Preview</button>
-</form>
-<section id="preview"></section>`,
-      css: `form {
-  display: grid;
-  gap: 10px;
-  max-width: 360px;
-}`,
-      js: `const profileForm = document.getElementById("profileForm");
-const preview = document.getElementById("preview");`,
-    },
-    solution: {
-      html: `<form id="profileForm">
-  <input name="name" placeholder="Name" />
-  <input name="email" placeholder="Email" />
-  <select name="role">
-    <option>Frontend Developer</option>
-    <option>Designer</option>
-    <option>Project Manager</option>
-  </select>
-  <button type="submit">Preview</button>
-</form>
-<section id="preview"></section>`,
-      css: `form {
-  display: grid;
-  gap: 10px;
-  max-width: 360px;
-}
-
-input,
-select,
-button {
-  padding: 10px;
-}
-
-#preview {
-  margin-top: 18px;
-}`,
-      js: `const profileForm = document.getElementById("profileForm");
-const preview = document.getElementById("preview");
-
-profileForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const formData = new FormData(profileForm);
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const role = formData.get("role");
-
-  preview.innerHTML = \`
-    <article>
-      <h3>\${name}</h3>
-      <p>\${email}</p>
-      <strong>\${role}</strong>
-    </article>
-  \`;
-});`,
-    },
-  },
-  {
     id: "dropdown-menu-toggle",
     editorType: "web",
-    title: "Challenge 0 — Dropdown Menu Toggle",
+    title: "Challenge 58 — Dropdown Menu Toggle",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Build a small dropdown menu that opens and closes when the trigger button is clicked.",
@@ -4822,7 +4974,7 @@ menuBtn.addEventListener("click", () => {
   {
     id: "async-product-search",
     editorType: "web",
-    title: "Challenge 28 — Async Product Search",
+    title: "Challenge 59 — Async Product Search",
     difficulty: "Hard",
     category: "JavaScript + Async",
     goal: "Simulate an async search request with loading and empty states.",
@@ -4911,7 +5063,7 @@ searchBtn.addEventListener("click", async () => {
   {
     id: "paginated-table",
     editorType: "web",
-    title: "Challenge 29 — Paginated Table",
+    title: "Challenge 60 — Paginated Table",
     difficulty: "Hard",
     category: "JavaScript + UI State",
     goal: "Create a simple paginated table for customer data.",
@@ -5016,7 +5168,7 @@ renderTable();`,
   {
     id: "kpi-dashboard-calculator",
     editorType: "web",
-    title: "Challenge 30 — KPI Dashboard Calculator",
+    title: "Challenge 61 — KPI Dashboard Calculator",
     difficulty: "Hard",
     category: "JavaScript + Data",
     goal: "Calculate dashboard summary values from an orders array.",
@@ -5117,7 +5269,7 @@ dashboard.innerHTML = kpis
   {
     id: "destructure-profile-card",
     editorType: "web",
-    title: "Challenge 31 — Destructure a Profile Card",
+    title: "Challenge 62 — Destructure a Profile Card",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Render a profile card by destructuring an object and copying data with the spread operator.",
@@ -5219,7 +5371,7 @@ profileCard.innerHTML =
   {
     id: "spread-settings-merge",
     editorType: "web",
-    title: "Challenge 0 — Merge Settings with Spread",
+    title: "Challenge 63 — Merge Settings with Spread",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Use the spread operator to merge base settings with user overrides and render the result.",
@@ -5300,7 +5452,7 @@ settingsCard.innerHTML =
   {
     id: "find-priority-ticket",
     editorType: "web",
-    title: "Challenge 0 — Find a Priority Ticket",
+    title: "Challenge 64 — Find a Priority Ticket",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Use find() on an array of objects and render one matching support ticket in the UI.",
@@ -5426,7 +5578,7 @@ renderTicket();`,
   {
     id: "switch-role-permissions",
     editorType: "web",
-    title: "Challenge 32 — Role Permissions with switch",
+    title: "Challenge 65 — Role Permissions with switch",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Use a switch statement to show different dashboard permissions for different user roles.",
@@ -5526,83 +5678,161 @@ renderPermissions();`,
     },
   },
   {
-    id: "try-catch-json-parser",
+    id: "closure-counter-factory",
     editorType: "web",
-    title: "Challenge 33 — Safe JSON Parser",
+    title: "Challenge 66 — Closure Counter Factory",
     difficulty: "Medium",
-    category: "Debugging",
-    goal: "Use try/catch to parse JSON and show a helpful error when the input is invalid.",
+    category: "Core JavaScript",
+    goal: "Create independent counters by using closures to remember private values.",
     requirements: [
-      "Add a textarea with JSON text",
-      "Add a parse button",
-      "Use JSON.parse inside try/catch",
-      "Show either formatted JSON or a readable error message",
+      "Write a createCounter function",
+      "Return a function that increases and returns the count",
+      "Create two independent counters",
+      "Connect each counter to a different button",
     ],
     tips: [
-      "JSON.parse throws when the text is not valid JSON.",
-      "Use error.message to show the user what happened.",
-      "Use JSON.stringify(value, null, 2) for readable output.",
+      "The inner function should remember a count variable from the outer function.",
+      "Each call to createCounter gets its own scope.",
+      "Render the returned count after every click.",
     ],
-    concepts: ["try/catch", "JSON.parse()", "error handling", "DevTools"],
+    concepts: ["closures", "scope", "functions", "event listeners"],
     suggestedApproach: [
-      "Read the textarea value when the button is clicked.",
-      "Try to parse the value.",
-      "Render formatted data on success.",
-      "Render an error message inside catch.",
+      "Create createCounter with a local count variable.",
+      "Return an inner function that increments count.",
+      "Create two counters from the factory.",
+      "Wire both counters to the DOM.",
     ],
     commonMistakes: [
-      "Using single quotes inside JSON",
-      "Forgetting quotes around object keys",
-      "Catching the error but not showing feedback",
+      "Using one global count for both buttons",
+      "Returning the count instead of returning a function",
+      "Forgetting to call the returned counter function",
     ],
     expectedOutcome:
-      "A debugging-friendly JSON parser with success and error states.",
+      "Two buttons that count independently because each one has its own closure.",
     starter: {
-      html: `<textarea id="jsonInput">{ "name": "Ava", "active": true }</textarea>
-<button id="parseBtn">Parse JSON</button>
-<pre id="result"></pre>`,
-      css: `textarea {
-  width: 100%;
-  min-height: 120px;
+      html: `<button id="likesBtn">Like</button>
+<span id="likesCount">0</span>
+
+<button id="savesBtn">Save</button>
+<span id="savesCount">0</span>`,
+      css: `button {
+  margin-right: 8px;
 }`,
-      js: `const input = document.getElementById("jsonInput");
-const parseBtn = document.getElementById("parseBtn");
-const result = document.getElementById("result");`,
+      js: `function createCounter() {
+
+}`,
     },
     solution: {
-      html: `<textarea id="jsonInput">{ "name": "Ava", "active": true }</textarea>
-<button id="parseBtn">Parse JSON</button>
-<pre id="result"></pre>`,
-      css: `textarea {
-  width: 100%;
-  min-height: 120px;
+      html: `<button id="likesBtn">Like</button>
+<span id="likesCount">0</span>
+
+<button id="savesBtn">Save</button>
+<span id="savesCount">0</span>`,
+      css: `button {
+  margin: 8px 8px 8px 0;
+}`,
+      js: `function createCounter() {
+  let count = 0;
+
+  return function increase() {
+    count += 1;
+    return count;
+  };
 }
 
-pre {
-  padding: 12px;
-  border-radius: 8px;
-  background: #111827;
-  color: #e5e7eb;
-  white-space: pre-wrap;
-}`,
-      js: `const input = document.getElementById("jsonInput");
-const parseBtn = document.getElementById("parseBtn");
-const result = document.getElementById("result");
+const increaseLikes = createCounter();
+const increaseSaves = createCounter();
 
-parseBtn.addEventListener("click", () => {
-  try {
-    const parsed = JSON.parse(input.value);
-    result.textContent = JSON.stringify(parsed, null, 2);
-  } catch (error) {
-    result.textContent = "Invalid JSON: " + error.message;
-  }
+const likesBtn = document.getElementById("likesBtn");
+const likesCount = document.getElementById("likesCount");
+const savesBtn = document.getElementById("savesBtn");
+const savesCount = document.getElementById("savesCount");
+
+likesBtn.addEventListener("click", () => {
+  likesCount.textContent = increaseLikes();
+});
+
+savesBtn.addEventListener("click", () => {
+  savesCount.textContent = increaseSaves();
+});`,
+    },
+  },
+  {
+    id: "event-loop-order",
+    editorType: "web",
+    title: "Challenge 67 — Event Loop Order",
+    difficulty: "Medium",
+    category: "Async JavaScript",
+    goal: "Visualize how synchronous code, promises, and timers run in different phases.",
+    requirements: [
+      "Add a button to run the demo",
+      "Log one synchronous step",
+      "Log one Promise.then step",
+      "Log one setTimeout step",
+      "Render the order on the page",
+    ],
+    tips: [
+      "Synchronous code runs first.",
+      "Promise callbacks run before setTimeout callbacks.",
+      "Render each step as it happens so the timing is visible.",
+    ],
+    concepts: ["event loop", "promises", "setTimeout", "async flow"],
+    suggestedApproach: [
+      "Create a renderStep helper.",
+      "Clear the list when the button is clicked.",
+      "Render a sync step immediately.",
+      "Schedule a promise step and a timeout step.",
+    ],
+    commonMistakes: [
+      "Expecting setTimeout to run before Promise.then",
+      "Thinking async code blocks the whole page",
+      "Not clearing previous demo output",
+    ],
+    expectedOutcome:
+      "A visible execution order: sync first, promise second, timeout third.",
+    starter: {
+      html: `<button id="runBtn">Run event loop demo</button>
+<ol id="steps"></ol>`,
+      css: `li {
+  margin: 8px 0;
+}`,
+      js: `const runBtn = document.getElementById("runBtn");
+const steps = document.getElementById("steps");`,
+    },
+    solution: {
+      html: `<button id="runBtn">Run event loop demo</button>
+<ol id="steps"></ol>`,
+      css: `li {
+  margin: 8px 0;
+}`,
+      js: `const runBtn = document.getElementById("runBtn");
+const steps = document.getElementById("steps");
+
+function renderStep(text) {
+  const item = document.createElement("li");
+  item.textContent = text;
+  steps.appendChild(item);
+}
+
+runBtn.addEventListener("click", () => {
+  steps.innerHTML = "";
+
+  setTimeout(() => {
+    renderStep("Timer callback");
+  }, 0);
+
+  Promise.resolve().then(() => {
+    renderStep("Promise callback");
+  });
+
+  renderStep("Synchronous code");
 });`,
     },
   },
   {
     id: "debug-broken-form-validation",
     editorType: "web",
-    title: "Challenge 0 — Debug Broken Form Validation",
+    title: "Challenge 68 — Debug Broken Form Validation",
     difficulty: "Medium",
     category: "Debugging",
     goal: "Repair a broken contact form so empty fields show an error and a valid submission shows success.",
@@ -5700,9 +5930,83 @@ contactForm.addEventListener("submit", (event) => {
     },
   },
   {
+    id: "try-catch-json-parser",
+    editorType: "web",
+    title: "Challenge 69 — Safe JSON Parser",
+    difficulty: "Medium",
+    category: "Debugging",
+    goal: "Use try/catch to parse JSON and show a helpful error when the input is invalid.",
+    requirements: [
+      "Add a textarea with JSON text",
+      "Add a parse button",
+      "Use JSON.parse inside try/catch",
+      "Show either formatted JSON or a readable error message",
+    ],
+    tips: [
+      "JSON.parse throws when the text is not valid JSON.",
+      "Use error.message to show the user what happened.",
+      "Use JSON.stringify(value, null, 2) for readable output.",
+    ],
+    concepts: ["try/catch", "JSON.parse()", "error handling", "DevTools"],
+    suggestedApproach: [
+      "Read the textarea value when the button is clicked.",
+      "Try to parse the value.",
+      "Render formatted data on success.",
+      "Render an error message inside catch.",
+    ],
+    commonMistakes: [
+      "Using single quotes inside JSON",
+      "Forgetting quotes around object keys",
+      "Catching the error but not showing feedback",
+    ],
+    expectedOutcome:
+      "A debugging-friendly JSON parser with success and error states.",
+    starter: {
+      html: `<textarea id="jsonInput">{ "name": "Ava", "active": true }</textarea>
+<button id="parseBtn">Parse JSON</button>
+<pre id="result"></pre>`,
+      css: `textarea {
+  width: 100%;
+  min-height: 120px;
+}`,
+      js: `const input = document.getElementById("jsonInput");
+const parseBtn = document.getElementById("parseBtn");
+const result = document.getElementById("result");`,
+    },
+    solution: {
+      html: `<textarea id="jsonInput">{ "name": "Ava", "active": true }</textarea>
+<button id="parseBtn">Parse JSON</button>
+<pre id="result"></pre>`,
+      css: `textarea {
+  width: 100%;
+  min-height: 120px;
+}
+
+pre {
+  padding: 12px;
+  border-radius: 8px;
+  background: #111827;
+  color: #e5e7eb;
+  white-space: pre-wrap;
+}`,
+      js: `const input = document.getElementById("jsonInput");
+const parseBtn = document.getElementById("parseBtn");
+const result = document.getElementById("result");
+
+parseBtn.addEventListener("click", () => {
+  try {
+    const parsed = JSON.parse(input.value);
+    result.textContent = JSON.stringify(parsed, null, 2);
+  } catch (error) {
+    result.textContent = "Invalid JSON: " + error.message;
+  }
+});`,
+    },
+  },
+  {
     id: "debug-broken-localstorage-todos",
     editorType: "web",
-    title: "Challenge 0 — Debug Broken localStorage Todos",
+    title: "Challenge 70 — Debug Broken localStorage Todos",
     difficulty: "Hard",
     category: "Debugging",
     goal: "Repair a todo list so saved items render correctly after refresh and new todos stay in sync with localStorage.",
@@ -5810,7 +6114,7 @@ renderTodos();`,
   {
     id: "debug-broken-async-search",
     editorType: "web",
-    title: "Challenge 0 — Debug Broken Async Search",
+    title: "Challenge 71 — Debug Broken Async Search",
     difficulty: "Hard",
     category: "Debugging",
     goal: "Repair a broken async search flow so loading, success, and empty results behave clearly.",
@@ -5935,161 +6239,9 @@ searchBtn.addEventListener("click", async () => {
     },
   },
   {
-    id: "closure-counter-factory",
-    editorType: "web",
-    title: "Challenge 34 — Closure Counter Factory",
-    difficulty: "Medium",
-    category: "Core JavaScript",
-    goal: "Create independent counters by using closures to remember private values.",
-    requirements: [
-      "Write a createCounter function",
-      "Return a function that increases and returns the count",
-      "Create two independent counters",
-      "Connect each counter to a different button",
-    ],
-    tips: [
-      "The inner function should remember a count variable from the outer function.",
-      "Each call to createCounter gets its own scope.",
-      "Render the returned count after every click.",
-    ],
-    concepts: ["closures", "scope", "functions", "event listeners"],
-    suggestedApproach: [
-      "Create createCounter with a local count variable.",
-      "Return an inner function that increments count.",
-      "Create two counters from the factory.",
-      "Wire both counters to the DOM.",
-    ],
-    commonMistakes: [
-      "Using one global count for both buttons",
-      "Returning the count instead of returning a function",
-      "Forgetting to call the returned counter function",
-    ],
-    expectedOutcome:
-      "Two buttons that count independently because each one has its own closure.",
-    starter: {
-      html: `<button id="likesBtn">Like</button>
-<span id="likesCount">0</span>
-
-<button id="savesBtn">Save</button>
-<span id="savesCount">0</span>`,
-      css: `button {
-  margin-right: 8px;
-}`,
-      js: `function createCounter() {
-
-}`,
-    },
-    solution: {
-      html: `<button id="likesBtn">Like</button>
-<span id="likesCount">0</span>
-
-<button id="savesBtn">Save</button>
-<span id="savesCount">0</span>`,
-      css: `button {
-  margin: 8px 8px 8px 0;
-}`,
-      js: `function createCounter() {
-  let count = 0;
-
-  return function increase() {
-    count += 1;
-    return count;
-  };
-}
-
-const increaseLikes = createCounter();
-const increaseSaves = createCounter();
-
-const likesBtn = document.getElementById("likesBtn");
-const likesCount = document.getElementById("likesCount");
-const savesBtn = document.getElementById("savesBtn");
-const savesCount = document.getElementById("savesCount");
-
-likesBtn.addEventListener("click", () => {
-  likesCount.textContent = increaseLikes();
-});
-
-savesBtn.addEventListener("click", () => {
-  savesCount.textContent = increaseSaves();
-});`,
-    },
-  },
-  {
-    id: "event-loop-order",
-    editorType: "web",
-    title: "Challenge 35 — Event Loop Order",
-    difficulty: "Medium",
-    category: "Async JavaScript",
-    goal: "Visualize how synchronous code, promises, and timers run in different phases.",
-    requirements: [
-      "Add a button to run the demo",
-      "Log one synchronous step",
-      "Log one Promise.then step",
-      "Log one setTimeout step",
-      "Render the order on the page",
-    ],
-    tips: [
-      "Synchronous code runs first.",
-      "Promise callbacks run before setTimeout callbacks.",
-      "Render each step as it happens so the timing is visible.",
-    ],
-    concepts: ["event loop", "promises", "setTimeout", "async flow"],
-    suggestedApproach: [
-      "Create a renderStep helper.",
-      "Clear the list when the button is clicked.",
-      "Render a sync step immediately.",
-      "Schedule a promise step and a timeout step.",
-    ],
-    commonMistakes: [
-      "Expecting setTimeout to run before Promise.then",
-      "Thinking async code blocks the whole page",
-      "Not clearing previous demo output",
-    ],
-    expectedOutcome:
-      "A visible execution order: sync first, promise second, timeout third.",
-    starter: {
-      html: `<button id="runBtn">Run event loop demo</button>
-<ol id="steps"></ol>`,
-      css: `li {
-  margin: 8px 0;
-}`,
-      js: `const runBtn = document.getElementById("runBtn");
-const steps = document.getElementById("steps");`,
-    },
-    solution: {
-      html: `<button id="runBtn">Run event loop demo</button>
-<ol id="steps"></ol>`,
-      css: `li {
-  margin: 8px 0;
-}`,
-      js: `const runBtn = document.getElementById("runBtn");
-const steps = document.getElementById("steps");
-
-function renderStep(text) {
-  const item = document.createElement("li");
-  item.textContent = text;
-  steps.appendChild(item);
-}
-
-runBtn.addEventListener("click", () => {
-  steps.innerHTML = "";
-
-  setTimeout(() => {
-    renderStep("Timer callback");
-  }, 0);
-
-  Promise.resolve().then(() => {
-    renderStep("Promise callback");
-  });
-
-  renderStep("Synchronous code");
-});`,
-    },
-  },
-  {
     id: "fetch-users-status-codes",
     editorType: "web",
-    title: "Challenge 36 — Fetch Users and Check Status",
+    title: "Challenge 72 — Fetch Users and Check Status",
     difficulty: "Medium",
     category: "APIs",
     goal: "Use fetch(), async/await, loading state, and response status checks to render API data.",
@@ -6180,7 +6332,7 @@ loadBtn.addEventListener("click", async () => {
   {
     id: "post-json-with-headers",
     editorType: "web",
-    title: "Challenge 37 — POST JSON with Headers",
+    title: "Challenge 73 — POST JSON with Headers",
     difficulty: "Hard",
     category: "APIs",
     goal: "Send form data to an API with POST, JSON.stringify, headers, and async error handling.",
@@ -6300,7 +6452,7 @@ form.addEventListener("submit", async (event) => {
   {
     id: "query-param-search",
     editorType: "web",
-    title: "Challenge 38 — Build Query Parameters",
+    title: "Challenge 74 — Build Query Parameters",
     difficulty: "Medium",
     category: "APIs",
     goal: "Create an API URL with query parameters for search, category, sorting, and page number.",
@@ -6399,7 +6551,7 @@ buildBtn.addEventListener("click", () => {
   {
     id: "request-race-condition-guard",
     editorType: "web",
-    title: "Challenge 39 — Guard Against Stale Search Results",
+    title: "Challenge 75 — Guard Against Stale Search Results",
     difficulty: "Hard",
     category: "Async JavaScript",
     goal: "Prevent older async search requests from overwriting newer results.",
@@ -6500,7 +6652,7 @@ searchInput.addEventListener("input", async () => {
   {
     id: "backend-request-flow",
     editorType: "web",
-    title: "Challenge 40 — Backend Request Flow",
+    title: "Challenge 76 — Backend Request Flow",
     difficulty: "Medium",
     category: "Backend Awareness",
     goal: "Render a visual explanation of how the browser, server, database, and API response work together.",

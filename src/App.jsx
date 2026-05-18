@@ -76,6 +76,10 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [language, setLanguage] = useLocalStorage("practice-language", "en");
   const [theme, setTheme] = useLocalStorage("practice-theme", "light");
+  const [previewViewport, setPreviewViewport] = useLocalStorage(
+    "practice-preview-viewport",
+    "desktop"
+  );
   const [skippedPrimers, setSkippedPrimers] = useLocalStorage(
     "practice-skipped-primers",
     {}
@@ -288,6 +292,7 @@ export default function App() {
           selectedModeId,
           selectedClassId,
           activeId,
+          previewViewport,
           skippedPrimers,
           savedDrafts,
           challengeProgress,
@@ -390,6 +395,14 @@ export default function App() {
       }
 
       if (
+        typeof imported.previewViewport === "string" &&
+        (imported.previewViewport === "desktop" ||
+          imported.previewViewport === "phone")
+      ) {
+        setPreviewViewport(imported.previewViewport);
+      }
+
+      if (
         imported.skippedPrimers &&
         typeof imported.skippedPrimers === "object" &&
         !Array.isArray(imported.skippedPrimers)
@@ -448,7 +461,7 @@ export default function App() {
       if (
         typeof imported.guidedBuildPreviewViewport === "string" &&
         (imported.guidedBuildPreviewViewport === "desktop" ||
-          imported.guidedBuildPreviewViewport === "mobile")
+          imported.guidedBuildPreviewViewport === "phone")
       ) {
         writeStoredJson(
           "guided-build-preview-viewport",
@@ -828,6 +841,8 @@ export default function App() {
               submissionResult={submissionResult}
               copy={appCopy}
               language={language}
+              previewViewport={previewViewport}
+              onPreviewViewportChange={setPreviewViewport}
               solutionEnabled={timedAssessmentFinished}
               solutionLockedReason={
                 timedInterviewMode && !timedAssessmentFinished
