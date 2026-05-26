@@ -919,6 +919,1195 @@ function hasResponsiveGridColumns(source) {
   );
 }
 
+function hasQuotedJsValue(source, value) {
+  const lowerValue = value.toLowerCase();
+
+  return includesAny(source.lowerJs, [
+    `"${lowerValue}"`,
+    `'${lowerValue}'`,
+    `\`${lowerValue}\``,
+  ]);
+}
+
+function hasInputListener(source) {
+  return includesAny(source.lowerJs, [
+    'addeventlistener("input"',
+    "addeventlistener('input'",
+    "oninput",
+  ]);
+}
+
+function hasClickListener(source) {
+  return includesAny(source.lowerJs, [
+    'addeventlistener("click"',
+    "addeventlistener('click'",
+    "onclick",
+  ]);
+}
+
+function hasItemLoop(source) {
+  return includesAny(source.lowerJs, [
+    "queryselectorall",
+    "getelementsbytagname",
+    "foreach(",
+    "for (",
+    "for(",
+    "forof",
+  ]);
+}
+
+function hasHiddenToggle(source) {
+  return includesAny(source.lowerJs, [
+    ".hidden=true",
+    ".hidden = true",
+    ".hidden=false",
+    ".hidden = false",
+    'toggleattribute("hidden"',
+    "toggleattribute('hidden'",
+    'setattribute("hidden"',
+    "setattribute('hidden'",
+    'removeattribute("hidden"',
+    "removeattribute('hidden'",
+  ]);
+}
+
+function hasHideShowClassToggle(source, classNames = ["hidden", "is-hidden"]) {
+  const hasClassBehavior = classNames.some((className) =>
+    includesAny(source.lowerJs, [
+      `classlist.add("${className}"`,
+      `classlist.add('${className}'`,
+      `classlist.remove("${className}"`,
+      `classlist.remove('${className}'`,
+      `classlist.toggle("${className}"`,
+      `classlist.toggle('${className}'`,
+    ])
+  );
+
+  const hasCssClass = classNames.some((className) =>
+    source.lowerCss.includes(`.${className}`)
+  );
+
+  return hasClassBehavior && hasCssClass && source.compactCss.includes("display:none");
+}
+
+function hasValidListVisibilityPattern(source) {
+  const usesDisplay = source.lowerJs.includes(".style.display");
+  const hasVisibleDisplay = hasQuotedJsValue(source, "list-item");
+  const hasHiddenDisplay = hasQuotedJsValue(source, "none");
+
+  return (
+    (usesDisplay && hasVisibleDisplay && hasHiddenDisplay) ||
+    hasHiddenToggle(source) ||
+    hasHideShowClassToggle(source)
+  );
+}
+
+function hasValidCardVisibilityPattern(source) {
+  const usesDisplay = source.lowerJs.includes(".style.display");
+  const hasVisibleDisplay =
+    hasQuotedJsValue(source, "block") ||
+    hasQuotedJsValue(source, "grid") ||
+    hasQuotedJsValue(source, "flex") ||
+    includesAny(source.lowerJs, [
+      '.style.display = ""',
+      ".style.display = ''",
+      ".style.display=\"\"",
+      ".style.display=''",
+    ]);
+  const hasHiddenDisplay = hasQuotedJsValue(source, "none");
+
+  return (
+    (usesDisplay && hasVisibleDisplay && hasHiddenDisplay) ||
+    hasHiddenToggle(source) ||
+    hasHideShowClassToggle(source)
+  );
+}
+
+function validateBuilderListSearchChallenge(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure = hasTag(source.html, ["input", "ul", "li"]);
+  const hasInputFlow = hasInputListener(source) && source.lowerJs.includes(".value");
+  const hasCaseInsensitive = source.lowerJs.includes("tolowercase()");
+  const hasMatchLogic = source.lowerJs.includes("includes(");
+  const hasIteration = hasItemLoop(source);
+  const hasVisibility = hasValidListVisibilityPattern(source);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - el input de busqueda y la lista existen."
+        : "Good - the search input and list structure are present.",
+      isSpanish
+        ? "Anade el input de busqueda y una lista real de resultados."
+        : "Add the search input and a real list of results.",
+    ],
+    [
+      hasInputFlow,
+      isSpanish
+        ? "Bien - el filtro se ejecuta mientras la persona escribe."
+        : "Good - the filter runs while the user types.",
+      isSpanish
+        ? "Conecta el filtro al evento input para que la lista se actualice al escribir."
+        : "Connect the filter to the input event so the list updates as the user types.",
+    ],
+    [
+      hasCaseInsensitive,
+      isSpanish
+        ? "Bien - la comparacion no depende de mayusculas o minusculas."
+        : "Good - the comparison is case-insensitive.",
+      isSpanish
+        ? "Pasa el query y el texto de cada item a minusculas antes de compararlos."
+        : "Lowercase both the query and each item text before comparing them.",
+    ],
+    [
+      hasMatchLogic,
+      isSpanish
+        ? "Bien - la logica de coincidencia usa una comparacion parcial."
+        : "Good - the matching logic uses a partial-text comparison.",
+      isSpanish
+        ? "Usa includes() o una comparacion equivalente para permitir coincidencias parciales."
+        : "Use includes() or an equivalent partial-match check so partial titles still work.",
+    ],
+    [
+      hasIteration,
+      isSpanish
+        ? "Bien - el codigo revisa los resultados uno por uno."
+        : "Good - the code checks the results one by one.",
+      isSpanish
+        ? "Recorre cada item de la lista y actualiza su visibilidad."
+        : "Loop through each list item and update its visibility.",
+    ],
+    [
+      hasVisibility,
+      isSpanish
+        ? 'Bien - los resultados usan un estado visible valido, como "list-item".'
+        : 'Good - matching results return with a valid visible state, such as "list-item".',
+      isSpanish
+        ? 'Usa un estado visible real como "list-item" y oculta lo que no coincide con "none", o usa hidden / una clase de ocultacion valida.'
+        : 'Use a real visible list state such as "list-item" and hide non-matches with "none", or use a valid hidden/class toggle.',
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 6, 4, feedback, language);
+}
+
+function validateBuilderNoResultsSearchChallenge(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasBase = validateBuilderListSearchChallenge(draft, language);
+  const baseScore = hasBase.status === "success" ? 5 : hasBase.status === "close" ? 4 : 2;
+  score += baseScore;
+  feedback.push(...hasBase.feedback.slice(1));
+
+  const hasEmptyStateMessage = includesAny(source.lowerHtml, ["no results", "noresult", "sin resultados"]);
+  const hasEmptyStateToggle = includesAny(source.lowerJs, [
+    "noresultstext.hidden",
+    "noresultstext.style.display",
+    "matches +=",
+    "matches+=",
+    "matchcount",
+    "visiblecount",
+    "length === 0",
+    "length===0",
+  ]);
+
+  [
+    [
+      hasEmptyStateMessage,
+      isSpanish
+        ? "Bien - existe un mensaje de estado vacio."
+        : "Good - an empty-state message is present.",
+      isSpanish
+        ? "Anade un mensaje real de sin resultados."
+        : "Add a real no-results message.",
+    ],
+    [
+      hasEmptyStateToggle,
+      isSpanish
+        ? "Bien - el mensaje se controla segun las coincidencias."
+        : "Good - the empty-state message is controlled from the match count.",
+      isSpanish
+        ? "Muestra u oculta el mensaje segun cuantas coincidencias queden visibles."
+        : "Show or hide the message based on how many matches remain visible.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 7, 5, feedback, language);
+}
+
+function validateBuilderClearSearchChallenge(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure = hasTag(source.html, ["input", "button", "ul", "li"]);
+  const hasFilterFlow = hasInputListener(source) && source.lowerJs.includes("includes(");
+  const hasReusableFunction = includesAny(source.lowerJs, [
+    "function filter",
+    "const filter",
+    "=>",
+  ]);
+  const hasClearClick = hasClickListener(source) && includesAny(source.lowerJs, [
+    "clearsearchbtn",
+    ".value = \"\"",
+    ".value = ''",
+    ".value=\"\"",
+    ".value=''",
+  ]);
+  const hasValidVisibility = hasValidListVisibilityPattern(source);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - el input, el boton y la lista existen."
+        : "Good - the input, button, and list are present.",
+      isSpanish
+        ? "Anade el input de busqueda, el boton Clear y la lista."
+        : "Add the search input, the Clear button, and the list.",
+    ],
+    [
+      hasFilterFlow,
+      isSpanish
+        ? "Bien - la lista se filtra mientras se escribe."
+        : "Good - the list filters while the user types.",
+      isSpanish
+        ? "Filtra la lista desde el evento input."
+        : "Filter the list from the input event.",
+    ],
+    [
+      hasReusableFunction,
+      isSpanish
+        ? "Bien - hay una logica reutilizable para aplicar el filtro."
+        : "Good - there is reusable logic for applying the filter.",
+      isSpanish
+        ? "Extrae la logica a una funcion reutilizable y vuelve a llamarla al limpiar."
+        : "Pull the filter logic into a reusable function and call it again when clearing.",
+    ],
+    [
+      hasClearClick,
+      isSpanish
+        ? "Bien - el boton Clear vacia el input."
+        : "Good - the Clear button resets the input.",
+      isSpanish
+        ? "Al hacer click en Clear, vacia el input y vuelve a aplicar el filtro."
+        : "When Clear is clicked, reset the input and apply the filter again.",
+    ],
+    [
+      hasValidVisibility,
+      isSpanish
+        ? 'Bien - los resultados usan un estado visible valido como "list-item".'
+        : 'Good - the results use a valid visible state such as "list-item".',
+      isSpanish
+        ? 'Usa "list-item" para mostrar los resultados otra vez, no un valor inventado.'
+        : 'Use "list-item" to show matching results again, not an invented display value.',
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 5, 4, feedback, language);
+}
+
+function validateBuilderBoldMatchesChallenge(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure = hasTag(source.html, ["input", "ul", "li"]);
+  const hasInputFlow = hasInputListener(source) && source.lowerJs.includes(".value");
+  const hasCaseInsensitive = source.lowerJs.includes("tolowercase()");
+  const hasMatchLogic = source.lowerJs.includes("includes(");
+  const hasBoldState = includesAny(source.lowerJs, [
+    "fontweight",
+    "classlist.add(\"is-match\"",
+    "classlist.add('is-match'",
+    "classlist.toggle(\"is-match\"",
+    "classlist.toggle('is-match'",
+    "\"700\"",
+    "'700'",
+    "\"bold\"",
+    "'bold'",
+  ]);
+  const hasReset = includesAny(source.lowerJs, [
+    "\"400\"",
+    "'400'",
+    "\"normal\"",
+    "'normal'",
+    "query !== \"\"",
+    "query !== ''",
+  ]);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - el input y la lista de frutas existen."
+        : "Good - the input and fruit list are present.",
+      isSpanish
+        ? "Anade el input y una lista real de frutas."
+        : "Add the input and a real fruit list.",
+    ],
+    [
+      hasInputFlow,
+      isSpanish
+        ? "Bien - la actualizacion ocurre mientras se escribe."
+        : "Good - the update runs while the user types.",
+      isSpanish
+        ? "Usa el evento input para actualizar los estilos en vivo."
+        : "Use the input event to update the styles live.",
+    ],
+    [
+      hasCaseInsensitive,
+      isSpanish
+        ? "Bien - la comparacion esta normalizada."
+        : "Good - the comparison is normalized.",
+      isSpanish
+        ? "Pasa el query y el texto de cada fruta a minusculas."
+        : "Lowercase both the query and each fruit text.",
+    ],
+    [
+      hasMatchLogic,
+      isSpanish
+        ? "Bien - el codigo compara el texto de cada fruta."
+        : "Good - the code compares each fruit text.",
+      isSpanish
+        ? "Usa includes() o una comparacion equivalente para detectar coincidencias."
+        : "Use includes() or an equivalent comparison to detect matches.",
+    ],
+    [
+      hasBoldState,
+      isSpanish
+        ? "Bien - las coincidencias reciben un estilo destacado."
+        : "Good - matches receive a highlighted style.",
+      isSpanish
+        ? "Haz que las coincidencias se pongan en negrita con fontWeight o una clase."
+        : "Make the matches bold with fontWeight or a highlight class.",
+    ],
+    [
+      hasReset,
+      isSpanish
+        ? "Bien - el estilo vuelve al estado normal cuando deja de coincidir."
+        : "Good - the style returns to normal when an item stops matching.",
+      isSpanish
+        ? "Resetea el estilo cuando la fruta ya no coincida o cuando el input quede vacio."
+        : "Reset the style when a fruit no longer matches or when the input becomes empty.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 6, 4, feedback, language);
+}
+
+function validateBuilderCardSearchChallenge(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure = hasTag(source.html, ["input", "article", "section"]);
+  const hasInputFlow = hasInputListener(source) && source.lowerJs.includes(".value");
+  const hasCaseInsensitive = source.lowerJs.includes("tolowercase()");
+  const hasMatchLogic = source.lowerJs.includes("includes(");
+  const hasIteration = hasItemLoop(source);
+  const hasVisibility = hasValidCardVisibilityPattern(source);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - el buscador y las cards existen."
+        : "Good - the search input and the cards are present.",
+      isSpanish
+        ? "Anade el input de busqueda y varias cards reales."
+        : "Add the search input and several real cards.",
+    ],
+    [
+      hasInputFlow,
+      isSpanish
+        ? "Bien - la busqueda corre mientras se escribe."
+        : "Good - the search runs while the user types.",
+      isSpanish
+        ? "Conecta el filtro al evento input."
+        : "Connect the filter to the input event.",
+    ],
+    [
+      hasCaseInsensitive,
+      isSpanish
+        ? "Bien - la comparacion no depende de mayusculas."
+        : "Good - the comparison is case-insensitive.",
+      isSpanish
+        ? "Normaliza el query y el texto de cada card."
+        : "Normalize the query and each card's text.",
+    ],
+    [
+      hasMatchLogic,
+      isSpanish
+        ? "Bien - la logica de coincidencia revisa el texto visible."
+        : "Good - the matching logic checks the visible text.",
+      isSpanish
+        ? "Compara el texto de cada card con el query actual."
+        : "Compare each card's text against the current query.",
+    ],
+    [
+      hasIteration,
+      isSpanish
+        ? "Bien - se recorre cada card por separado."
+        : "Good - each card is checked individually.",
+      isSpanish
+        ? "Recorre cada card y decide si debe verse u ocultarse."
+        : "Loop through each card and decide whether it should show or hide.",
+    ],
+    [
+      hasVisibility,
+      isSpanish
+        ? "Bien - las cards usan un estado visible valido."
+        : "Good - the cards use a valid visible state.",
+      isSpanish
+        ? 'Usa un valor valido como "block" para mostrar cards, o hidden / una clase valida de ocultacion.'
+        : 'Use a valid visible value such as "block" for cards, or a valid hidden/class toggle.',
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 6, 4, feedback, language);
+}
+
+function validateBuilderProductFilterChallenge(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure = hasTag(source.html, ["input", "ul", "li"]);
+  const hasData = includesAny(source.lowerJs, ["const lessonproducts", "const products", "let products"]);
+  const hasFilter = source.lowerJs.includes(".filter(");
+  const hasPriceParsing = includesAny(source.lowerJs, [
+    "number(",
+    "parseint(",
+    "parsefloat(",
+    "infinity",
+  ]);
+  const hasRendering = includesAny(source.lowerJs, [".map(", "innerhtml", "createelement"]);
+  const hasTwoInputFlow =
+    countMatches(source.lowerJs, /addeventlistener\s*\(\s*["']input["']/g) >= 2;
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - los dos inputs y la salida renderizada existen."
+        : "Good - the two inputs and rendered output are present.",
+      isSpanish
+        ? "Anade el input por nombre, el input de precio y una salida visible."
+        : "Add the name input, the price input, and a visible output area.",
+    ],
+    [
+      hasData,
+      isSpanish
+        ? "Bien - los productos salen de un array de datos."
+        : "Good - the products come from a data array.",
+      isSpanish
+        ? "Usa un array de productos en JavaScript para poder filtrarlos."
+        : "Use a JavaScript products array so the UI can filter real data.",
+    ],
+    [
+      hasFilter,
+      isSpanish
+        ? "Bien - la solucion deriva resultados con filter()."
+        : "Good - the solution derives results with filter().",
+      isSpanish
+        ? "Usa filter() para combinar el filtro por nombre y por precio."
+        : "Use filter() to combine the name and price checks.",
+    ],
+    [
+      hasPriceParsing,
+      isSpanish
+        ? "Bien - el precio se trata como numero."
+        : "Good - the price is treated as a number.",
+      isSpanish
+        ? "Convierte el valor del precio a numero antes de compararlo."
+        : "Convert the price input to a number before comparing it.",
+    ],
+    [
+      hasRendering,
+      isSpanish
+        ? "Bien - los productos filtrados se vuelven a renderizar."
+        : "Good - the filtered products are rendered back into the UI.",
+      isSpanish
+        ? "Vuelve a renderizar la lista despues de aplicar los filtros."
+        : "Render the filtered list after applying the filters.",
+    ],
+    [
+      hasTwoInputFlow,
+      isSpanish
+        ? "Bien - ambos inputs pueden volver a disparar el filtrado."
+        : "Good - both inputs can trigger the filter again.",
+      isSpanish
+        ? "Escucha el evento input en los dos campos para actualizar la lista."
+        : "Listen to the input event on both fields so the list updates from either one.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 6, 4, feedback, language);
+}
+
+function localizeMessage(language, english, spanish) {
+  return language === "es" ? spanish : english;
+}
+
+function pushValidatorCheck(feedback, scoreRef, passed, successMessage, missingMessage) {
+  if (passed) scoreRef.count += 1;
+  feedback.push(passed ? successMessage : missingMessage);
+}
+
+function hasSubmitHandler(source) {
+  return includesAny(source.lowerJs, [
+    'addeventlistener("submit"',
+    "addeventlistener('submit'",
+    "onsubmit",
+  ]);
+}
+
+function hasPreventDefault(source) {
+  return source.lowerJs.includes("preventdefault");
+}
+
+function hasTrimmedInputCheck(source) {
+  return includesAny(source.lowerJs, [".trim()", "trim() ===", "trim()==="]);
+}
+
+function hasFeedbackMessage(source) {
+  return includesAny(source.lowerJs, [
+    "textcontent",
+    "innerhtml",
+    "message",
+    "feedback",
+    "status",
+  ]);
+}
+
+function hasFormDataUsage(source) {
+  return includesAny(source.js, ["new FormData(", "FormData("]);
+}
+
+function hasObjectCreation(source) {
+  return (
+    /const\s+[A-Za-z_$][\w$]*\s*=\s*\{[\s\S]*?\}/.test(source.js) ||
+    /let\s+[A-Za-z_$][\w$]*\s*=\s*\{[\s\S]*?\}/.test(source.js)
+  );
+}
+
+function hasFormReset(source) {
+  return includesAny(source.lowerJs, [
+    ".reset(",
+    '.value = ""',
+    ".value = ''",
+    ".value=\"\"",
+    ".value=''",
+  ]);
+}
+
+function hasNumberConversion(source) {
+  return includesAny(source.lowerJs, ["number(", "parseint(", "parsefloat("]);
+}
+
+function hasValidationBranch(source) {
+  return includesAny(source.lowerJs, [
+    "if (!",
+    "if(",
+    "return;",
+    "please enter",
+    "valid",
+    "error",
+  ]);
+}
+
+function hasArraySource(source, names = []) {
+  if (names.some((name) => source.lowerJs.includes(name.toLowerCase()))) {
+    return true;
+  }
+
+  return (
+    /const\s+[A-Za-z_$][\w$]*\s*=\s*\[/.test(source.js) ||
+    /let\s+[A-Za-z_$][\w$]*\s*=\s*\[/.test(source.js)
+  );
+}
+
+function hasRenderFunction(source) {
+  return includesAny(source.lowerJs, [
+    "function render",
+    "const render",
+    "=>",
+    "innerhtml",
+    "appendchild",
+    "createelement",
+  ]);
+}
+
+function validateBuilderBasicFormValidator(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure =
+    hasTag(source.html, ["form", "input", "button"]) &&
+    hasFeedbackMessage(source);
+  const hasSubmitFlow = hasSubmitHandler(source) && hasPreventDefault(source);
+  const hasTrim = hasTrimmedInputCheck(source);
+  const hasValidation = hasValidationBranch(source);
+  const hasSuccessAndError =
+    includesAny(source.lowerAll, ["please enter", "valid", "success", "submitted", "ready"]) &&
+    hasFeedbackMessage(source);
+  const hasEmailRule = !options.requireEmail
+    ? true
+    : includesAny(source.lowerJs, ['includes("@")', 'includes(\'@\')', ".includes(\"@\")", ".includes('@')"]);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the form, inputs, button, and feedback area are present.", "Bien - el formulario, los inputs, el boton y la zona de feedback existen."),
+      localizeMessage(language, "Add the real form structure plus a visible feedback area.", "Anade la estructura real del formulario y una zona visible de feedback."),
+    ],
+    [
+      hasSubmitFlow,
+      localizeMessage(language, "Good - submit is handled without reloading the page.", "Bien - el envio se maneja sin recargar la pagina."),
+      localizeMessage(language, "Use the submit event with preventDefault() so validation stays in the page.", "Usa el evento submit con preventDefault() para que la validacion ocurra en la pagina."),
+    ],
+    [
+      hasTrim,
+      localizeMessage(language, "Good - the validation trims user input before checking it.", "Bien - la validacion limpia el input antes de comprobarlo."),
+      localizeMessage(language, "Trim the input value before validating it.", "Limpia el valor del input con trim() antes de validarlo."),
+    ],
+    [
+      hasValidation,
+      localizeMessage(language, "Good - there is real validation logic in the submit flow.", "Bien - hay logica real de validacion dentro del envio."),
+      localizeMessage(language, "Add a real validation branch instead of accepting every submit.", "Anade una rama real de validacion en lugar de aceptar cualquier envio."),
+    ],
+    [
+      hasSuccessAndError,
+      localizeMessage(language, "Good - the UI can explain both invalid and valid states.", "Bien - la UI puede explicar estados invalidos y validos."),
+      localizeMessage(language, "Show clear feedback for invalid input and for a valid submit.", "Muestra feedback claro para input invalido y para un envio valido."),
+    ],
+    [
+      hasEmailRule,
+      localizeMessage(language, "Good - the form includes an email-specific rule.", "Bien - el formulario incluye una regla especifica para email."),
+      localizeMessage(language, "Add a simple email rule, such as checking for @ before success.", "Anade una regla sencilla para email, como comprobar @ antes del exito."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, options.requireEmail ? 6 : 5, 4, feedback, language);
+}
+
+function validateBuilderObjectFormChallenge(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure = hasTag(source.html, ["form", "input", "button"]);
+  const hasSubmitFlow = hasSubmitHandler(source) && hasPreventDefault(source);
+  const hasValueRead = hasFormDataUsage(source) || source.lowerJs.includes(".value");
+  const hasObject = options.requireObject === false ? true : hasObjectCreation(source);
+  const hasPreview = hasFeedbackMessage(source) && includesAny(source.lowerJs, ["preview", "summary", "card", "innerhtml", "json.stringify"]);
+  const hasReset = !options.requireReset ? true : hasFormReset(source);
+  const hasNumberRule = !options.requireNumber ? true : hasNumberConversion(source);
+  const hasValidation = !options.requireValidation ? true : hasValidationBranch(source);
+  const hasFormData = !options.requireFormData ? true : hasFormDataUsage(source);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the form structure is in place.", "Bien - la estructura del formulario existe."),
+      localizeMessage(language, "Build the real form structure for this challenge.", "Construye la estructura real del formulario para este reto."),
+    ],
+    [
+      hasSubmitFlow,
+      localizeMessage(language, "Good - submit is handled in JavaScript.", "Bien - el envio se controla desde JavaScript."),
+      localizeMessage(language, "Use a submit handler with preventDefault().", "Usa un submit handler con preventDefault()."),
+    ],
+    [
+      hasValueRead,
+      localizeMessage(language, "Good - the code reads the submitted form values.", "Bien - el codigo lee los valores enviados por el formulario."),
+      localizeMessage(language, "Read the submitted form values before building the UI result.", "Lee los valores enviados antes de construir el resultado en pantalla."),
+    ],
+    [
+      hasObject,
+      localizeMessage(language, "Good - the submitted data is turned into a clear object shape.", "Bien - los datos enviados se convierten en un objeto claro."),
+      localizeMessage(language, "Build a real object from the submitted form data.", "Crea un objeto real a partir de los datos enviados."),
+    ],
+    [
+      hasPreview,
+      localizeMessage(language, "Good - the result is rendered back into the UI.", "Bien - el resultado se vuelve a renderizar en la UI."),
+      localizeMessage(language, "Render the submitted result back into the page as a preview or summary.", "Renderiza el resultado enviado dentro de la pagina como preview o resumen."),
+    ],
+    [
+      hasReset,
+      localizeMessage(language, "Good - the form is cleared after a valid submit.", "Bien - el formulario se limpia despues de un envio valido."),
+      localizeMessage(language, "Clear the form only after a valid submit.", "Limpia el formulario solo despues de un envio valido."),
+    ],
+    [
+      hasNumberRule,
+      localizeMessage(language, "Good - numeric fields are treated like numbers.", "Bien - los campos numericos se tratan como numeros."),
+      localizeMessage(language, "Convert the numeric field before validating or rendering it.", "Convierte el campo numerico antes de validarlo o renderizarlo."),
+    ],
+    [
+      hasValidation,
+      localizeMessage(language, "Good - the form still validates before success.", "Bien - el formulario sigue validando antes del exito."),
+      localizeMessage(language, "Validate the important fields before showing success.", "Valida los campos importantes antes de mostrar exito."),
+    ],
+    [
+      hasFormData,
+      localizeMessage(language, "Good - FormData is used to read the submitted values.", "Bien - se usa FormData para leer los valores enviados."),
+      localizeMessage(language, "Use FormData for this challenge so the submit flow reads from the form cleanly.", "Usa FormData en este reto para leer el formulario de forma limpia."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  let successAt = 5;
+  let closeAt = 4;
+
+  if (options.requireFormData && options.requireValidation) successAt = 7;
+  else if (options.requireReset || options.requireNumber) successAt = 6;
+
+  return finalizeScoreResult(score.count, successAt, closeAt, feedback, language);
+}
+
+function validateBuilderListMutationChallenge(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure =
+    hasTag(source.html, ["ul", "li"]) ||
+    (hasTag(source.html, ["input", "button", "ul"]));
+  const hasInteraction = (options.addMode ? hasClickListener(source) || hasSubmitHandler(source) : hasClickListener(source));
+  const hasValueRead = !options.addMode ? true : source.lowerJs.includes(".value");
+  const hasCreationOrRemoval = options.addMode
+    ? includesAny(source.lowerJs, ["createelement", "appendchild", "innerhtml"])
+    : includesAny(source.lowerJs, [".remove()", "parentelement.remove()", "closest("]);
+  const hasEmptyGuard = !options.requireEmptyGuard
+    ? true
+    : includesAny(source.lowerJs, ["if (!value)", "if(value === \"\")", "if (value === \"\")", "trim()"]);
+  const hasCounter = !options.requireCounter
+    ? true
+    : includesAny(source.lowerJs, ["goalcount.textcontent", "totalgoals", "count.textcontent"]);
+  const hasEmptyState = !options.requireEmptyState
+    ? true
+    : includesAny(source.lowerJs, [".hidden", "queryselectorall(\"li\")", "length > 0", "length===0", "length === 0"]);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the list UI structure exists.", "Bien - la estructura de lista existe."),
+      localizeMessage(language, "Build the visible list structure for this challenge.", "Construye la estructura visible de lista para este reto."),
+    ],
+    [
+      hasInteraction,
+      localizeMessage(language, "Good - the item change is connected to a real interaction.", "Bien - el cambio de items esta conectado a una interaccion real."),
+      localizeMessage(language, options.addMode ? "Use a click or submit interaction to add items." : "Use a click interaction on each remove control.", options.addMode ? "Usa un click o submit para anadir items." : "Usa una interaccion click en cada control de eliminar."),
+    ],
+    [
+      hasValueRead,
+      localizeMessage(language, "Good - the code reads the current input value.", "Bien - el codigo lee el valor actual del input."),
+      localizeMessage(language, "Read the current input value before creating the new list item.", "Lee el valor actual del input antes de crear el nuevo item."),
+    ],
+    [
+      hasCreationOrRemoval,
+      localizeMessage(language, options.addMode ? "Good - the DOM is updated with a real add-item step." : "Good - the clicked item is actually removed from the DOM.", options.addMode ? "Bien - el DOM se actualiza con un paso real de anadir item." : "Bien - el item clicado se elimina de verdad del DOM."),
+      localizeMessage(language, options.addMode ? "Create and append the new list item into the DOM." : "Remove the related list item, not just the button.", options.addMode ? "Crea y anade el nuevo item dentro del DOM." : "Elimina el item relacionado, no solo el boton."),
+    ],
+    [
+      hasEmptyGuard,
+      localizeMessage(language, "Good - empty values are guarded before changing the list.", "Bien - los valores vacios se frenan antes de cambiar la lista."),
+      localizeMessage(language, "Ignore empty values before changing the list.", "Ignora valores vacios antes de cambiar la lista."),
+    ],
+    [
+      hasCounter,
+      localizeMessage(language, "Good - the item count stays in sync with the list.", "Bien - el contador se mantiene sincronizado con la lista."),
+      localizeMessage(language, "Update the visible count after each valid add.", "Actualiza el contador visible despues de cada alta valida."),
+    ],
+    [
+      hasEmptyState,
+      localizeMessage(language, "Good - the empty-state logic reacts to the remaining items.", "Bien - la logica de estado vacio reacciona a los items que quedan."),
+      localizeMessage(language, "Show or hide the empty-state message based on whether any items remain.", "Muestra u oculta el mensaje vacio segun queden items o no."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  const successAt = options.requireCounter || options.requireEmptyState ? 6 : 4;
+  return finalizeScoreResult(score.count, successAt, 4, feedback, language);
+}
+
+function validateBuilderArrayUiChallenge(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasArray = hasArraySource(source, options.arrayNames || []);
+  const hasRender = hasRenderFunction(source);
+  const hasInteraction = (options.useButtons ? hasClickListener(source) : hasInputListener(source) || hasClickListener(source));
+  const hasPrimaryMethod = options.method === "sort"
+    ? source.lowerJs.includes(".sort(")
+    : options.method === "filter"
+      ? source.lowerJs.includes(".filter(")
+      : options.method === "reduce"
+        ? source.lowerJs.includes(".reduce(")
+        : options.method === "map"
+          ? source.lowerJs.includes(".map(")
+          : true;
+  const hasSecondaryMethod = !options.secondaryMethod
+    ? true
+    : source.lowerJs.includes(`.${options.secondaryMethod}(`);
+  const hasDomUpdate = includesAny(source.lowerJs, ["innerhtml", "appendchild", "textcontent", "classlist.toggle"]);
+  const hasSpecificCheck = !options.specificCheck || options.specificCheck(source);
+
+  [
+    [
+      hasArray,
+      localizeMessage(language, "Good - the UI is driven from JavaScript data.", "Bien - la UI se alimenta desde datos en JavaScript."),
+      localizeMessage(language, "Use a real JavaScript array as the source of truth.", "Usa un array real de JavaScript como fuente de verdad."),
+    ],
+    [
+      hasRender,
+      localizeMessage(language, "Good - there is a render path that pushes data back into the UI.", "Bien - existe una ruta de renderizado que devuelve los datos a la UI."),
+      localizeMessage(language, "Add a render step so the data changes appear in the page.", "Anade un paso de render para que los cambios de datos aparezcan en la pagina."),
+    ],
+    [
+      hasInteraction,
+      localizeMessage(language, "Good - the array logic is connected to a real interaction.", "Bien - la logica del array esta conectada a una interaccion real."),
+      localizeMessage(language, "Connect the logic to the buttons or inputs for this challenge.", "Conecta la logica a los botones o inputs de este reto."),
+    ],
+    [
+      hasPrimaryMethod,
+      localizeMessage(language, `Good - the solution uses ${options.method}() in the right place.`, `Bien - la solucion usa ${options.method}() donde toca.`),
+      localizeMessage(language, `Use ${options.method}() for the main data transformation in this challenge.`, `Usa ${options.method}() como transformacion principal de datos en este reto.`),
+    ],
+    [
+      hasSecondaryMethod,
+      localizeMessage(language, `Good - the extra ${options.secondaryMethod}() step is present.`, `Bien - el paso extra con ${options.secondaryMethod}() existe.`),
+      localizeMessage(language, `This challenge also needs ${options.secondaryMethod}() in the data flow.`, `Este reto tambien necesita ${options.secondaryMethod}() dentro del flujo de datos.`),
+    ],
+    [
+      hasDomUpdate,
+      localizeMessage(language, "Good - the transformed data updates the DOM.", "Bien - los datos transformados actualizan el DOM."),
+      localizeMessage(language, "Update the DOM after transforming the data.", "Actualiza el DOM despues de transformar los datos."),
+    ],
+    [
+      hasSpecificCheck,
+      localizeMessage(language, "Good - the main challenge-specific rule is covered.", "Bien - la regla principal del reto esta cubierta."),
+      localizeMessage(language, options.specificMessageEn || "Finish the challenge-specific rule for this exercise.", options.specificMessageEs || "Termina la regla especifica de este ejercicio."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, options.successAt || 6, 4, feedback, language);
+}
+
+function validateBuilderTabsLikeChallenge(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasButtons = countTags(source.html, ["button"]) >= (options.buttonCount || 2);
+  const hasPanels = countTags(source.html, ["div", "section"]) >= (options.panelCount || 2);
+  const hasClickFlow = hasClickListener(source);
+  const hasVisibility = hasValidCardVisibilityPattern(source) || hasValidListVisibilityPattern(source);
+  const hasActiveState = !options.requireActiveState
+    ? true
+    : includesAny(source.lowerJs, ["classlist.toggle", "classlist.add", "classlist.remove", "dataset.tab"]);
+  const hasSharedContent = !options.requireSharedContent
+    ? true
+    : includesAny(source.lowerJs, ["innerhtml", "restaurantcontent", "dataset.tab"]);
+
+  [
+    [
+      hasButtons,
+      localizeMessage(language, "Good - the tab buttons are present.", "Bien - los botones de tabs existen."),
+      localizeMessage(language, "Add the tab buttons for this switcher.", "Anade los botones de tabs para este conmutador."),
+    ],
+    [
+      hasPanels,
+      localizeMessage(language, "Good - there is visible content to switch between.", "Bien - hay contenido visible para intercambiar."),
+      localizeMessage(language, "Add the tab content panels or shared output area.", "Anade los paneles de contenido o una zona compartida de salida."),
+    ],
+    [
+      hasClickFlow,
+      localizeMessage(language, "Good - tab changes are driven by click events.", "Bien - los cambios de tab se activan con clicks."),
+      localizeMessage(language, "Use click events to switch the visible tab content.", "Usa eventos click para cambiar el contenido visible de tabs."),
+    ],
+    [
+      hasVisibility,
+      localizeMessage(language, "Good - the visible content is controlled intentionally.", "Bien - el contenido visible se controla de forma intencional."),
+      localizeMessage(language, "Show the active content and hide the inactive content clearly.", "Muestra el contenido activo y oculta el inactivo con claridad."),
+    ],
+    [
+      hasActiveState,
+      localizeMessage(language, "Good - the active tab can be told apart visually.", "Bien - la tab activa se puede distinguir visualmente."),
+      localizeMessage(language, "Add an active-tab style or state update when the user switches tabs.", "Anade un estilo o estado para la tab activa cuando la persona cambia de tab."),
+    ],
+    [
+      hasSharedContent,
+      localizeMessage(language, "Good - the tab content updates from shared logic or shared content data.", "Bien - el contenido de tabs se actualiza desde una logica o datos compartidos."),
+      localizeMessage(language, "Update the tab content from one clear render path instead of leaving every panel visible.", "Actualiza el contenido de tabs desde una ruta clara de render en lugar de dejar todo visible."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, options.requireActiveState ? 5 : 4, 4, feedback, language);
+}
+
+function validateProductListManagerCapstone(draft, language = "en") {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure =
+    hasTag(source.html, ["form", "input", "select", "button"]) &&
+    includesAny(source.lowerHtml, ["productlist", "controls"]);
+  const hasValidation =
+    hasSubmitHandler(source) &&
+    hasPreventDefault(source) &&
+    hasTrimmedInputCheck(source) &&
+    hasNumberConversion(source);
+  const hasDataArray = hasArraySource(source, ["products"]);
+  const hasFilterAndSort = source.lowerJs.includes(".filter(") && source.lowerJs.includes(".sort(");
+  const hasRendering = includesAny(source.lowerJs, [".map(", "innerhtml", "product-card"]);
+  const hasUiUpdates =
+    includesAny(source.lowerJs, [
+      'addeventlistener("change"',
+      "addeventlistener('change'",
+      "formmessage.textcontent",
+      ".reset(",
+    ]);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the manager has the form, controls, and output shell.", "Bien - el gestor tiene formulario, controles y zona de salida."),
+      localizeMessage(language, "Build the full manager shell with form, controls, and product output.", "Construye la estructura completa con formulario, controles y salida de productos."),
+    ],
+    [
+      hasValidation,
+      localizeMessage(language, "Good - the form validates before adding a product.", "Bien - el formulario valida antes de anadir un producto."),
+      localizeMessage(language, "Validate and normalize the form values before adding a product.", "Valida y normaliza los valores del formulario antes de anadir un producto."),
+    ],
+    [
+      hasDataArray,
+      localizeMessage(language, "Good - products live in a JavaScript array.", "Bien - los productos viven en un array de JavaScript."),
+      localizeMessage(language, "Store the products in a JavaScript array instead of hardcoding the output.", "Guarda los productos en un array de JavaScript en lugar de dejar la salida fija."),
+    ],
+    [
+      hasFilterAndSort,
+      localizeMessage(language, "Good - the visible products are both filtered and sorted.", "Bien - los productos visibles se filtran y ordenan."),
+      localizeMessage(language, "Combine filter() and sort() so the controls really change the visible product list.", "Combina filter() y sort() para que los controles cambien de verdad la lista visible."),
+    ],
+    [
+      hasRendering,
+      localizeMessage(language, "Good - the product data is rendered back into the interface.", "Bien - los datos de productos se renderizan dentro de la interfaz."),
+      localizeMessage(language, "Render the products from JavaScript data after every change.", "Renderiza los productos desde datos de JavaScript despues de cada cambio."),
+    ],
+    [
+      hasUiUpdates,
+      localizeMessage(language, "Good - the UI responds after submit, filter, and sort changes.", "Bien - la UI responde despues de enviar, filtrar y ordenar."),
+      localizeMessage(language, "Wire the form and controls so the UI updates after every important change.", "Conecta formulario y controles para que la UI se actualice tras cada cambio importante."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, 5, 4, feedback, language);
+}
+
+function validateBuilderAsyncChallenge(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure = hasTag(source.html, ["button", "p"]) || hasTag(source.html, ["button", "div"]);
+  const hasAsyncSource =
+    includesAny(source.lowerJs, ["new promise", "fetch(", "async ", ".then("]) &&
+    includesAny(source.lowerJs, ["settimeout", "response.json", "resolve(", "reject("]);
+  const hasLoading = includesAny(source.lowerAll, ["loading", "saving", "please wait"]);
+  const hasResultRendering = includesAny(source.lowerJs, ["textcontent", "innerhtml", "appendchild"]);
+  const hasAsyncPattern = options.useThen ? source.lowerJs.includes(".then(") : includesAny(source.lowerJs, ["await ", "async "]);
+  const hasExtraRule = !options.extraRule || options.extraRule(source);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the async UI shell is present.", "Bien - la base de UI async existe."),
+      localizeMessage(language, "Add the visible button and output area for the async flow.", "Anade el boton visible y la zona de salida para el flujo async."),
+    ],
+    [
+      hasAsyncSource,
+      localizeMessage(language, "Good - the code creates or calls a real async source.", "Bien - el codigo crea o llama a una fuente async real."),
+      localizeMessage(language, "Use a Promise, fetch(), or another real async source in this challenge.", "Usa una Promise, fetch() u otra fuente async real en este reto."),
+    ],
+    [
+      hasLoading,
+      localizeMessage(language, "Good - the UI shows a loading or saving state first.", "Bien - la UI muestra primero un estado de carga o guardado."),
+      localizeMessage(language, "Show a loading or saving state before the async work finishes.", "Muestra un estado de carga o guardado antes de que termine el trabajo async."),
+    ],
+    [
+      hasAsyncPattern,
+      localizeMessage(language, options.useThen ? "Good - the promise is handled with .then()." : "Good - the async flow uses async/await.", options.useThen ? "Bien - la promesa se maneja con .then()." : "Bien - el flujo async usa async/await."),
+      localizeMessage(language, options.useThen ? "Handle the promise result inside .then()." : "Use async/await for the main async flow in this challenge.", options.useThen ? "Maneja el resultado de la promesa dentro de .then()." : "Usa async/await para el flujo async principal de este reto."),
+    ],
+    [
+      hasResultRendering,
+      localizeMessage(language, "Good - the async result is rendered back into the UI.", "Bien - el resultado async vuelve a renderizarse en la UI."),
+      localizeMessage(language, "Render the async result back into the page.", "Renderiza el resultado async dentro de la pagina."),
+    ],
+    [
+      hasExtraRule,
+      localizeMessage(language, "Good - the challenge-specific async behavior is covered.", "Bien - el comportamiento async especifico del reto esta cubierto."),
+      localizeMessage(language, options.extraMessageEn || "Finish the main async behavior for this exercise.", options.extraMessageEs || "Termina el comportamiento async principal de este ejercicio."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, options.successAt || 5, 4, feedback, language);
+}
+
+function validateBuilderLocalStorageChallenge(draft, language = "en", options = {}) {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure = options.hasStructure
+    ? options.hasStructure(source)
+    : hasTag(source.html, ["button", "ul", "input"]) || hasTag(source.html, ["textarea", "button"]);
+  const hasRead = includesAny(source.lowerJs, ["localstorage.getitem"]);
+  const hasWrite = includesAny(source.lowerJs, ["localstorage.setitem"]);
+  const hasSafeJson = !options.requireJson
+    ? true
+    : includesAny(source.lowerJs, ["json.parse", "json.stringify"]);
+  const hasRender = includesAny(source.lowerJs, [".map(", "foreach(", "innerhtml", "appendchild", "textcontent"]);
+  const hasChallengeRule = !options.challengeRule || options.challengeRule(source);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the persistent UI shell is present.", "Bien - la estructura de UI persistente existe."),
+      localizeMessage(language, "Build the visible UI for the localStorage exercise.", "Construye la UI visible para el ejercicio de localStorage."),
+    ],
+    [
+      hasRead,
+      localizeMessage(language, "Good - the code reads saved data on startup.", "Bien - el codigo lee datos guardados al iniciar."),
+      localizeMessage(language, "Read the saved data from localStorage when the page starts.", "Lee los datos guardados desde localStorage al iniciar la pagina."),
+    ],
+    [
+      hasWrite,
+      localizeMessage(language, "Good - the code writes the updated state back to localStorage.", "Bien - el codigo vuelve a guardar el estado actualizado en localStorage."),
+      localizeMessage(language, "Write the updated data back into localStorage after changes.", "Vuelve a guardar los datos en localStorage despues de los cambios."),
+    ],
+    [
+      hasSafeJson,
+      localizeMessage(language, "Good - complex saved data is encoded and decoded safely.", "Bien - los datos guardados complejos se codifican y decodifican con seguridad."),
+      localizeMessage(language, "Use JSON.parse() and JSON.stringify() for saved arrays or objects.", "Usa JSON.parse() y JSON.stringify() para arrays u objetos guardados."),
+    ],
+    [
+      hasRender,
+      localizeMessage(language, "Good - the saved state is rendered back into the UI.", "Bien - el estado guardado se vuelve a renderizar en la UI."),
+      localizeMessage(language, "Render the saved state back into the page.", "Renderiza el estado guardado dentro de la pagina."),
+    ],
+    [
+      hasChallengeRule,
+      localizeMessage(language, "Good - the main storage behavior for this challenge is covered.", "Bien - el comportamiento principal de persistencia en este reto esta cubierto."),
+      localizeMessage(language, options.extraMessageEn || "Finish the main localStorage behavior for this exercise.", options.extraMessageEs || "Termina el comportamiento principal de localStorage en este ejercicio."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, options.successAt || 5, 4, feedback, language);
+}
+
+function validateAsyncDashboardCapstone(draft, language = "en") {
+  const source = getSource(draft);
+  const feedback = [];
+  const score = { count: 0 };
+
+  const hasStructure =
+    includesAny(source.lowerHtml, ["retrybtn", "noteinput", "savenotebtn", "dashboard"]) &&
+    hasTag(source.html, ["button", "textarea", "section"]);
+  const hasAsyncLoad = includesAny(source.lowerJs, ["async function", "await ", "new promise", "settimeout"]);
+  const hasErrorAndRetry =
+    source.lowerJs.includes("catch") &&
+    includesAny(source.lowerJs, ["retrybtn", 'addeventlistener("click", loaddashboard', "error.message"]);
+  const hasRendering = includesAny(source.lowerJs, [".map(", "metric-card", "dashboard.innerhtml"]);
+  const hasStorage = includesAny(source.lowerJs, ["localstorage.setitem", "localstorage.getitem"]);
+  const hasLifecycle = includesAny(source.lowerAll, ["loading...", "loaded successfully", "failed", "saved locally"]);
+
+  [
+    [
+      hasStructure,
+      localizeMessage(language, "Good - the dashboard shell has status, retry, cards, and notes.", "Bien - el dashboard tiene estado, reintento, tarjetas y notas."),
+      localizeMessage(language, "Build the dashboard shell with status text, retry, cards, and saved note UI.", "Construye el dashboard con texto de estado, reintento, tarjetas y nota guardada."),
+    ],
+    [
+      hasAsyncLoad,
+      localizeMessage(language, "Good - the metrics load through a real async flow.", "Bien - las metricas cargan mediante un flujo async real."),
+      localizeMessage(language, "Use a real async load function for the dashboard data.", "Usa una funcion de carga async real para los datos del dashboard."),
+    ],
+    [
+      hasErrorAndRetry,
+      localizeMessage(language, "Good - error state and retry are connected.", "Bien - el estado de error y el reintento estan conectados."),
+      localizeMessage(language, "Add an error path plus a retry action that calls the same load flow again.", "Anade una ruta de error y una accion de reintento que vuelva a llamar a la misma carga."),
+    ],
+    [
+      hasRendering,
+      localizeMessage(language, "Good - fetched metrics are rendered into visible cards.", "Bien - las metricas cargadas se renderizan en tarjetas visibles."),
+      localizeMessage(language, "Render the fetched dashboard metrics back into the page.", "Renderiza las metricas del dashboard dentro de la pagina."),
+    ],
+    [
+      hasStorage,
+      localizeMessage(language, "Good - the local note is saved and restored.", "Bien - la nota local se guarda y se restaura."),
+      localizeMessage(language, "Save and restore the dashboard note with localStorage.", "Guarda y restaura la nota del dashboard con localStorage."),
+    ],
+    [
+      hasLifecycle,
+      localizeMessage(language, "Good - the UI communicates loading, error, success, and note saving states.", "Bien - la UI comunica estados de carga, error, exito y guardado de nota."),
+      localizeMessage(language, "Show the important UI states clearly as the dashboard changes.", "Muestra con claridad los estados importantes de la UI mientras cambia el dashboard."),
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) =>
+    pushValidatorCheck(feedback, score, passed, successMessage, missingMessage)
+  );
+
+  return finalizeScoreResult(score.count, 5, 4, feedback, language);
+}
+
 function hasThreeEqualGridColumns(source) {
   return (
     /grid-template-columns\s*:\s*repeat\s*\(\s*3\s*,\s*minmax\s*\(\s*0\s*,\s*1fr\s*\)\s*\)/i.test(
@@ -3362,6 +4551,302 @@ export function validateChallenge(challengeOrId, draft, language = "en") {
     "debug-broken-responsive-grid": validateDebugBrokenResponsiveGrid,
     "copy-mock-pricing-section": validateCopyMockPricingSection,
     "copy-mock-dashboard-overview": validateCopyMockDashboardOverview,
+    "live-search-filter": validateBuilderListSearchChallenge,
+    "fruit-partial-match-list": validateBuilderListSearchChallenge,
+    "city-search-list": validateBuilderListSearchChallenge,
+    "movie-search-list": validateBuilderListSearchChallenge,
+    "case-insensitive-book-search": validateBuilderListSearchChallenge,
+    "username-search-filter": validateBuilderListSearchChallenge,
+    "no-results-search-state": validateBuilderNoResultsSearchChallenge,
+    "clear-search-button": validateBuilderClearSearchChallenge,
+    "bold-matching-fruits": validateBuilderBoldMatchesChallenge,
+    "search-cards-layout": validateBuilderCardSearchChallenge,
+    "filter-products-name-price": validateBuilderProductFilterChallenge,
+    "simple-form-validation": (draft, language) =>
+      validateBuilderBasicFormValidator(draft, language),
+    "contact-form-validation": (draft, language) =>
+      validateBuilderBasicFormValidator(draft, language, { requireEmail: true }),
+    "prevent-duplicate-items": (draft, language) =>
+      validateBuilderObjectFormChallenge(draft, language, {
+        requireValidation: true,
+        requireObject: false,
+      }),
+    "login-form-submit-object": (draft, language) =>
+      validateBuilderObjectFormChallenge(draft, language, {
+        requireValidation: true,
+        requireReset: true,
+      }),
+    "booking-form-reset": (draft, language) =>
+      validateBuilderObjectFormChallenge(draft, language, {
+        requireValidation: true,
+        requireReset: true,
+        requireNumber: true,
+      }),
+    "reservation-form-summary": (draft, language) =>
+      validateBuilderObjectFormChallenge(draft, language, {
+        requireValidation: true,
+        requireFormData: true,
+      }),
+    "form-data-preview": (draft, language) =>
+      validateBuilderObjectFormChallenge(draft, language, {
+        requireFormData: true,
+        requireValidation: false,
+        requireObject: false,
+      }),
+    "add-item-to-list": (draft, language) =>
+      validateBuilderListMutationChallenge(draft, language, {
+        addMode: true,
+        requireEmptyGuard: true,
+      }),
+    "add-goal-to-list": (draft, language) =>
+      validateBuilderListMutationChallenge(draft, language, {
+        addMode: true,
+        requireEmptyGuard: true,
+        requireCounter: true,
+      }),
+    "remove-item-from-list": (draft, language) =>
+      validateBuilderListMutationChallenge(draft, language, {
+        addMode: false,
+      }),
+    "remove-saved-item": (draft, language) =>
+      validateBuilderListMutationChallenge(draft, language, {
+        addMode: false,
+        requireEmptyState: true,
+      }),
+    "sort-products": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        method: "sort",
+        useButtons: true,
+        arrayNames: ["products"],
+        specificCheck: (source) =>
+          includesAny(source.lowerJs, ["price"]) &&
+          includesAny(source.lowerJs, ["a.price-b.price", "a.price - b.price"]),
+        specificMessageEn:
+          "Sort the products by their numeric price and re-render the updated list.",
+        specificMessageEs:
+          "Ordena los productos por su precio numerico y vuelve a renderizar la lista.",
+      }),
+    "filter-products": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        method: "filter",
+        useButtons: true,
+        arrayNames: ["products"],
+        specificCheck: (source) =>
+          includesAny(source.lowerJs, ["category ===", "category==="]) &&
+          includesAny(source.lowerJs, ["allbtn", "techbtn", "homebtn"]),
+        specificMessageEn:
+          "Filter by the product category and keep a way to show all products again.",
+        specificMessageEs:
+          "Filtra por categoria de producto y conserva una forma de volver a ver todos.",
+      }),
+    "todo-complete-toggle": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        useButtons: true,
+        specificCheck: (source) =>
+          includesAny(source.lowerJs, ["classlist.toggle", "parentelement.classlist.toggle"]) &&
+          source.lowerCss.includes(".done"),
+        specificMessageEn:
+          "Toggle a completed style on the right todo item and define the matching CSS class.",
+        specificMessageEs:
+          "Alterna el estilo de completado en el item correcto y define la clase CSS correspondiente.",
+        successAt: 5,
+      }),
+    "password-strength-checker": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        specificCheck: (source) =>
+          hasInputListener(source) &&
+          includesAny(source.lowerJs, [".length", "strong password", "weak password"]),
+        specificMessageEn:
+          "Update the feedback live from the current password length.",
+        specificMessageEs:
+          "Actualiza el feedback en vivo a partir de la longitud actual del password.",
+        successAt: 5,
+      }),
+    "password-rules-validation": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        specificCheck: (source) =>
+          hasInputListener(source) &&
+          includesAny(source.lowerJs, ["classlist.toggle"]) &&
+          includesAny(source.js, ["/\\d/", "/[A-Z]/", "value.length >= 8"]),
+        specificMessageEn:
+          "Check multiple password rules and update the visible checklist live.",
+        specificMessageEs:
+          "Comprueba varias reglas de password y actualiza la checklist visible en vivo.",
+        successAt: 5,
+      }),
+    "tab-switcher": (draft, language) =>
+      validateBuilderTabsLikeChallenge(draft, language),
+    "restaurant-tabs-panel": (draft, language) =>
+      validateBuilderTabsLikeChallenge(draft, language, {
+        buttonCount: 3,
+        panelCount: 1,
+        requireActiveState: true,
+        requireSharedContent: true,
+      }),
+    "product-list-manager-capstone": validateProductListManagerCapstone,
+    "mock-fetch-loading": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) => includesAny(source.lowerJs, ["loading...", "settimeout", "resolve("]),
+        extraMessageEn:
+          "Simulate a delayed request and replace the loading state with the returned result.",
+        extraMessageEs:
+          "Simula una request con retraso y reemplaza el estado de carga por el resultado devuelto.",
+      }),
+    "mock-fetch-error-retry": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          source.lowerJs.includes("catch") &&
+          includesAny(source.lowerJs, ["reject(", "error.message", "retrybtn"]),
+        extraMessageEn:
+          "Handle the failure path and let the same button trigger another attempt.",
+        extraMessageEs:
+          "Maneja la ruta de error y permite que el mismo boton vuelva a intentarlo.",
+      }),
+    "promise-chain-practice": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        useThen: true,
+        extraRule: (source) =>
+          source.lowerJs.includes("new promise") &&
+          includesAny(source.lowerJs, [".then(", "resolve("]),
+        extraMessageEn:
+          "Return a promise and handle the result inside .then().",
+        extraMessageEs:
+          "Devuelve una promesa y maneja el resultado dentro de .then().",
+      }),
+    "await-user-card": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          includesAny(source.lowerJs, ["await fetchuser()", "resolve({", "user.name", "user.role"]),
+        extraMessageEn:
+          "Await a user object and render real properties like name and role.",
+        extraMessageEs:
+          "Espera un objeto user y renderiza propiedades reales como name y role.",
+      }),
+    "async-save-button": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          includesAny(source.lowerJs, [".disabled = true", ".disabled = false", "saving...", "saved successfully"]),
+        extraMessageEn:
+          "Disable the button during the async save and restore it afterward with a success state.",
+        extraMessageEs:
+          "Desactiva el boton durante el guardado async y restauralo despues con un estado de exito.",
+      }),
+    "save-notes-localstorage": (draft, language) =>
+      validateBuilderLocalStorageChallenge(draft, language, {
+        challengeRule: (source) =>
+          hasTag(source.html, ["textarea"]) &&
+          includesAny(source.lowerJs, ["noteinput.value", "saved-note", "note saved"]),
+        extraMessageEn:
+          "Restore the saved note on load and save the current textarea value when the button is clicked.",
+        extraMessageEs:
+          "Restaura la nota guardada al cargar y guarda el valor actual del textarea al hacer click.",
+      }),
+    "save-load-todos-localstorage": (draft, language) =>
+      validateBuilderLocalStorageChallenge(draft, language, {
+        requireJson: true,
+        challengeRule: (source) =>
+          hasArraySource(source, ["todos"]) &&
+          includesAny(source.lowerJs, ["createli", "appendchild", "todos.push"]),
+        extraMessageEn:
+          "Store todos in an array, save that array with JSON, and render the saved list back into the page.",
+        extraMessageEs:
+          "Guarda los todos en un array, persiste ese array con JSON y vuelve a renderizar la lista guardada.",
+      }),
+    "saved-favourites-localstorage": (draft, language) =>
+      validateBuilderLocalStorageChallenge(draft, language, {
+        requireJson: true,
+        challengeRule: (source) =>
+          includesAny(source.lowerJs, ["savedids.includes", "savedcount.textcontent", "togglesaved", "data-id"]),
+        extraMessageEn:
+          "Store saved ids, toggle them honestly, and keep the saved count in sync.",
+        extraMessageEs:
+          "Guarda ids, alterna su estado con honestidad y mantén sincronizado el contador de guardados.",
+      }),
+    "cart-items-localstorage": (draft, language) =>
+      validateBuilderLocalStorageChallenge(draft, language, {
+        requireJson: true,
+        challengeRule: (source) =>
+          includesAny(source.lowerJs, ["cartcount.textcontent", "products.find(", "addtocart", "cartitems.innerhtml"]),
+        extraMessageEn:
+          "Restore the cart, add products into it, and keep the count plus visible list updated.",
+        extraMessageEs:
+          "Restaura el carrito, anade productos y mantén actualizados el contador y la lista visible.",
+      }),
+    "mock-product-search": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          source.lowerJs.includes(".filter(") &&
+          includesAny(source.lowerJs, ["results.length", "no products found", "searchinput.value"]),
+        extraMessageEn:
+          "Filter the returned products with the typed query and handle the empty-result case.",
+        extraMessageEs:
+          "Filtra los productos devueltos con el query escrito y maneja el caso sin resultados.",
+      }),
+    "github-profile-finder": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          includesAny(source.lowerJs, ["fetch(", "response.json", ".find(", "username.tolowercase()", "profileresult.innerhtml"]) &&
+          source.lowerJs.includes("catch"),
+        extraMessageEn:
+          "Fetch the data, search by username, render one profile card, and handle the error path.",
+        extraMessageEs:
+          "Haz fetch de los datos, busca por username, renderiza una tarjeta de perfil y maneja la ruta de error.",
+      }),
+    "weather-search-panel": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          includesAny(source.lowerJs, ["fetch(", "response.json", ".find(", "city.tolowercase()", "weathercard.innerhtml"]) &&
+          source.lowerJs.includes("catch"),
+        extraMessageEn:
+          "Fetch the weather data, find the matching city, render a card, and handle missing results or errors.",
+        extraMessageEs:
+          "Haz fetch de los datos del tiempo, encuentra la ciudad, renderiza una card y maneja faltas de resultado o errores.",
+      }),
+    "recipe-search-app": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          includesAny(source.lowerJs, ["fetch(", "response.json", ".filter(", ".map(", "ingredient.tolowercase()", "no recipes found"]) &&
+          source.lowerJs.includes("catch"),
+        extraMessageEn:
+          "Search recipes by title or ingredient, render the matching cards, and handle the no-results case.",
+        extraMessageEs:
+          "Busca recetas por titulo o ingrediente, renderiza las cards coincidentes y maneja el caso sin resultados.",
+      }),
+    "promise-all-user-posts": (draft, language) =>
+      validateBuilderAsyncChallenge(draft, language, {
+        extraRule: (source) =>
+          includesAny(source.js, ["Promise.all", "fetchUser()", "fetchPosts()"]) &&
+          includesAny(source.lowerJs, ["posts.foreach", "user.name"]),
+        extraMessageEn:
+          "Load both async sources together with Promise.all and render both the user and the posts.",
+        extraMessageEs:
+          "Carga las dos fuentes async juntas con Promise.all y renderiza tanto el usuario como los posts.",
+      }),
+    "shopping-cart-total": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        method: "reduce",
+        arrayNames: ["cartItems", "cartitems"],
+        specificCheck: (source) =>
+          includesAny(source.lowerJs, ["price", "carttotal.textcontent", "sum + item.price", "sum+item.price"]),
+        specificMessageEn:
+          "Calculate the numeric total from the item prices and render it into the UI.",
+        specificMessageEs:
+          "Calcula el total numerico desde los precios de los items y renderizalo en la UI.",
+      }),
+    "filter-sort-products": (draft, language) =>
+      validateBuilderArrayUiChallenge(draft, language, {
+        method: "filter",
+        secondaryMethod: "sort",
+        useButtons: true,
+        arrayNames: ["products", "visibleProducts", "visibleproducts"],
+        specificCheck: (source) =>
+          includesAny(source.lowerJs, ["category ===", "visibleproducts = [...visibleproducts].sort", "renderproducts(visibleproducts)"]),
+        specificMessageEn:
+          "Filter by category, then sort the currently visible products by price and re-render them.",
+        specificMessageEs:
+          "Filtra por categoria, luego ordena por precio los productos visibles y vuelve a renderizarlos.",
+      }),
+    "async-dashboard-capstone": validateAsyncDashboardCapstone,
     "builder-all-in-one-practice-lab": validateBuilderPracticeLab,
     "react-all-in-one-restaurant-app": validateReactRestaurantCapstone,
     "interview-accessibility-qa-test": validateInterviewAccessibilityTest,

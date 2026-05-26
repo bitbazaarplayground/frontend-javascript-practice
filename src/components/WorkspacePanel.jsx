@@ -16,7 +16,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 const HISTORY_LIMIT = 240;
 const HISTORY_GROUP_MS = 500;
-const DESKTOP_PREVIEW_WIDTH = 960;
+const DESKTOP_PREVIEW_WIDTH = 820;
 
 function createEditorHistory(html = "", css = "", js = "") {
   return {
@@ -253,9 +253,10 @@ export default function WorkspacePanel({
     isReactTestChallenge;
   const isTypeScriptChallenge = editorType === "react-ts";
   const isShowingSolution = solutionEnabled && showSolution;
+  const desktopPreviewFitScale = previewStageWidth / DESKTOP_PREVIEW_WIDTH;
   const desktopPreviewScale =
     previewViewport === "desktop"
-      ? Math.max(0.25, Math.min(1, previewStageWidth / DESKTOP_PREVIEW_WIDTH))
+      ? Math.min(1, desktopPreviewFitScale)
       : 1;
 
   const visibleHtml = isShowingSolution ? solution?.html || "" : html || "";
@@ -1520,6 +1521,8 @@ export default function WorkspacePanel({
         className={
           layoutMode === "stacked"
             ? "workspace-grid workspace-grid-stacked"
+            : previewViewport === "desktop"
+              ? "workspace-grid workspace-grid-desktop-preview"
             : "workspace-grid"
         }
       >
