@@ -1,3 +1,4 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import { getConcept } from "../../data/concepts";
 
@@ -6,12 +7,16 @@ export default function BriefPanel({
   copy,
   language,
   variant = "default",
+  collapsed = false,
+  onToggleCollapse,
 }) {
   const [openSections, setOpenSections] = useState({
     tips: false,
     approach: false,
     mistakes: false,
     outcome: false,
+    quality: false,
+    readiness: false,
   });
   const [selectedConcept, setSelectedConcept] = useState(null);
   const selectedConceptDetails = useMemo(
@@ -28,6 +33,29 @@ export default function BriefPanel({
   };
   const isTimedVariant = variant === "timed";
 
+  if (collapsed) {
+    return (
+      <aside
+        className={
+          isTimedVariant
+            ? "panel brief-panel brief-panel-collapsed brief-panel-timed"
+            : "panel brief-panel brief-panel-collapsed"
+        }
+      >
+        <button
+          type="button"
+          className="brief-collapse-rail"
+          onClick={onToggleCollapse}
+          aria-label={copy.brief.expand}
+          title={copy.brief.expand}
+        >
+          <ChevronRight size={18} aria-hidden="true" />
+          <span>{copy.brief.title}</span>
+        </button>
+      </aside>
+    );
+  }
+
   return (
     <section
       className={
@@ -36,6 +64,17 @@ export default function BriefPanel({
     >
       <div className="panel-top">
         <h3>{isTimedVariant ? copy.assessment.briefTitle : copy.brief.title}</h3>
+        {onToggleCollapse && (
+          <button
+            type="button"
+            className="brief-panel-collapse-btn"
+            onClick={onToggleCollapse}
+            aria-label={copy.brief.minimize}
+            title={copy.brief.minimize}
+          >
+            <ChevronLeft size={18} aria-hidden="true" />
+          </button>
+        )}
       </div>
 
       {isTimedVariant && (
@@ -55,6 +94,29 @@ export default function BriefPanel({
           ))}
         </ul>
       </div>
+
+      {!isTimedVariant && challenge.qualityChecklist?.length > 0 && (
+        <div className="brief-block">
+          <button
+            className="brief-toggle"
+            onClick={() => toggleSection("quality")}
+          >
+            <span>{copy.brief.qualityBar}</span>
+            <span>{openSections.quality ? "−" : "+"}</span>
+          </button>
+
+          {openSections.quality && (
+            <div className="quality-box brief-dropdown-content">
+              <p className="brief-text">{copy.brief.qualityIntro}</p>
+              <ul className="clean-list">
+                {challenge.qualityChecklist.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {!isTimedVariant && challenge.concepts?.length > 0 && (
         <div className="brief-block">
@@ -110,6 +172,33 @@ export default function BriefPanel({
                   </pre>
                 </>
               )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {!isTimedVariant && challenge.readinessChecks?.length > 0 && (
+        <div className="brief-block">
+          <button
+            className="brief-toggle"
+            onClick={() => toggleSection("readiness")}
+          >
+            <span>{copy.brief.readinessCheck}</span>
+            <span>{openSections.readiness ? "−" : "+"}</span>
+          </button>
+
+          {openSections.readiness && (
+            <div className="readiness-checks brief-dropdown-content">
+              <p className="brief-text">{copy.brief.readinessIntro}</p>
+              {challenge.readinessChecks.map((item, index) => (
+                <details className="readiness-answer" key={index}>
+                  <summary>{item.question}</summary>
+                  <div>
+                    <strong>{copy.brief.modelAnswer}</strong>
+                    <p>{item.answer}</p>
+                  </div>
+                </details>
+              ))}
             </div>
           )}
         </div>

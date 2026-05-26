@@ -1,4 +1,219 @@
-export const rookieChallenges = [
+function challengeIncludes(challenge, ...terms) {
+  const haystack = [
+    challenge.id,
+    challenge.title,
+    challenge.category,
+    ...(challenge.concepts || []),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return terms.some((term) => haystack.includes(term.toLowerCase()));
+}
+
+function getRookieFocus(challenge) {
+  return challenge.title
+    .replace(/^Challenge\s+\d+\s+.\s+/, "")
+    .replace(/^Capstone\s+.\s+/, "")
+    .toLowerCase();
+}
+
+function addUnique(items, nextItems) {
+  nextItems.forEach((item) => {
+    if (!items.includes(item)) items.push(item);
+  });
+}
+
+function getRookieQualityChecklist(challenge) {
+  const items = [
+    "The HTML has a clear wrapper, a sensible heading, and elements that match the content.",
+    "Class names describe the purpose of the UI instead of only describing a color or position.",
+    "Spacing is intentional: padding creates inner space, while margin or gap separates elements.",
+    "The result is checked in desktop and phone preview, with no awkward overflow.",
+  ];
+
+  if (challengeIncludes(challenge, "forms", "input", "label", "textarea")) {
+    addUnique(items, [
+      "Inputs have visible labels or clear accessible names, not only placeholders.",
+      "Focus styles make keyboard use visible.",
+    ]);
+  }
+
+  if (challengeIncludes(challenge, "hover", "focus", "button", "links")) {
+    addUnique(items, [
+      "Interactive elements have enough padding and a visible hover or focus state.",
+    ]);
+  }
+
+  if (challengeIncludes(challenge, "responsive", "media queries", "grid", "minmax")) {
+    addUnique(items, [
+      "Cards, columns, or sections can shrink and stack without fixed-width breakage.",
+    ]);
+  }
+
+  if (challengeIncludes(challenge, "JavaScript", "event listeners", "DOM")) {
+    addUnique(items, [
+      "The JavaScript changes one clear piece of UI and leaves the HTML/CSS easy to follow.",
+    ]);
+  }
+
+  return items;
+}
+
+function getRookieDecisionCheck(challenge) {
+  if (challengeIncludes(challenge, "CSS debugging", "debug-broken")) {
+    return {
+      question: "When reading the broken CSS, what should you fix first?",
+      answer:
+        "I would identify the smallest rule causing the visible problem, then fix layout before polish. For example, I would check the parent display, spacing, readable colors, and only then add finishing touches.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "JavaScript", "event listeners", "DOM")) {
+    return {
+      question: "What changes when the user interacts with this UI?",
+      answer:
+        "A click event runs JavaScript that updates the current UI state, such as a class, text value, input type, or number. The important part is that the user action causes one visible, predictable change.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "forms", "labels", "input", "textarea")) {
+    return {
+      question: "Why do labels, spacing, and focus states matter in a form?",
+      answer:
+        "Labels tell users and assistive technology what each field is for. Consistent spacing makes the form easier to scan, and a visible focus state helps keyboard users see where they are.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "CSS Grid", "responsive", "minmax", "media queries")) {
+    return {
+      question: "Why is this layout responsive instead of only looking good on your screen?",
+      answer:
+        "The layout uses flexible columns, minmax, auto-fit, or a media query so the browser can adapt the design when space changes. That is better than hard-coding widths that only work on one screen size.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "flexbox", "nav", "two-column", "center")) {
+    return {
+      question: "Why is flexbox a good choice for this layout?",
+      answer:
+        "Flexbox is strong for one-dimensional layout: one row or one column. I can use it to align items, center content, share space, add gaps, and keep related elements lined up cleanly.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "box model", "padding", "margin", "box-sizing")) {
+    return {
+      question: "How would you explain the box model decision here?",
+      answer:
+        "The content sits inside a box. Padding creates space inside the box, border marks the edge, and margin creates space outside it. If I use box-sizing: border-box, the final width is easier to predict.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "selectors", "class selectors", "id selectors")) {
+    return {
+      question: "How did you choose which selector to use?",
+      answer:
+        "I used selectors based on scope. Element selectors affect every matching element, class selectors target reusable UI pieces, and an id selector is for one unique area when I really need that specificity.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "semantic HTML", "article", "section", "navigation")) {
+    return {
+      question: "Why does semantic HTML matter here?",
+      answer:
+        "Semantic HTML gives meaning to the content before styling is added. Elements like nav, section, article, header, and footer help people, search engines, and assistive technology understand the page structure.",
+    };
+  }
+
+  return {
+    question: "What is the main CSS decision in this challenge?",
+    answer:
+      "I would identify the rule that controls the main visual result, then explain why it fits the job: spacing for readability, color for hierarchy, border or radius for shape, and layout rules for positioning.",
+  };
+}
+
+function getRookieCodeReadingCheck(challenge) {
+  if (challengeIncludes(challenge, "JavaScript", "event listeners", "DOM")) {
+    return {
+      question: "Read the code: which lines connect the button to the UI change?",
+      answer:
+        "Look for the element selection first, then the addEventListener call. Inside that callback, the code changes textContent, classList, an input attribute, or a variable, which is what the user sees change.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "CSS Grid", "responsive grid", "minmax")) {
+    return {
+      question: "Read the CSS: which rule controls the columns?",
+      answer:
+        "The parent grid rule controls the columns. Look for display: grid and grid-template-columns. A pattern like repeat(auto-fit, minmax(...)) lets the layout create as many columns as can fit.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "media queries")) {
+    return {
+      question: "Read the CSS: which line changes the mobile layout?",
+      answer:
+        "The @media rule changes the layout at a smaller screen width. Inside it, a property such as flex-direction or grid-template-columns switches the design from a wide layout into a stacked one.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "flexbox", "nav", "center")) {
+    return {
+      question: "Read the CSS: which selector should become the flex parent?",
+      answer:
+        "The flex parent is the element that directly contains the things being aligned. That selector gets display: flex, then justify-content, align-items, gap, or flex-wrap depending on the layout.",
+    };
+  }
+
+  if (challengeIncludes(challenge, "box model", "padding", "margin")) {
+    return {
+      question: "Read the CSS: which rules control inner and outer spacing?",
+      answer:
+        "Padding controls the space inside the component, between the content and the edge. Margin controls the space outside the component, between this element and nearby elements.",
+    };
+  }
+
+  return {
+    question: "Read the code: which selector controls the main visual result?",
+    answer:
+      "Start with the wrapper or repeated component class, then read its CSS rule. That is usually where the main spacing, background, border, radius, or layout behavior is defined.",
+  };
+}
+
+function getRookieReadinessChecks(challenge) {
+  const focus = getRookieFocus(challenge);
+  const usesJs = challengeIncludes(challenge, "JavaScript", "event listeners", "DOM");
+
+  return [
+    {
+      question: "How would you explain what this challenge builds?",
+      answer: `I would say: this builds ${focus} using HTML for structure and CSS for the visual presentation.${
+        usesJs
+          ? " JavaScript adds the small interaction so the page responds to the user's action."
+          : ""
+      }`,
+    },
+    getRookieDecisionCheck(challenge),
+    getRookieCodeReadingCheck(challenge),
+    {
+      question: "What would you check before saying you are ready to move on?",
+      answer:
+        "I would check the brief requirements, test the preview at desktop and phone sizes, look for readable spacing and contrast, confirm controls are usable, and make sure I can explain the main selector or layout rule without guessing.",
+    },
+  ];
+}
+
+function addRookieReadiness(challenge) {
+  return {
+    ...challenge,
+    qualityChecklist:
+      challenge.qualityChecklist || getRookieQualityChecklist(challenge),
+    readinessChecks:
+      challenge.readinessChecks || getRookieReadinessChecks(challenge),
+  };
+}
+
+const rookieChallengesBase = [
   {
     id: "styled-heading",
     editorType: "web",
@@ -4044,3 +4259,5 @@ finalTogglePasswordBtn.addEventListener("click", () => {
     },
   },
 ];
+
+export const rookieChallenges = rookieChallengesBase.map(addRookieReadiness);

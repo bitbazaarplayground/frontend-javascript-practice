@@ -980,6 +980,90 @@ const exactSpanishText = {
     "Poner todo el JSX directamente dentro de Challenge",
   "Lift search and category state into Challenge.":
     "Sube el estado de busqueda y categoria a Challenge.",
+  "The HTML has a clear wrapper, a sensible heading, and elements that match the content.":
+    "El HTML tiene un wrapper claro, un heading con sentido y elementos que encajan con el contenido.",
+  "Class names describe the purpose of the UI instead of only describing a color or position.":
+    "Los nombres de clase describen la funcion de la UI, no solo un color o una posicion.",
+  "Spacing is intentional: padding creates inner space, while margin or gap separates elements.":
+    "El espaciado es intencional: padding crea espacio interior, mientras margin o gap separan elementos.",
+  "The result is checked in desktop and phone preview, with no awkward overflow.":
+    "El resultado se comprueba en preview de escritorio y telefono, sin overflow raro.",
+  "Inputs have visible labels or clear accessible names, not only placeholders.":
+    "Los inputs tienen labels visibles o nombres accesibles claros, no solo placeholders.",
+  "Focus styles make keyboard use visible.":
+    "Los estilos focus hacen visible el uso con teclado.",
+  "Interactive elements have enough padding and a visible hover or focus state.":
+    "Los elementos interactivos tienen suficiente padding y un estado hover o focus visible.",
+  "Cards, columns, or sections can shrink and stack without fixed-width breakage.":
+    "Las tarjetas, columnas o secciones pueden reducirse y apilarse sin romperse por anchos fijos.",
+  "The JavaScript changes one clear piece of UI and leaves the HTML/CSS easy to follow.":
+    "El JavaScript cambia una parte clara de la UI y deja el HTML/CSS facil de seguir.",
+  "How would you explain what this challenge builds?":
+    "Como explicarias lo que construye este reto?",
+  "When reading the broken CSS, what should you fix first?":
+    "Al leer CSS roto, que deberias arreglar primero?",
+  "I would identify the smallest rule causing the visible problem, then fix layout before polish. For example, I would check the parent display, spacing, readable colors, and only then add finishing touches.":
+    "Identificaria la regla mas pequena que causa el problema visible y arreglaria el layout antes del pulido. Por ejemplo, revisaria el display del padre, el espaciado, los colores legibles y solo despues anadiria detalles finales.",
+  "What changes when the user interacts with this UI?":
+    "Que cambia cuando el usuario interactua con esta UI?",
+  "A click event runs JavaScript that updates the current UI state, such as a class, text value, input type, or number. The important part is that the user action causes one visible, predictable change.":
+    "Un evento click ejecuta JavaScript que actualiza el estado actual de la UI, como una clase, texto, type de input o numero. Lo importante es que la accion del usuario cause un cambio visible y predecible.",
+  "Why do labels, spacing, and focus states matter in a form?":
+    "Por que importan labels, espaciado y estados focus en un formulario?",
+  "Labels tell users and assistive technology what each field is for. Consistent spacing makes the form easier to scan, and a visible focus state helps keyboard users see where they are.":
+    "Los labels dicen al usuario y a tecnologias asistivas para que sirve cada campo. El espaciado consistente hace el formulario mas facil de escanear y el focus visible ayuda a usuarios de teclado a ver donde estan.",
+  "Why is this layout responsive instead of only looking good on your screen?":
+    "Por que este layout es responsive y no solo se ve bien en tu pantalla?",
+  "The layout uses flexible columns, minmax, auto-fit, or a media query so the browser can adapt the design when space changes. That is better than hard-coding widths that only work on one screen size.":
+    "El layout usa columnas flexibles, minmax, auto-fit o una media query para que el navegador adapte el diseno cuando cambia el espacio. Eso es mejor que fijar anchos que solo funcionan en un tamano de pantalla.",
+  "Why is flexbox a good choice for this layout?":
+    "Por que flexbox es una buena opcion para este layout?",
+  "Flexbox is strong for one-dimensional layout: one row or one column. I can use it to align items, center content, share space, add gaps, and keep related elements lined up cleanly.":
+    "Flexbox es fuerte para layout de una dimension: una fila o una columna. Lo puedo usar para alinear items, centrar contenido, repartir espacio, anadir gaps y mantener elementos relacionados bien alineados.",
+  "How would you explain the box model decision here?":
+    "Como explicarias la decision del box model aqui?",
+  "The content sits inside a box. Padding creates space inside the box, border marks the edge, and margin creates space outside it. If I use box-sizing: border-box, the final width is easier to predict.":
+    "El contenido vive dentro de una caja. Padding crea espacio dentro, border marca el borde y margin crea espacio fuera. Si uso box-sizing: border-box, el ancho final es mas facil de predecir.",
+  "How did you choose which selector to use?":
+    "Como elegiste que selector usar?",
+  "I used selectors based on scope. Element selectors affect every matching element, class selectors target reusable UI pieces, and an id selector is for one unique area when I really need that specificity.":
+    "Use selectores segun el alcance. Los selectores de elemento afectan a todos los elementos que coinciden, las clases apuntan a piezas reutilizables y un id sirve para un area unica cuando necesito esa especificidad.",
+  "Why does semantic HTML matter here?":
+    "Por que importa el HTML semantico aqui?",
+  "Semantic HTML gives meaning to the content before styling is added. Elements like nav, section, article, header, and footer help people, search engines, and assistive technology understand the page structure.":
+    "El HTML semantico da significado al contenido antes de anadir estilos. Elementos como nav, section, article, header y footer ayudan a personas, buscadores y tecnologias asistivas a entender la estructura.",
+  "What is the main CSS decision in this challenge?":
+    "Cual es la decision principal de CSS en este reto?",
+  "I would identify the rule that controls the main visual result, then explain why it fits the job: spacing for readability, color for hierarchy, border or radius for shape, and layout rules for positioning.":
+    "Identificaria la regla que controla el resultado visual principal y despues explicaria por que encaja: espaciado para legibilidad, color para jerarquia, border o radius para forma y reglas de layout para posicion.",
+  "Read the code: which lines connect the button to the UI change?":
+    "Lee el codigo: que lineas conectan el boton con el cambio de UI?",
+  "Look for the element selection first, then the addEventListener call. Inside that callback, the code changes textContent, classList, an input attribute, or a variable, which is what the user sees change.":
+    "Busca primero la seleccion de elementos y despues la llamada a addEventListener. Dentro de ese callback, el codigo cambia textContent, classList, un atributo de input o una variable, que es lo que el usuario ve cambiar.",
+  "Read the CSS: which rule controls the columns?":
+    "Lee el CSS: que regla controla las columnas?",
+  "The parent grid rule controls the columns. Look for display: grid and grid-template-columns. A pattern like repeat(auto-fit, minmax(...)) lets the layout create as many columns as can fit.":
+    "La regla grid del padre controla las columnas. Busca display: grid y grid-template-columns. Un patron como repeat(auto-fit, minmax(...)) permite crear tantas columnas como quepan.",
+  "Read the CSS: which line changes the mobile layout?":
+    "Lee el CSS: que linea cambia el layout mobile?",
+  "The @media rule changes the layout at a smaller screen width. Inside it, a property such as flex-direction or grid-template-columns switches the design from a wide layout into a stacked one.":
+    "La regla @media cambia el layout en un ancho de pantalla menor. Dentro, una propiedad como flex-direction o grid-template-columns cambia el diseno de ancho a apilado.",
+  "Read the CSS: which selector should become the flex parent?":
+    "Lee el CSS: que selector debe convertirse en el padre flex?",
+  "The flex parent is the element that directly contains the things being aligned. That selector gets display: flex, then justify-content, align-items, gap, or flex-wrap depending on the layout.":
+    "El padre flex es el elemento que contiene directamente las cosas que se alinean. Ese selector recibe display: flex y luego justify-content, align-items, gap o flex-wrap segun el layout.",
+  "Read the CSS: which rules control inner and outer spacing?":
+    "Lee el CSS: que reglas controlan el espaciado interior y exterior?",
+  "Padding controls the space inside the component, between the content and the edge. Margin controls the space outside the component, between this element and nearby elements.":
+    "Padding controla el espacio dentro del componente, entre el contenido y el borde. Margin controla el espacio fuera, entre este elemento y los elementos cercanos.",
+  "Read the code: which selector controls the main visual result?":
+    "Lee el codigo: que selector controla el resultado visual principal?",
+  "Start with the wrapper or repeated component class, then read its CSS rule. That is usually where the main spacing, background, border, radius, or layout behavior is defined.":
+    "Empieza por el wrapper o la clase del componente repetido y lee su regla CSS. Normalmente ahi se define el espaciado, fondo, border, radius o comportamiento de layout principal.",
+  "What would you check before saying you are ready to move on?":
+    "Que comprobaria antes de decir que estas listo para avanzar?",
+  "I would check the brief requirements, test the preview at desktop and phone sizes, look for readable spacing and contrast, confirm controls are usable, and make sure I can explain the main selector or layout rule without guessing.":
+    "Comprobaria los requisitos del brief, probaria el preview en escritorio y telefono, revisaria espaciado y contraste legibles, confirmaria que los controles se pueden usar y me aseguraria de poder explicar el selector o regla de layout principal sin adivinar.",
 };
 
 const conceptLabelCopy = {
@@ -1208,6 +1292,10 @@ const conceptLabelCopy = {
 };
 
 const spanishPhraseReplacements = [
+  ["I would say:", "Diria:"],
+  ["this builds", "esto construye"],
+  ["using HTML for structure and CSS for the visual presentation", "usando HTML para la estructura y CSS para la presentacion visual"],
+  ["JavaScript adds the small interaction so the page responds to the user's action", "JavaScript anade la pequena interaccion para que la pagina responda a la accion del usuario"],
   ["Create a React component", "Crea un componente React"],
   ["Create a reusable component", "Crea un componente reutilizable"],
   ["Create one reusable component", "Crea un componente reutilizable"],
@@ -2453,6 +2541,8 @@ export const copy = {
     },
     brief: {
       title: "Challenge brief",
+      minimize: "Minimize brief",
+      expand: "Open brief",
       goal: "Goal",
       requirements: "Requirements",
       concepts: "Concepts practiced",
@@ -2464,6 +2554,13 @@ export const copy = {
       mistakes: "Common mistakes",
       outcome: "Expected outcome",
       tips: "Tips",
+      qualityBar: "CSS quality bar",
+      qualityIntro:
+        "Use this as the standard for a strong beginner solution, not just a passing one.",
+      readinessCheck: "Ready check with answers",
+      readinessIntro:
+        "Try answering first. Then open the model answer and compare how clearly you can explain your work.",
+      modelAnswer: "Model answer",
     },
     assessment: {
       modeLabel: "Assessment mode",
@@ -2530,6 +2627,20 @@ export const copy = {
       improvePrompt: "What would you improve with more time?",
       improvePlaceholder:
         "Mention one or two improvements, edge cases, tests, or polish steps you would add next.",
+    },
+    rookieReflection: {
+      title: "Explain your Rookie solution",
+      intro:
+        "Before moving on, practise the interview habit: say what you built, why your HTML/CSS choices work, and what you checked.",
+      summaryPrompt: "What HTML structure did you choose?",
+      summaryPlaceholder:
+        "Name the wrapper, heading, sections, cards, links, form, or controls you used, and why.",
+      decisionsPrompt: "Which CSS or small JavaScript decision made it work?",
+      decisionsPlaceholder:
+        "Mention the selector, layout rule, spacing choice, responsive rule, or event listener that matters most.",
+      improvePrompt: "What tells you this is ready?",
+      improvePlaceholder:
+        "Mention preview checks, mobile behavior, readable spacing, labels, focus states, or one improvement you would make next.",
     },
     drawer: {
       backToModes: "Back to modes",
@@ -2759,6 +2870,8 @@ export const copy = {
     },
     brief: {
       title: "Brief del reto",
+      minimize: "Minimizar brief",
+      expand: "Abrir brief",
       goal: "Objetivo",
       requirements: "Requisitos",
       concepts: "Conceptos practicados",
@@ -2770,6 +2883,13 @@ export const copy = {
       mistakes: "Errores comunes",
       outcome: "Resultado esperado",
       tips: "Pistas",
+      qualityBar: "Nivel de calidad CSS",
+      qualityIntro:
+        "Usa esto como el estandar de una solucion principiante fuerte, no solo una que pasa.",
+      readinessCheck: "Revision de preparacion con respuestas",
+      readinessIntro:
+        "Intenta responder primero. Luego abre la respuesta modelo y compara si puedes explicar tu trabajo con claridad.",
+      modelAnswer: "Respuesta modelo",
     },
     assessment: {
       modeLabel: "Modo de prueba tecnica",
@@ -2838,6 +2958,20 @@ export const copy = {
       improvePlaceholder:
         "Menciona una o dos mejoras, edge cases, tests o pasos de pulido que anadirias despues.",
     },
+    rookieReflection: {
+      title: "Explica tu solucion Rookie",
+      intro:
+        "Antes de avanzar, practica el habito de entrevista: di que construiste, por que funcionan tus decisiones de HTML/CSS y que comprobaste.",
+      summaryPrompt: "Que estructura HTML elegiste?",
+      summaryPlaceholder:
+        "Nombra el wrapper, titulo, secciones, tarjetas, links, formulario o controles que usaste, y por que.",
+      decisionsPrompt: "Que decision de CSS o JavaScript pequeno hizo que funcionara?",
+      decisionsPlaceholder:
+        "Menciona el selector, regla de layout, espaciado, responsive o event listener que mas importa.",
+      improvePrompt: "Que te dice que esto esta listo?",
+      improvePlaceholder:
+        "Menciona pruebas en preview, comportamiento mobile, espaciado legible, labels, estados focus o una mejora que harias despues.",
+    },
     drawer: {
       backToModes: "Volver a modos",
       challenges: "Retos",
@@ -2868,11 +3002,32 @@ function localizeTitle(title, language) {
   return title.replace("Challenge", "Reto");
 }
 
+function localizeChecklist(items, language) {
+  if (language !== "es" || !items) return items;
+  return items.map((item) => localizeChallengeText(item));
+}
+
+function localizeReadinessChecks(checks, language) {
+  if (language !== "es" || !checks) return checks;
+
+  return checks.map((check) => ({
+    ...check,
+    question: localizeChallengeText(check.question),
+    answer: localizeChallengeText(check.answer),
+  }));
+}
+
 function localizeChallenge(challenge, language) {
   if (language !== "es") return challenge;
 
   const translatedChallenge = rookieChallengeCopy[challenge.id] || {};
   const generatedChallenge = getGeneratedChallengeCopy(challenge);
+  const qualityChecklist =
+    translatedChallenge.qualityChecklist ||
+    localizeChecklist(challenge.qualityChecklist, language);
+  const readinessChecks =
+    translatedChallenge.readinessChecks ||
+    localizeReadinessChecks(challenge.readinessChecks, language);
 
   return {
     ...challenge,
@@ -2887,6 +3042,8 @@ function localizeChallenge(challenge, language) {
       difficultyCopy.en[challenge.difficulty] ||
       challenge.difficulty,
     category: categoryCopy.es[challenge.category] || challenge.category,
+    qualityChecklist,
+    readinessChecks,
     starter: challenge.starter,
     solution: challenge.solution,
   };

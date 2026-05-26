@@ -53,13 +53,15 @@ export default function ConceptPrimer({ challenge, copy, language, onSkip }) {
     [challenge, language]
   );
   const beginnerGuide = useMemo(() => {
+    const lessonGuide = lesson?.beginnerGuide || null;
     const challengeGuide = getLocalizedGuide(challenge.beginnerGuide, language);
 
     return (
+      lessonGuide ||
       challengeGuide ||
       getDefaultJavaScriptGuide(challenge, copy)
     );
-  }, [challenge, copy, language]);
+  }, [challenge, copy, language, lesson]);
 
   const title = lesson.title || challenge.category;
   const summary = lesson.summary || copy.primer.fallbackSummary;

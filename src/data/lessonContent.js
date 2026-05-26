@@ -992,6 +992,1043 @@ const topicTemplates = {
   },
 };
 
+function createBeginnerGuide(title, intro, steps, code) {
+  return {
+    title,
+    intro,
+    steps,
+    ...(code ? { code } : {}),
+  };
+}
+
+const beginnerGuideLibrary = {
+  en: {
+    displayBasics: createBeginnerGuide(
+      "Think of display as element behavior",
+      "Before Flexbox and Grid, display answers a simpler question: should this element take the whole row, sit next to others, or disappear?",
+      [
+        "The outer section can stay as a normal block element, so it naturally creates one clear wrapper.",
+        "Small links start inline, which is why they feel awkward when you try to add padding or pill styling.",
+        "display: inline-block lets the small item stay in a row while still accepting padding, width, and rounded corners.",
+        "display: none removes an element from the layout completely, so it is the clean way to hide helper text.",
+      ],
+      `.pill {\n  display: inline-block;\n  padding: 8px 14px;\n}\n\n.helper {\n  display: none;\n}`
+    ),
+    flexCenter: createBeginnerGuide(
+      "Let the parent do the centering",
+      "When something needs to sit in the middle, think about the parent first. The parent decides where the child lives.",
+      [
+        "Create one wrapper that covers the screen or section.",
+        "Put display: flex on the wrapper, not on the circle itself.",
+        "Use justify-content and align-items to move the child into the middle.",
+        "Give the circle equal width and height, then border-radius: 50% to make it round.",
+      ],
+      `.page {\n  min-height: 100vh;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.circle {\n  width: 120px;\n  height: 120px;\n  border-radius: 50%;\n}`
+    ),
+    flexRow: createBeginnerGuide(
+      "One parent, two children, one row rule",
+      "A two-column layout becomes easier when you stop styling each box alone and start giving the parent one layout job.",
+      [
+        "Create one wrapper around both boxes.",
+        "Turn the wrapper into a flex container.",
+        "Use gap on the wrapper so the spacing stays consistent.",
+        "Give both children flex: 1 so they share the row evenly.",
+      ],
+      `.layout {\n  display: flex;\n  gap: 20px;\n}\n\n.box {\n  flex: 1;\n}`
+    ),
+    flexCards: createBeginnerGuide(
+      "Flexbox is great for repeated cards in one row",
+      "This pattern appears everywhere: service cards, pricing cards, stat cards, feature cards. The trick is to make one rule and repeat it.",
+      [
+        "Build one parent row and repeat the same child structure three times.",
+        "Use display: flex on the parent so the cards sit next to each other.",
+        "Use gap for spacing instead of margins on random cards.",
+        "Use flex: 1 on each card so they all share the space fairly.",
+      ],
+      `.service-row {\n  display: flex;\n  gap: 16px;\n}\n\n.service-row article {\n  flex: 1;\n}`
+    ),
+    flexWrap: createBeginnerGuide(
+      "Wrap means move to a new line instead of overflowing",
+      "Tags, chips, skills, and filters often look small, but the layout idea is important: the row should adapt when space runs out.",
+      [
+        "Create one wrapper for all the chips.",
+        "Use display: flex so the chips line up in a row.",
+        "Add flex-wrap: wrap so the row can continue onto a new line.",
+        "Keep the chip styling repeated so the row feels like one system.",
+      ],
+      `.chip-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n}`
+    ),
+    cardStructure: createBeginnerGuide(
+      "A card is just a clear content box",
+      "Beginners sometimes think cards are complex. Really, a card is a wrapper, a title, supporting text, and good spacing.",
+      [
+        "Start with one container for related content.",
+        "Add the title first because it tells the user what the card is about.",
+        "Use padding inside the card so the content can breathe.",
+        "Use border-radius, background, and spacing to separate the card from the page.",
+      ]
+    ),
+    navbar: createBeginnerGuide(
+      "A navbar is usually two groups in one row",
+      "Most simple navbars follow the same structure: brand on one side, links on the other side.",
+      [
+        "Create one outer header or nav wrapper.",
+        "Put the logo or site name in one child and the links in another child.",
+        "Use display: flex on the main nav row.",
+        "Use justify-content: space-between to push the two groups apart and gap inside the links row.",
+      ],
+      `.nav {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.links {\n  display: flex;\n  gap: 20px;\n}`
+    ),
+    heroStack: createBeginnerGuide(
+      "Hero copy is a vertical stack with hierarchy",
+      "A hero text block should read in a simple order: title first, supporting text second, action third.",
+      [
+        "Wrap the heading, paragraph, and button inside one hero container.",
+        "Stack the content vertically with flex-direction: column or clear spacing rules.",
+        "Keep the text width under control with max-width so the paragraph stays readable.",
+        "Make sure the button feels connected to the message, not floating far away.",
+      ],
+      `.hero-copy {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  max-width: 560px;\n}`
+    ),
+    landingHeader: createBeginnerGuide(
+      "Build big sections in layers",
+      "For a landing header, do not style everything at once. Build it in layers: section, nav, hero, then spacing and polish.",
+      [
+        "Create the outer section first so the whole header has one background and one padding system.",
+        "Build the navbar inside that section.",
+        "Build the hero copy block after the navbar.",
+        "Only after the structure works should you add spacing, alignment, and button styling.",
+      ]
+    ),
+    basicGrid: createBeginnerGuide(
+      "Grid starts at the parent",
+      "Grid is not about styling each card one by one. The important move is telling the parent how many columns should exist.",
+      [
+        "Create one parent wrapper and the repeated cards inside it.",
+        "Put display: grid on the parent.",
+        "Use grid-template-columns to describe the column pattern.",
+        "Use gap on the grid parent so every space stays consistent.",
+      ],
+      `.board {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 24px;\n}`
+    ),
+    autoFitGrid: createBeginnerGuide(
+      "Let the browser decide how many columns fit",
+      "This is one of the most useful beginner Grid patterns because it saves you from hardcoding every row size by hand.",
+      [
+        "Build one repeated card pattern first.",
+        "Turn the parent into a grid container.",
+        "Use repeat(auto-fit, minmax(...)) so the browser chooses how many columns fit.",
+        "Think of minmax as a promise: each card can shrink, but not below the readable minimum.",
+      ],
+      `.card-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 20px;\n}`
+    ),
+    mediaQuery: createBeginnerGuide(
+      "A media query is a rule change at a breakpoint",
+      "Responsive design is not magic. It usually means the layout follows one rule, then switches to a simpler rule when the screen gets smaller.",
+      [
+        "Start with the desktop or wider layout first so you can see the two-column structure.",
+        "Add one breakpoint with @media (max-width: ...).",
+        "Inside that breakpoint, change the layout rule, often from row to column.",
+        "Keep the HTML the same. Only the CSS rule changes.",
+      ],
+      `.promo {\n  display: flex;\n  gap: 20px;\n}\n\n@media (max-width: 700px) {\n  .promo {\n    flex-direction: column;\n  }\n}`
+    ),
+    container: createBeginnerGuide(
+      "A container protects readability",
+      "Without a container, content can stretch too wide and feel hard to scan. A container gives the page side breathing room.",
+      [
+        "Use width or percentage so the content can shrink on small screens.",
+        "Use max-width so the content stops growing on large screens.",
+        "Use margin: 0 auto to center the container.",
+        "Think of the container as the page shell that many sections can share.",
+      ],
+      `.container {\n  width: 90%;\n  max-width: 1100px;\n  margin: 0 auto;\n}`
+    ),
+    dashboardGrid: createBeginnerGuide(
+      "Dashboards often need even, repeatable columns",
+      "Stat cards should feel balanced. Grid is useful here because you can say exactly how many columns you want.",
+      [
+        "Put all the stat cards inside one wrapper.",
+        "Use Grid to create equal columns on wider screens.",
+        "Add a media query so the cards stack on narrow screens.",
+        "Keep the inner card spacing and typography consistent so the row feels professional.",
+      ],
+      `.stats {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(0, 1fr));\n  gap: 18px;\n}`
+    ),
+    cssPolish: createBeginnerGuide(
+      "Polish is small details repeated consistently",
+      "A card starts to feel professional when it has soft corners, space, shadow, and gentle motion instead of harsh edges and random spacing.",
+      [
+        "Start with the base card: background, padding, border-radius, and shadow.",
+        "Add transition so hover changes feel smooth instead of jumpy.",
+        "Use transform or shadow on hover to suggest interactivity.",
+        "Do not forget focus states, because keyboard users also need a clear signal.",
+      ],
+      `.card {\n  border-radius: 18px;\n  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);\n  transition: transform 0.2s ease;\n}\n\n.card:hover {\n  transform: translateY(-4px);\n}`
+    ),
+    gradientCallout: createBeginnerGuide(
+      "Put the visual effect on the wrapper",
+      "A gradient should support the message, not fight it. The content still needs clear hierarchy and breathing room.",
+      [
+        "Create one outer callout wrapper.",
+        "Add the gradient background to that wrapper, not to every child element.",
+        "Use padding and border-radius so the section feels framed and intentional.",
+        "Keep the heading, paragraph, and button readable with good contrast.",
+      ],
+      `.callout {\n  padding: 24px;\n  border-radius: 20px;\n  background: linear-gradient(135deg, #2563eb, #8b5cf6);\n}`
+    ),
+    featureStrip: createBeginnerGuide(
+      "One repeated card pattern can power a whole section",
+      "A feature strip is a great beginner exercise because it repeats one idea cleanly and still needs to adapt across screen sizes.",
+      [
+        "Build one feature card structure first.",
+        "Repeat the same structure for the rest of the cards.",
+        "Use responsive Grid on the parent so the browser decides how many fit.",
+        "Keep spacing and text hierarchy consistent across all cards.",
+      ]
+    ),
+    portfolioGrid: createBeginnerGuide(
+      "Think of this as one real portfolio section",
+      "This capstone matters because it feels like work you could actually show. The goal is not random boxes. The goal is one coherent section.",
+      [
+        "Build the section title and short intro first.",
+        "Create the repeated project card structure second.",
+        "Use responsive Grid on the project list so the layout adapts.",
+        "Finish with tags, links, spacing, and polish so the whole section feels intentional.",
+      ]
+    ),
+    searchCards: createBeginnerGuide(
+      "The search pattern is still the same on cards",
+      "It does not matter whether the visible items are list items or cards. The logic is still: read the search text, compare it, then show or hide each item.",
+      [
+        "Select the input and all the cards.",
+        "Listen for the input event so the UI updates while the user types.",
+        "Turn the typed value and the card text into lowercase so the comparison is easier.",
+        "Show matching cards and hide the rest.",
+      ],
+      `const query = input.value.toLowerCase();\n\ncards.forEach((card) => {\n  const matches = card.textContent.toLowerCase().includes(query);\n  card.style.display = matches ? "block" : "none";\n});`
+    ),
+    multiFilter: createBeginnerGuide(
+      "Two filters means two conditions",
+      "A product should stay visible only if it passes both checks. This is the first step from simple search into more real product filtering.",
+      [
+        "Read the text filter and the price filter separately.",
+        "Convert the price input into a number before comparing it.",
+        "Inside filter(), check both conditions: name match and price match.",
+        "Render the filtered list again whenever either input changes.",
+      ],
+      `const visibleProducts = products.filter((product) => {\n  const matchesName = product.name.toLowerCase().includes(query);\n  const matchesPrice = product.price <= maxPrice;\n  return matchesName && matchesPrice;\n});`
+    ),
+    faqToggle: createBeginnerGuide(
+      "A toggle is just a tiny state switch",
+      "FAQ items look small, but they teach an important product idea: one user action changes one part of the UI from closed to open or back again.",
+      [
+        "Create one trigger and one answer element.",
+        "Hide the answer at the start so there is a visible before-and-after state.",
+        "Listen for the click on the trigger.",
+        "Check the current state, then swap to the opposite state.",
+      ]
+    ),
+    savedTheme: createBeginnerGuide(
+      "Persistence means remember something after refresh",
+      "This challenge is not only about toggling colors. It is about teaching the browser to remember the user's last choice.",
+      [
+        "Choose two clear theme states, such as light and dark.",
+        "On click, update the page class so the UI changes immediately.",
+        "Save the chosen theme in localStorage as a string.",
+        "When the script starts, read the saved value and apply it before the user clicks again.",
+      ],
+      `const savedTheme = localStorage.getItem("theme");\n\nif (savedTheme) {\n  page.className = "page " + savedTheme;\n}\n\nlocalStorage.setItem("theme", "dark");`
+    ),
+    counter: createBeginnerGuide(
+      "The real count lives in JavaScript",
+      "A counter looks simple, but it teaches a very important idea: the page displays a value, while JavaScript owns the changing value.",
+      [
+        "Keep the current number in a variable.",
+        "Create one small render function that copies that variable into the DOM.",
+        "Each button changes the variable in a different way.",
+        "After every change, call the render function again.",
+      ],
+      `let count = 0;\n\nfunction renderCount() {\n  countEl.textContent = count;\n}`
+    ),
+    passwordVisibility: createBeginnerGuide(
+      "You are not changing the password, only the input type",
+      "This is a nice beginner challenge because it shows that one small attribute change can create a very real UX feature.",
+      [
+        "Select the password input and the toggle button.",
+        "On click, inspect the current input type.",
+        "If the type is password, switch it to text. Otherwise switch it back.",
+        "Update the button label so the user knows the next action.",
+      ],
+      `const isHidden = passwordInput.type === "password";\npasswordInput.type = isHidden ? "text" : "password";\npasswordToggleBtn.textContent = isHidden ? "Hide" : "Show";`
+    ),
+    clickCounter: createBeginnerGuide(
+      "Count in JavaScript, render in HTML",
+      "This is one of the clearest beginner state exercises because every click changes one number and the result is easy to see.",
+      [
+        "Create one variable to store the total.",
+        "Listen for button clicks.",
+        "Increase the variable by one on each click.",
+        "Render the new value into the page right away.",
+      ]
+    ),
+    formValidation: createBeginnerGuide(
+      "Submit is the moment to stop and check the data",
+      "Forms try to reload the page by default. In JavaScript, the first job is usually to pause that behavior and inspect the values.",
+      [
+        "Listen for the submit event on the form, not just the button click.",
+        "Use event.preventDefault() so the page stays in place.",
+        "Read the input value and trim it before checking it.",
+        "Show either an error message or a success message based on the result.",
+      ],
+      `form.addEventListener("submit", (event) => {\n  event.preventDefault();\n\n  if (input.value.trim() === "") {\n    feedback.textContent = "Please complete the field.";\n  }\n});`
+    ),
+    duplicateItems: createBeginnerGuide(
+      "The array is the source of truth",
+      "This challenge feels more real because it is not enough to update the DOM. You also need one place in JavaScript that knows which items already exist.",
+      [
+        "Keep the saved items inside an array.",
+        "Trim the new input value before checking it.",
+        "Use includes() to detect duplicates in the array.",
+        "Only push the new value and re-render when it passes both checks.",
+      ],
+      `if (!value) return;\nif (topics.includes(value)) return;\n\ntopics.push(value);\nrenderTopics();`
+    ),
+    contactValidation: createBeginnerGuide(
+      "Check one rule at a time",
+      "When forms have more than one field, the cleanest beginner approach is to read the values once and then validate them in a simple order.",
+      [
+        "Read and trim the name and email values inside the submit handler.",
+        "Check the first rule and return early if it fails.",
+        "Check the next rule after that, such as whether the email includes @.",
+        "Only show success after all rules pass.",
+      ]
+    ),
+    formObject: createBeginnerGuide(
+      "A successful submit often becomes one object",
+      "This is a very real junior pattern: collect the values, validate them, turn them into one object, then show or send that object.",
+      [
+        "Read the form values inside the submit event.",
+        "Validate them before building anything.",
+        "Create one object with clear property names.",
+        "Render the object preview and reset the form only after success.",
+      ],
+      `const user = {\n  email,\n  password,\n};\n\npreview.textContent = JSON.stringify(user, null, 2);`
+    ),
+    bookingFlow: createBeginnerGuide(
+      "Real form flow is validate, build, render, then reset",
+      "Booking forms are a good product example because they show that success is more than a message. The user should see what was submitted.",
+      [
+        "Read the current form values first.",
+        "Validate each required field before moving on.",
+        "Build one booking object after the data is valid.",
+        "Render a clear summary card, then reset the form.",
+      ]
+    ),
+    formDataSummary: createBeginnerGuide(
+      "FormData reads named fields from one form",
+      "FormData is useful when a form has several related fields and you want to collect them together after one submit action.",
+      [
+        "Make sure each field has a name attribute.",
+        "Create new FormData(form) inside the submit handler.",
+        "Read each value with formData.get(...).",
+        "Build one object or one summary card from those values.",
+      ],
+      `const formData = new FormData(reservationForm);\nconst reservation = {\n  name: String(formData.get("name") || "").trim(),\n  time: String(formData.get("time") || ""),\n};`
+    ),
+    formDataPreview: createBeginnerGuide(
+      "Previewing submitted data makes forms easier to understand",
+      "For a beginner, this is helpful because the result is visible. The user can see exactly what the submit action collected.",
+      [
+        "Give the fields name attributes so FormData can read them.",
+        "Prevent the default submit behavior.",
+        "Collect the values with FormData.",
+        "Render the submitted data into one preview card.",
+      ]
+    ),
+    addListItem: createBeginnerGuide(
+      "This is the create, append, clear pattern",
+      "Adding one item to a list is a small exercise, but it teaches how UI can grow after the page has already loaded.",
+      [
+        "Read the current input value.",
+        "Stop if the value is empty.",
+        "Create a new li element and put the text inside it.",
+        "Append it to the list, then clear the input.",
+      ],
+      `const li = document.createElement("li");\nli.textContent = value;\nitemList.appendChild(li);\nitemInput.value = "";`
+    ),
+    removeListItem: createBeginnerGuide(
+      "Remove the whole item, not just the button",
+      "When a remove button sits inside a list item, the real target is usually the parent item around that button.",
+      [
+        "Add a remove button to each visible item.",
+        "Listen for the click on each button.",
+        "Use parentElement or a close wrapper selector to reach the full item.",
+        "Remove that full item from the page.",
+      ],
+      `button.addEventListener("click", () => {\n  button.parentElement.remove();\n});`
+    ),
+    removeWithEmptyState: createBeginnerGuide(
+      "After removal, check if anything is left",
+      "Real interfaces usually do one more thing after deleting: they explain what the empty screen means instead of leaving a blank area.",
+      [
+        "Remove the clicked item first.",
+        "Count how many list items are still in the DOM.",
+        "If none remain, reveal the empty message.",
+        "If items still exist, keep the empty message hidden.",
+      ]
+    ),
+    sortArray: createBeginnerGuide(
+      "Sort the data first, then render it again",
+      "Sorting is easier when you separate the data from the UI. JavaScript changes the order of the data, and the render function draws the result.",
+      [
+        "Store the products in an array of objects.",
+        "Write one render function that shows the current array.",
+        "Use sort() when the user clicks the button.",
+        "Call render again so the new order appears on the page.",
+      ],
+      `products.sort((a, b) => a.price - b.price);\nrenderProducts();`
+    ),
+    filterArray: createBeginnerGuide(
+      "filter() creates a smaller array of matches",
+      "This is one of the most important frontend data patterns. You keep the original data, then create a smaller visible version of it.",
+      [
+        "Store the full product array once.",
+        "Create a render function that accepts the items you want to show.",
+        "When a filter button is clicked, use filter() to make a new array of matches.",
+        "Pass that new array into the render function.",
+      ],
+      `const techItems = products.filter((product) => {\n  return product.category === "Tech";\n});\n\nrenderProducts(techItems);`
+    ),
+    todoToggle: createBeginnerGuide(
+      "Completed state is often just one class change",
+      "This is a good lesson in UI state. The todo still exists, but its visual state changes from normal to completed.",
+      [
+        "Create the todo items and their buttons.",
+        "Add a click listener to each button.",
+        "Toggle a class on the related list item.",
+        "Let CSS decide how a completed item should look.",
+      ]
+    ),
+    passwordStrength: createBeginnerGuide(
+      "Live feedback means react while the user types",
+      "This is not a submit problem. The UI should update during typing, which is why the input event matters here.",
+      [
+        "Select the password input and feedback text.",
+        "Listen for the input event.",
+        "Check a simple rule, such as the current length.",
+        "Update the feedback message every time the value changes.",
+      ]
+    ),
+    passwordRules: createBeginnerGuide(
+      "Check each rule separately",
+      "A checklist is clearer than one vague message because the user can see exactly what is already correct and what is still missing.",
+      [
+        "Create one visible row for each password rule.",
+        "Listen for the input event on the password field.",
+        "Run each rule check separately, such as length, number, and uppercase.",
+        "Update each rule row on its own so the feedback stays specific.",
+      ],
+      `lengthRule.classList.toggle("is-valid", value.length >= 8);\nnumberRule.classList.toggle("is-valid", /\\d/.test(value));\nupperRule.classList.toggle("is-valid", /[A-Z]/.test(value));`
+    ),
+    tabBasics: createBeginnerGuide(
+      "Tabs are just show one and hide the others",
+      "The important idea is that only one content panel should feel active at a time.",
+      [
+        "Create the tab buttons and their matching content panels.",
+        "Choose one panel to be visible at the start.",
+        "On click, hide the old panel and show the new one.",
+        "Keep the rule simple: one active tab, one visible content area.",
+      ]
+    ),
+    restaurantTabs: createBeginnerGuide(
+      "One shared panel keeps tab code cleaner",
+      "Instead of building three full sections and showing or hiding all of them, you can keep one output area and swap the content inside it.",
+      [
+        "Create three tab buttons and one shared output area.",
+        "Store the About, Menu, and Contact text in JavaScript.",
+        "On click, replace the output area content with the matching entry.",
+        "Update the active button style so the user knows where they are.",
+      ]
+    ),
+    productManager: createBeginnerGuide(
+      "This capstone is many small patterns working together",
+      "Do not try to solve the whole capstone in one jump. Break it into small pieces you already know.",
+      [
+        "Build the HTML structure for the form, filters, feedback, and output list first.",
+        "Make the add or submit flow work before worrying about sorting or filtering.",
+        "Add the data logic next: arrays, render function, filter or sort helpers.",
+        "Finish with reset states, messages, and polish so the UI feels complete.",
+      ]
+    ),
+  },
+  es: {
+    displayBasics: createBeginnerGuide(
+      "Piensa en display como el comportamiento del elemento",
+      "Antes de Flexbox y Grid, display responde una pregunta mas simple: este elemento debe ocupar toda la fila, quedarse junto a otros o desaparecer?",
+      [
+        "La seccion exterior puede quedarse como un bloque normal, asi que crea un envoltorio claro.",
+        "Los enlaces pequenos empiezan como inline, por eso se sienten incomodos cuando intentas darles padding o forma de pill.",
+        "display: inline-block deja que el elemento pequeno siga en fila pero tambien acepte padding, ancho y bordes redondeados.",
+        "display: none quita el elemento del layout por completo, asi que es la forma limpia de ocultar texto auxiliar.",
+      ],
+      `.pill {\n  display: inline-block;\n  padding: 8px 14px;\n}\n\n.helper {\n  display: none;\n}`
+    ),
+    flexCenter: createBeginnerGuide(
+      "Deja que el padre haga el centrado",
+      "Cuando algo debe ir en el medio, piensa primero en el padre. El padre decide donde vive el hijo.",
+      [
+        "Crea un envoltorio que cubra la pantalla o la seccion.",
+        "Pon display: flex en el envoltorio, no en el circulo.",
+        "Usa justify-content y align-items para mover el hijo al centro.",
+        "Da al circulo el mismo ancho y alto, y luego border-radius: 50% para hacerlo redondo.",
+      ],
+      `.page {\n  min-height: 100vh;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.circle {\n  width: 120px;\n  height: 120px;\n  border-radius: 50%;\n}`
+    ),
+    flexRow: createBeginnerGuide(
+      "Un padre, dos hijos, una regla de fila",
+      "Un layout de dos columnas se vuelve mas facil cuando dejas de estilizar cada caja por separado y das al padre un solo trabajo de layout.",
+      [
+        "Crea un envoltorio alrededor de ambas cajas.",
+        "Convierte ese envoltorio en un contenedor flex.",
+        "Usa gap en el envoltorio para que el espacio sea consistente.",
+        "Da a las dos cajas flex: 1 para que compartan la fila por igual.",
+      ],
+      `.layout {\n  display: flex;\n  gap: 20px;\n}\n\n.box {\n  flex: 1;\n}`
+    ),
+    flexCards: createBeginnerGuide(
+      "Flexbox va genial para tarjetas repetidas en una fila",
+      "Este patron aparece en todas partes: servicios, precios, metricas, beneficios. La clave es escribir una regla y repetirla.",
+      [
+        "Construye una fila padre y repite la misma estructura de hijo tres veces.",
+        "Usa display: flex en el padre para que las tarjetas se sienten una al lado de la otra.",
+        "Usa gap para el espacio en vez de margenes aleatorios.",
+        "Usa flex: 1 en cada tarjeta para que compartan el espacio con justicia.",
+      ],
+      `.service-row {\n  display: flex;\n  gap: 16px;\n}\n\n.service-row article {\n  flex: 1;\n}`
+    ),
+    flexWrap: createBeginnerGuide(
+      "Wrap significa pasar a una nueva linea en vez de desbordar",
+      "Las etiquetas, skills y filtros parecen pequenas, pero la idea de layout es importante: la fila debe adaptarse cuando se acaba el espacio.",
+      [
+        "Crea un envoltorio para todos los chips.",
+        "Usa display: flex para alinearlos en una fila.",
+        "Anade flex-wrap: wrap para que puedan seguir en una nueva linea.",
+        "Manten el mismo estilo en todos los chips para que la fila se sienta como un solo sistema.",
+      ],
+      `.chip-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n}`
+    ),
+    cardStructure: createBeginnerGuide(
+      "Una tarjeta es solo una caja de contenido clara",
+      "A veces parece que una card es algo complejo. En realidad suele ser un envoltorio, un titulo, texto de apoyo y buen espaciado.",
+      [
+        "Empieza con un contenedor para contenido relacionado.",
+        "Anade primero el titulo porque dice de que trata la tarjeta.",
+        "Usa padding dentro de la tarjeta para que el contenido respire.",
+        "Usa border-radius, fondo y espacio para separar la tarjeta de la pagina.",
+      ]
+    ),
+    navbar: createBeginnerGuide(
+      "Una navbar suele ser dos grupos en una fila",
+      "La mayoria de navbars simples siguen la misma estructura: marca a un lado, enlaces al otro.",
+      [
+        "Crea un envoltorio exterior con header o nav.",
+        "Pon el logo o nombre del sitio en un hijo y los enlaces en otro hijo.",
+        "Usa display: flex en la fila principal.",
+        "Usa justify-content: space-between para separar los dos grupos y gap dentro de la fila de enlaces.",
+      ],
+      `.nav {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.links {\n  display: flex;\n  gap: 20px;\n}`
+    ),
+    heroStack: createBeginnerGuide(
+      "El texto hero es una pila vertical con jerarquia",
+      "Un bloque hero debe leerse en un orden simple: titulo primero, texto de apoyo segundo, accion tercera.",
+      [
+        "Envuelve el titulo, el parrafo y el boton dentro de un contenedor hero.",
+        "Apila el contenido en vertical con flex-direction: column o reglas claras de espaciado.",
+        "Controla el ancho del texto con max-width para que el parrafo siga siendo legible.",
+        "Haz que el boton se sienta conectado al mensaje, no flotando lejos.",
+      ],
+      `.hero-copy {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  max-width: 560px;\n}`
+    ),
+    landingHeader: createBeginnerGuide(
+      "Construye secciones grandes por capas",
+      "Para un encabezado de landing, no intentes estilizar todo a la vez. Construyelo por capas: seccion, nav, hero y luego espaciado y acabado.",
+      [
+        "Crea primero la seccion exterior para que todo el header comparta un fondo y un sistema de padding.",
+        "Construye la navbar dentro de esa seccion.",
+        "Construye el bloque hero despues de la navbar.",
+        "Solo cuando la estructura funcione anade espaciado, alineacion y estilo de botones.",
+      ]
+    ),
+    basicGrid: createBeginnerGuide(
+      "Grid empieza en el padre",
+      "Grid no va de estilizar cada tarjeta una por una. El movimiento importante es decirle al padre cuantas columnas deben existir.",
+      [
+        "Crea un envoltorio padre y las tarjetas repetidas dentro.",
+        "Pon display: grid en el padre.",
+        "Usa grid-template-columns para describir el patron de columnas.",
+        "Usa gap en el padre para que todos los espacios sean consistentes.",
+      ],
+      `.board {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 24px;\n}`
+    ),
+    autoFitGrid: createBeginnerGuide(
+      "Deja que el navegador decida cuantas columnas caben",
+      "Este es uno de los patrones Grid mas utiles para principiantes porque evita fijar a mano cada tamano de fila.",
+      [
+        "Construye primero un patron de tarjeta repetida.",
+        "Convierte el padre en un contenedor grid.",
+        "Usa repeat(auto-fit, minmax(...)) para que el navegador elija cuantas columnas caben.",
+        "Piensa en minmax como una promesa: la tarjeta puede encogerse, pero no por debajo del minimo legible.",
+      ],
+      `.card-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 20px;\n}`
+    ),
+    mediaQuery: createBeginnerGuide(
+      "Una media query es un cambio de regla en un breakpoint",
+      "El responsive no es magia. Normalmente significa que el layout sigue una regla y luego cambia a una regla mas simple cuando la pantalla se hace pequena.",
+      [
+        "Empieza por el layout de escritorio o pantalla amplia para ver la estructura de dos columnas.",
+        "Anade un breakpoint con @media (max-width: ...).",
+        "Dentro de ese breakpoint, cambia la regla de layout, muchas veces de fila a columna.",
+        "Mantiene el mismo HTML. Solo cambia la regla CSS.",
+      ],
+      `.promo {\n  display: flex;\n  gap: 20px;\n}\n\n@media (max-width: 700px) {\n  .promo {\n    flex-direction: column;\n  }\n}`
+    ),
+    container: createBeginnerGuide(
+      "Un contenedor protege la legibilidad",
+      "Sin un contenedor, el contenido puede estirarse demasiado y resultar dificil de escanear. El contenedor da aire a los lados.",
+      [
+        "Usa width o porcentaje para que el contenido pueda encogerse en pantallas pequenas.",
+        "Usa max-width para que el contenido deje de crecer en pantallas grandes.",
+        "Usa margin: 0 auto para centrar el contenedor.",
+        "Piensa en el contenedor como la carcasa de pagina que muchas secciones pueden compartir.",
+      ],
+      `.container {\n  width: 90%;\n  max-width: 1100px;\n  margin: 0 auto;\n}`
+    ),
+    dashboardGrid: createBeginnerGuide(
+      "Los dashboards suelen necesitar columnas parejas y repetibles",
+      "Las tarjetas de metricas deben sentirse equilibradas. Grid ayuda porque puedes decir exactamente cuantas columnas quieres.",
+      [
+        "Pon todas las tarjetas de estadisticas dentro de un solo envoltorio.",
+        "Usa Grid para crear columnas iguales en pantallas amplias.",
+        "Anade una media query para que las tarjetas se apilen en pantallas estrechas.",
+        "Mantiene consistente el espaciado interior y la tipografia para que la fila se vea profesional.",
+      ],
+      `.stats {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(0, 1fr));\n  gap: 18px;\n}`
+    ),
+    cssPolish: createBeginnerGuide(
+      "El acabado son pequenos detalles repetidos con consistencia",
+      "Una tarjeta empieza a sentirse profesional cuando tiene esquinas suaves, espacio, sombra y movimiento suave en vez de bordes duros y espaciado aleatorio.",
+      [
+        "Empieza con la base de la tarjeta: fondo, padding, border-radius y sombra.",
+        "Anade transition para que los cambios de hover sean suaves en vez de bruscos.",
+        "Usa transform o sombra en hover para sugerir interaccion.",
+        "No olvides los focus states, porque el teclado tambien necesita una senal clara.",
+      ],
+      `.card {\n  border-radius: 18px;\n  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);\n  transition: transform 0.2s ease;\n}\n\n.card:hover {\n  transform: translateY(-4px);\n}`
+    ),
+    gradientCallout: createBeginnerGuide(
+      "Pon el efecto visual en el envoltorio",
+      "Un degradado debe apoyar el mensaje, no pelearse con el. El contenido sigue necesitando jerarquia clara y aire.",
+      [
+        "Crea un envoltorio exterior para el callout.",
+        "Anade el fondo con degradado a ese envoltorio, no a cada hijo.",
+        "Usa padding y border-radius para que la seccion se sienta enmarcada e intencional.",
+        "Mantiene el titulo, parrafo y boton legibles con buen contraste.",
+      ],
+      `.callout {\n  padding: 24px;\n  border-radius: 20px;\n  background: linear-gradient(135deg, #2563eb, #8b5cf6);\n}`
+    ),
+    featureStrip: createBeginnerGuide(
+      "Un patron de tarjeta repetido puede sostener una seccion entera",
+      "Una franja de beneficios es un gran ejercicio principiante porque repite una sola idea de forma limpia y aun asi debe adaptarse a distintos anchos.",
+      [
+        "Construye primero una tarjeta de beneficio.",
+        "Repite la misma estructura para el resto.",
+        "Usa Grid responsive en el padre para que el navegador decida cuantas caben.",
+        "Mantiene consistente el espaciado y la jerarquia del texto en todas las tarjetas.",
+      ]
+    ),
+    portfolioGrid: createBeginnerGuide(
+      "Piensa en esto como una seccion real de portfolio",
+      "Este capstone importa porque se parece a trabajo que si podrias mostrar. La meta no son cajas aleatorias. La meta es una seccion coherente.",
+      [
+        "Construye primero el titulo de la seccion y una introduccion corta.",
+        "Crea despues la estructura repetida de las tarjetas de proyecto.",
+        "Usa Grid responsive en la lista de proyectos para que el layout se adapte.",
+        "Termina con tags, enlaces, espaciado y acabado para que todo se sienta intencional.",
+      ]
+    ),
+    searchCards: createBeginnerGuide(
+      "El patron de busqueda sigue siendo el mismo en cards",
+      "No importa si los elementos visibles son li o cards. La logica sigue siendo: leer el texto de busqueda, compararlo y luego mostrar u ocultar cada item.",
+      [
+        "Selecciona el input y todas las cards.",
+        "Escucha el evento input para que la UI se actualice mientras la persona escribe.",
+        "Convierte el valor escrito y el texto de la card a minusculas para comparar mas facil.",
+        "Muestra las cards coincidentes y oculta el resto.",
+      ],
+      `const query = input.value.toLowerCase();\n\ncards.forEach((card) => {\n  const matches = card.textContent.toLowerCase().includes(query);\n  card.style.display = matches ? "block" : "none";\n});`
+    ),
+    multiFilter: createBeginnerGuide(
+      "Dos filtros significan dos condiciones",
+      "Un producto solo debe seguir visible si pasa ambas comprobaciones. Este es el primer paso desde una busqueda simple hacia filtros mas reales.",
+      [
+        "Lee por separado el filtro de texto y el filtro de precio.",
+        "Convierte el input de precio en numero antes de compararlo.",
+        "Dentro de filter(), revisa ambas condiciones: nombre y precio.",
+        "Renderiza de nuevo la lista filtrada cada vez que cambie cualquiera de los dos inputs.",
+      ],
+      `const visibleProducts = products.filter((product) => {\n  const matchesName = product.name.toLowerCase().includes(query);\n  const matchesPrice = product.price <= maxPrice;\n  return matchesName && matchesPrice;\n});`
+    ),
+    faqToggle: createBeginnerGuide(
+      "Un toggle es un cambio pequeno de estado",
+      "Los FAQ parecen pequenos, pero ensenan una idea importante de producto: una accion cambia una parte de la UI de cerrada a abierta y viceversa.",
+      [
+        "Crea un disparador y un elemento de respuesta.",
+        "Oculta la respuesta al principio para que exista un antes y un despues claro.",
+        "Escucha el click en el disparador.",
+        "Revisa el estado actual y cambialo por el contrario.",
+      ]
+    ),
+    savedTheme: createBeginnerGuide(
+      "Persistencia significa recordar algo tras refrescar",
+      "Este reto no va solo de cambiar colores. Va de ensenar al navegador a recordar la ultima eleccion de la persona usuaria.",
+      [
+        "Elige dos estados de tema claros, como light y dark.",
+        "En el click, actualiza la clase de la pagina para que la UI cambie al instante.",
+        "Guarda el tema elegido en localStorage como texto.",
+        "Cuando empiece el script, lee ese valor guardado y aplicalo antes de que la persona vuelva a hacer click.",
+      ],
+      `const savedTheme = localStorage.getItem("theme");\n\nif (savedTheme) {\n  page.className = "page " + savedTheme;\n}\n\nlocalStorage.setItem("theme", "dark");`
+    ),
+    counter: createBeginnerGuide(
+      "El numero real vive primero en JavaScript",
+      "Un contador parece simple, pero ensena una idea muy importante: la pagina muestra un valor, mientras JavaScript guarda el valor que cambia.",
+      [
+        "Guarda el numero actual en una variable.",
+        "Crea una funcion pequena de render que copie esa variable al DOM.",
+        "Cada boton cambia la variable de una forma distinta.",
+        "Despues de cada cambio, llama otra vez a la funcion de render.",
+      ],
+      `let count = 0;\n\nfunction renderCount() {\n  countEl.textContent = count;\n}`
+    ),
+    passwordVisibility: createBeginnerGuide(
+      "No cambias la password, cambias el tipo del input",
+      "Es un buen reto principiante porque muestra que un cambio pequeno en un atributo puede crear una funcionalidad de UX muy real.",
+      [
+        "Selecciona el input de password y el boton toggle.",
+        "En el click, revisa el tipo actual del input.",
+        "Si el tipo es password, cambialo a text. Si no, vuelvelo a password.",
+        "Actualiza el texto del boton para que la persona sepa la siguiente accion.",
+      ],
+      `const isHidden = passwordInput.type === "password";\npasswordInput.type = isHidden ? "text" : "password";\npasswordToggleBtn.textContent = isHidden ? "Hide" : "Show";`
+    ),
+    clickCounter: createBeginnerGuide(
+      "Cuenta en JavaScript y pinta en HTML",
+      "Este es uno de los ejercicios de estado mas claros para empezar porque cada click cambia un numero y el resultado se ve enseguida.",
+      [
+        "Crea una variable para guardar el total.",
+        "Escucha los clicks del boton.",
+        "Suma uno a la variable en cada click.",
+        "Pinta el nuevo valor en la pagina inmediatamente.",
+      ]
+    ),
+    formValidation: createBeginnerGuide(
+      "Submit es el momento de parar y revisar los datos",
+      "Los formularios intentan recargar la pagina por defecto. En JavaScript, el primer trabajo suele ser pausar eso y revisar los valores.",
+      [
+        "Escucha el evento submit del formulario, no solo el click del boton.",
+        "Usa event.preventDefault() para que la pagina no se recargue.",
+        "Lee el valor del input y haz trim antes de revisarlo.",
+        "Muestra error o exito segun el resultado.",
+      ],
+      `form.addEventListener("submit", (event) => {\n  event.preventDefault();\n\n  if (input.value.trim() === "") {\n    feedback.textContent = "Please complete the field.";\n  }\n});`
+    ),
+    duplicateItems: createBeginnerGuide(
+      "El array es la fuente de verdad",
+      "Este reto se siente mas real porque no basta con tocar el DOM. Tambien necesitas un lugar en JavaScript que sepa que items ya existen.",
+      [
+        "Guarda los items actuales dentro de un array.",
+        "Haz trim al nuevo valor antes de revisarlo.",
+        "Usa includes() para detectar duplicados dentro del array.",
+        "Solo haz push del nuevo valor y vuelve a renderizar cuando pase ambas comprobaciones.",
+      ],
+      `if (!value) return;\nif (topics.includes(value)) return;\n\ntopics.push(value);\nrenderTopics();`
+    ),
+    contactValidation: createBeginnerGuide(
+      "Revisa una regla cada vez",
+      "Cuando un formulario tiene mas de un campo, el enfoque mas limpio para empezar es leer los valores una sola vez y validarlos en orden.",
+      [
+        "Lee y haz trim al nombre y email dentro del submit.",
+        "Revisa la primera regla y haz return pronto si falla.",
+        "Despues revisa la siguiente regla, por ejemplo si el email incluye @.",
+        "Solo muestra exito cuando todas las reglas pasen.",
+      ]
+    ),
+    formObject: createBeginnerGuide(
+      "Un submit correcto suele convertirse en un objeto",
+      "Este es un patron muy real de junior: recoger valores, validarlos, convertirlos en un objeto y luego mostrar o enviar ese objeto.",
+      [
+        "Lee los valores dentro del evento submit.",
+        "Validalos antes de construir nada.",
+        "Crea un objeto con nombres de propiedad claros.",
+        "Pinta la vista previa del objeto y resetea el formulario solo tras exito.",
+      ],
+      `const user = {\n  email,\n  password,\n};\n\npreview.textContent = JSON.stringify(user, null, 2);`
+    ),
+    bookingFlow: createBeginnerGuide(
+      "El flujo real de formulario es validar, construir, pintar y resetear",
+      "Los formularios de reserva son un buen ejemplo de producto porque el exito no es solo un mensaje. La persona debe ver que datos se han enviado.",
+      [
+        "Lee primero los valores actuales del formulario.",
+        "Valida cada campo obligatorio antes de seguir.",
+        "Construye un objeto booking cuando los datos sean validos.",
+        "Pinta un resumen claro y luego resetea el formulario.",
+      ]
+    ),
+    formDataSummary: createBeginnerGuide(
+      "FormData lee campos con name desde un solo formulario",
+      "FormData es util cuando un formulario tiene varios campos relacionados y quieres recogerlos juntos tras una sola accion de envio.",
+      [
+        "Asegurate de que cada campo tenga atributo name.",
+        "Crea new FormData(form) dentro del submit.",
+        "Lee cada valor con formData.get(...).",
+        "Construye un objeto o una card resumen con esos valores.",
+      ],
+      `const formData = new FormData(reservationForm);\nconst reservation = {\n  name: String(formData.get("name") || "").trim(),\n  time: String(formData.get("time") || ""),\n};`
+    ),
+    formDataPreview: createBeginnerGuide(
+      "Ver los datos enviados ayuda a entender mejor los formularios",
+      "Para alguien que empieza, esto ayuda mucho porque el resultado es visible. La persona puede ver exactamente lo que el submit ha recogido.",
+      [
+        "Da atributos name a los campos para que FormData pueda leerlos.",
+        "Evita el submit por defecto.",
+        "Recoge los valores con FormData.",
+        "Pinta esos datos dentro de una card de preview.",
+      ]
+    ),
+    addListItem: createBeginnerGuide(
+      "Este es el patron crear, anadir y limpiar",
+      "Anadir un item a una lista es un ejercicio pequeno, pero ensena como una UI puede crecer despues de que la pagina ya haya cargado.",
+      [
+        "Lee el valor actual del input.",
+        "Detente si el valor esta vacio.",
+        "Crea un nuevo li y coloca el texto dentro.",
+        "Anadelo a la lista y luego limpia el input.",
+      ],
+      `const li = document.createElement("li");\nli.textContent = value;\nitemList.appendChild(li);\nitemInput.value = "";`
+    ),
+    removeListItem: createBeginnerGuide(
+      "Quita el item completo, no solo el boton",
+      "Cuando un boton remove esta dentro de un item de lista, el objetivo real suele ser el elemento padre que envuelve ese boton.",
+      [
+        "Anade un boton remove a cada item visible.",
+        "Escucha el click en cada boton.",
+        "Usa parentElement o un selector cercano para llegar al item completo.",
+        "Elimina ese item completo de la pagina.",
+      ],
+      `button.addEventListener("click", () => {\n  button.parentElement.remove();\n});`
+    ),
+    removeWithEmptyState: createBeginnerGuide(
+      "Despues de borrar, revisa si queda algo",
+      "Las interfaces reales suelen hacer una cosa mas despues de borrar: explicar que significa la pantalla vacia en vez de dejar un hueco sin contexto.",
+      [
+        "Elimina primero el item pulsado.",
+        "Cuenta cuantos li siguen quedando en el DOM.",
+        "Si no queda ninguno, muestra el mensaje vacio.",
+        "Si aun quedan items, manten oculto ese mensaje.",
+      ]
+    ),
+    sortArray: createBeginnerGuide(
+      "Ordena los datos primero y luego vuelve a pintar",
+      "Ordenar es mas facil cuando separas los datos de la UI. JavaScript cambia el orden de los datos y la funcion render dibuja el resultado.",
+      [
+        "Guarda los productos en un array de objetos.",
+        "Escribe una funcion render que muestre el array actual.",
+        "Usa sort() cuando la persona pulse el boton.",
+        "Llama de nuevo a render para que aparezca el nuevo orden.",
+      ],
+      `products.sort((a, b) => a.price - b.price);\nrenderProducts();`
+    ),
+    filterArray: createBeginnerGuide(
+      "filter() crea un array mas pequeno con los elementos que coinciden",
+      "Este es uno de los patrones de datos mas importantes en frontend. Mantienes los datos originales y creas una version visible mas pequena.",
+      [
+        "Guarda una sola vez el array completo de productos.",
+        "Crea una funcion render que reciba los items que quieres mostrar.",
+        "Cuando se pulse un boton de filtro, usa filter() para crear un nuevo array con los coincidientes.",
+        "Pasa ese nuevo array a la funcion render.",
+      ],
+      `const techItems = products.filter((product) => {\n  return product.category === "Tech";\n});\n\nrenderProducts(techItems);`
+    ),
+    todoToggle: createBeginnerGuide(
+      "El estado completado suele ser solo un cambio de clase",
+      "Es una buena leccion sobre estado visual. La tarea sigue existiendo, pero su apariencia cambia de normal a completada.",
+      [
+        "Crea los items y sus botones.",
+        "Anade un click listener a cada boton.",
+        "Haz toggle de una clase en el item correspondiente.",
+        "Deja que CSS decida como se ve un item completado.",
+      ]
+    ),
+    passwordStrength: createBeginnerGuide(
+      "Feedback en vivo significa reaccionar mientras la persona escribe",
+      "Esto no es un problema de submit. La UI debe actualizarse durante la escritura, por eso aqui importa el evento input.",
+      [
+        "Selecciona el input de password y el texto de feedback.",
+        "Escucha el evento input.",
+        "Revisa una regla simple, como la longitud actual.",
+        "Actualiza el mensaje cada vez que cambie el valor.",
+      ]
+    ),
+    passwordRules: createBeginnerGuide(
+      "Revisa cada regla por separado",
+      "Una checklist es mas clara que un mensaje vago porque la persona ve exactamente que ya esta bien y que sigue faltando.",
+      [
+        "Crea una fila visible para cada regla de password.",
+        "Escucha el evento input del campo de password.",
+        "Ejecuta cada comprobacion por separado, como longitud, numero y mayuscula.",
+        "Actualiza cada fila por su cuenta para que el feedback sea especifico.",
+      ],
+      `lengthRule.classList.toggle("is-valid", value.length >= 8);\nnumberRule.classList.toggle("is-valid", /\\d/.test(value));\nupperRule.classList.toggle("is-valid", /[A-Z]/.test(value));`
+    ),
+    tabBasics: createBeginnerGuide(
+      "Los tabs son mostrar uno y ocultar los demas",
+      "La idea importante es que solo un panel de contenido debe sentirse activo a la vez.",
+      [
+        "Crea los botones de tab y sus paneles de contenido.",
+        "Elige un panel visible al principio.",
+        "En el click, oculta el panel anterior y muestra el nuevo.",
+        "Mantiene la regla simple: un tab activo, un area de contenido visible.",
+      ]
+    ),
+    restaurantTabs: createBeginnerGuide(
+      "Un panel compartido mantiene el codigo de tabs mas limpio",
+      "En vez de construir tres secciones completas y mostrarlas u ocultarlas todas, puedes mantener un area de salida y cambiar su contenido.",
+      [
+        "Crea tres botones y un area de salida compartida.",
+        "Guarda el texto de About, Menu y Contact dentro de JavaScript.",
+        "En el click, reemplaza el contenido del panel con la entrada correcta.",
+        "Actualiza el estilo activo del boton para que la persona sepa donde esta.",
+      ]
+    ),
+    productManager: createBeginnerGuide(
+      "Este capstone son muchos patrones pequenos trabajando juntos",
+      "No intentes resolver el capstone entero de un salto. Rompelo en piezas pequenas que ya conoces.",
+      [
+        "Construye primero la estructura HTML del formulario, filtros, feedback y lista.",
+        "Haz funcionar el flujo de anadir o enviar antes de preocuparte por ordenar o filtrar.",
+        "Anade luego la logica de datos: arrays, funcion render y helpers de filtro u orden.",
+        "Termina con estados de reset, mensajes y acabado para que la UI se sienta completa.",
+      ]
+    ),
+  },
+};
+
+function applyLessonGuides(language, guideMap) {
+  Object.entries(guideMap).forEach(([challengeId, beginnerGuide]) => {
+    lessonOverrides[language][challengeId] = {
+      ...(lessonOverrides[language][challengeId] || {}),
+      beginnerGuide,
+    };
+  });
+}
+
+applyLessonGuides("en", {
+  "display-mode-announcement": beginnerGuideLibrary.en.displayBasics,
+  "center-circle": beginnerGuideLibrary.en.flexCenter,
+  "two-column-layout": beginnerGuideLibrary.en.flexRow,
+  "flex-service-row": beginnerGuideLibrary.en.flexCards,
+  "flex-wrap-chip-row": beginnerGuideLibrary.en.flexWrap,
+  "profile-card": beginnerGuideLibrary.en.cardStructure,
+  "simple-navbar": beginnerGuideLibrary.en.navbar,
+  "hero-copy-stack": beginnerGuideLibrary.en.heroStack,
+  "landing-header-capstone": beginnerGuideLibrary.en.landingHeader,
+  "grid-feature-board": beginnerGuideLibrary.en.basicGrid,
+  "css-grid-gallery": beginnerGuideLibrary.en.autoFitGrid,
+  "responsive-card-grid": beginnerGuideLibrary.en.autoFitGrid,
+  "media-query-stack-layout": beginnerGuideLibrary.en.mediaQuery,
+  "fluid-container-shell": beginnerGuideLibrary.en.container,
+  "dashboard-stats-layout": beginnerGuideLibrary.en.dashboardGrid,
+  "polished-pricing-card": beginnerGuideLibrary.en.cssPolish,
+  "gradient-hero-callout": beginnerGuideLibrary.en.gradientCallout,
+  "responsive-feature-strip": beginnerGuideLibrary.en.featureStrip,
+  "portfolio-section-capstone": beginnerGuideLibrary.en.portfolioGrid,
+  "search-cards-layout": beginnerGuideLibrary.en.searchCards,
+  "filter-products-name-price": beginnerGuideLibrary.en.multiFilter,
+  "faq-toggle": beginnerGuideLibrary.en.faqToggle,
+  "theme-toggle-saved": beginnerGuideLibrary.en.savedTheme,
+  "counter-with-reset": beginnerGuideLibrary.en.counter,
+  "password-visibility-toggle": beginnerGuideLibrary.en.passwordVisibility,
+  "button-click-counter": beginnerGuideLibrary.en.clickCounter,
+  "simple-form-validation": beginnerGuideLibrary.en.formValidation,
+  "prevent-duplicate-items": beginnerGuideLibrary.en.duplicateItems,
+  "contact-form-validation": beginnerGuideLibrary.en.contactValidation,
+  "login-form-submit-object": beginnerGuideLibrary.en.formObject,
+  "booking-form-reset": beginnerGuideLibrary.en.bookingFlow,
+  "reservation-form-summary": beginnerGuideLibrary.en.formDataSummary,
+  "form-data-preview": beginnerGuideLibrary.en.formDataPreview,
+  "add-item-to-list": beginnerGuideLibrary.en.addListItem,
+  "add-goal-to-list": beginnerGuideLibrary.en.addListItem,
+  "remove-item-from-list": beginnerGuideLibrary.en.removeListItem,
+  "remove-saved-item": beginnerGuideLibrary.en.removeWithEmptyState,
+  "sort-products": beginnerGuideLibrary.en.sortArray,
+  "filter-products": beginnerGuideLibrary.en.filterArray,
+  "todo-complete-toggle": beginnerGuideLibrary.en.todoToggle,
+  "password-strength-checker": beginnerGuideLibrary.en.passwordStrength,
+  "password-rules-validation": beginnerGuideLibrary.en.passwordRules,
+  "tab-switcher": beginnerGuideLibrary.en.tabBasics,
+  "restaurant-tabs-panel": beginnerGuideLibrary.en.restaurantTabs,
+  "product-list-manager-capstone": beginnerGuideLibrary.en.productManager,
+});
+
+applyLessonGuides("es", {
+  "display-mode-announcement": beginnerGuideLibrary.es.displayBasics,
+  "center-circle": beginnerGuideLibrary.es.flexCenter,
+  "two-column-layout": beginnerGuideLibrary.es.flexRow,
+  "flex-service-row": beginnerGuideLibrary.es.flexCards,
+  "flex-wrap-chip-row": beginnerGuideLibrary.es.flexWrap,
+  "profile-card": beginnerGuideLibrary.es.cardStructure,
+  "simple-navbar": beginnerGuideLibrary.es.navbar,
+  "hero-copy-stack": beginnerGuideLibrary.es.heroStack,
+  "landing-header-capstone": beginnerGuideLibrary.es.landingHeader,
+  "grid-feature-board": beginnerGuideLibrary.es.basicGrid,
+  "css-grid-gallery": beginnerGuideLibrary.es.autoFitGrid,
+  "responsive-card-grid": beginnerGuideLibrary.es.autoFitGrid,
+  "media-query-stack-layout": beginnerGuideLibrary.es.mediaQuery,
+  "fluid-container-shell": beginnerGuideLibrary.es.container,
+  "dashboard-stats-layout": beginnerGuideLibrary.es.dashboardGrid,
+  "polished-pricing-card": beginnerGuideLibrary.es.cssPolish,
+  "gradient-hero-callout": beginnerGuideLibrary.es.gradientCallout,
+  "responsive-feature-strip": beginnerGuideLibrary.es.featureStrip,
+  "portfolio-section-capstone": beginnerGuideLibrary.es.portfolioGrid,
+  "search-cards-layout": beginnerGuideLibrary.es.searchCards,
+  "filter-products-name-price": beginnerGuideLibrary.es.multiFilter,
+  "faq-toggle": beginnerGuideLibrary.es.faqToggle,
+  "theme-toggle-saved": beginnerGuideLibrary.es.savedTheme,
+  "counter-with-reset": beginnerGuideLibrary.es.counter,
+  "password-visibility-toggle": beginnerGuideLibrary.es.passwordVisibility,
+  "button-click-counter": beginnerGuideLibrary.es.clickCounter,
+  "simple-form-validation": beginnerGuideLibrary.es.formValidation,
+  "prevent-duplicate-items": beginnerGuideLibrary.es.duplicateItems,
+  "contact-form-validation": beginnerGuideLibrary.es.contactValidation,
+  "login-form-submit-object": beginnerGuideLibrary.es.formObject,
+  "booking-form-reset": beginnerGuideLibrary.es.bookingFlow,
+  "reservation-form-summary": beginnerGuideLibrary.es.formDataSummary,
+  "form-data-preview": beginnerGuideLibrary.es.formDataPreview,
+  "add-item-to-list": beginnerGuideLibrary.es.addListItem,
+  "add-goal-to-list": beginnerGuideLibrary.es.addListItem,
+  "remove-item-from-list": beginnerGuideLibrary.es.removeListItem,
+  "remove-saved-item": beginnerGuideLibrary.es.removeWithEmptyState,
+  "sort-products": beginnerGuideLibrary.es.sortArray,
+  "filter-products": beginnerGuideLibrary.es.filterArray,
+  "todo-complete-toggle": beginnerGuideLibrary.es.todoToggle,
+  "password-strength-checker": beginnerGuideLibrary.es.passwordStrength,
+  "password-rules-validation": beginnerGuideLibrary.es.passwordRules,
+  "tab-switcher": beginnerGuideLibrary.es.tabBasics,
+  "restaurant-tabs-panel": beginnerGuideLibrary.es.restaurantTabs,
+  "product-list-manager-capstone": beginnerGuideLibrary.es.productManager,
+});
+
 function normalize(value) {
   return String(value || "")
     .toLowerCase()
@@ -1178,19 +2215,24 @@ function getLevelLine(challenge, language) {
 
 export function getChallengeLesson(challenge, language = "en") {
   const currentLanguage = language === "es" ? "es" : "en";
-  const override = lessonOverrides[currentLanguage]?.[challenge.id];
+  const override = lessonOverrides[currentLanguage]?.[challenge.id] || null;
   const existingLesson = lessonFromChallenge(challenge, currentLanguage);
-
-  if (override) return override;
-  if (existingLesson) return existingLesson;
 
   const topic = inferTopic(challenge);
   const template =
     topicTemplates[currentLanguage][topic] || topicTemplates[currentLanguage].layout;
   const levelLine = getLevelLine(challenge, currentLanguage);
-
-  return {
+  const baseLesson = existingLesson || {
     ...template,
     why: `${template.why} ${levelLine}`,
+  };
+
+  if (!override) return baseLesson;
+
+  return {
+    ...baseLesson,
+    ...override,
+    examples: override.examples || baseLesson.examples,
+    beginnerGuide: override.beginnerGuide || baseLesson.beginnerGuide,
   };
 }

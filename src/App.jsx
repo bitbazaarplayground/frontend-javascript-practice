@@ -80,6 +80,10 @@ export default function App() {
     "practice-preview-viewport",
     "desktop"
   );
+  const [briefCollapsed, setBriefCollapsed] = useLocalStorage(
+    "practice-brief-collapsed",
+    false
+  );
   const [skippedPrimers, setSkippedPrimers] = useLocalStorage(
     "practice-skipped-primers",
     {}
@@ -120,6 +124,7 @@ export default function App() {
     return localizedModes.find((mode) => mode.id === selectedModeId) || null;
   }, [localizedModes, selectedModeId]);
   const isInterviewTrack = selectedMode?.id === "interview";
+  const isRookieTrack = selectedMode?.id === "rookie";
 
   const selectedClass = useMemo(() => {
     const currentClass =
@@ -193,6 +198,9 @@ export default function App() {
         improve: "",
       }
     : { summary: "", decisions: "", improve: "" };
+  const showExplanationPanel =
+    (timedInterviewMode && submissionResult) ||
+    (isRookieTrack && submissionResult?.status === "success");
 
   const currentDraft = activeChallenge
     ? savedDrafts[activeChallenge.id] || activeChallenge.starter
@@ -293,6 +301,7 @@ export default function App() {
           selectedClassId,
           activeId,
           previewViewport,
+          briefCollapsed,
           skippedPrimers,
           savedDrafts,
           challengeProgress,
@@ -400,6 +409,10 @@ export default function App() {
           imported.previewViewport === "phone")
       ) {
         setPreviewViewport(imported.previewViewport);
+      }
+
+      if (typeof imported.briefCollapsed === "boolean") {
+        setBriefCollapsed(imported.briefCollapsed);
       }
 
       if (
@@ -814,7 +827,11 @@ export default function App() {
 
           <div
             key={`${selectedMode.id}:${activeChallenge.id}:${language}:${timedInterviewMode ? "timed" : "practice"}`}
-            className="content-grid"
+            className={
+              briefCollapsed
+                ? "content-grid content-grid-brief-collapsed"
+                : "content-grid"
+            }
           >
             <BriefPanel
               key={`brief-${activeChallenge.id}`}
@@ -822,6 +839,8 @@ export default function App() {
               copy={appCopy}
               language={language}
               variant={timedInterviewMode ? "timed" : "default"}
+              collapsed={briefCollapsed}
+              onToggleCollapse={() => setBriefCollapsed((current) => !current)}
             />
             <WorkspacePanel
               key={`workspace-${activeChallenge.id}`}
@@ -852,11 +871,12 @@ export default function App() {
             />
           </div>
 
-          {timedInterviewMode && submissionResult && (
+          {showExplanationPanel && (
             <InterviewReflectionPanel
               value={currentReflection}
               onChange={handleReflectionChange}
               copy={appCopy}
+              variant={isRookieTrack ? "rookie" : "interview"}
             />
           )}
         </div>
