@@ -4258,6 +4258,602 @@ finalTogglePasswordBtn.addEventListener("click", () => {
 });`,
     },
   },
+  {
+    id: "rookie-all-in-one-portfolio-site",
+    editorType: "web",
+    title: "Capstone — Rookie All-in-One Portfolio Website",
+    difficulty: "Hard",
+    category: "HTML + CSS + JS",
+    goal: "Build a personal portfolio website that combines a hero, project cards, skills, a contact form, responsive layout, and one small interaction.",
+    requirements: [
+      "Create a nav bar with links such as Work and Contact",
+      "Add a hero section with a heading, paragraph, and call to action",
+      "Add a skills or services section with exactly 3 cards",
+      "Add a projects section with at least 3 project cards",
+      "Add a contact form with name, email, and message fields",
+      "Add one small interaction such as showing or hiding extra project details",
+      "Add a footer",
+      "Make the layout responsive",
+    ],
+    tips: [
+      "This should feel different from the restaurant page: it is about presenting a person and their work.",
+      "Use repeated card styles for skills and projects so the page feels consistent.",
+      "The small JavaScript interaction should support the portfolio content, not distract from it.",
+    ],
+    concepts: [
+      "navigation",
+      "semantic sections",
+      "portfolio UI",
+      "cards",
+      "forms",
+      "responsive design",
+      "DOM interaction",
+    ],
+    suggestedApproach: [
+      "Create the page sections first: nav, hero, skills, projects, contact, and footer.",
+      "Build one skill card and one project card, then repeat those patterns.",
+      "Use Grid for repeated cards and a media query for narrow screens.",
+      "Add a button that shows or hides a short project note.",
+    ],
+    commonMistakes: [
+      "Making every section look unrelated instead of using one visual system",
+      "Listing projects without descriptions or actions",
+      "Adding a form without labels",
+      "Forgetting that a portfolio must be readable on a phone",
+    ],
+    expectedOutcome:
+      "A beginner portfolio website that shows structure, repeated components, responsive thinking, and a small purposeful interaction.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<main class="portfolio-page">
+  <header class="hero-shell">
+    <nav class="navbar">
+      <strong>Maya Stone</strong>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <p class="eyebrow">Junior frontend developer</p>
+      <h1>I build clear, responsive interfaces for small teams.</h1>
+      <p>
+        This portfolio page combines semantic sections, repeatable cards,
+        form structure, responsive CSS, and one small JavaScript interaction.
+      </p>
+      <a class="primary-link" href="#work">View projects</a>
+    </section>
+  </header>
+
+  <section id="skills" class="card-grid">
+    <article>
+      <h2>HTML structure</h2>
+      <p>Semantic sections, clear headings, and accessible form labels.</p>
+    </article>
+    <article>
+      <h2>CSS layout</h2>
+      <p>Responsive Grid, flexbox alignment, spacing, and reusable cards.</p>
+    </article>
+    <article>
+      <h2>Small interactions</h2>
+      <p>Button-driven UI changes that make a page feel more complete.</p>
+    </article>
+  </section>
+
+  <section id="work" class="project-section">
+    <div class="section-heading">
+      <p class="eyebrow">Selected work</p>
+      <h2>Projects</h2>
+    </div>
+
+    <div class="project-grid">
+      <article>
+        <h3>Local Bakery Page</h3>
+        <p>A warm landing page with menu cards and a contact form.</p>
+        <button id="detailsBtn" type="button">Show details</button>
+        <p id="projectDetails" class="project-details" hidden>
+          Built with semantic HTML, card layouts, and responsive sections.
+        </p>
+      </article>
+      <article>
+        <h3>Pricing Section</h3>
+        <p>A responsive pricing block with a featured plan and clear actions.</p>
+        <a href="#">View case study</a>
+      </article>
+      <article>
+        <h3>Dashboard Cards</h3>
+        <p>A compact dashboard overview with stats and structured content.</p>
+        <a href="#">View case study</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-panel">
+    <h2>Contact</h2>
+    <form>
+      <label>
+        Name
+        <input type="text" placeholder="Your name" />
+      </label>
+      <label>
+        Email
+        <input type="email" placeholder="you@example.com" />
+      </label>
+      <label>
+        Message
+        <textarea placeholder="Tell me about your project"></textarea>
+      </label>
+      <button type="submit">Send message</button>
+    </form>
+  </section>
+
+  <footer>
+    <small>Portfolio built with HTML, CSS, and a tiny bit of JavaScript.</small>
+  </footer>
+</main>`,
+      css: `* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #182235;
+}
+
+.portfolio-page {
+  display: grid;
+  gap: 22px;
+  padding: 24px;
+}
+
+.hero-shell,
+.project-section,
+.contact-panel,
+footer {
+  padding: 24px;
+  border: 1px solid #d9e2ec;
+  border-radius: 18px;
+  background: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+a {
+  color: #0f766e;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.hero {
+  max-width: 720px;
+}
+
+.hero h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+.hero p,
+article p {
+  line-height: 1.6;
+  color: #475569;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #0f766e;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.primary-link,
+button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #0f766e;
+  color: white;
+  font-weight: 800;
+}
+
+.card-grid,
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card-grid article,
+.project-grid article {
+  padding: 20px;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid #d9e2ec;
+}
+
+.card-grid article {
+  background: #e4f4f1;
+}
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.project-details {
+  padding: 12px;
+  border-radius: 12px;
+  background: #eef6ff;
+}
+
+form {
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  font-weight: 800;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}`,
+      js: `const detailsBtn = document.getElementById("detailsBtn");
+const projectDetails = document.getElementById("projectDetails");
+
+detailsBtn.addEventListener("click", () => {
+  const isHidden = projectDetails.hidden;
+
+  projectDetails.hidden = !isHidden;
+  detailsBtn.textContent = isHidden ? "Hide details" : "Show details";
+});`,
+    },
+  },
+  {
+    id: "rookie-all-in-one-event-page",
+    editorType: "web",
+    title: "Capstone — Rookie All-in-One Event Page",
+    difficulty: "Hard",
+    category: "HTML + CSS + JS",
+    goal: "Build an event landing page with a schedule, speaker cards, an RSVP form, responsive layout, and one small interaction.",
+    requirements: [
+      "Create a nav bar with links such as Schedule, Speakers, and RSVP",
+      "Add a hero section with event name, date, location, and a call to action",
+      "Add a schedule section with at least 3 agenda items",
+      "Add a speakers or highlights section with at least 3 cards",
+      "Add an RSVP form with name, email, and one extra field",
+      "Add one submit or click event that shows a confirmation message",
+      "Add a footer",
+      "Make the layout responsive",
+    ],
+    tips: [
+      "This page is about time-based information, so the schedule should be easy to scan.",
+      "Use cards for speakers or highlights, but make the agenda feel different from regular cards.",
+      "The interaction should give clear feedback after the RSVP action.",
+    ],
+    concepts: [
+      "navigation",
+      "semantic sections",
+      "schedule layout",
+      "cards",
+      "forms",
+      "responsive design",
+      "form submission",
+    ],
+    suggestedApproach: [
+      "Create the main areas: nav, hero, schedule, speakers, RSVP form, and footer.",
+      "Build the schedule with repeated agenda items that share one style.",
+      "Use Grid for the speaker or highlight cards.",
+      "Use a form submit event to show a short confirmation message.",
+    ],
+    commonMistakes: [
+      "Making the schedule look like unstructured paragraphs",
+      "Forgetting to prevent the form from reloading the page",
+      "Adding speaker cards with inconsistent spacing",
+      "Leaving the layout desktop-only",
+    ],
+    expectedOutcome:
+      "A complete event page that proves the learner can organize time-based content, repeated cards, a form, responsive CSS, and one useful JavaScript feedback pattern.",
+    starter: {
+      html: ``,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<main class="event-page">
+  <header class="event-hero">
+    <nav class="navbar">
+      <strong>Frontend Day</strong>
+      <div class="nav-links">
+        <a href="#schedule">Schedule</a>
+        <a href="#speakers">Speakers</a>
+        <a href="#rsvp">RSVP</a>
+      </div>
+    </nav>
+
+    <section class="hero-copy">
+      <p class="eyebrow">June 18 - Manchester</p>
+      <h1>A one-day event for new frontend developers.</h1>
+      <p>
+        Practice layout thinking by building a page with time slots,
+        speaker cards, a form, and a clear confirmation message.
+      </p>
+      <a class="hero-btn" href="#rsvp">Save a seat</a>
+    </section>
+  </header>
+
+  <section id="schedule" class="schedule-panel">
+    <h2>Schedule</h2>
+    <div class="agenda">
+      <article>
+        <time>09:30</time>
+        <div>
+          <h3>Welcome and setup</h3>
+          <p>Get ready for a focused day of practical frontend work.</p>
+        </div>
+      </article>
+      <article>
+        <time>11:00</time>
+        <div>
+          <h3>Layout workshop</h3>
+          <p>Build responsive sections with Grid, flexbox, and spacing systems.</p>
+        </div>
+      </article>
+      <article>
+        <time>14:30</time>
+        <div>
+          <h3>Portfolio review</h3>
+          <p>Learn how to explain beginner projects with calm, clear language.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="speakers" class="speaker-grid">
+    <article>
+      <h2>Ana</h2>
+      <p>HTML structure and accessibility basics.</p>
+    </article>
+    <article>
+      <h2>Sam</h2>
+      <p>CSS layout, responsive thinking, and visual polish.</p>
+    </article>
+    <article>
+      <h2>Leah</h2>
+      <p>How to talk through a junior frontend task.</p>
+    </article>
+  </section>
+
+  <section id="rsvp" class="rsvp-panel">
+    <h2>RSVP</h2>
+    <form id="rsvpForm">
+      <label>
+        Name
+        <input type="text" placeholder="Your name" />
+      </label>
+      <label>
+        Email
+        <input type="email" placeholder="you@example.com" />
+      </label>
+      <label>
+        Track
+        <select>
+          <option>HTML and CSS</option>
+          <option>JavaScript basics</option>
+          <option>Interview practice</option>
+        </select>
+      </label>
+      <button type="submit">Confirm RSVP</button>
+    </form>
+    <p id="rsvpMessage" class="rsvp-message"></p>
+  </section>
+
+  <footer>
+    <small>Frontend Day - practical beginner-friendly web practice.</small>
+  </footer>
+</main>`,
+      css: `* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff7ed;
+  color: #172033;
+}
+
+.event-page {
+  display: grid;
+  gap: 22px;
+  padding: 24px;
+}
+
+.event-hero,
+.schedule-panel,
+.rsvp-panel,
+footer {
+  padding: 24px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid #fed7aa;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+a {
+  color: #c2410c;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.hero-copy {
+  max-width: 720px;
+}
+
+.hero-copy h1 {
+  margin: 10px 0 14px;
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+.hero-copy p,
+.agenda p,
+.speaker-grid p {
+  color: #5f6472;
+  line-height: 1.6;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #c2410c;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.hero-btn,
+button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #c2410c;
+  color: white;
+  font-weight: 800;
+}
+
+.agenda {
+  display: grid;
+  gap: 14px;
+}
+
+.agenda article {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff7ed;
+}
+
+time {
+  color: #c2410c;
+  font-weight: 900;
+}
+
+.agenda h3,
+.agenda p {
+  margin: 0;
+}
+
+.speaker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.speaker-grid article {
+  padding: 20px;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid #fed7aa;
+}
+
+form {
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  font-weight: 800;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #fdba74;
+  border-radius: 10px;
+}
+
+.rsvp-message {
+  margin: 14px 0 0;
+  color: #166534;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  .navbar,
+  .agenda article {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}`,
+      js: `const rsvpForm = document.getElementById("rsvpForm");
+const rsvpMessage = document.getElementById("rsvpMessage");
+
+rsvpForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  rsvpMessage.textContent = "Thanks - your RSVP has been saved for review.";
+});`,
+    },
+  },
 ];
 
 export const rookieChallenges = rookieChallengesBase.map(addRookieReadiness);

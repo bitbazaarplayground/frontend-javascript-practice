@@ -1,5 +1,7 @@
 import {
   ArrowRight,
+  ChevronDown,
+  ChevronUp,
   Code2,
   Columns2,
   Eye,
@@ -10,6 +12,8 @@ import {
   Rows2,
   Send,
   Smartphone,
+  Terminal,
+  Trash2,
   Undo2,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -205,6 +209,86 @@ function getPreviewScrollSetup() {
   `;
 }
 
+function getPreviewConsoleSetup() {
+  return `
+    <script>
+      (function () {
+        const MESSAGE_SOURCE = "frontend-practice-preview-console";
+        const originalConsole = {
+          log: console.log.bind(console),
+          info: console.info.bind(console),
+          warn: console.warn.bind(console),
+          error: console.error.bind(console),
+        };
+
+        function serialize(value) {
+          if (value instanceof Error) {
+            return value.name + ": " + value.message;
+          }
+
+          if (typeof value === "string") {
+            return value;
+          }
+
+          try {
+            return JSON.stringify(value, null, 2);
+          } catch (error) {
+            return String(value);
+          }
+        }
+
+        function send(level, values, detail) {
+          const message = values.map(serialize).join(" ");
+
+          window.parent.postMessage(
+            {
+              source: MESSAGE_SOURCE,
+              level,
+              message: message || level,
+              detail: detail ? serialize(detail) : "",
+              timestamp: Date.now(),
+            },
+            "*"
+          );
+        }
+
+        window.__previewConsole = {
+          log: (...values) => send("log", values),
+          info: (...values) => send("info", values),
+          warn: (...values) => send("warn", values),
+          error: (...values) => send("error", values),
+        };
+
+        ["log", "info", "warn", "error"].forEach(function (level) {
+          console[level] = function (...values) {
+            send(level, values);
+            originalConsole[level](...values);
+          };
+        });
+
+        window.addEventListener("error", function (event) {
+          const location =
+            event.lineno || event.colno
+              ? "Line " + event.lineno + ", column " + event.colno
+              : "";
+          const stack = event.error && event.error.stack ? event.error.stack : "";
+
+          send("error", [event.message || "Script error"], stack || location);
+        });
+
+        window.addEventListener("unhandledrejection", function (event) {
+          const reason = event.reason;
+          const message =
+            reason && reason.message ? reason.message : String(reason);
+          const stack = reason && reason.stack ? reason.stack : "";
+
+          send("error", ["Unhandled promise rejection: " + message], stack);
+        });
+      })();
+    </script>
+  `;
+}
+
 export default function WorkspacePanel({
   editorType = "web",
   html,
@@ -236,6 +320,11 @@ export default function WorkspacePanel({
   );
   const [showSolution, setShowSolution] = useState(false);
   const [layoutMode, setLayoutMode] = useState("split");
+  const [consoleOpen, setConsoleOpen] = useState(false);
+  const [previewConsoleState, setPreviewConsoleState] = useState({
+    signature: "",
+    messages: [],
+  });
   const [previewKey, setPreviewKey] = useState(0);
   const [previewStageWidth, setPreviewStageWidth] = useState(
     DESKTOP_PREVIEW_WIDTH
@@ -245,6 +334,7 @@ export default function WorkspacePanel({
   );
   const historyMetaRef = useRef(createHistoryMeta());
   const previewStageRef = useRef(null);
+  const previewFrameRef = useRef(null);
 
   const isReactTestChallenge = editorType === "react-test";
   const isReactChallenge =
@@ -279,6 +369,7 @@ export default function WorkspacePanel({
   const srcDoc = useMemo(() => {
     const previewStorageSetup = getPreviewStorageSetup();
     const previewScrollSetup = getPreviewScrollSetup();
+    const previewConsoleSetup = getPreviewConsoleSetup();
 
     if (isReactTestChallenge) {
       return `
@@ -411,6 +502,7 @@ export default function WorkspacePanel({
 
             ${previewStorageSetup}
             ${previewScrollSetup}
+            ${previewConsoleSetup}
 
             <script>
               function showPreviewError(message) {
@@ -931,6 +1023,9 @@ export default function WorkspacePanel({
                   await runTests();
                 })(window.__previewLocalStorage, window.__previewSessionStorage);
               } catch (error) {
+                if (window.__previewConsole) {
+                  window.__previewConsole.error(error.message);
+                }
                 showPreviewError(error.message);
               }
             </script>
@@ -988,6 +1083,7 @@ export default function WorkspacePanel({
             <div id="root"></div>
             ${previewStorageSetup}
             ${previewScrollSetup}
+            ${previewConsoleSetup}
 
             <script>
               function showPreviewError(message) {
@@ -1032,6 +1128,9 @@ export default function WorkspacePanel({
                   root.render(<Challenge />);
                 })(window.__previewLocalStorage, window.__previewSessionStorage);
               } catch (error) {
+                if (window.__previewConsole) {
+                  window.__previewConsole.error(error.message);
+                }
                 const rootEl = document.getElementById("root");
                 if (rootEl) {
                   rootEl.innerHTML = "";
@@ -1052,6 +1151,9 @@ export default function WorkspacePanel({
         try {
           ${visibleJs}
         } catch (error) {
+          if (window.__previewConsole) {
+            window.__previewConsole.error(error.message);
+          }
           const errorEl = document.createElement("pre");
           errorEl.className = "preview-error";
           errorEl.textContent = error.message;
@@ -1109,6 +1211,7 @@ export default function WorkspacePanel({
           </style>
           ${previewStorageSetup}
           ${previewScrollSetup}
+          ${previewConsoleSetup}
           ${webRuntime}
         </head>
         <body>
@@ -1125,6 +1228,63 @@ export default function WorkspacePanel({
     isTypeScriptChallenge,
     language,
   ]);
+
+  const previewConsoleSignature = `${previewKey}:${srcDoc}`;
+  const previewConsoleMessages =
+    previewConsoleState.signature === previewConsoleSignature
+      ? previewConsoleState.messages
+      : [];
+
+  useEffect(() => {
+    function handlePreviewConsoleMessage(event) {
+      if (event.source !== previewFrameRef.current?.contentWindow) return;
+      if (
+        !event.data ||
+        event.data.source !== "frontend-practice-preview-console"
+      ) {
+        return;
+      }
+
+      const level = event.data.level || "log";
+      const message = String(event.data.message || "");
+      const detail = event.data.detail ? String(event.data.detail) : "";
+
+      setPreviewConsoleState((currentState) => {
+        const currentMessages =
+          currentState.signature === previewConsoleSignature
+            ? currentState.messages
+            : [];
+
+        return {
+          signature: previewConsoleSignature,
+          messages: [
+            ...currentMessages.slice(-49),
+            {
+              id: `${Date.now()}-${Math.random()}`,
+              level,
+              message,
+              detail,
+              timestamp: event.data.timestamp || Date.now(),
+            },
+          ],
+        };
+      });
+
+      if (level === "error" || level === "warn") {
+        setConsoleOpen(true);
+      }
+    }
+
+    window.addEventListener("message", handlePreviewConsoleMessage);
+
+    return () => {
+      window.removeEventListener("message", handlePreviewConsoleMessage);
+    };
+  }, [previewConsoleSignature]);
+
+  const previewConsoleErrorCount = previewConsoleMessages.filter(
+    (message) => message.level === "error"
+  ).length;
 
   const toggleLayoutMode = () => {
     setLayoutMode((prev) => (prev === "split" ? "stacked" : "split"));
@@ -1315,6 +1475,49 @@ export default function WorkspacePanel({
     </div>
   );
 
+  const renderPreviewConsole = () => (
+    <div className="preview-console-panel" aria-label={copy.workspace.console}>
+      <div className="preview-console-toolbar">
+        <span>{copy.workspace.consoleOutput}</span>
+
+        <button
+          type="button"
+          className="preview-console-clear"
+          onClick={() =>
+            setPreviewConsoleState({
+              signature: previewConsoleSignature,
+              messages: [],
+            })
+          }
+          title={copy.workspace.clearConsole}
+          aria-label={copy.workspace.clearConsole}
+          disabled={previewConsoleMessages.length === 0}
+        >
+          <Trash2 size={14} aria-hidden="true" />
+        </button>
+      </div>
+
+      <div className="preview-console-log" aria-live="polite">
+        {previewConsoleMessages.length === 0 ? (
+          <p className="preview-console-empty">{copy.workspace.consoleEmpty}</p>
+        ) : (
+          previewConsoleMessages.map((message) => (
+            <article
+              className={`preview-console-message ${message.level}`}
+              key={message.id}
+            >
+              <span className="preview-console-level">{message.level}</span>
+              <div>
+                <p>{message.message}</p>
+                {message.detail && <pre>{message.detail}</pre>}
+              </div>
+            </article>
+          ))
+        )}
+      </div>
+    </div>
+  );
+
   const renderPreview = () => (
     <div className="preview-card">
       <div className="editor-label preview-label">
@@ -1364,6 +1567,38 @@ export default function WorkspacePanel({
 
           <button
             type="button"
+            className={
+              consoleOpen
+                ? "preview-console-toggle active"
+                : "preview-console-toggle"
+            }
+            onClick={() => setConsoleOpen((current) => !current)}
+            title={
+              consoleOpen
+                ? copy.workspace.hideConsole
+                : copy.workspace.showConsole
+            }
+            aria-label={
+              consoleOpen
+                ? copy.workspace.hideConsole
+                : copy.workspace.showConsole
+            }
+            aria-expanded={consoleOpen}
+          >
+            <Terminal size={15} aria-hidden="true" />
+            <span>{copy.workspace.console}</span>
+            {previewConsoleErrorCount > 0 && (
+              <strong>{previewConsoleErrorCount}</strong>
+            )}
+            {consoleOpen ? (
+              <ChevronUp size={15} aria-hidden="true" />
+            ) : (
+              <ChevronDown size={15} aria-hidden="true" />
+            )}
+          </button>
+
+          <button
+            type="button"
             className="preview-refresh-btn"
             onClick={() => setPreviewKey((current) => current + 1)}
             title={copy.workspace.refreshPreview}
@@ -1386,6 +1621,7 @@ export default function WorkspacePanel({
           }
         >
           <iframe
+            ref={previewFrameRef}
             key={previewKey}
             title="preview"
             srcDoc={srcDoc}
@@ -1402,6 +1638,8 @@ export default function WorkspacePanel({
           />
         </div>
       </div>
+
+      {consoleOpen && renderPreviewConsole()}
     </div>
   );
 

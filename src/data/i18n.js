@@ -645,7 +645,11 @@ const rookieChallengeCopy = {
 
 const spanishTitleById = {
   "rookie-all-in-one-restaurant-site":
-    "Proyecto integrador Rookie de web de restaurante",
+    "web de restaurante integradora Rookie",
+  "rookie-all-in-one-portfolio-site":
+    "portfolio personal integrador Rookie",
+  "rookie-all-in-one-event-page":
+    "pagina de evento integradora Rookie",
   "builder-all-in-one-practice-lab":
     "Proyecto integrador Builder de laboratorio interactivo",
   "react-all-in-one-restaurant-app":
@@ -742,20 +746,35 @@ const spanishTitleById = {
   "password-visibility-toggle": "Mostrar y ocultar password",
   "character-counter": "Contador de caracteres",
   "button-click-counter": "Contador de clicks en un boton",
+  "mini-build-textarea-counter-card":
+    "Mini build: tarjeta con textarea y contador",
+  "mini-build-searchable-topics-list":
+    "Mini build: lista de temas con busqueda",
+  "mini-build-bold-search-clear-list":
+    "Mini build: lista con coincidencias en negrita y limpiar",
+  "mini-build-card-search-empty-state":
+    "Mini build: tarjetas con busqueda y estado vacio",
+  "mini-build-feedback-form-preview":
+    "Mini build: formulario con preview en vivo",
   "live-search-filter": "Filtro de busqueda en vivo",
-  "fruit-partial-match-list": "Buscar 10 frutas con coincidencias parciales",
-  "city-search-list": "Buscar una lista de ciudades",
-  "movie-search-list": "Buscar una lista de peliculas",
-  "case-insensitive-book-search": "Busqueda sin distinguir mayusculas y minusculas",
-  "username-search-filter": "Buscar usuarios por nombre de usuario",
+  "filter-lessons-with-filter-method": "Filtrar nombres de lecciones con filter()",
+  "select-preview-change-event": "Preview con select y evento change",
+  "checkbox-summary-panel": "Resumen de preferencias con checkboxes",
+  "range-slider-live-preview": "Preview en vivo con slider",
+  "keydown-enter-add-tag": "Anadir etiqueta con Enter",
   "no-results-search-state": "Estado de sin resultados",
   "clear-search-button": "Boton para limpiar la busqueda",
   "bold-matching-fruits": "Poner en negrita las frutas que coinciden",
   "search-cards-layout": "Buscar tarjetas en lugar de elementos de lista",
-  "filter-products-name-price": "Filtrar productos por nombre y precio",
+  "filter-products-name-price": "Filtrar tarjetas de productos por nombre y precio",
   "faq-toggle": "FAQ desplegable",
   "theme-toggle-saved": "Cambio de tema con preferencia guardada",
   "counter-with-reset": "Contador con reset",
+  "search-filter-count-reset": "Buscar, contar y resetear una lista",
+  "class-toggle-alert-panel": "Cambiar clases en un panel de alerta",
+  "limited-step-counter": "Contador con pasos y limites",
+  "multi-faq-accordion": "Acordeon FAQ multiple",
+  "modal-open-close": "Abrir y cerrar un modal",
   "simple-form-validation": "Validacion sencilla de formulario",
   "contact-form-validation": "Validacion sencilla de formulario de contacto",
   "login-form-submit-object": "Formulario de login con objeto enviado",
@@ -768,11 +787,13 @@ const spanishTitleById = {
   "remove-saved-item": "Eliminar item guardado de una lista",
   "sort-products": "Ordenar productos",
   "filter-products": "Filtrar productos por categoria",
+  "data-driven-lesson-search": "Busqueda de lecciones desde datos",
   "todo-complete-toggle": "Marcar todo como completado",
   "password-strength-checker": "Medidor de fuerza de password",
   "password-rules-validation": "Validacion de password por reglas",
   "tab-switcher": "Cambio de pestanas",
   "restaurant-tabs-panel": "Pestanas: Sobre nosotros / Menu / Contacto",
+  "profile-tabs-active-state": "Pestanas de perfil con estado activo",
   "mock-fetch-loading": "Mock fetch con estado de carga",
   "mock-fetch-error-retry": "Error de mock fetch y reintento",
   "promise-chain-practice": "Practica de cadena de promises",
@@ -781,14 +802,31 @@ const spanishTitleById = {
   "save-notes-localstorage": "Guardar notas en localStorage",
   "saved-favourites-localstorage": "Guardar favoritos en localStorage",
   "cart-items-localstorage": "Guardar items del carrito en localStorage",
+  "dark-mode-preference-localstorage":
+    "Preferencia de modo oscuro en localStorage",
+  "saved-form-draft-localstorage":
+    "Borrador de formulario guardado en localStorage",
+  "recently-viewed-products-localstorage":
+    "Productos vistos recientemente con localStorage",
+  "todo-completed-filter-localstorage":
+    "Todo app guardada con filtro de completados",
   "shopping-cart-total": "Total de carrito de compra",
   "mock-product-search": "Busqueda simulada de productos",
   "github-profile-finder": "Buscador de perfiles tipo GitHub",
   "weather-search-panel": "Panel de busqueda del tiempo",
   "recipe-search-app": "App de busqueda de recetas",
   "promise-all-user-posts": "Cargar usuario y posts con Promise.all",
+  "fetch-posts-loading-error-list":
+    "Fetch de posts con carga y error",
+  "fetch-users-filter-after-load":
+    "Fetch de usuarios y filtro despues de cargar",
   "filter-sort-products": "Filtrar y ordenar productos",
   "save-load-todos-localstorage": "Guardar y cargar todos con localStorage",
+  "map-product-cards": "Tarjetas de producto con map()",
+  "filter-available-sessions": "Filtrar sesiones disponibles",
+  "find-selected-mentor": "Encontrar mentor seleccionado",
+  "some-stock-warning": "Aviso de stock con some()",
+  "sort-students-by-score": "Ordenar estudiantes por puntuacion",
   "render-users-from-array": "Renderizar usuarios desde un array",
   "event-delegation-todo-actions": "Acciones de todo con event delegation",
   "form-data-preview": "Preview de datos de formulario",
@@ -2555,12 +2593,9 @@ export const copy = {
       outcome: "Expected outcome",
       tips: "Tips",
       qualityBar: "CSS quality bar",
+      qualityBadge: "Before submit",
       qualityIntro:
-        "Use this as the standard for a strong beginner solution, not just a passing one.",
-      readinessCheck: "Ready check with answers",
-      readinessIntro:
-        "Try answering first. Then open the model answer and compare how clearly you can explain your work.",
-      modelAnswer: "Model answer",
+        "Use these checks while your code and preview are open. If one fails, fix it before submitting.",
     },
     assessment: {
       modeLabel: "Assessment mode",
@@ -2593,6 +2628,12 @@ export const copy = {
       previewViewport: "Preview viewport",
       desktopView: "Desktop view",
       phoneView: "Phone view",
+      console: "Console",
+      consoleOutput: "Preview console",
+      consoleEmpty: "No errors or logs yet.",
+      showConsole: "Show preview console",
+      hideConsole: "Hide preview console",
+      clearConsole: "Clear console",
       switchStacked: "Switch to preview on top",
       switchSplit: "Switch to side by side",
       undo: "Undo",
@@ -2641,6 +2682,12 @@ export const copy = {
       improvePrompt: "What tells you this is ready?",
       improvePlaceholder:
         "Mention preview checks, mobile behavior, readable spacing, labels, focus states, or one improvement you would make next.",
+      revealAnswers: "Reveal answer guide",
+      hideAnswers: "Hide answer guide",
+      answerGuideTitle: "Answer guide",
+      answerGuideIntro:
+        "Compare these model answers with your own explanation. You are ready when you can say the idea in your own words.",
+      modelAnswer: "Model answer",
     },
     drawer: {
       backToModes: "Back to modes",
@@ -2884,12 +2931,9 @@ export const copy = {
       outcome: "Resultado esperado",
       tips: "Pistas",
       qualityBar: "Nivel de calidad CSS",
+      qualityBadge: "Antes de enviar",
       qualityIntro:
-        "Usa esto como el estandar de una solucion principiante fuerte, no solo una que pasa.",
-      readinessCheck: "Revision de preparacion con respuestas",
-      readinessIntro:
-        "Intenta responder primero. Luego abre la respuesta modelo y compara si puedes explicar tu trabajo con claridad.",
-      modelAnswer: "Respuesta modelo",
+        "Usa estas comprobaciones mientras tienes abiertos el codigo y el preview. Si una falla, arreglala antes de enviar.",
     },
     assessment: {
       modeLabel: "Modo de prueba tecnica",
@@ -2922,6 +2966,12 @@ export const copy = {
       previewViewport: "Vista del preview",
       desktopView: "Vista escritorio",
       phoneView: "Vista telefono",
+      console: "Consola",
+      consoleOutput: "Consola del preview",
+      consoleEmpty: "No hay errores ni logs todavia.",
+      showConsole: "Mostrar consola del preview",
+      hideConsole: "Ocultar consola del preview",
+      clearConsole: "Limpiar consola",
       switchStacked: "Cambiar a preview arriba",
       switchSplit: "Cambiar a lado a lado",
       undo: "Deshacer",
@@ -2971,6 +3021,12 @@ export const copy = {
       improvePrompt: "Que te dice que esto esta listo?",
       improvePlaceholder:
         "Menciona pruebas en preview, comportamiento mobile, espaciado legible, labels, estados focus o una mejora que harias despues.",
+      revealAnswers: "Mostrar guia de respuestas",
+      hideAnswers: "Ocultar guia de respuestas",
+      answerGuideTitle: "Guia de respuestas",
+      answerGuideIntro:
+        "Compara estas respuestas modelo con tu propia explicacion. Estas listo cuando puedes decir la idea con tus propias palabras.",
+      modelAnswer: "Respuesta modelo",
     },
     drawer: {
       backToModes: "Volver a modos",

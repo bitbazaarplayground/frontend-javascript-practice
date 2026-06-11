@@ -556,350 +556,612 @@ searchInput.addEventListener("input", () => {
     },
   },
   {
-    id: "fruit-partial-match-list",
+    id: "filter-lessons-with-filter-method",
     editorType: "web",
-    title: "Challenge 7 — Search 10 Fruits with Partial Matches",
+    title: "Challenge 7 — Filter Lesson Names with filter()",
     difficulty: "Easy",
-    category: "JavaScript + DOM",
-    goal: "Search a longer fruit list and keep items visible when the typed text matches only part of the word.",
+    category: "JavaScript + Arrays",
+    goal: "Use filter() on a simple array of strings before combining it with objects, search inputs, or card rendering.",
     requirements: [
-      "Add a search input",
-      "Show 10 fruits in a list",
-      "Search the list as the user types",
-      "Support partial matches",
+      "Create an array of lesson names as strings",
+      "Add a Show all button and a JavaScript only button",
+      "Use filter() to create a smaller array of JavaScript lessons",
+      "Render the current array into a list with forEach()",
+      "Update a small count message after each render",
     ],
     tips: [
-      "includes() helps with partial matches.",
-      "Convert both values to lowercase before comparing.",
-      "A longer list helps the learner see the pattern more clearly.",
+      "filter() returns a new array. It does not change the original lessons array.",
+      "Start with strings so you can focus on the method itself.",
+      "Use forEach() to render for now. map() can come later.",
     ],
-    concepts: ["input events", "string matching", "includes()", "DOM filtering"],
+    concepts: ["filter()", "arrays", "button events", "forEach()", "rendering lists"],
     suggestedApproach: [
-      "Create one input and a list of 10 fruits.",
-      "Select the input and list items.",
-      "Read the search value on every input event.",
-      "Hide items that do not include the typed text.",
+      "Create the lesson names array.",
+      "Write a renderLessons function that receives an array.",
+      "Use forEach() inside the render function to create list items.",
+      "Use filter() only inside the JavaScript only button click.",
     ],
     commonMistakes: [
-      "Only matching full words instead of partial text",
-      "Forgetting lowercase comparison",
-      "Filtering only once instead of on every keystroke",
+      "Expecting filter() to change the original array",
+      "Filtering correctly but still rendering the full array",
+      "Using map(), objects, and search logic before filter() feels clear",
     ],
     expectedOutcome:
-      "A fruit list that responds well even when the user types only part of the fruit name.",
+      "A small lesson list where the learner can explain that filter() creates a smaller array from a bigger one.",
     starter: {
-      html: `<input id="fruitSearchInput" type="text" placeholder="Search fruits..." />
-<ul id="fruitSearchList">
-  <li>Apple</li>
-  <li>Apricot</li>
-  <li>Banana</li>
-  <li>Blueberry</li>
-  <li>Cherry</li>
-  <li>Grapes</li>
-  <li>Kiwi</li>
-  <li>Mango</li>
-  <li>Orange</li>
-  <li>Pineapple</li>
-</ul>`,
+      html: `<section class="lesson-filter">
+  <div class="button-row">
+    <button id="showAllLessonsBtn" type="button">Show all</button>
+    <button id="showJsLessonsBtn" type="button">JavaScript only</button>
+  </div>
+  <p id="lessonCount">No lessons shown yet</p>
+  <ul id="lessonList"></ul>
+</section>`,
       css: ``,
       js: ``,
     },
     solution: {
-      html: `<input id="fruitSearchInput" type="text" placeholder="Search fruits..." />
-<ul id="fruitSearchList">
-  <li>Apple</li>
-  <li>Apricot</li>
-  <li>Banana</li>
-  <li>Blueberry</li>
-  <li>Cherry</li>
-  <li>Grapes</li>
-  <li>Kiwi</li>
-  <li>Mango</li>
-  <li>Orange</li>
-  <li>Pineapple</li>
-</ul>`,
-      css: ``,
-      js: `const fruitSearchInput = document.getElementById("fruitSearchInput");
-const fruitSearchItems = document.querySelectorAll("#fruitSearchList li");
+      html: `<section class="lesson-filter">
+  <div class="button-row">
+    <button id="showAllLessonsBtn" type="button">Show all</button>
+    <button id="showJsLessonsBtn" type="button">JavaScript only</button>
+  </div>
+  <p id="lessonCount">No lessons shown yet</p>
+  <ul id="lessonList"></ul>
+</section>`,
+      css: `.lesson-filter {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
 
-fruitSearchInput.addEventListener("input", () => {
-  const query = fruitSearchInput.value.toLowerCase();
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-  fruitSearchItems.forEach((item) => {
-    item.style.display = item.textContent.toLowerCase().includes(query)
-      ? "list-item"
-      : "none";
+.button-row button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+#lessonCount {
+  color: #435269;
+}
+
+#lessonList {
+  padding-left: 20px;
+}`,
+      js: `const lessons = [
+  "HTML structure",
+  "CSS layout",
+  "JavaScript events",
+  "JavaScript arrays",
+  "Responsive CSS",
+];
+
+const showAllLessonsBtn = document.getElementById("showAllLessonsBtn");
+const showJsLessonsBtn = document.getElementById("showJsLessonsBtn");
+const lessonCount = document.getElementById("lessonCount");
+const lessonList = document.getElementById("lessonList");
+
+function renderLessons(items) {
+  lessonList.innerHTML = "";
+
+  items.forEach((lesson) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = lesson;
+    lessonList.appendChild(listItem);
   });
-});`,
+
+  lessonCount.textContent = items.length + " lesson" + (items.length === 1 ? "" : "s") + " shown";
+}
+
+showAllLessonsBtn.addEventListener("click", () => {
+  renderLessons(lessons);
+});
+
+showJsLessonsBtn.addEventListener("click", () => {
+  const jsLessons = lessons.filter((lesson) => {
+    return lesson.includes("JavaScript");
+  });
+
+  renderLessons(jsLessons);
+});
+
+renderLessons(lessons);`,
     },
   },
   {
-    id: "city-search-list",
+    id: "select-preview-change-event",
     editorType: "web",
-    title: "Challenge 8 — Search a List of Cities",
+    title: "Challenge 8 — Update a Preview with a Select",
     difficulty: "Easy",
     category: "JavaScript + DOM",
-    goal: "Search a list of city names and show only the matching cities.",
+    goal: "Use a select input and the change event to update a live plan preview.",
     requirements: [
-      "Add a search input",
-      "Show a list of cities",
-      "Update the visible cities as the user types",
+      "Add a select element with at least three options",
+      "Listen for the change event",
+      "Update a preview heading and description",
+      "Change at least one class or visual style when the selected option changes",
     ],
     tips: [
-      "This is the same search pattern in a new context.",
-      "Keep the code calm: read the input, compare text, show or hide items.",
-      "Cities are a useful real-world list type.",
+      "The change event is better than input for select controls.",
+      "An object can store the preview content for each option.",
+      "Use className or classList to make the preview feel different for each option.",
     ],
-    concepts: ["input events", "DOM filtering", "string matching", "textContent"],
+    concepts: ["change events", "select values", "objects", "class updates"],
     suggestedApproach: [
-      "Create one input and a short city list.",
-      "Select the input and all list items.",
-      "Listen for the input event.",
-      "Show cities that include the typed text and hide the others.",
+      "Create a select with three plan values.",
+      "Create an object where each value points to preview text.",
+      "Read select.value when the change event fires.",
+      "Update the preview text and class from the selected data.",
     ],
     commonMistakes: [
-      "Using the wrong selector for the list items",
-      "Not updating the list on every keystroke",
-      "Comparing the raw strings without normalizing them",
+      "Using the input event when change is clearer for a select",
+      "Reading option text instead of the select value",
+      "Updating the text but forgetting the visual state",
     ],
     expectedOutcome:
-      "A city list that filters instantly while the user types.",
+      "A select-controlled preview that changes content and styling when the user chooses an option.",
     starter: {
-      html: `<input id="citySearchInput" type="text" placeholder="Search cities..." />
-<ul id="cityList">
-  <li>London</li>
-  <li>Madrid</li>
-  <li>Paris</li>
-  <li>Rome</li>
-  <li>Tokyo</li>
-</ul>`,
+      html: `<section class="plan-builder">
+  <label for="planSelect">Choose a plan</label>
+  <select id="planSelect">
+    <option value="starter">Starter</option>
+    <option value="team">Team</option>
+    <option value="pro">Pro</option>
+  </select>
+
+  <article id="planPreview" class="plan-card">
+    <h2 id="planTitle">Starter</h2>
+    <p id="planDescription">A calm plan for learning the basics.</p>
+  </article>
+</section>`,
       css: ``,
       js: ``,
     },
     solution: {
-      html: `<input id="citySearchInput" type="text" placeholder="Search cities..." />
-<ul id="cityList">
-  <li>London</li>
-  <li>Madrid</li>
-  <li>Paris</li>
-  <li>Rome</li>
-  <li>Tokyo</li>
-</ul>`,
-      css: ``,
-      js: `const citySearchInput = document.getElementById("citySearchInput");
-const cityItems = document.querySelectorAll("#cityList li");
+      html: `<section class="plan-builder">
+  <label for="planSelect">Choose a plan</label>
+  <select id="planSelect">
+    <option value="starter">Starter</option>
+    <option value="team">Team</option>
+    <option value="pro">Pro</option>
+  </select>
 
-citySearchInput.addEventListener("input", () => {
-  const query = citySearchInput.value.toLowerCase();
+  <article id="planPreview" class="plan-card">
+    <h2 id="planTitle">Starter</h2>
+    <p id="planDescription">A calm plan for learning the basics.</p>
+  </article>
+</section>`,
+      css: `.plan-builder {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
 
-  cityItems.forEach((item) => {
-    item.style.display = item.textContent.toLowerCase().includes(query)
-      ? "list-item"
-      : "none";
-  });
-});`,
+.plan-builder label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.plan-builder select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #b9c2d0;
+  border-radius: 8px;
+}
+
+.plan-card {
+  margin-top: 18px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #d7deea;
+}
+
+.plan-card h2 {
+  margin: 0 0 8px;
+}
+
+.starter-plan {
+  background: #f8fbff;
+}
+
+.team-plan {
+  background: #f1fff7;
+}
+
+.pro-plan {
+  background: #fff8ed;
+}`,
+      js: `const planSelect = document.getElementById("planSelect");
+const planPreview = document.getElementById("planPreview");
+const planTitle = document.getElementById("planTitle");
+const planDescription = document.getElementById("planDescription");
+
+const planDetails = {
+  starter: {
+    title: "Starter",
+    description: "A calm plan for learning the basics.",
+    className: "starter-plan",
+  },
+  team: {
+    title: "Team",
+    description: "A focused plan for practising with peers.",
+    className: "team-plan",
+  },
+  pro: {
+    title: "Pro",
+    description: "A stronger plan for interview-level repetition.",
+    className: "pro-plan",
+  },
+};
+
+function updatePlanPreview() {
+  const selectedPlan = planDetails[planSelect.value];
+  planTitle.textContent = selectedPlan.title;
+  planDescription.textContent = selectedPlan.description;
+  planPreview.className = "plan-card " + selectedPlan.className;
+}
+
+planSelect.addEventListener("change", updatePlanPreview);
+
+updatePlanPreview();`,
     },
   },
   {
-    id: "movie-search-list",
+    id: "checkbox-summary-panel",
     editorType: "web",
-    title: "Challenge 9 — Search a List of Movies",
+    title: "Challenge 9 — Checkbox Summary Panel",
     difficulty: "Easy",
     category: "JavaScript + DOM",
-    goal: "Search a list of movie titles and show only the matching results.",
+    goal: "Use checkbox change events to build a live summary of selected preferences.",
     requirements: [
-      "Add a search input",
-      "Show a list of movies",
-      "Search the list while the user types",
+      "Add at least three checkbox inputs",
+      "Listen for the change event on each checkbox",
+      "Show how many choices are currently selected",
+      "Render the selected choices in a summary list",
+      "Show a clear empty state when no checkboxes are selected",
+      "Style the checkbox group and summary card so the feedback is easy to scan",
     ],
     tips: [
-      "Movies are another good way to repeat the same search pattern.",
-      "The key idea is still input -> compare text -> update UI.",
-      "Use includes() so partial titles still work.",
+      "Checkboxes use the checked property, not the value alone.",
+      "Use forEach() to check each box one at a time.",
+      "The summary should update whenever any checkbox changes.",
     ],
-    concepts: ["input events", "includes()", "DOM filtering", "live feedback"],
+    concepts: ["checkboxes", "change events", "checked", "forEach()", "DOM updates"],
     suggestedApproach: [
-      "Create a movie list and search input.",
-      "Listen for input changes.",
-      "Compare the typed query against each movie title.",
-      "Hide titles that do not match.",
+      "Create a checkbox group and a summary area.",
+      "Select all checkboxes with querySelectorAll.",
+      "On change, loop through the checkboxes.",
+      "If a checkbox is checked, add its value to the summary list.",
     ],
     commonMistakes: [
-      "Matching only exact titles",
-      "Forgetting to update the UI after the comparison",
-      "Typing logic that works for one movie but not the full list",
+      "Checking the value instead of the checked property",
+      "Only listening to one checkbox",
+      "Not handling the empty state after everything is unchecked",
     ],
     expectedOutcome:
-      "A simple movie search list that responds immediately to typing.",
+      "A preferences panel where the summary and selected count always match the checked boxes.",
     starter: {
-      html: `<input id="movieSearchInput" type="text" placeholder="Search movies..." />
-<ul id="movieList">
-  <li>Inception</li>
-  <li>Interstellar</li>
-  <li>Arrival</li>
-  <li>Whiplash</li>
-  <li>Parasite</li>
-</ul>`,
-      css: ``,
-      js: ``,
+      html: `<section class="preferences">
+  <h2>Choose your practice focus</h2>
+  <label><input class="preferenceOption" type="checkbox" value="HTML structure" /> HTML structure</label>
+  <label><input class="preferenceOption" type="checkbox" value="CSS layout" /> CSS layout</label>
+  <label><input class="preferenceOption" type="checkbox" value="DOM events" /> DOM events</label>
+
+  <aside class="summary-card">
+    <strong id="selectedCount">0 selected</strong>
+    <ul id="selectedList"></ul>
+  </aside>
+</section>`,
+      css: `/* Style the preferences section, checkbox labels, and summary card. */
+/* Make the selected count and summary list easy to read. */`,
+      js: `// Select the checkboxes, selected count, and selected list.
+// Write an updateSummary function.
+// In that function, loop through each checkbox and check option.checked.
+// Add checked options to the summary list and update the selected count.
+// Run updateSummary whenever a checkbox changes.`,
     },
     solution: {
-      html: `<input id="movieSearchInput" type="text" placeholder="Search movies..." />
-<ul id="movieList">
-  <li>Inception</li>
-  <li>Interstellar</li>
-  <li>Arrival</li>
-  <li>Whiplash</li>
-  <li>Parasite</li>
-</ul>`,
-      css: ``,
-      js: `const movieSearchInput = document.getElementById("movieSearchInput");
-const movieItems = document.querySelectorAll("#movieList li");
+      html: `<section class="preferences">
+  <h2>Choose your practice focus</h2>
+  <label><input class="preferenceOption" type="checkbox" value="HTML structure" /> HTML structure</label>
+  <label><input class="preferenceOption" type="checkbox" value="CSS layout" /> CSS layout</label>
+  <label><input class="preferenceOption" type="checkbox" value="DOM events" /> DOM events</label>
 
-movieSearchInput.addEventListener("input", () => {
-  const query = movieSearchInput.value.toLowerCase();
+  <aside class="summary-card">
+    <strong id="selectedCount">0 selected</strong>
+    <ul id="selectedList"></ul>
+  </aside>
+</section>`,
+      css: `.preferences {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
 
-  movieItems.forEach((item) => {
-    item.style.display = item.textContent.toLowerCase().includes(query)
-      ? "list-item"
-      : "none";
+.preferences h2 {
+  margin-top: 0;
+}
+
+.preferences label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.summary-card {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #d6deea;
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.summary-card ul {
+  margin-bottom: 0;
+  padding-left: 20px;
+}`,
+      js: `const preferenceOptions = document.querySelectorAll(".preferenceOption");
+const selectedCount = document.getElementById("selectedCount");
+const selectedList = document.getElementById("selectedList");
+
+function updateSummary() {
+  let selectedTotal = 0;
+  selectedList.innerHTML = "";
+
+  preferenceOptions.forEach((option) => {
+    if (option.checked) {
+      selectedTotal += 1;
+
+      const listItem = document.createElement("li");
+      listItem.textContent = option.value;
+      selectedList.appendChild(listItem);
+    }
   });
-});`,
+
+  if (selectedTotal === 0) {
+    const emptyItem = document.createElement("li");
+    emptyItem.textContent = "No focus chosen yet";
+    selectedList.appendChild(emptyItem);
+  }
+
+  selectedCount.textContent = selectedTotal + " selected";
+}
+
+preferenceOptions.forEach((option) => {
+  option.addEventListener("change", updateSummary);
+});
+
+updateSummary();`,
     },
   },
   {
-    id: "case-insensitive-book-search",
+    id: "range-slider-live-preview",
     editorType: "web",
-    title: "Challenge 10 — Case-Insensitive Search",
+    title: "Challenge 10 — Range Slider Live Preview",
     difficulty: "Easy",
     category: "JavaScript + DOM",
-    goal: "Search book titles even when the user types with a different letter case.",
+    goal: "Use a range input to update a preview card while the user moves the slider.",
     requirements: [
-      "Add a search input",
-      "Show a list of books with mixed capital letters",
-      "Make the search case-insensitive",
-      "Update the visible results as the user types",
+      "Add a range input",
+      "Listen for the input event",
+      "Show the current range value in the UI",
+      "Use the range value to update a preview style",
+      "Style the preview so the change is easy to see",
     ],
     tips: [
-      "toLowerCase() on both values usually solves this cleanly.",
-      "This challenge makes the rule explicit so learners notice it.",
-      "Mixed-case titles are useful for testing.",
+      "Range inputs usually feel best with the input event because it updates continuously.",
+      "The value from an input is a string, but you can still combine it with px for CSS.",
+      "Update the text label and the style in the same function.",
     ],
-    concepts: ["toLowerCase()", "string matching", "DOM filtering", "input events"],
+    concepts: ["range inputs", "input events", "inline styles", "live feedback"],
     suggestedApproach: [
-      "Create the input and mixed-case book titles.",
-      "Read the query on the input event.",
-      "Lowercase both the query and each title before comparing.",
-      "Hide non-matching books.",
+      "Create a range input and a preview paragraph.",
+      "Read the range value inside an update function.",
+      "Write the value into the label.",
+      "Apply the value to the preview style.",
     ],
     commonMistakes: [
-      "Lowercasing only the input but not the item text",
-      "Keeping a case-sensitive comparison by accident",
-      "Testing only one word and assuming the logic works for all titles",
+      "Using change and wondering why the preview updates late",
+      "Forgetting to add px when setting fontSize",
+      "Updating the style but not the displayed number",
     ],
     expectedOutcome:
-      "A book search that still works whether the user types uppercase, lowercase, or a mix of both.",
+      "A slider-controlled preview where the visible value and the card style stay in sync.",
     starter: {
-      html: `<input id="bookSearchInput" type="text" placeholder="Search books..." />
-<ul id="bookList">
-  <li>The Hobbit</li>
-  <li>clean Code</li>
-  <li>JavaScript: The Good Parts</li>
-  <li>Atomic Habits</li>
-  <li>deep Work</li>
-</ul>`,
+      html: `<section class="text-size-tool">
+  <label for="sizeRange">Text size: <span id="sizeValue">20px</span></label>
+  <input id="sizeRange" type="range" min="14" max="40" value="20" />
+
+  <article class="preview-card">
+    <p id="previewText">Move the slider to resize this preview text.</p>
+  </article>
+</section>`,
       css: ``,
       js: ``,
     },
     solution: {
-      html: `<input id="bookSearchInput" type="text" placeholder="Search books..." />
-<ul id="bookList">
-  <li>The Hobbit</li>
-  <li>clean Code</li>
-  <li>JavaScript: The Good Parts</li>
-  <li>Atomic Habits</li>
-  <li>deep Work</li>
-</ul>`,
-      css: ``,
-      js: `const bookSearchInput = document.getElementById("bookSearchInput");
-const bookItems = document.querySelectorAll("#bookList li");
+      html: `<section class="text-size-tool">
+  <label for="sizeRange">Text size: <span id="sizeValue">20px</span></label>
+  <input id="sizeRange" type="range" min="14" max="40" value="20" />
 
-bookSearchInput.addEventListener("input", () => {
-  const query = bookSearchInput.value.toLowerCase();
+  <article class="preview-card">
+    <p id="previewText">Move the slider to resize this preview text.</p>
+  </article>
+</section>`,
+      css: `.text-size-tool {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
 
-  bookItems.forEach((item) => {
-    item.style.display = item.textContent.toLowerCase().includes(query)
-      ? "list-item"
-      : "none";
-  });
-});`,
+.text-size-tool label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.text-size-tool input {
+  width: 100%;
+}
+
+.preview-card {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #d8deea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.preview-card p {
+  margin: 0;
+  line-height: 1.4;
+}`,
+      js: `const sizeRange = document.getElementById("sizeRange");
+const sizeValue = document.getElementById("sizeValue");
+const previewText = document.getElementById("previewText");
+
+function updatePreviewSize() {
+  const size = sizeRange.value;
+  sizeValue.textContent = size + "px";
+  previewText.style.fontSize = size + "px";
+}
+
+sizeRange.addEventListener("input", updatePreviewSize);
+
+updatePreviewSize();`,
     },
   },
   {
-    id: "username-search-filter",
+    id: "keydown-enter-add-tag",
     editorType: "web",
-    title: "Challenge 11 — Search Users by Username",
-    difficulty: "Easy",
+    title: "Challenge 11 — Add a Tag with Enter",
+    difficulty: "Medium",
     category: "JavaScript + DOM",
-    goal: "Search a list of usernames and show only the matching users.",
+    goal: "Use a keyboard event to add tags when the user presses Enter.",
     requirements: [
-      "Add a search input",
-      "Show usernames in the UI",
-      "Search by username while the user types",
-      "Make the matching case-insensitive",
+      "Add a text input for a new tag",
+      "Listen for a keydown event",
+      "Only add the tag when the Enter key is pressed",
+      "Add the new tag to a visible list",
+      "Clear the input after a tag is added",
+      "Show helpful feedback when the input is empty",
     ],
     tips: [
-      "Usernames feel closer to a real product than generic words.",
-      "You can show them in list items or small cards.",
-      "Keep the comparison case-insensitive for a better user experience.",
+      "Check event.key to know which key was pressed.",
+      "Use trim() so empty spaces do not become tags.",
+      "Use createElement() here so you can focus on the keyboard event before adding array state later.",
     ],
-    concepts: ["input events", "username search", "case-insensitive matching", "DOM updates"],
+    concepts: ["keydown events", "event.key", "trim()", "createElement()", "DOM updates"],
     suggestedApproach: [
-      "Create the input and a short user list.",
-      "Listen for the input event.",
-      "Compare the typed value against each username.",
-      "Hide usernames that do not match the current query.",
+      "Create an input, status text, and list.",
+      "On keydown, return early unless the key is Enter.",
+      "Validate the text.",
+      "Create a new list item, append it, clear the input, and update the status.",
     ],
     commonMistakes: [
-      "Searching the wrong text instead of the username value",
-      "Forgetting lowercase matching",
-      "Updating the logic but not the rendered visibility",
+      "Adding a tag on every key press",
+      "Forgetting preventDefault when using Enter",
+      "Allowing empty strings into the list",
     ],
     expectedOutcome:
-      "A username search that feels like the first step toward a real admin or community interface.",
+      "A keyboard-driven tag list that behaves like a real form control.",
     starter: {
-      html: `<input id="userSearchInput" type="text" placeholder="Search usernames..." />
-<ul id="userSearchList">
-  <li>@maria_dev</li>
-  <li>@frontend_lee</li>
-  <li>@sofiacodes</li>
-  <li>@nico_ui</li>
-  <li>@buildwithana</li>
-</ul>`,
+      html: `<section class="tag-tool">
+  <label for="tagInput">Add a skill tag</label>
+  <input id="tagInput" type="text" placeholder="Type a tag and press Enter" />
+  <p id="tagStatus">No tags yet</p>
+  <ul id="tagList" class="tag-list"></ul>
+</section>`,
       css: ``,
       js: ``,
     },
     solution: {
-      html: `<input id="userSearchInput" type="text" placeholder="Search usernames..." />
-<ul id="userSearchList">
-  <li>@maria_dev</li>
-  <li>@frontend_lee</li>
-  <li>@sofiacodes</li>
-  <li>@nico_ui</li>
-  <li>@buildwithana</li>
-</ul>`,
-      css: ``,
-      js: `const userSearchInput = document.getElementById("userSearchInput");
-const userItems = document.querySelectorAll("#userSearchList li");
+      html: `<section class="tag-tool">
+  <label for="tagInput">Add a skill tag</label>
+  <input id="tagInput" type="text" placeholder="Type a tag and press Enter" />
+  <p id="tagStatus">No tags yet</p>
+  <ul id="tagList" class="tag-list"></ul>
+</section>`,
+      css: `.tag-tool {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
 
-userSearchInput.addEventListener("input", () => {
-  const query = userSearchInput.value.toLowerCase();
+.tag-tool label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
 
-  userItems.forEach((item) => {
-    item.style.display = item.textContent.toLowerCase().includes(query)
-      ? "list-item"
-      : "none";
-  });
+.tag-tool input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bac4d2;
+  border-radius: 8px;
+}
+
+#tagStatus {
+  color: #4a5870;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.tag-list li {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: #27456f;
+}`,
+      js: `const tagInput = document.getElementById("tagInput");
+const tagStatus = document.getElementById("tagStatus");
+const tagList = document.getElementById("tagList");
+
+let tagCount = 0;
+
+tagInput.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+
+  const newTag = tagInput.value.trim();
+
+  if (newTag === "") {
+    tagStatus.textContent = "Type a tag before pressing Enter.";
+    return;
+  }
+
+  const listItem = document.createElement("li");
+  listItem.textContent = newTag;
+  tagList.appendChild(listItem);
+
+  tagCount += 1;
+  tagInput.value = "";
+  tagStatus.textContent = tagCount + " tag" + (tagCount === 1 ? "" : "s") + " added";
 });`,
     },
   },
@@ -1211,78 +1473,135 @@ cardSearchInput.addEventListener("input", () => {
   {
     id: "filter-products-name-price",
     editorType: "web",
-    title: "Challenge 16 — Filter Products by Name and Price",
-    difficulty: "Medium",
+    title: "Challenge 16 — Filter Product Cards by Name and Price",
+    difficulty: "Easy",
     category: "JavaScript + DOM",
-    goal: "Filter a product list using both a search input and a maximum price input.",
+    goal: "Filter existing product cards using a search input, a maximum price input, and DOM updates.",
     requirements: [
       "Add a name search input",
       "Add a maximum price input",
-      "Filter products by name and price",
-      "Render the filtered products on the page",
+      "Create product cards in the HTML",
+      "Store each product price in a data-price attribute",
+      "Hide cards that do not match both input values",
+      "Show a visible count of matching cards",
     ],
     tips: [
-      "This is the first mini step from simple search toward multi-filter UI.",
-      "Use an array of product objects and derive the visible products from the filters.",
-      "Render again whenever either input changes.",
+      "This stays DOM-first: the cards already exist in the HTML.",
+      "dataset.price lets JavaScript read the data-price attribute.",
+      "Use Number() before comparing prices.",
     ],
-    concepts: ["arrays", "filter()", "input events", "rendering data"],
+    concepts: ["input events", "data attributes", "Number()", "DOM filtering"],
     suggestedApproach: [
-      "Create a products array with name and price.",
-      "Add the two inputs and one output area.",
-      "Write a render function that filters the products array.",
-      "Call render whenever either input value changes.",
+      "Create the inputs, status text, and product cards.",
+      "Select all cards with querySelectorAll.",
+      "Read both input values inside one update function.",
+      "Loop through the cards and decide whether each one should be visible.",
     ],
     commonMistakes: [
       "Filtering by name but forgetting the price check",
       "Comparing the price input as a string instead of a number",
-      "Updating the data but not re-rendering the visible products",
+      "Hiding cards but never showing them again when the input changes",
     ],
     expectedOutcome:
-      "A small but realistic multi-filter product search interface.",
+      "A DOM-based product card filter that prepares the learner for later data-driven filtering.",
     starter: {
       html: `<input id="productNameInput" type="text" placeholder="Search products..." />
 <input id="maxPriceInput" type="number" placeholder="Max price" />
-<ul id="filteredProductList"></ul>`,
+<p id="productStatus">Showing all products</p>
+
+<section class="product-grid">
+  <article class="product-card" data-price="40">
+    <h3>Keyboard</h3>
+    <p>£40</p>
+  </article>
+  <article class="product-card" data-price="180">
+    <h3>Monitor</h3>
+    <p>£180</p>
+  </article>
+  <article class="product-card" data-price="25">
+    <h3>Mouse</h3>
+    <p>£25</p>
+  </article>
+  <article class="product-card" data-price="55">
+    <h3>Laptop Stand</h3>
+    <p>£55</p>
+  </article>
+</section>`,
       css: ``,
       js: ``,
     },
     solution: {
       html: `<input id="productNameInput" type="text" placeholder="Search products..." />
 <input id="maxPriceInput" type="number" placeholder="Max price" />
-<ul id="filteredProductList"></ul>`,
-      css: ``,
-      js: `const productNameInput = document.getElementById("productNameInput");
-const maxPriceInput = document.getElementById("maxPriceInput");
-const filteredProductList = document.getElementById("filteredProductList");
+<p id="productStatus">Showing all products</p>
 
-const lessonProducts = [
-  { name: "Keyboard", price: 40 },
-  { name: "Monitor", price: 180 },
-  { name: "Mouse", price: 25 },
-  { name: "Laptop Stand", price: 55 },
-];
-
-function renderFilteredProducts() {
-  const query = productNameInput.value.toLowerCase();
-  const maxPrice = Number(maxPriceInput.value) || Infinity;
-
-  const visibleProducts = lessonProducts.filter((product) => {
-    const matchesName = product.name.toLowerCase().includes(query);
-    const matchesPrice = product.price <= maxPrice;
-
-    return matchesName && matchesPrice;
-  });
-
-  filteredProductList.innerHTML = visibleProducts
-    .map((product) => "<li>" + product.name + " - £" + product.price + "</li>")
-    .join("");
+<section class="product-grid">
+  <article class="product-card" data-price="40">
+    <h3>Keyboard</h3>
+    <p>£40</p>
+  </article>
+  <article class="product-card" data-price="180">
+    <h3>Monitor</h3>
+    <p>£180</p>
+  </article>
+  <article class="product-card" data-price="25">
+    <h3>Mouse</h3>
+    <p>£25</p>
+  </article>
+  <article class="product-card" data-price="55">
+    <h3>Laptop Stand</h3>
+    <p>£55</p>
+  </article>
+</section>`,
+      css: `.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
 }
 
-productNameInput.addEventListener("input", renderFilteredProducts);
-maxPriceInput.addEventListener("input", renderFilteredProducts);
+.product-card {
+  padding: 16px;
+  border: 1px solid #d8deea;
+  border-radius: 8px;
+  background: white;
+}
 
-renderFilteredProducts();`,
+.product-card h3,
+.product-card p {
+  margin: 0 0 6px;
+}`,
+      js: `const productNameInput = document.getElementById("productNameInput");
+const maxPriceInput = document.getElementById("maxPriceInput");
+const productStatus = document.getElementById("productStatus");
+const productCards = document.querySelectorAll(".product-card");
+
+function updateProductCards() {
+  const query = productNameInput.value.toLowerCase();
+  const maxPrice = Number(maxPriceInput.value) || Infinity;
+  let visibleCount = 0;
+
+  productCards.forEach((card) => {
+    const cardName = card.textContent.toLowerCase();
+    const cardPrice = Number(card.dataset.price);
+    const matchesName = cardName.includes(query);
+    const matchesPrice = cardPrice <= maxPrice;
+    const shouldShow = matchesName && matchesPrice;
+
+    card.hidden = !shouldShow;
+
+    if (shouldShow) {
+      visibleCount += 1;
+    }
+  });
+
+  productStatus.textContent = visibleCount + " product" + (visibleCount === 1 ? "" : "s") + " shown";
+}
+
+productNameInput.addEventListener("input", updateProductCards);
+maxPriceInput.addEventListener("input", updateProductCards);
+
+updateProductCards();`,
     },
   },
   {
@@ -1650,9 +1969,1230 @@ clickCounterBtn.addEventListener("click", () => {
     },
   },
   {
+    id: "search-filter-count-reset",
+    editorType: "web",
+    title: "Challenge 22 — Search, Count, and Reset a List",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a search bar that filters a list, shows the current match count, and resets cleanly.",
+    requirements: [
+      "Add a search input, clear button, result count, and a list of at least 6 items",
+      "Filter the list while the user types",
+      "Update the count of visible matches",
+      "Show a no-results message when nothing matches",
+      "Clear the input and restore the full list when Clear is clicked",
+    ],
+    tips: [
+      "Before coding, decide which element owns the source list and which text explains the current state.",
+      "This repeats search, but the count and reset force you to keep UI state in sync.",
+      "Use one render function so input and Clear both update the same pieces.",
+    ],
+    concepts: ["input events", "filtering lists", "live counts", "empty states"],
+    suggestedApproach: [
+      "Create the controls, count text, empty message, and list.",
+      "Select the input, button, count, empty message, and list items.",
+      "Write a renderSearch function that checks every item against the query.",
+      "Update display, visible count, and empty state inside that function.",
+    ],
+    commonMistakes: [
+      "Filtering the list but forgetting to update the count",
+      "Clearing the input without restoring hidden items",
+      "Comparing text without lowercasing both sides",
+    ],
+    expectedOutcome:
+      "A search list that behaves like a real UI: live filtering, accurate count, no-results feedback, and a clean reset.",
+    starter: {
+      html: `<input id="resourceSearch" type="text" placeholder="Search resources..." />
+<button id="clearResourceSearch" type="button">Clear</button>
+<p id="resultCount">Showing 6 resources</p>
+<p id="emptyState" hidden>No resources found.</p>
+<ul id="resourceList">
+  <li>HTML checklist</li>
+  <li>CSS grid guide</li>
+  <li>DOM events practice</li>
+  <li>Search patterns</li>
+  <li>localStorage notes</li>
+  <li>React state intro</li>
+</ul>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<input id="resourceSearch" type="text" placeholder="Search resources..." />
+<button id="clearResourceSearch" type="button">Clear</button>
+<p id="resultCount">Showing 6 resources</p>
+<p id="emptyState" hidden>No resources found.</p>
+<ul id="resourceList">
+  <li>HTML checklist</li>
+  <li>CSS grid guide</li>
+  <li>DOM events practice</li>
+  <li>Search patterns</li>
+  <li>localStorage notes</li>
+  <li>React state intro</li>
+</ul>`,
+      css: ``,
+      js: `const resourceSearch = document.getElementById("resourceSearch");
+const clearResourceSearch = document.getElementById("clearResourceSearch");
+const resultCount = document.getElementById("resultCount");
+const emptyState = document.getElementById("emptyState");
+const resourceItems = document.querySelectorAll("#resourceList li");
+
+function renderSearch() {
+  const query = resourceSearch.value.toLowerCase();
+  let visibleCount = 0;
+
+  resourceItems.forEach((item) => {
+    const matches = item.textContent.toLowerCase().includes(query);
+    item.style.display = matches ? "list-item" : "none";
+
+    if (matches) {
+      visibleCount += 1;
+    }
+  });
+
+  resultCount.textContent =
+    "Showing " + visibleCount + " of " + resourceItems.length + " resources";
+  emptyState.hidden = visibleCount !== 0;
+}
+
+resourceSearch.addEventListener("input", renderSearch);
+
+clearResourceSearch.addEventListener("click", () => {
+  resourceSearch.value = "";
+  renderSearch();
+});
+
+renderSearch();`,
+    },
+  },
+  {
+    id: "class-toggle-alert-panel",
+    editorType: "web",
+    title: "Challenge 23 — Toggle Alert Panel Classes",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Use buttons to switch a panel between info, success, and warning states by toggling classes.",
+    requirements: [
+      "Add a panel with heading and message text",
+      "Add at least 3 state buttons",
+      "Use classList to change the panel state",
+      "Update the visible message for each state",
+      "Make the active state visually clear with CSS",
+    ],
+    tips: [
+      "Before coding, decide which classes are mutually exclusive.",
+      "This is a class toggling exercise, not just a textContent exercise.",
+      "A small helper function can remove old state classes before adding the next one.",
+    ],
+    concepts: ["classList", "state classes", "click events", "UI feedback"],
+    suggestedApproach: [
+      "Create the alert panel and the three state buttons.",
+      "Write CSS for info, success, and warning classes.",
+      "Write one setAlert function that receives the next state and message.",
+      "Call that function from each button click.",
+    ],
+    commonMistakes: [
+      "Adding new classes without removing old state classes",
+      "Updating the text but not the visual state",
+      "Putting the state class on the wrong element",
+    ],
+    expectedOutcome:
+      "A panel where the visual style and text both change when the user chooses a new state.",
+    starter: {
+      html: `<section id="alertPanel" class="alert-panel info">
+  <h2>Status panel</h2>
+  <p id="alertMessage">Choose a state.</p>
+</section>
+<button id="infoBtn" type="button">Info</button>
+<button id="successBtn" type="button">Success</button>
+<button id="warningBtn" type="button">Warning</button>`,
+      css: `.alert-panel {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #dbe3ef;
+}
+
+.info {
+  background: #eff6ff;
+}
+
+.success {
+  background: #ecfdf5;
+}
+
+.warning {
+  background: #fffbeb;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section id="alertPanel" class="alert-panel info">
+  <h2>Status panel</h2>
+  <p id="alertMessage">Choose a state.</p>
+</section>
+<button id="infoBtn" type="button">Info</button>
+<button id="successBtn" type="button">Success</button>
+<button id="warningBtn" type="button">Warning</button>`,
+      css: `.alert-panel {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #dbe3ef;
+}
+
+.info {
+  background: #eff6ff;
+}
+
+.success {
+  background: #ecfdf5;
+}
+
+.warning {
+  background: #fffbeb;
+}`,
+      js: `const alertPanel = document.getElementById("alertPanel");
+const alertMessage = document.getElementById("alertMessage");
+const infoBtn = document.getElementById("infoBtn");
+const successBtn = document.getElementById("successBtn");
+const warningBtn = document.getElementById("warningBtn");
+
+function setAlert(state, message) {
+  alertPanel.classList.remove("info", "success", "warning");
+  alertPanel.classList.add(state);
+  alertMessage.textContent = message;
+}
+
+infoBtn.addEventListener("click", () => {
+  setAlert("info", "Here is a helpful update.");
+});
+
+successBtn.addEventListener("click", () => {
+  setAlert("success", "Your changes were saved.");
+});
+
+warningBtn.addEventListener("click", () => {
+  setAlert("warning", "Check this before continuing.");
+});`,
+    },
+  },
+  {
+    id: "limited-step-counter",
+    editorType: "web",
+    title: "Challenge 24 — Limited Step Counter",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a counter that moves in steps, respects min and max limits, and disables buttons at the edges.",
+    requirements: [
+      "Show the current count",
+      "Add increase, decrease, and reset buttons",
+      "Increase and decrease by 2",
+      "Do not allow the count below 0 or above 10",
+      "Disable buttons when the count reaches a limit",
+    ],
+    tips: [
+      "Before coding, decide what your state variable is and what the limits are.",
+      "The UI should reflect the number and button states after every click.",
+      "A render function is useful because three buttons can change the same state.",
+    ],
+    concepts: ["counters", "state variables", "disabled buttons", "render functions"],
+    suggestedApproach: [
+      "Create one count variable.",
+      "Write a render function that updates the text and disabled states.",
+      "Update the count in each click handler.",
+      "Use Math.min and Math.max or if statements to enforce limits.",
+    ],
+    commonMistakes: [
+      "Changing the number but not disabling the buttons",
+      "Letting the count move past the min or max",
+      "Resetting the DOM text but not the JavaScript variable",
+    ],
+    expectedOutcome:
+      "A counter that behaves like a real control because it prevents invalid states.",
+    starter: {
+      html: `<h2 id="stepCount">0</h2>
+<button id="decreaseStepBtn" type="button">-2</button>
+<button id="increaseStepBtn" type="button">+2</button>
+<button id="resetStepBtn" type="button">Reset</button>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<h2 id="stepCount">0</h2>
+<button id="decreaseStepBtn" type="button">-2</button>
+<button id="increaseStepBtn" type="button">+2</button>
+<button id="resetStepBtn" type="button">Reset</button>`,
+      css: ``,
+      js: `const stepCount = document.getElementById("stepCount");
+const decreaseStepBtn = document.getElementById("decreaseStepBtn");
+const increaseStepBtn = document.getElementById("increaseStepBtn");
+const resetStepBtn = document.getElementById("resetStepBtn");
+
+let count = 0;
+
+function renderCount() {
+  stepCount.textContent = count;
+  decreaseStepBtn.disabled = count === 0;
+  increaseStepBtn.disabled = count === 10;
+}
+
+increaseStepBtn.addEventListener("click", () => {
+  count = Math.min(count + 2, 10);
+  renderCount();
+});
+
+decreaseStepBtn.addEventListener("click", () => {
+  count = Math.max(count - 2, 0);
+  renderCount();
+});
+
+resetStepBtn.addEventListener("click", () => {
+  count = 0;
+  renderCount();
+});
+
+renderCount();`,
+    },
+  },
+  {
+    id: "multi-faq-accordion",
+    editorType: "web",
+    title: "Challenge 25 — Multi FAQ Accordion",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build an accordion where clicking one question opens its answer and closes the others.",
+    requirements: [
+      "Add at least 3 FAQ buttons and answer panels",
+      "Hide answers by default",
+      "Open the clicked answer",
+      "Close the other answers when a new one opens",
+      "Update aria-expanded on each button",
+    ],
+    tips: [
+      "Before coding, decide how each button connects to its answer.",
+      "This is harder than a single FAQ because old open state must be cleared.",
+      "data-target attributes are useful for matching buttons to panels.",
+    ],
+    concepts: ["accordions", "querySelectorAll", "aria-expanded", "hide/show"],
+    suggestedApproach: [
+      "Create buttons with data-target values.",
+      "Create answer panels whose ids match those target values.",
+      "Loop through all buttons on click.",
+      "Open the matching panel and close the rest.",
+    ],
+    commonMistakes: [
+      "Opening a panel without closing the previous one",
+      "Leaving aria-expanded out of sync",
+      "Selecting only the first FAQ item",
+    ],
+    expectedOutcome:
+      "A multi-item FAQ accordion where only one answer is open at a time.",
+    starter: {
+      html: `<section class="faq-list">
+  <button class="faq-question" data-target="answerOne" aria-expanded="false">What is DOM selection?</button>
+  <p id="answerOne" hidden>Finding elements so JavaScript can update them.</p>
+
+  <button class="faq-question" data-target="answerTwo" aria-expanded="false">What is an event?</button>
+  <p id="answerTwo" hidden>A user action like clicking or typing.</p>
+
+  <button class="faq-question" data-target="answerThree" aria-expanded="false">What is state?</button>
+  <p id="answerThree" hidden>The current data that controls the UI.</p>
+</section>`,
+      css: `.faq-list {
+  display: grid;
+  gap: 10px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="faq-list">
+  <button class="faq-question" data-target="answerOne" aria-expanded="false">What is DOM selection?</button>
+  <p id="answerOne" hidden>Finding elements so JavaScript can update them.</p>
+
+  <button class="faq-question" data-target="answerTwo" aria-expanded="false">What is an event?</button>
+  <p id="answerTwo" hidden>A user action like clicking or typing.</p>
+
+  <button class="faq-question" data-target="answerThree" aria-expanded="false">What is state?</button>
+  <p id="answerThree" hidden>The current data that controls the UI.</p>
+</section>`,
+      css: `.faq-list {
+  display: grid;
+  gap: 10px;
+}`,
+      js: `const faqQuestions = document.querySelectorAll(".faq-question");
+
+faqQuestions.forEach((button) => {
+  button.addEventListener("click", () => {
+    const targetId = button.dataset.target;
+
+    faqQuestions.forEach((question) => {
+      const answer = document.getElementById(question.dataset.target);
+      const shouldOpen = question.dataset.target === targetId;
+
+      answer.hidden = !shouldOpen;
+      question.setAttribute("aria-expanded", String(shouldOpen));
+    });
+  });
+});`,
+    },
+  },
+  {
+    id: "modal-open-close",
+    editorType: "web",
+    title: "Challenge 26 — Open and Close a Modal",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a modal that opens from a button and closes from both the close button and the backdrop.",
+    requirements: [
+      "Add an open modal button",
+      "Add a hidden modal with backdrop and dialog content",
+      "Show the modal when Open is clicked",
+      "Hide the modal when Close is clicked",
+      "Hide the modal when the backdrop is clicked",
+      "Use a class or hidden attribute to control visibility",
+    ],
+    tips: [
+      "Before coding, decide what element represents the whole modal layer.",
+      "Modals are mostly hide/show plus careful event targeting.",
+      "Check event.target so backdrop clicks close the modal but dialog clicks do not.",
+    ],
+    concepts: ["modals", "hide/show", "event.target", "class toggling"],
+    suggestedApproach: [
+      "Create the open button and a modal overlay.",
+      "Place the dialog content inside the overlay.",
+      "Write openModal and closeModal functions.",
+      "Close only when the user clicks the close button or the overlay itself.",
+    ],
+    commonMistakes: [
+      "Closing the modal when the user clicks inside the dialog",
+      "Showing the modal but not giving it a hidden or closed state",
+      "Adding listeners before selecting the elements",
+    ],
+    expectedOutcome:
+      "A modal interaction that prepares learners for common product UI and later React component work.",
+    starter: {
+      html: `<button id="openModalBtn" type="button">Open details</button>
+
+<div id="modalOverlay" class="modal-overlay" hidden>
+  <article class="modal-dialog">
+    <h2>Project details</h2>
+    <p>This modal explains a feature without leaving the page.</p>
+    <button id="closeModalBtn" type="button">Close</button>
+  </article>
+</div>`,
+      css: `.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.modal-dialog {
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<button id="openModalBtn" type="button">Open details</button>
+
+<div id="modalOverlay" class="modal-overlay" hidden>
+  <article class="modal-dialog">
+    <h2>Project details</h2>
+    <p>This modal explains a feature without leaving the page.</p>
+    <button id="closeModalBtn" type="button">Close</button>
+  </article>
+</div>`,
+      css: `.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.modal-dialog {
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+}`,
+      js: `const openModalBtn = document.getElementById("openModalBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const modalOverlay = document.getElementById("modalOverlay");
+
+function openModal() {
+  modalOverlay.hidden = false;
+}
+
+function closeModal() {
+  modalOverlay.hidden = true;
+}
+
+openModalBtn.addEventListener("click", openModal);
+closeModalBtn.addEventListener("click", closeModal);
+
+modalOverlay.addEventListener("click", (event) => {
+  if (event.target === modalOverlay) {
+    closeModal();
+  }
+});`,
+    },
+  },
+  {
+    id: "mini-build-textarea-counter-card",
+    editorType: "web",
+    title: "Challenge 27 — Mini Build: Textarea Counter Card",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a complete textarea counter card from scratch, including the HTML structure, the CSS styling, and the live JavaScript feedback.",
+    requirements: [
+      "Build the HTML structure yourself with a textarea, counter text, and clear button",
+      "Style it as a neat card with spacing, labels, and a visible warning state",
+      "Update the character count while the user types",
+      "Show a warning when the message is close to the limit",
+      "Clear the textarea and reset the feedback when Clear is clicked",
+    ],
+    tips: [
+      "This combines a form control, a live input event, a little state, and real UI polish.",
+      "Use textarea.value.length to calculate the count.",
+      "A small render function makes the input and clear button share the same update logic.",
+    ],
+    concepts: [
+      "textarea input",
+      "input events",
+      "DOM updates",
+      "conditional feedback",
+      "CSS state classes",
+    ],
+    suggestedApproach: [
+      "Create the card, label, textarea, counter text, hint text, and clear button in HTML.",
+      "Write CSS that makes the card readable and gives the warning state a clear style.",
+      "Select the textarea, counter, hint, and button in JavaScript.",
+      "Write one render function that updates the count and warning message.",
+      "Run that function on textarea input and again after the clear button resets the textarea.",
+    ],
+    commonMistakes: [
+      "Counting once on page load but not listening to the input event",
+      "Clearing the textarea without resetting the counter and warning text",
+      "Leaving the warning style active after the user goes back under the limit",
+    ],
+    expectedOutcome:
+      "A polished counter card where typing updates the count, nearing the limit changes the feedback, and Clear resets the whole UI.",
+    starter: {
+      html: `<!-- Build a textarea counter card from scratch. -->`,
+      css: `/* Style the card, textarea, counter row, and warning state. */`,
+      js: `// Select your elements and wire up the live counter here.`,
+    },
+    solution: {
+      html: `<section class="counter-card">
+  <label for="feedbackMessage">Interview practice note</label>
+  <textarea id="feedbackMessage" maxlength="160" placeholder="Write a short answer..."></textarea>
+
+  <div class="counter-row">
+    <p id="counterText">0 / 160 characters</p>
+    <button id="clearMessageBtn" type="button">Clear</button>
+  </div>
+
+  <p id="limitHint">You have plenty of space.</p>
+</section>`,
+      css: `.counter-card {
+  max-width: 460px;
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #d8dee9;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.counter-card label {
+  font-weight: 700;
+}
+
+.counter-card textarea {
+  min-height: 140px;
+  padding: 12px;
+  border: 1px solid #b9c3d0;
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+}
+
+.counter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.counter-row p,
+#limitHint {
+  margin: 0;
+}
+
+#limitHint.warning {
+  color: #b45309;
+  font-weight: 700;
+}`,
+      js: `const feedbackMessage = document.getElementById("feedbackMessage");
+const counterText = document.getElementById("counterText");
+const clearMessageBtn = document.getElementById("clearMessageBtn");
+const limitHint = document.getElementById("limitHint");
+
+const characterLimit = 160;
+
+function renderCounter() {
+  const usedCharacters = feedbackMessage.value.length;
+  const remainingCharacters = characterLimit - usedCharacters;
+
+  counterText.textContent =
+    usedCharacters + " / " + characterLimit + " characters";
+
+  if (remainingCharacters <= 20) {
+    limitHint.textContent =
+      "Almost at the limit: " + remainingCharacters + " characters left.";
+    limitHint.classList.add("warning");
+  } else {
+    limitHint.textContent = "You have plenty of space.";
+    limitHint.classList.remove("warning");
+  }
+}
+
+feedbackMessage.addEventListener("input", renderCounter);
+
+clearMessageBtn.addEventListener("click", () => {
+  feedbackMessage.value = "";
+  renderCounter();
+});
+
+renderCounter();`,
+    },
+  },
+  {
+    id: "mini-build-searchable-topics-list",
+    editorType: "web",
+    title: "Challenge 28 — Mini Build: Searchable Topics List",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a searchable list feature from scratch with a clear button, live result count, and no-results message.",
+    requirements: [
+      "Build the HTML yourself with a search input, clear button, summary text, and a list of at least six items",
+      "Style the search area and list so the feature feels like a small interface",
+      "Filter the list while the user types",
+      "Show how many items are currently visible",
+      "Show a no-results message when nothing matches",
+      "Reset the search and show every item when Clear is clicked",
+    ],
+    tips: [
+      "This is the same search idea as before, but now you are responsible for the whole feature.",
+      "Keep the filtering code in a function so input and Clear can both use it.",
+      "Use a visible count so you can explain what your code is doing in an interview.",
+    ],
+    concepts: [
+      "input events",
+      "DOM filtering",
+      "case-insensitive search",
+      "empty states",
+      "clear actions",
+    ],
+    suggestedApproach: [
+      "Create the search input, Clear button, summary paragraph, empty message, and list items.",
+      "Style the controls and list with spacing, borders, and readable states.",
+      "Select the input, button, summary, empty message, and all list items.",
+      "Write a filter function that compares each item with the current query.",
+      "Update each item's display, the visible count, and the empty message inside that function.",
+    ],
+    commonMistakes: [
+      "Filtering the first item only instead of looping through every item",
+      "Forgetting to lowercase both the query and the item text",
+      "Clearing the input but leaving old items hidden",
+    ],
+    expectedOutcome:
+      "A complete searchable list that filters live, reports visible results, handles no matches, and resets cleanly.",
+    starter: {
+      html: `<!-- Build a searchable topics list from scratch. -->`,
+      css: `/* Style the search controls, summary, list, and empty state. */`,
+      js: `// Select your elements and write the filter logic here.`,
+    },
+    solution: {
+      html: `<section class="topic-search">
+  <label for="topicSearchInput">Search topics</label>
+
+  <div class="search-row">
+    <input id="topicSearchInput" type="text" placeholder="Try CSS, DOM, React..." />
+    <button id="clearTopicSearchBtn" type="button">Clear</button>
+  </div>
+
+  <p id="topicSummary">Showing 7 topics</p>
+  <p id="topicEmpty" hidden>No topics match that search.</p>
+
+  <ul id="topicList">
+    <li>HTML semantics</li>
+    <li>CSS layout</li>
+    <li>Responsive design</li>
+    <li>DOM events</li>
+    <li>Live search</li>
+    <li>Form validation</li>
+    <li>React state</li>
+  </ul>
+</section>`,
+      css: `.topic-search {
+  max-width: 520px;
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.topic-search label {
+  font-weight: 700;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+.search-row input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #b9c3d0;
+  border-radius: 8px;
+}
+
+.topic-search ul {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+}
+
+#topicSummary,
+#topicEmpty {
+  margin: 0;
+}
+
+#topicEmpty {
+  color: #b91c1c;
+  font-weight: 700;
+}`,
+      js: `const topicSearchInput = document.getElementById("topicSearchInput");
+const clearTopicSearchBtn = document.getElementById("clearTopicSearchBtn");
+const topicSummary = document.getElementById("topicSummary");
+const topicEmpty = document.getElementById("topicEmpty");
+const topicItems = document.querySelectorAll("#topicList li");
+
+function renderTopics() {
+  const query = topicSearchInput.value.toLowerCase();
+  let visibleCount = 0;
+
+  topicItems.forEach((item) => {
+    const isMatch = item.textContent.toLowerCase().includes(query);
+    item.style.display = isMatch ? "list-item" : "none";
+
+    if (isMatch) {
+      visibleCount += 1;
+    }
+  });
+
+  topicSummary.textContent =
+    "Showing " + visibleCount + " of " + topicItems.length + " topics";
+  topicEmpty.hidden = visibleCount !== 0;
+}
+
+topicSearchInput.addEventListener("input", renderTopics);
+
+clearTopicSearchBtn.addEventListener("click", () => {
+  topicSearchInput.value = "";
+  renderTopics();
+});
+
+renderTopics();`,
+    },
+  },
+  {
+    id: "mini-build-bold-search-clear-list",
+    editorType: "web",
+    title: "Challenge 29 — Mini Build: Bold Match Finder with Clear",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a list search that keeps every item visible but makes matching items bold, then resets everything with a Clear button.",
+    requirements: [
+      "Build the HTML yourself with a search input, clear button, status text, and a list of items",
+      "Style the list and matching state so the highlighted items are obvious",
+      "Keep all list items visible while the user searches",
+      "Make matching items bold when the query is present",
+      "Show a live message telling the user how many matches were found",
+      "Clear the query and remove every highlight when Clear is clicked",
+    ],
+    tips: [
+      "This is not a hide/show filter. It is a highlight feature.",
+      "Make the empty-query state explicit so nothing stays highlighted by accident.",
+      "A CSS class is easier to explain than many separate inline styles.",
+    ],
+    concepts: [
+      "input events",
+      "classList",
+      "string matching",
+      "live status text",
+      "clear actions",
+    ],
+    suggestedApproach: [
+      "Create the input, Clear button, status text, and list in HTML.",
+      "Add a CSS class for matching items.",
+      "Select every list item with querySelectorAll.",
+      "On input, lowercase the query and compare it with each item's text.",
+      "Toggle the matching class and update the match count.",
+    ],
+    commonMistakes: [
+      "Hiding non-matches even though this challenge asks you to keep them visible",
+      "Leaving old matches bold when the input becomes empty",
+      "Updating the styles but forgetting the status message",
+    ],
+    expectedOutcome:
+      "A complete highlight search feature where matches become bold, the match count updates live, and Clear resets the interface.",
+    starter: {
+      html: `<!-- Build a bold-match finder from scratch. -->`,
+      css: `/* Style the list and create a visible .is-match state. */`,
+      js: `// Select your elements and highlight matches here.`,
+    },
+    solution: {
+      html: `<section class="skill-finder">
+  <label for="skillSearchInput">Find a skill</label>
+
+  <div class="search-row">
+    <input id="skillSearchInput" type="text" placeholder="Type a skill..." />
+    <button id="clearSkillSearchBtn" type="button">Clear</button>
+  </div>
+
+  <p id="matchStatus">Type to highlight matching skills.</p>
+
+  <ul id="skillList">
+    <li>Semantic HTML</li>
+    <li>CSS Grid</li>
+    <li>Flexbox</li>
+    <li>DOM events</li>
+    <li>Debugging</li>
+    <li>React components</li>
+  </ul>
+</section>`,
+      css: `.skill-finder {
+  max-width: 520px;
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.skill-finder label {
+  font-weight: 700;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+.search-row input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #b9c3d0;
+  border-radius: 8px;
+}
+
+#skillList {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+}
+
+#matchStatus {
+  margin: 0;
+}
+
+.is-match {
+  font-weight: 700;
+  color: #0f766e;
+  background: #ccfbf1;
+}`,
+      js: `const skillSearchInput = document.getElementById("skillSearchInput");
+const clearSkillSearchBtn = document.getElementById("clearSkillSearchBtn");
+const matchStatus = document.getElementById("matchStatus");
+const skillItems = document.querySelectorAll("#skillList li");
+
+function renderMatches() {
+  const query = skillSearchInput.value.toLowerCase();
+  let matchCount = 0;
+
+  skillItems.forEach((item) => {
+    const isMatch =
+      query !== "" && item.textContent.toLowerCase().includes(query);
+
+    item.classList.toggle("is-match", isMatch);
+
+    if (isMatch) {
+      matchCount += 1;
+    }
+  });
+
+  if (query === "") {
+    matchStatus.textContent = "Type to highlight matching skills.";
+  } else {
+    matchStatus.textContent = matchCount + " matching skill(s) found.";
+  }
+}
+
+skillSearchInput.addEventListener("input", renderMatches);
+
+clearSkillSearchBtn.addEventListener("click", () => {
+  skillSearchInput.value = "";
+  renderMatches();
+});
+
+renderMatches();`,
+    },
+  },
+  {
+    id: "mini-build-card-search-empty-state",
+    editorType: "web",
+    title: "Challenge 30 — Mini Build: Searchable Resource Cards",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a small card directory with search, a clear button, a live summary, and a no-results state.",
+    requirements: [
+      "Build the HTML yourself with a search input, clear button, summary text, empty state, and several cards",
+      "Use CSS Grid or Flexbox to create a neat responsive card layout",
+      "Filter cards while the user types",
+      "Search across the visible text inside each card",
+      "Show a live summary of visible cards",
+      "Show a no-results message when every card is hidden",
+      "Reset the search and cards when Clear is clicked",
+    ],
+    tips: [
+      "This is closer to a real directory or dashboard than a plain list.",
+      "Search the card's textContent so titles and descriptions both count.",
+      "Keep the empty state separate from the card grid so it is easy to show and hide.",
+    ],
+    concepts: [
+      "card layouts",
+      "DOM filtering",
+      "input events",
+      "empty states",
+      "responsive CSS",
+    ],
+    suggestedApproach: [
+      "Build a section with controls, summary text, empty text, and a grid of article cards.",
+      "Style the cards with CSS Grid or Flexbox.",
+      "Select all cards in JavaScript.",
+      "Loop through cards on input and compare each card's visible text with the query.",
+      "Update display, summary, and empty-state visibility together.",
+    ],
+    commonMistakes: [
+      "Searching only the heading and ignoring useful card text",
+      "Hiding card content but leaving the card wrapper visible",
+      "Showing the empty message while matching cards are still visible",
+    ],
+    expectedOutcome:
+      "A searchable resource-card UI that looks organised, filters live, reports visible cards, and handles no results cleanly.",
+    starter: {
+      html: `<!-- Build a searchable resource card grid from scratch. -->`,
+      css: `/* Style the controls, card grid, cards, and empty state. */`,
+      js: `// Select cards and write the live card search here.`,
+    },
+    solution: {
+      html: `<section class="resource-search">
+  <label for="resourceSearchInput">Search resources</label>
+
+  <div class="search-row">
+    <input id="resourceSearchInput" type="text" placeholder="Search cards..." />
+    <button id="clearResourceSearchBtn" type="button">Clear</button>
+  </div>
+
+  <p id="resourceSummary">Showing 4 resources</p>
+  <p id="resourceEmpty" hidden>No resources match that search.</p>
+
+  <section class="resource-grid">
+    <article class="resource-card">
+      <h3>CSS Layout Guide</h3>
+      <p>Grid and Flexbox patterns for responsive pages.</p>
+    </article>
+    <article class="resource-card">
+      <h3>DOM Events Checklist</h3>
+      <p>Practice selecting elements and handling user actions.</p>
+    </article>
+    <article class="resource-card">
+      <h3>Debugging Notes</h3>
+      <p>Common mistakes with selectors, strings, and state.</p>
+    </article>
+    <article class="resource-card">
+      <h3>React Preview</h3>
+      <p>Components, props, and state for the next stage.</p>
+    </article>
+  </section>
+</section>`,
+      css: `.resource-search {
+  display: grid;
+  gap: 14px;
+}
+
+.resource-search label {
+  font-weight: 700;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+.search-row input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #b9c3d0;
+  border-radius: 8px;
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.resource-card {
+  padding: 16px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.resource-card h3,
+.resource-card p,
+#resourceSummary,
+#resourceEmpty {
+  margin: 0;
+}
+
+#resourceEmpty {
+  color: #b91c1c;
+  font-weight: 700;
+}`,
+      js: `const resourceSearchInput = document.getElementById("resourceSearchInput");
+const clearResourceSearchBtn = document.getElementById("clearResourceSearchBtn");
+const resourceSummary = document.getElementById("resourceSummary");
+const resourceEmpty = document.getElementById("resourceEmpty");
+const resourceCards = document.querySelectorAll(".resource-card");
+
+function renderResources() {
+  const query = resourceSearchInput.value.toLowerCase();
+  let visibleCount = 0;
+
+  resourceCards.forEach((card) => {
+    const isMatch = card.textContent.toLowerCase().includes(query);
+    card.style.display = isMatch ? "block" : "none";
+
+    if (isMatch) {
+      visibleCount += 1;
+    }
+  });
+
+  resourceSummary.textContent =
+    "Showing " + visibleCount + " of " + resourceCards.length + " resources";
+  resourceEmpty.hidden = visibleCount !== 0;
+}
+
+resourceSearchInput.addEventListener("input", renderResources);
+
+clearResourceSearchBtn.addEventListener("click", () => {
+  resourceSearchInput.value = "";
+  renderResources();
+});
+
+renderResources();`,
+    },
+  },
+  {
+    id: "mini-build-feedback-form-preview",
+    editorType: "web",
+    title: "Challenge 31 — Mini Build: Live Feedback Form Preview",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a small feedback form that updates a live preview as the user types and shows a status message on submit.",
+    requirements: [
+      "Build the HTML yourself with a form, name input, message textarea, submit button, clear button, and preview area",
+      "Style the form and preview so they work as one polished mini interface",
+      "Update the preview while the user types",
+      "Show a live character count for the message",
+      "Prevent empty form submission and show a helpful status message",
+      "Clear the fields and reset the preview when Clear is clicked",
+    ],
+    tips: [
+      "This is a bridge into form work: the DOM event ideas are the same, but the UI feels more realistic.",
+      "Use input events for the live preview and a submit event for validation.",
+      "preventDefault() lets you handle the form without the page refreshing.",
+    ],
+    concepts: [
+      "forms",
+      "input events",
+      "submit events",
+      "preventDefault",
+      "live preview",
+    ],
+    suggestedApproach: [
+      "Create the form fields, buttons, count text, status text, and preview panel.",
+      "Style the form and preview with a clear layout.",
+      "Write a renderPreview function that reads the input values and updates the preview.",
+      "Listen for input events on both fields.",
+      "Listen for submit, prevent the page refresh, validate the fields, and show a status message.",
+      "Use the Clear button to reset the fields, preview, count, and status.",
+    ],
+    commonMistakes: [
+      "Using a button click but forgetting the form submit event",
+      "Letting the page refresh because preventDefault() is missing",
+      "Updating the preview but not the character count or status text",
+    ],
+    expectedOutcome:
+      "A complete live-preview form that updates as the user types, validates on submit, and resets cleanly.",
+    starter: {
+      html: `<!-- Build a live feedback form and preview from scratch. -->`,
+      css: `/* Style the form, buttons, preview panel, and status text. */`,
+      js: `// Wire up input, submit, validation, preview, and clear behavior here.`,
+    },
+    solution: {
+      html: `<section class="feedback-builder">
+  <form id="feedbackForm" class="feedback-form">
+    <label>
+      Your name
+      <input id="visitorName" type="text" placeholder="Alex" />
+    </label>
+
+    <label>
+      Message
+      <textarea id="visitorMessage" maxlength="180" placeholder="Write your feedback..."></textarea>
+    </label>
+
+    <p id="messageCount">0 / 180 characters</p>
+
+    <div class="button-row">
+      <button type="submit">Send preview</button>
+      <button id="resetFeedbackBtn" type="button">Clear</button>
+    </div>
+  </form>
+
+  <aside class="feedback-preview">
+    <p class="preview-label">Live preview</p>
+    <h2 id="previewName">Your name</h2>
+    <p id="previewMessage">Your message preview will appear here.</p>
+    <p id="feedbackStatus" aria-live="polite">Ready for a short message.</p>
+  </aside>
+</section>`,
+      css: `.feedback-builder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.feedback-form,
+.feedback-preview {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.feedback-form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  padding: 10px;
+  border: 1px solid #b9c3d0;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.feedback-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+}
+
+.preview-label,
+#messageCount,
+#feedbackStatus,
+#previewMessage {
+  margin: 0;
+}
+
+#previewName {
+  margin: 0;
+  color: #0f766e;
+}`,
+      js: `const feedbackForm = document.getElementById("feedbackForm");
+const visitorName = document.getElementById("visitorName");
+const visitorMessage = document.getElementById("visitorMessage");
+const messageCount = document.getElementById("messageCount");
+const previewName = document.getElementById("previewName");
+const previewMessage = document.getElementById("previewMessage");
+const feedbackStatus = document.getElementById("feedbackStatus");
+const resetFeedbackBtn = document.getElementById("resetFeedbackBtn");
+
+const messageLimit = 180;
+
+function renderPreview() {
+  const name = visitorName.value.trim();
+  const message = visitorMessage.value.trim();
+
+  previewName.textContent = name || "Your name";
+  previewMessage.textContent = message || "Your message preview will appear here.";
+  messageCount.textContent =
+    visitorMessage.value.length + " / " + messageLimit + " characters";
+}
+
+visitorName.addEventListener("input", renderPreview);
+visitorMessage.addEventListener("input", renderPreview);
+
+feedbackForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (visitorName.value.trim() === "" || visitorMessage.value.trim() === "") {
+    feedbackStatus.textContent = "Please add your name and message before sending.";
+    return;
+  }
+
+  feedbackStatus.textContent = "Preview submitted successfully.";
+});
+
+resetFeedbackBtn.addEventListener("click", () => {
+  visitorName.value = "";
+  visitorMessage.value = "";
+  feedbackStatus.textContent = "Ready for a short message.";
+  renderPreview();
+});
+
+renderPreview();`,
+    },
+  },
+  {
     id: "simple-form-validation",
     editorType: "web",
-    title: "Challenge 22 — Simple Form Validation",
+    title: "Challenge 33 — Simple Form Validation",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a form so the user cannot submit empty fields.",
@@ -1720,7 +3260,7 @@ signupForm.addEventListener("submit", (event) => {
   {
     id: "prevent-duplicate-items",
     editorType: "web",
-    title: "Challenge 23 — Prevent Duplicate Items",
+    title: "Challenge 41 — Prevent Duplicate Items",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Let the user add items to a list, but stop duplicates from being added twice.",
@@ -1735,6 +3275,7 @@ signupForm.addEventListener("submit", (event) => {
       "This builds on add item to list, but adds one more layer of logic.",
       "Trim the value before checking it.",
       "Use includes() on the array to detect duplicates.",
+      "Render with forEach() here; map() gets its own focused practice later.",
     ],
     concepts: [
       "form submission",
@@ -1747,7 +3288,7 @@ signupForm.addEventListener("submit", (event) => {
       "Create a form, input, list, and feedback element.",
       "Keep the current items in an array.",
       "Validate the value before pushing it into the array.",
-      "Render the list again after each valid change.",
+      "Loop through the array with forEach() and render the list again after each valid change.",
     ],
     commonMistakes: [
       "Only checking the DOM instead of the source array",
@@ -1782,7 +3323,13 @@ const itemList = document.getElementById("itemList");
 const topics = ["HTML", "CSS"];
 
 function renderTopics() {
-  itemList.innerHTML = topics.map((topic) => "<li>" + topic + "</li>").join("");
+  itemList.innerHTML = "";
+
+  topics.forEach((topic) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = topic;
+    itemList.appendChild(listItem);
+  });
 }
 
 itemForm.addEventListener("submit", (event) => {
@@ -1811,7 +3358,7 @@ renderTopics();`,
   {
     id: "contact-form-validation",
     editorType: "web",
-    title: "Challenge 24 — Simple Contact Form Validation",
+    title: "Challenge 34 — Simple Contact Form Validation",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a small contact form so the user must enter a name and a valid email before success is shown.",
@@ -1893,7 +3440,7 @@ contactForm.addEventListener("submit", (event) => {
   {
     id: "login-form-submit-object",
     editorType: "web",
-    title: "Challenge 25 — Login Form Submit Object",
+    title: "Challenge 35 — Login Form Submit Object",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Read login form values, validate them, create a user object, and preview the submitted data.",
@@ -2015,7 +3562,7 @@ loginForm.addEventListener("submit", (event) => {
   {
     id: "booking-form-reset",
     editorType: "web",
-    title: "Challenge 26 — Booking Form with Reset",
+    title: "Challenge 36 — Booking Form with Reset",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a booking form, show a booking summary, and clear the fields after a valid submit.",
@@ -2148,7 +3695,7 @@ bookingForm.addEventListener("submit", (event) => {
   {
     id: "reservation-form-summary",
     editorType: "web",
-    title: "Challenge 27 — Restaurant Reservation Summary",
+    title: "Challenge 37 — Restaurant Reservation Summary",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Build a reservation form that turns form data into a clear reservation summary card.",
@@ -2277,7 +3824,7 @@ reservationForm.addEventListener("submit", (event) => {
   {
     id: "form-data-preview",
     editorType: "web",
-    title: "Challenge 28 — Form Data Preview",
+    title: "Challenge 38 — Form Data Preview",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Collect form values and preview the submitted data on the page.",
@@ -2382,7 +3929,7 @@ profileForm.addEventListener("submit", (event) => {
   {
     id: "add-item-to-list",
     editorType: "web",
-    title: "Challenge 29 — Add Item to List",
+    title: "Challenge 39 — Add Item to List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Let the user add new items to a list.",
@@ -2447,7 +3994,7 @@ addBtn.addEventListener("click", () => {
   {
     id: "add-goal-to-list",
     editorType: "web",
-    title: "Challenge 30 — Add Item to a List",
+    title: "Challenge 40 — Add Item to a List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Let the user add goals to a list and show how many items have been added.",
@@ -2521,7 +4068,7 @@ goalAddBtn.addEventListener("click", () => {
   {
     id: "remove-item-from-list",
     editorType: "web",
-    title: "Challenge 31 — Remove Item from List",
+    title: "Challenge 42 — Remove Item from List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Allow the user to remove items from a list.",
@@ -2582,7 +4129,7 @@ removeButtons.forEach((button) => {
   {
     id: "remove-saved-item",
     editorType: "web",
-    title: "Challenge 32 — Remove Item from a List",
+    title: "Challenge 43 — Remove Item from a List",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Allow the user to remove saved links from a list and show an empty message when none remain.",
@@ -2656,7 +4203,7 @@ updateSavedEmptyState();`,
   {
     id: "sort-products",
     editorType: "web",
-    title: "Challenge 33 — Sort Products",
+    title: "Challenge 46 — Sort Products",
     difficulty: "Medium",
     category: "JavaScript + Arrays",
     goal: "Sort a small list of products by price.",
@@ -2729,7 +4276,7 @@ renderProducts();`,
   {
     id: "filter-products",
     editorType: "web",
-    title: "Challenge 34 — Filter Products by Category",
+    title: "Challenge 44 — Filter Products by Category",
     difficulty: "Medium",
     category: "JavaScript + Arrays",
     goal: "Show only products from a selected category.",
@@ -2810,9 +4357,154 @@ renderProducts(products);`,
     },
   },
   {
+    id: "data-driven-lesson-search",
+    editorType: "web",
+    title: "Challenge 45 — Data-Driven Lesson Search",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays + DOM",
+    goal: "Combine a search input, an array of lesson objects, filter(), map(), and DOM rendering after practising each idea separately.",
+    requirements: [
+      "Create an array of lesson objects",
+      "Add a search input and a results container",
+      "Use filter() to create the matching lessons array",
+      "Use map() to create lesson card markup",
+      "Render the matching lessons into the page",
+      "Show a no-results message when the matching array is empty",
+      "Style the results so they look like clear lesson cards",
+    ],
+    tips: [
+      "This is the later version of the simple filter exercise: now the data has shape.",
+      "filter() decides which lesson objects remain.",
+      "map() turns each remaining lesson object into markup.",
+      "The render function should be the only place that writes to innerHTML.",
+    ],
+    concepts: ["arrays of objects", "filter()", "map()", "input events", "data-driven rendering"],
+    suggestedApproach: [
+      "Create a lessons array with title, topic, and level fields.",
+      "Build a renderLessons function that receives an array.",
+      "Use map() inside the render function to create cards.",
+      "Use filter() inside the input event to create the visible lessons.",
+      "Pass the filtered result into the render function.",
+    ],
+    commonMistakes: [
+      "Using filter() but still rendering the original array",
+      "Using map() without join(), which can leave commas in the HTML",
+      "Filtering by the wrong object property",
+      "Writing render code in several places instead of one reusable function",
+    ],
+    expectedOutcome:
+      "A searchable lesson-card interface that feels close to React-style list rendering while still using plain JavaScript.",
+    starter: {
+      html: `<section class="lesson-search">
+  <label for="lessonSearchInput">Search lessons</label>
+  <input id="lessonSearchInput" type="text" placeholder="Try CSS, DOM, or arrays" />
+  <p id="lessonStatus">Showing all lessons</p>
+  <div id="lessonResults" class="lesson-grid"></div>
+</section>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<section class="lesson-search">
+  <label for="lessonSearchInput">Search lessons</label>
+  <input id="lessonSearchInput" type="text" placeholder="Try CSS, DOM, or arrays" />
+  <p id="lessonStatus">Showing all lessons</p>
+  <div id="lessonResults" class="lesson-grid"></div>
+</section>`,
+      css: `.lesson-search {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.lesson-search label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.lesson-search input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #b7c1d1;
+  border-radius: 8px;
+}
+
+#lessonStatus {
+  color: #435269;
+  font-size: 0.95rem;
+}
+
+.lesson-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.lesson-card {
+  padding: 16px;
+  border: 1px solid #d7deea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(39, 52, 78, 0.08);
+}
+
+.lesson-card h3 {
+  margin: 0 0 6px;
+}
+
+.lesson-card p {
+  margin: 0;
+  color: #58657a;
+}`,
+      js: `const lessons = [
+  { title: "CSS Grid Layout", topic: "CSS", level: "Beginner" },
+  { title: "DOM Events", topic: "JavaScript", level: "Beginner" },
+  { title: "Array filter()", topic: "JavaScript", level: "Builder" },
+  { title: "Responsive Cards", topic: "CSS", level: "Builder" },
+  { title: "Form Feedback", topic: "DOM", level: "Builder" },
+];
+
+const lessonSearchInput = document.getElementById("lessonSearchInput");
+const lessonStatus = document.getElementById("lessonStatus");
+const lessonResults = document.getElementById("lessonResults");
+
+function renderLessons(items) {
+  if (items.length === 0) {
+    lessonStatus.textContent = "No lessons found";
+    lessonResults.innerHTML = "<p>No lessons match that search yet.</p>";
+    return;
+  }
+
+  lessonStatus.textContent = items.length + " lesson" + (items.length === 1 ? "" : "s") + " found";
+  lessonResults.innerHTML = items
+    .map((lesson) => {
+      return '<article class="lesson-card">' +
+        "<h3>" + lesson.title + "</h3>" +
+        "<p>" + lesson.topic + " - " + lesson.level + "</p>" +
+        "</article>";
+    })
+    .join("");
+}
+
+lessonSearchInput.addEventListener("input", () => {
+  const query = lessonSearchInput.value.toLowerCase();
+
+  const matchingLessons = lessons.filter((lesson) => {
+    return lesson.title.toLowerCase().includes(query) ||
+      lesson.topic.toLowerCase().includes(query);
+  });
+
+  renderLessons(matchingLessons);
+});
+
+renderLessons(lessons);`,
+    },
+  },
+  {
     id: "todo-complete-toggle",
     editorType: "web",
-    title: "Challenge 35 — Todo Complete Toggle",
+    title: "Challenge 47 — Todo Complete Toggle",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Let the user mark todo items as complete.",
@@ -2877,7 +4569,7 @@ todoButtons.forEach((button) => {
   {
     id: "password-strength-checker",
     editorType: "web",
-    title: "Challenge 36 — Password Strength Checker",
+    title: "Challenge 48 — Password Strength Checker",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Display whether a password is weak or strong as the user types.",
@@ -2935,7 +4627,7 @@ passwordInput.addEventListener("input", () => {
   {
     id: "password-rules-validation",
     editorType: "web",
-    title: "Challenge 37 — Password Validation Rules",
+    title: "Challenge 49 — Password Validation Rules",
     difficulty: "Medium",
     category: "JavaScript + Forms",
     goal: "Validate a password against basic rules and show which rules are currently passing.",
@@ -3011,7 +4703,7 @@ rulesPasswordInput.addEventListener("input", () => {
   {
     id: "tab-switcher",
     editorType: "web",
-    title: "Challenge 38 — Tab Switcher",
+    title: "Challenge 50 — Tab Switcher",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Switch visible content when the user clicks different tabs.",
@@ -3079,7 +4771,7 @@ tab2Btn.addEventListener("click", () => {
   {
     id: "restaurant-tabs-panel",
     editorType: "web",
-    title: "Challenge 39 — Tabs: About / Menu / Contact",
+    title: "Challenge 51 — Tabs: About / Menu / Contact",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Build a restaurant info panel where About, Menu, and Contact buttons switch the visible content.",
@@ -3176,9 +4868,117 @@ renderRestaurantTab("about");`,
     },
   },
   {
+    id: "profile-tabs-active-state",
+    editorType: "web",
+    title: "Challenge 52 — Profile Tabs with Active State",
+    difficulty: "Medium",
+    category: "JavaScript + DOM",
+    goal: "Build a profile card where tabs switch between Bio, Skills, and Contact without duplicating the render logic.",
+    requirements: [
+      "Add 3 tab buttons",
+      "Add one shared output panel",
+      "Store the tab content in a JavaScript object",
+      "Render the matching content when a tab is clicked",
+      "Toggle an active class on the selected tab",
+    ],
+    tips: [
+      "Before coding, decide what changes between tabs and what stays the same.",
+      "This is a tabs repeat, but the content object forces a more reusable approach.",
+      "If your click handlers look identical, move the repeated work into one function.",
+    ],
+    concepts: ["tabs", "objects", "classList.toggle", "render functions"],
+    suggestedApproach: [
+      "Create the three buttons and one panel.",
+      "Create a profileSections object with title and text for each tab.",
+      "Write a renderProfileTab function.",
+      "Loop over buttons and call the render function with the clicked tab id.",
+    ],
+    commonMistakes: [
+      "Writing three long click handlers instead of one reusable function",
+      "Changing the active button but not the panel content",
+      "Forgetting to render the default tab on page load",
+    ],
+    expectedOutcome:
+      "A tabbed profile panel that repeats the tab pattern in a more data-driven way.",
+    starter: {
+      html: `<div class="profile-tabs">
+  <button class="profile-tab is-active" data-tab="bio">Bio</button>
+  <button class="profile-tab" data-tab="skills">Skills</button>
+  <button class="profile-tab" data-tab="contact">Contact</button>
+</div>
+<article id="profilePanel"></article>`,
+      css: `.profile-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.is-active {
+  background: #0f766e;
+  color: white;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<div class="profile-tabs">
+  <button class="profile-tab is-active" data-tab="bio">Bio</button>
+  <button class="profile-tab" data-tab="skills">Skills</button>
+  <button class="profile-tab" data-tab="contact">Contact</button>
+</div>
+<article id="profilePanel"></article>`,
+      css: `.profile-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.is-active {
+  background: #0f766e;
+  color: white;
+}`,
+      js: `const profileTabs = document.querySelectorAll(".profile-tab");
+const profilePanel = document.getElementById("profilePanel");
+
+const profileSections = {
+  bio: {
+    title: "Bio",
+    text: "Maya is a junior frontend developer focused on clean UI.",
+  },
+  skills: {
+    title: "Skills",
+    text: "HTML, CSS, JavaScript, DOM events, and accessibility basics.",
+  },
+  contact: {
+    title: "Contact",
+    text: "Available for interviews and portfolio reviews.",
+  },
+};
+
+function renderProfileTab(tabName) {
+  const section = profileSections[tabName];
+
+  profilePanel.innerHTML =
+    "<h2>" + section.title + "</h2>" +
+    "<p>" + section.text + "</p>";
+
+  profileTabs.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.tab === tabName);
+  });
+}
+
+profileTabs.forEach((button) => {
+  button.addEventListener("click", () => {
+    renderProfileTab(button.dataset.tab);
+  });
+});
+
+renderProfileTab("bio");`,
+    },
+  },
+  {
     id: "mock-fetch-loading",
     editorType: "web",
-    title: "Challenge 40 — Mock Fetch with Loading State",
+    title: "Challenge 54 — Mock Fetch with Loading State",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Simulate loading data with a fake API call and show a loading message first.",
@@ -3238,7 +5038,7 @@ loadBtn.addEventListener("click", async () => {
   {
     id: "mock-fetch-error-retry",
     editorType: "web",
-    title: "Challenge 41 — Mock Fetch Error and Retry",
+    title: "Challenge 55 — Mock Fetch Error and Retry",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Simulate an API request that can fail and show an error message with retry support.",
@@ -3308,7 +5108,7 @@ retryBtn.addEventListener("click", async () => {
   {
     id: "promise-chain-practice",
     editorType: "web",
-    title: "Challenge 42 — Promise Chain Practice",
+    title: "Challenge 56 — Promise Chain Practice",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Use .then() to handle a Promise and display the result.",
@@ -3369,7 +5169,7 @@ runPromiseBtn.addEventListener("click", () => {
   {
     id: "await-user-card",
     editorType: "web",
-    title: "Challenge 43 — Async Await User Card",
+    title: "Challenge 57 — Async Await User Card",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Use async/await to load mock user data and show it in a small card.",
@@ -3433,7 +5233,7 @@ loadUserBtn.addEventListener("click", async () => {
   {
     id: "async-save-button",
     editorType: "web",
-    title: "Challenge 44 — Async Save Button",
+    title: "Challenge 58 — Async Save Button",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Simulate saving data with a button that shows loading, success, and disabled states.",
@@ -3506,7 +5306,7 @@ saveBtn.addEventListener("click", async () => {
   {
     id: "save-notes-localstorage",
     editorType: "web",
-    title: "Challenge 45 — Save Notes in localStorage",
+    title: "Challenge 59 — Save Notes in localStorage",
     difficulty: "Medium",
     category: "JavaScript + localStorage",
     goal: "Save notes in localStorage so they remain after refresh.",
@@ -3577,7 +5377,7 @@ saveNoteBtn.addEventListener("click", () => {
   {
     id: "save-load-todos-localstorage",
     editorType: "web",
-    title: "Challenge 46 — Save and Load Todos with localStorage",
+    title: "Challenge 60 — Save and Load Todos with localStorage",
     difficulty: "Hard",
     category: "JavaScript + localStorage",
     goal: "Let the user add todos, save them in localStorage, and load them on refresh.",
@@ -3679,7 +5479,7 @@ saveNoteBtn.addEventListener("click", () => {
   {
     id: "saved-favourites-localstorage",
     editorType: "web",
-    title: "Challenge 47 — Save Favourites in localStorage",
+    title: "Challenge 61 — Save Favourites in localStorage",
     difficulty: "Hard",
     category: "JavaScript + localStorage",
     goal: "Let the user save favourite resources and restore them from localStorage on refresh.",
@@ -3814,7 +5614,7 @@ renderResources();`,
   {
     id: "cart-items-localstorage",
     editorType: "web",
-    title: "Challenge 48 — Save Cart Items in localStorage",
+    title: "Challenge 62 — Save Cart Items in localStorage",
     difficulty: "Hard",
     category: "JavaScript + localStorage",
     goal: "Build a simple cart that saves added items in localStorage and restores them on refresh.",
@@ -3950,9 +5750,434 @@ renderShop();`,
     },
   },
   {
+    id: "dark-mode-preference-localstorage",
+    editorType: "web",
+    title: "Challenge 63 — Dark Mode Preference Card",
+    difficulty: "Medium",
+    category: "JavaScript + localStorage",
+    goal: "Build a theme toggle that saves the selected mode and restores it on page load.",
+    requirements: [
+      "Add a page card and theme toggle button",
+      "Toggle a dark class or data attribute on the card",
+      "Save the selected theme in localStorage",
+      "Read the saved theme when the page loads",
+      "Update the button label to explain the next action",
+    ],
+    tips: [
+      "Before coding, decide whether the saved value should be light or dark.",
+      "This repeats dark mode, but the button label and initial load must stay in sync.",
+      "localStorage stores strings, so keep your stored values simple.",
+    ],
+    concepts: ["localStorage", "class toggling", "saved preferences", "initial state"],
+    suggestedApproach: [
+      "Create the card and button.",
+      "Read the saved theme before adding the click listener.",
+      "Write a renderTheme function that applies the class and button label.",
+      "Save and render whenever the user toggles the theme.",
+    ],
+    commonMistakes: [
+      "Saving the theme but not applying it on page load",
+      "Changing the class but leaving the button label wrong",
+      "Using one storage key for saving and a different one for loading",
+    ],
+    expectedOutcome:
+      "A theme preference card that remembers the user's choice after refresh.",
+    starter: {
+      html: `<section id="themeCard" class="theme-card">
+  <h2>Practice dashboard</h2>
+  <p id="themeStatus">Theme: light</p>
+  <button id="themeToggleBtn" type="button">Use dark mode</button>
+</section>`,
+      css: `.theme-card {
+  padding: 20px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+}
+
+.theme-card.dark {
+  background: #111827;
+  color: #f8fafc;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section id="themeCard" class="theme-card">
+  <h2>Practice dashboard</h2>
+  <p id="themeStatus">Theme: light</p>
+  <button id="themeToggleBtn" type="button">Use dark mode</button>
+</section>`,
+      css: `.theme-card {
+  padding: 20px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+}
+
+.theme-card.dark {
+  background: #111827;
+  color: #f8fafc;
+}`,
+      js: `const themeCard = document.getElementById("themeCard");
+const themeStatus = document.getElementById("themeStatus");
+const themeToggleBtn = document.getElementById("themeToggleBtn");
+
+let theme = localStorage.getItem("dashboard-theme") || "light";
+
+function renderTheme() {
+  const isDark = theme === "dark";
+  themeCard.classList.toggle("dark", isDark);
+  themeStatus.textContent = "Theme: " + theme;
+  themeToggleBtn.textContent = isDark ? "Use light mode" : "Use dark mode";
+}
+
+themeToggleBtn.addEventListener("click", () => {
+  theme = theme === "dark" ? "light" : "dark";
+  localStorage.setItem("dashboard-theme", theme);
+  renderTheme();
+});
+
+renderTheme();`,
+    },
+  },
+  {
+    id: "saved-form-draft-localstorage",
+    editorType: "web",
+    title: "Challenge 64 — Saved Form Draft",
+    difficulty: "Medium",
+    category: "JavaScript + localStorage",
+    goal: "Save a form draft while the user types and restore it after refresh.",
+    requirements: [
+      "Add a name input and message textarea",
+      "Save both field values to localStorage on input",
+      "Load the saved draft when the page starts",
+      "Add a clear draft button",
+      "Show a small status message when the draft is saved or cleared",
+    ],
+    tips: [
+      "Before coding, decide whether to save two separate keys or one object.",
+      "This is a real form pattern: users expect drafts not to disappear.",
+      "Saving on input means the UI persists without a submit button.",
+    ],
+    concepts: ["localStorage", "form state", "input events", "JSON"],
+    suggestedApproach: [
+      "Create the inputs, clear button, and status text.",
+      "Read the saved draft safely from localStorage.",
+      "Write saveDraft and renderDraft helper functions.",
+      "Listen for input on both fields and click on the clear button.",
+    ],
+    commonMistakes: [
+      "Saving only one field",
+      "Saving an object without JSON.stringify()",
+      "Clearing localStorage but leaving old text visible in the fields",
+    ],
+    expectedOutcome:
+      "A form that keeps an unfinished draft after refresh and can clear it on demand.",
+    starter: {
+      html: `<input id="draftName" type="text" placeholder="Your name" />
+<textarea id="draftMessage" placeholder="Write a draft..."></textarea>
+<button id="clearDraftBtn" type="button">Clear draft</button>
+<p id="draftStatus"></p>`,
+      css: `textarea {
+  width: 100%;
+  min-height: 110px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<input id="draftName" type="text" placeholder="Your name" />
+<textarea id="draftMessage" placeholder="Write a draft..."></textarea>
+<button id="clearDraftBtn" type="button">Clear draft</button>
+<p id="draftStatus"></p>`,
+      css: `textarea {
+  width: 100%;
+  min-height: 110px;
+}`,
+      js: `const draftName = document.getElementById("draftName");
+const draftMessage = document.getElementById("draftMessage");
+const clearDraftBtn = document.getElementById("clearDraftBtn");
+const draftStatus = document.getElementById("draftStatus");
+
+function readDraft() {
+  try {
+    const raw = localStorage.getItem("contact-draft");
+    return raw ? JSON.parse(raw) : { name: "", message: "" };
+  } catch (error) {
+    return { name: "", message: "" };
+  }
+}
+
+function saveDraft() {
+  const draft = {
+    name: draftName.value,
+    message: draftMessage.value,
+  };
+
+  localStorage.setItem("contact-draft", JSON.stringify(draft));
+  draftStatus.textContent = "Draft saved.";
+}
+
+const savedDraft = readDraft();
+draftName.value = savedDraft.name || "";
+draftMessage.value = savedDraft.message || "";
+
+draftName.addEventListener("input", saveDraft);
+draftMessage.addEventListener("input", saveDraft);
+
+clearDraftBtn.addEventListener("click", () => {
+  localStorage.removeItem("contact-draft");
+  draftName.value = "";
+  draftMessage.value = "";
+  draftStatus.textContent = "Draft cleared.";
+});`,
+    },
+  },
+  {
+    id: "recently-viewed-products-localstorage",
+    editorType: "web",
+    title: "Challenge 65 — Recently Viewed Items",
+    difficulty: "Hard",
+    category: "JavaScript + localStorage",
+    goal: "Track recently viewed products, keep only the latest three, and restore them after refresh.",
+    requirements: [
+      "Render product buttons from an array",
+      "When a product is clicked, add it to recently viewed",
+      "Keep only the latest 3 unique viewed products",
+      "Save the recently viewed list to localStorage",
+      "Load and render recently viewed items on page start",
+    ],
+    tips: [
+      "Before coding, decide whether new viewed items go at the start or end.",
+      "This is a state exercise: the same product should not appear twice.",
+      "Use filter() to remove an old duplicate before adding the latest click.",
+    ],
+    concepts: ["localStorage", "arrays", "filter()", "slice()", "recent state"],
+    suggestedApproach: [
+      "Create products and recentlyViewed arrays.",
+      "Render product buttons and the recent list separately.",
+      "On click, remove any existing matching id from recent items.",
+      "Add the clicked product to the front and slice the list to 3 items.",
+      "Save and render after every click.",
+    ],
+    commonMistakes: [
+      "Allowing duplicate recently viewed items",
+      "Saving the list but not loading it on startup",
+      "Letting the recent list grow forever",
+    ],
+    expectedOutcome:
+      "A recently viewed feature like the kind used in shops, dashboards, and learning platforms.",
+    starter: {
+      html: `<section id="productButtons"></section>
+<h2>Recently viewed</h2>
+<ul id="recentList"></ul>`,
+      css: `#productButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section id="productButtons"></section>
+<h2>Recently viewed</h2>
+<ul id="recentList"></ul>`,
+      css: `#productButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}`,
+      js: `const productButtons = document.getElementById("productButtons");
+const recentList = document.getElementById("recentList");
+
+const products = [
+  { id: 1, name: "Keyboard" },
+  { id: 2, name: "Monitor" },
+  { id: 3, name: "Mouse" },
+  { id: 4, name: "Laptop stand" },
+];
+
+function readRecent() {
+  try {
+    const raw = localStorage.getItem("recent-products");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+let recentlyViewed = readRecent();
+
+function saveRecent() {
+  localStorage.setItem("recent-products", JSON.stringify(recentlyViewed));
+}
+
+function renderProducts() {
+  productButtons.innerHTML = products
+    .map((product) => {
+      return "<button data-id='" + product.id + "'>" + product.name + "</button>";
+    })
+    .join("");
+
+  productButtons.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const product = products.find((item) => item.id === Number(button.dataset.id));
+      recentlyViewed = [
+        product,
+        ...recentlyViewed.filter((item) => item.id !== product.id),
+      ].slice(0, 3);
+      saveRecent();
+      renderRecent();
+    });
+  });
+}
+
+function renderRecent() {
+  recentList.innerHTML = recentlyViewed
+    .map((product) => "<li>" + product.name + "</li>")
+    .join("");
+}
+
+renderProducts();
+renderRecent();`,
+    },
+  },
+  {
+    id: "todo-completed-filter-localstorage",
+    editorType: "web",
+    title: "Challenge 66 — Saved Todo App with Filter",
+    difficulty: "Hard",
+    category: "JavaScript + localStorage",
+    goal: "Build a simple todo app that saves todos, toggles completed state, and filters between all and active items.",
+    requirements: [
+      "Add a todo input, add button, filter buttons, and todo list",
+      "Store todos as objects with text and completed values",
+      "Toggle completed state when a todo button is clicked",
+      "Filter between All and Active todos",
+      "Save and load todos with localStorage",
+    ],
+    tips: [
+      "Before coding, decide the shape of one todo object.",
+      "This is more React-like because the UI is derived from an array of state objects.",
+      "Render from the array every time state changes.",
+    ],
+    concepts: ["localStorage", "arrays of objects", "filter()", "state rendering"],
+    suggestedApproach: [
+      "Create todos and currentFilter variables.",
+      "Write saveTodos and renderTodos functions.",
+      "Add a new todo object when the Add button is clicked.",
+      "Use event delegation to toggle completed state from the list.",
+      "Filter the array before rendering when Active is selected.",
+    ],
+    commonMistakes: [
+      "Saving only todo text instead of completed state",
+      "Toggling the DOM class but not updating the array",
+      "Filtering the data but rendering the unfiltered array",
+    ],
+    expectedOutcome:
+      "A small persisted todo app that builds confidence with saved state before React.",
+    starter: {
+      html: `<input id="todoText" type="text" placeholder="Add todo..." />
+<button id="addSavedTodoBtn" type="button">Add</button>
+<button id="showAllTodosBtn" type="button">All</button>
+<button id="showActiveTodosBtn" type="button">Active</button>
+<ul id="savedTodoList"></ul>`,
+      css: `.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<input id="todoText" type="text" placeholder="Add todo..." />
+<button id="addSavedTodoBtn" type="button">Add</button>
+<button id="showAllTodosBtn" type="button">All</button>
+<button id="showActiveTodosBtn" type="button">Active</button>
+<ul id="savedTodoList"></ul>`,
+      css: `.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}`,
+      js: `const todoText = document.getElementById("todoText");
+const addSavedTodoBtn = document.getElementById("addSavedTodoBtn");
+const showAllTodosBtn = document.getElementById("showAllTodosBtn");
+const showActiveTodosBtn = document.getElementById("showActiveTodosBtn");
+const savedTodoList = document.getElementById("savedTodoList");
+
+function readTodos() {
+  try {
+    const raw = localStorage.getItem("filtered-todos");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+let todos = readTodos();
+let currentFilter = "all";
+
+function saveTodos() {
+  localStorage.setItem("filtered-todos", JSON.stringify(todos));
+}
+
+function renderTodos() {
+  const visibleTodos =
+    currentFilter === "active"
+      ? todos.filter((todo) => !todo.completed)
+      : todos;
+
+  savedTodoList.innerHTML = visibleTodos
+    .map((todo) => {
+      const className = todo.completed ? "completed" : "";
+      return (
+        "<li class='" + className + "'>" +
+        "<button data-id='" + todo.id + "'>Toggle</button> " +
+        todo.text +
+        "</li>"
+      );
+    })
+    .join("");
+}
+
+addSavedTodoBtn.addEventListener("click", () => {
+  const text = todoText.value.trim();
+  if (text === "") return;
+
+  todos = [...todos, { id: Date.now(), text, completed: false }];
+  todoText.value = "";
+  saveTodos();
+  renderTodos();
+});
+
+savedTodoList.addEventListener("click", (event) => {
+  if (event.target.tagName !== "BUTTON") return;
+
+  const id = Number(event.target.dataset.id);
+  todos = todos.map((todo) =>
+    todo.id === id ? { ...todo, completed: !todo.completed } : todo
+  );
+  saveTodos();
+  renderTodos();
+});
+
+showAllTodosBtn.addEventListener("click", () => {
+  currentFilter = "all";
+  renderTodos();
+});
+
+showActiveTodosBtn.addEventListener("click", () => {
+  currentFilter = "active";
+  renderTodos();
+});
+
+renderTodos();`,
+    },
+  },
+  {
     id: "mock-product-search",
     editorType: "web",
-    title: "Challenge 49 — Mock Product Search",
+    title: "Challenge 67 — Mock Product Search",
     difficulty: "Medium",
     category: "JavaScript + Async",
     goal: "Search mock products asynchronously and render the matching results.",
@@ -4061,7 +6286,7 @@ renderShop();`,
   {
     id: "github-profile-finder",
     editorType: "web",
-    title: "Challenge 50 — GitHub User Finder",
+    title: "Challenge 68 — GitHub User Finder",
     difficulty: "Hard",
     category: "APIs",
     goal: "Use fetch(), loading state, and search logic to find a GitHub-style user profile by username.",
@@ -4172,7 +6397,7 @@ profileBtn.addEventListener("click", async () => {
   {
     id: "weather-search-panel",
     editorType: "web",
-    title: "Challenge 51 — Weather Search Panel",
+    title: "Challenge 69 — Weather Search Panel",
     difficulty: "Hard",
     category: "APIs",
     goal: "Build a weather-style search panel with fetch(), loading state, and a visible result card.",
@@ -4282,7 +6507,7 @@ weatherBtn.addEventListener("click", async () => {
   {
     id: "recipe-search-app",
     editorType: "web",
-    title: "Challenge 52 — Recipe Search App",
+    title: "Challenge 70 — Recipe Search App",
     difficulty: "Hard",
     category: "APIs",
     goal: "Use fetch(), search, and map-style rendering to build a small recipe search app.",
@@ -4404,7 +6629,7 @@ recipeBtn.addEventListener("click", async () => {
   {
     id: "promise-all-user-posts",
     editorType: "web",
-    title: "Challenge 53 — Load User and Posts with Promise.all",
+    title: "Challenge 71 — Load User and Posts with Promise.all",
     difficulty: "Hard",
     category: "JavaScript + Async",
     goal: "Load mock user and post data at the same time using Promise.all and render both results.",
@@ -4510,9 +6735,203 @@ recipeBtn.addEventListener("click", async () => {
     },
   },
   {
+    id: "fetch-posts-loading-error-list",
+    editorType: "web",
+    title: "Challenge 72 — Fetch Posts with Loading and Error UI",
+    difficulty: "Hard",
+    category: "JavaScript + Fetch",
+    goal: "Fetch posts from an API endpoint and render loading, success, and error states clearly.",
+    requirements: [
+      "Add a Load posts button, status text, and posts list",
+      "Use fetch() inside an async function",
+      "Show a loading message before awaiting the response",
+      "Check response.ok and throw an error if the request fails",
+      "Render at least 5 posts when the request succeeds",
+      "Show a helpful error message in catch",
+    ],
+    tips: [
+      "Before coding, say the request lifecycle out loud: idle, loading, success, error.",
+      "This is a real API version of the mock loading exercises.",
+      "Use slice() if the API returns more posts than you want to display.",
+    ],
+    concepts: ["fetch()", "async/await", "loading state", "error handling"],
+    suggestedApproach: [
+      "Create the button, status paragraph, and list.",
+      "Write an async loadPosts function.",
+      "Set loading UI before fetch.",
+      "Check response.ok, parse JSON, and render the list.",
+      "Use catch to show a readable error.",
+    ],
+    commonMistakes: [
+      "Trying to render before await finishes",
+      "Never checking response.ok",
+      "Leaving stale results on screen when loading starts",
+    ],
+    expectedOutcome:
+      "A small API-driven list with a clear request lifecycle.",
+    starter: {
+      html: `<button id="loadPostsBtn" type="button">Load posts</button>
+<p id="postsStatus">Ready to load.</p>
+<ul id="postsList"></ul>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<button id="loadPostsBtn" type="button">Load posts</button>
+<p id="postsStatus">Ready to load.</p>
+<ul id="postsList"></ul>`,
+      css: ``,
+      js: `const loadPostsBtn = document.getElementById("loadPostsBtn");
+const postsStatus = document.getElementById("postsStatus");
+const postsList = document.getElementById("postsList");
+
+async function loadPosts() {
+  postsStatus.textContent = "Loading posts...";
+  postsList.innerHTML = "";
+
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+
+    if (!response.ok) {
+      throw new Error("Could not load posts.");
+    }
+
+    const posts = await response.json();
+    const visiblePosts = posts.slice(0, 5);
+
+    postsStatus.textContent = "Loaded " + visiblePosts.length + " posts.";
+    postsList.innerHTML = visiblePosts
+      .map((post) => "<li>" + post.title + "</li>")
+      .join("");
+  } catch (error) {
+    postsStatus.textContent = "Error: " + error.message;
+  }
+}
+
+loadPostsBtn.addEventListener("click", loadPosts);`,
+    },
+  },
+  {
+    id: "fetch-users-filter-after-load",
+    editorType: "web",
+    title: "Challenge 73 — Fetch Users Then Filter Locally",
+    difficulty: "Hard",
+    category: "JavaScript + Fetch",
+    goal: "Fetch users once, store them in a variable, and filter the loaded data with a search input.",
+    requirements: [
+      "Add a Load users button, search input, status text, and output area",
+      "Use fetch() and async/await to load users",
+      "Store the loaded users in a JavaScript array variable",
+      "Render users after loading",
+      "Filter the loaded users when the search input changes",
+      "Show an empty state when no loaded users match",
+    ],
+    tips: [
+      "Before coding, decide which data comes from the API and which data comes from the input.",
+      "This is important before React because loaded data and filter text are separate pieces of state.",
+      "Do not fetch again on every keystroke; filter the array you already loaded.",
+    ],
+    concepts: ["fetch()", "async/await", "state variables", "filter()", "search"],
+    suggestedApproach: [
+      "Create a loadedUsers variable that starts as an empty array.",
+      "Fetch users when the button is clicked.",
+      "Render from loadedUsers inside one renderUsers function.",
+      "Read the search input inside that render function and filter locally.",
+    ],
+    commonMistakes: [
+      "Running fetch on every input event",
+      "Filtering before the users have been loaded",
+      "Updating the data variable but not re-rendering",
+    ],
+    expectedOutcome:
+      "A fetch-and-filter UI that separates remote data from local search state.",
+    starter: {
+      html: `<button id="loadUsersBtn" type="button">Load users</button>
+<input id="userSearchInput" type="text" placeholder="Search loaded users..." />
+<p id="usersStatus">No users loaded yet.</p>
+<section id="usersOutput"></section>`,
+      css: `#usersOutput {
+  display: grid;
+  gap: 10px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<button id="loadUsersBtn" type="button">Load users</button>
+<input id="userSearchInput" type="text" placeholder="Search loaded users..." />
+<p id="usersStatus">No users loaded yet.</p>
+<section id="usersOutput"></section>`,
+      css: `#usersOutput {
+  display: grid;
+  gap: 10px;
+}
+
+.user-row {
+  padding: 10px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+}`,
+      js: `const loadUsersBtn = document.getElementById("loadUsersBtn");
+const userSearchInput = document.getElementById("userSearchInput");
+const usersStatus = document.getElementById("usersStatus");
+const usersOutput = document.getElementById("usersOutput");
+
+let loadedUsers = [];
+
+function renderUsers() {
+  const query = userSearchInput.value.toLowerCase();
+  const visibleUsers = loadedUsers.filter((user) =>
+    user.name.toLowerCase().includes(query)
+  );
+
+  if (loadedUsers.length === 0) {
+    usersStatus.textContent = "No users loaded yet.";
+    usersOutput.innerHTML = "";
+    return;
+  }
+
+  usersStatus.textContent =
+    "Showing " + visibleUsers.length + " of " + loadedUsers.length + " users.";
+
+  usersOutput.innerHTML =
+    visibleUsers.length === 0
+      ? "<p>No loaded users match that search.</p>"
+      : visibleUsers
+          .map((user) => {
+            return (
+              "<article class='user-row'>" +
+              "<strong>" + user.name + "</strong>" +
+              "<p>" + user.email + "</p>" +
+              "</article>"
+            );
+          })
+          .join("");
+}
+
+loadUsersBtn.addEventListener("click", async () => {
+  usersStatus.textContent = "Loading users...";
+
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+
+    if (!response.ok) {
+      throw new Error("Could not load users.");
+    }
+
+    loadedUsers = await response.json();
+    renderUsers();
+  } catch (error) {
+    usersStatus.textContent = "Error: " + error.message;
+  }
+});
+
+userSearchInput.addEventListener("input", renderUsers);`,
+    },
+  },
+  {
     id: "shopping-cart-total",
     editorType: "web",
-    title: "Challenge 54 — Shopping Cart Total",
+    title: "Challenge 74 — Shopping Cart Total",
     difficulty: "Medium",
     category: "JavaScript + Arrays",
     goal: "Calculate and display the total price of cart items.",
@@ -4575,7 +6994,7 @@ cartTotal.textContent = "Total: £" + total;`,
   {
     id: "filter-sort-products",
     editorType: "web",
-    title: "Challenge 55 — Filter and Sort Products",
+    title: "Challenge 75 — Filter and Sort Products",
     difficulty: "Hard",
     category: "JavaScript + Arrays",
     goal: "Filter products by category and sort the visible products by price.",
@@ -4705,9 +7124,386 @@ cartTotal.textContent = "Total: £" + total;`,
     },
   },
   {
+    id: "map-product-cards",
+    editorType: "web",
+    title: "Challenge 77 — Map Product Cards",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays",
+    goal: "Use map() to transform product data into a grid of cards.",
+    requirements: [
+      "Create an array of product objects",
+      "Use map() to create card markup",
+      "Render all cards into a container",
+      "Show at least name, category, and price",
+      "Use CSS to make the cards readable",
+    ],
+    tips: [
+      "Before coding, decide what one product object should look like.",
+      "map() is for turning every item into something new.",
+      "This is the data-to-UI pattern React will use constantly.",
+    ],
+    concepts: ["map()", "arrays of objects", "DOM rendering", "card UI"],
+    suggestedApproach: [
+      "Create the product data.",
+      "Select the grid container.",
+      "Use map() to return one card string per product.",
+      "Join the strings and assign them to innerHTML.",
+    ],
+    commonMistakes: [
+      "Using forEach() when the challenge asks for map()",
+      "Forgetting to join the mapped strings",
+      "Rendering object values with the wrong property names",
+    ],
+    expectedOutcome:
+      "A product card grid rendered entirely from array data.",
+    starter: {
+      html: `<section id="productGrid"></section>`,
+      css: `#productGrid {
+  display: grid;
+  gap: 12px;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<section id="productGrid"></section>`,
+      css: `#productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.product-card {
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+}`,
+      js: `const productGrid = document.getElementById("productGrid");
+
+const products = [
+  { name: "Keyboard", category: "Tech", price: 40 },
+  { name: "Lamp", category: "Home", price: 28 },
+  { name: "Notebook", category: "Study", price: 12 },
+];
+
+productGrid.innerHTML = products
+  .map((product) => {
+    return (
+      "<article class='product-card'>" +
+      "<h2>" + product.name + "</h2>" +
+      "<p>" + product.category + "</p>" +
+      "<strong>$" + product.price + "</strong>" +
+      "</article>"
+    );
+  })
+  .join("");`,
+    },
+  },
+  {
+    id: "filter-available-sessions",
+    editorType: "web",
+    title: "Challenge 78 — Filter Available Sessions",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays",
+    goal: "Use filter() to show only sessions that are currently available.",
+    requirements: [
+      "Create an array of session objects",
+      "Each session should include an available boolean",
+      "Add buttons to show all sessions and available sessions",
+      "Use filter() for the available view",
+      "Render the selected list after each button click",
+    ],
+    tips: [
+      "Before coding, decide which button changes the visible list and which data never changes.",
+      "filter() returns a smaller array, not just one item.",
+      "Keep the render function separate from the filter decision.",
+    ],
+    concepts: ["filter()", "arrays of objects", "boolean values", "render functions"],
+    suggestedApproach: [
+      "Create the sessions data.",
+      "Write a renderSessions function that accepts an array.",
+      "Render all sessions by default.",
+      "Use filter() in the Available button click handler.",
+    ],
+    commonMistakes: [
+      "Filtering correctly but rendering the original array",
+      "Mutating the source data when you only need a filtered copy",
+      "Checking a string instead of the boolean property",
+    ],
+    expectedOutcome:
+      "A session list that proves the learner understands filter() as a smaller-list tool.",
+    starter: {
+      html: `<button id="allSessionsBtn" type="button">All sessions</button>
+<button id="availableSessionsBtn" type="button">Available only</button>
+<ul id="sessionList"></ul>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<button id="allSessionsBtn" type="button">All sessions</button>
+<button id="availableSessionsBtn" type="button">Available only</button>
+<ul id="sessionList"></ul>`,
+      css: ``,
+      js: `const allSessionsBtn = document.getElementById("allSessionsBtn");
+const availableSessionsBtn = document.getElementById("availableSessionsBtn");
+const sessionList = document.getElementById("sessionList");
+
+const sessions = [
+  { title: "DOM events", available: true },
+  { title: "React state", available: false },
+  { title: "CSS Grid", available: true },
+  { title: "API practice", available: false },
+];
+
+function renderSessions(items) {
+  sessionList.innerHTML = items
+    .map((session) => {
+      const status = session.available ? "Available" : "Full";
+      return "<li>" + session.title + " - " + status + "</li>";
+    })
+    .join("");
+}
+
+allSessionsBtn.addEventListener("click", () => {
+  renderSessions(sessions);
+});
+
+availableSessionsBtn.addEventListener("click", () => {
+  const availableSessions = sessions.filter((session) => session.available);
+  renderSessions(availableSessions);
+});
+
+renderSessions(sessions);`,
+    },
+  },
+  {
+    id: "find-selected-mentor",
+    editorType: "web",
+    title: "Challenge 79 — Find the Selected Mentor",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays",
+    goal: "Use find() to display one selected mentor from an array of objects.",
+    requirements: [
+      "Create an array of mentor objects with ids",
+      "Add a select input with matching ids",
+      "Use find() to get the selected mentor",
+      "Render one mentor card",
+      "Show fallback text if no mentor matches",
+    ],
+    tips: [
+      "Before coding, decide why find() is better than filter() here.",
+      "Select values are strings, so compare carefully with numeric ids.",
+      "The UI should render one card, not a list.",
+    ],
+    concepts: ["find()", "arrays of objects", "select inputs", "fallback UI"],
+    suggestedApproach: [
+      "Create the mentor data.",
+      "Read the current select value.",
+      "Use find() to locate the matching mentor.",
+      "Render the mentor or fallback message.",
+    ],
+    commonMistakes: [
+      "Using filter() and then forgetting it returns an array",
+      "Comparing string and number ids without conversion",
+      "Finding the mentor but not rendering the result",
+    ],
+    expectedOutcome:
+      "A lookup panel that makes find() feel different from filter().",
+    starter: {
+      html: `<select id="mentorSelect">
+  <option value="1">Maya</option>
+  <option value="2">Leo</option>
+  <option value="3">Sara</option>
+</select>
+<article id="mentorCard"></article>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<select id="mentorSelect">
+  <option value="1">Maya</option>
+  <option value="2">Leo</option>
+  <option value="3">Sara</option>
+</select>
+<article id="mentorCard"></article>`,
+      css: `#mentorCard {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+}`,
+      js: `const mentorSelect = document.getElementById("mentorSelect");
+const mentorCard = document.getElementById("mentorCard");
+
+const mentors = [
+  { id: 1, name: "Maya", specialty: "CSS layout" },
+  { id: 2, name: "Leo", specialty: "JavaScript events" },
+  { id: 3, name: "Sara", specialty: "React components" },
+];
+
+function renderMentor() {
+  const selectedId = Number(mentorSelect.value);
+  const mentor = mentors.find((item) => item.id === selectedId);
+
+  if (!mentor) {
+    mentorCard.textContent = "No mentor found.";
+    return;
+  }
+
+  mentorCard.innerHTML =
+    "<h2>" + mentor.name + "</h2>" +
+    "<p>" + mentor.specialty + "</p>";
+}
+
+mentorSelect.addEventListener("change", renderMentor);
+
+renderMentor();`,
+    },
+  },
+  {
+    id: "some-stock-warning",
+    editorType: "web",
+    title: "Challenge 80 — Check Stock Warnings with some()",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays",
+    goal: "Use some() to check whether any product is low on stock and show a warning.",
+    requirements: [
+      "Create an array of product objects with stock numbers",
+      "Use some() to check for low stock",
+      "Show a warning if any item has stock below 5",
+      "Render the product list",
+      "Use a different message when stock levels are healthy",
+    ],
+    tips: [
+      "Before coding, decide the yes/no question some() should answer.",
+      "some() is for checking whether at least one item passes a test.",
+      "This is useful for warnings, badges, and validation checks.",
+    ],
+    concepts: ["some()", "arrays of objects", "conditional rendering", "warnings"],
+    suggestedApproach: [
+      "Create product data with stock values.",
+      "Use some() to calculate whether low stock exists.",
+      "Render the warning message from that boolean.",
+      "Render the list so the user can see why the warning appears.",
+    ],
+    commonMistakes: [
+      "Using filter() when a yes/no answer is enough",
+      "Checking only the first product",
+      "Rendering the list but not the warning state",
+    ],
+    expectedOutcome:
+      "A stock panel that demonstrates some() as an any-match check.",
+    starter: {
+      html: `<p id="stockWarning"></p>
+<ul id="stockList"></ul>`,
+      css: `.warning {
+  color: #b45309;
+  font-weight: 700;
+}`,
+      js: ``,
+    },
+    solution: {
+      html: `<p id="stockWarning"></p>
+<ul id="stockList"></ul>`,
+      css: `.warning {
+  color: #b45309;
+  font-weight: 700;
+}`,
+      js: `const stockWarning = document.getElementById("stockWarning");
+const stockList = document.getElementById("stockList");
+
+const products = [
+  { name: "Keyboard", stock: 12 },
+  { name: "Mouse", stock: 3 },
+  { name: "Monitor", stock: 7 },
+];
+
+const hasLowStock = products.some((product) => product.stock < 5);
+
+stockWarning.textContent = hasLowStock
+  ? "Some products are low on stock."
+  : "All stock levels look healthy.";
+stockWarning.classList.toggle("warning", hasLowStock);
+
+stockList.innerHTML = products
+  .map((product) => {
+    return "<li>" + product.name + " - " + product.stock + " left</li>";
+  })
+  .join("");`,
+    },
+  },
+  {
+    id: "sort-students-by-score",
+    editorType: "web",
+    title: "Challenge 81 — Sort Students by Score",
+    difficulty: "Medium",
+    category: "JavaScript + Arrays",
+    goal: "Use sort() on a copied array to rank students by score without mutating the original data directly.",
+    requirements: [
+      "Create an array of student objects with scores",
+      "Render the original order first",
+      "Add a Sort by score button",
+      "Use sort() on a copied array",
+      "Render highest scores first after sorting",
+    ],
+    tips: [
+      "Before coding, decide whether you want to mutate the original array.",
+      "A copied array with spread keeps the original data safer.",
+      "sort() needs a compare function for numbers.",
+    ],
+    concepts: ["sort()", "spread operator", "arrays of objects", "numeric sorting"],
+    suggestedApproach: [
+      "Create the student data.",
+      "Write a renderStudents function.",
+      "Render the original array on load.",
+      "In the button handler, create a sorted copy and render it.",
+    ],
+    commonMistakes: [
+      "Sorting numbers like strings",
+      "Forgetting to re-render after sorting",
+      "Mutating the original array without realizing it",
+    ],
+    expectedOutcome:
+      "A ranked student list that practices safe numeric sorting.",
+    starter: {
+      html: `<button id="sortStudentsBtn" type="button">Sort by score</button>
+<ol id="studentList"></ol>`,
+      css: ``,
+      js: ``,
+    },
+    solution: {
+      html: `<button id="sortStudentsBtn" type="button">Sort by score</button>
+<ol id="studentList"></ol>`,
+      css: ``,
+      js: `const sortStudentsBtn = document.getElementById("sortStudentsBtn");
+const studentList = document.getElementById("studentList");
+
+const students = [
+  { name: "Maya", score: 86 },
+  { name: "Leo", score: 92 },
+  { name: "Sara", score: 78 },
+  { name: "Nico", score: 95 },
+];
+
+function renderStudents(items) {
+  studentList.innerHTML = items
+    .map((student) => {
+      return "<li>" + student.name + " - " + student.score + "</li>";
+    })
+    .join("");
+}
+
+sortStudentsBtn.addEventListener("click", () => {
+  const sortedStudents = [...students].sort((a, b) => b.score - a.score);
+  renderStudents(sortedStudents);
+});
+
+renderStudents(students);`,
+    },
+  },
+  {
     id: "render-users-from-array",
     editorType: "web",
-    title: "Challenge 56 — Render Users from an Array",
+    title: "Challenge 82 — Render Users from an Array",
     difficulty: "Medium",
     category: "JavaScript + Data Rendering",
     goal: "Render a list of user cards from an array of objects.",
@@ -4794,7 +7590,7 @@ userList.innerHTML = users
   {
     id: "event-delegation-todo-actions",
     editorType: "web",
-    title: "Challenge 57 — Todo Actions with Event Delegation",
+    title: "Challenge 83 — Todo Actions with Event Delegation",
     difficulty: "Hard",
     category: "JavaScript + DOM",
     goal: "Use event delegation to complete and remove todo items.",
@@ -4878,7 +7674,7 @@ todoList.addEventListener("click", (event) => {
   {
     id: "dropdown-menu-toggle",
     editorType: "web",
-    title: "Challenge 58 — Dropdown Menu Toggle",
+    title: "Challenge 84 — Dropdown Menu Toggle",
     difficulty: "Medium",
     category: "JavaScript + DOM",
     goal: "Build a small dropdown menu that opens and closes when the trigger button is clicked.",
@@ -4974,7 +7770,7 @@ menuBtn.addEventListener("click", () => {
   {
     id: "async-product-search",
     editorType: "web",
-    title: "Challenge 59 — Async Product Search",
+    title: "Challenge 85 — Async Product Search",
     difficulty: "Hard",
     category: "JavaScript + Async",
     goal: "Simulate an async search request with loading and empty states.",
@@ -5063,7 +7859,7 @@ searchBtn.addEventListener("click", async () => {
   {
     id: "paginated-table",
     editorType: "web",
-    title: "Challenge 60 — Paginated Table",
+    title: "Challenge 86 — Paginated Table",
     difficulty: "Hard",
     category: "JavaScript + UI State",
     goal: "Create a simple paginated table for customer data.",
@@ -5168,7 +7964,7 @@ renderTable();`,
   {
     id: "kpi-dashboard-calculator",
     editorType: "web",
-    title: "Challenge 61 — KPI Dashboard Calculator",
+    title: "Challenge 87 — KPI Dashboard Calculator",
     difficulty: "Hard",
     category: "JavaScript + Data",
     goal: "Calculate dashboard summary values from an orders array.",
@@ -5269,7 +8065,7 @@ dashboard.innerHTML = kpis
   {
     id: "destructure-profile-card",
     editorType: "web",
-    title: "Challenge 62 — Destructure a Profile Card",
+    title: "Challenge 89 — Destructure a Profile Card",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Render a profile card by destructuring an object and copying data with the spread operator.",
@@ -5371,7 +8167,7 @@ profileCard.innerHTML =
   {
     id: "spread-settings-merge",
     editorType: "web",
-    title: "Challenge 63 — Merge Settings with Spread",
+    title: "Challenge 90 — Merge Settings with Spread",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Use the spread operator to merge base settings with user overrides and render the result.",
@@ -5452,7 +8248,7 @@ settingsCard.innerHTML =
   {
     id: "find-priority-ticket",
     editorType: "web",
-    title: "Challenge 64 — Find a Priority Ticket",
+    title: "Challenge 91 — Find a Priority Ticket",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Use find() on an array of objects and render one matching support ticket in the UI.",
@@ -5578,7 +8374,7 @@ renderTicket();`,
   {
     id: "switch-role-permissions",
     editorType: "web",
-    title: "Challenge 65 — Role Permissions with switch",
+    title: "Challenge 92 — Role Permissions with switch",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Use a switch statement to show different dashboard permissions for different user roles.",
@@ -5680,7 +8476,7 @@ renderPermissions();`,
   {
     id: "closure-counter-factory",
     editorType: "web",
-    title: "Challenge 66 — Closure Counter Factory",
+    title: "Challenge 93 — Closure Counter Factory",
     difficulty: "Medium",
     category: "Core JavaScript",
     goal: "Create independent counters by using closures to remember private values.",
@@ -5760,7 +8556,7 @@ savesBtn.addEventListener("click", () => {
   {
     id: "event-loop-order",
     editorType: "web",
-    title: "Challenge 67 — Event Loop Order",
+    title: "Challenge 94 — Event Loop Order",
     difficulty: "Medium",
     category: "Async JavaScript",
     goal: "Visualize how synchronous code, promises, and timers run in different phases.",
@@ -5832,7 +8628,7 @@ runBtn.addEventListener("click", () => {
   {
     id: "debug-broken-form-validation",
     editorType: "web",
-    title: "Challenge 68 — Debug Broken Form Validation",
+    title: "Challenge 95 — Debug Broken Form Validation",
     difficulty: "Medium",
     category: "Debugging",
     goal: "Repair a broken contact form so empty fields show an error and a valid submission shows success.",
@@ -5932,7 +8728,7 @@ contactForm.addEventListener("submit", (event) => {
   {
     id: "try-catch-json-parser",
     editorType: "web",
-    title: "Challenge 69 — Safe JSON Parser",
+    title: "Challenge 96 — Safe JSON Parser",
     difficulty: "Medium",
     category: "Debugging",
     goal: "Use try/catch to parse JSON and show a helpful error when the input is invalid.",
@@ -6006,7 +8802,7 @@ parseBtn.addEventListener("click", () => {
   {
     id: "debug-broken-localstorage-todos",
     editorType: "web",
-    title: "Challenge 70 — Debug Broken localStorage Todos",
+    title: "Challenge 97 — Debug Broken localStorage Todos",
     difficulty: "Hard",
     category: "Debugging",
     goal: "Repair a todo list so saved items render correctly after refresh and new todos stay in sync with localStorage.",
@@ -6114,7 +8910,7 @@ renderTodos();`,
   {
     id: "debug-broken-async-search",
     editorType: "web",
-    title: "Challenge 71 — Debug Broken Async Search",
+    title: "Challenge 98 — Debug Broken Async Search",
     difficulty: "Hard",
     category: "Debugging",
     goal: "Repair a broken async search flow so loading, success, and empty results behave clearly.",
@@ -6241,7 +9037,7 @@ searchBtn.addEventListener("click", async () => {
   {
     id: "fetch-users-status-codes",
     editorType: "web",
-    title: "Challenge 72 — Fetch Users and Check Status",
+    title: "Challenge 99 — Fetch Users and Check Status",
     difficulty: "Medium",
     category: "APIs",
     goal: "Use fetch(), async/await, loading state, and response status checks to render API data.",
@@ -6332,7 +9128,7 @@ loadBtn.addEventListener("click", async () => {
   {
     id: "post-json-with-headers",
     editorType: "web",
-    title: "Challenge 73 — POST JSON with Headers",
+    title: "Challenge 100 — POST JSON with Headers",
     difficulty: "Hard",
     category: "APIs",
     goal: "Send form data to an API with POST, JSON.stringify, headers, and async error handling.",
@@ -6452,7 +9248,7 @@ form.addEventListener("submit", async (event) => {
   {
     id: "query-param-search",
     editorType: "web",
-    title: "Challenge 74 — Build Query Parameters",
+    title: "Challenge 101 — Build Query Parameters",
     difficulty: "Medium",
     category: "APIs",
     goal: "Create an API URL with query parameters for search, category, sorting, and page number.",
@@ -6551,7 +9347,7 @@ buildBtn.addEventListener("click", () => {
   {
     id: "request-race-condition-guard",
     editorType: "web",
-    title: "Challenge 75 — Guard Against Stale Search Results",
+    title: "Challenge 102 — Guard Against Stale Search Results",
     difficulty: "Hard",
     category: "Async JavaScript",
     goal: "Prevent older async search requests from overwriting newer results.",
@@ -6652,7 +9448,7 @@ searchInput.addEventListener("input", async () => {
   {
     id: "backend-request-flow",
     editorType: "web",
-    title: "Challenge 76 — Backend Request Flow",
+    title: "Challenge 103 — Backend Request Flow",
     difficulty: "Medium",
     category: "Backend Awareness",
     goal: "Render a visual explanation of how the browser, server, database, and API response work together.",

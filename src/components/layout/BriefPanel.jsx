@@ -15,8 +15,6 @@ export default function BriefPanel({
     approach: false,
     mistakes: false,
     outcome: false,
-    quality: false,
-    readiness: false,
   });
   const [selectedConcept, setSelectedConcept] = useState(null);
   const selectedConceptDetails = useMemo(
@@ -96,25 +94,19 @@ export default function BriefPanel({
       </div>
 
       {!isTimedVariant && challenge.qualityChecklist?.length > 0 && (
-        <div className="brief-block">
-          <button
-            className="brief-toggle"
-            onClick={() => toggleSection("quality")}
-          >
-            <span>{copy.brief.qualityBar}</span>
-            <span>{openSections.quality ? "−" : "+"}</span>
-          </button>
-
-          {openSections.quality && (
-            <div className="quality-box brief-dropdown-content">
-              <p className="brief-text">{copy.brief.qualityIntro}</p>
-              <ul className="clean-list">
-                {challenge.qualityChecklist.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
+        <div className="brief-block quality-brief-block">
+          <div className="quality-box">
+            <div className="quality-box-top">
+              <h4>{copy.brief.qualityBar}</h4>
+              <span>{copy.brief.qualityBadge}</span>
             </div>
-          )}
+            <p className="brief-text">{copy.brief.qualityIntro}</p>
+            <ul className="quality-checklist">
+              {challenge.qualityChecklist.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
 
@@ -172,33 +164,6 @@ export default function BriefPanel({
                   </pre>
                 </>
               )}
-            </div>
-          )}
-        </div>
-      )}
-
-      {!isTimedVariant && challenge.readinessChecks?.length > 0 && (
-        <div className="brief-block">
-          <button
-            className="brief-toggle"
-            onClick={() => toggleSection("readiness")}
-          >
-            <span>{copy.brief.readinessCheck}</span>
-            <span>{openSections.readiness ? "−" : "+"}</span>
-          </button>
-
-          {openSections.readiness && (
-            <div className="readiness-checks brief-dropdown-content">
-              <p className="brief-text">{copy.brief.readinessIntro}</p>
-              {challenge.readinessChecks.map((item, index) => (
-                <details className="readiness-answer" key={index}>
-                  <summary>{item.question}</summary>
-                  <div>
-                    <strong>{copy.brief.modelAnswer}</strong>
-                    <p>{item.answer}</p>
-                  </div>
-                </details>
-              ))}
             </div>
           )}
         </div>

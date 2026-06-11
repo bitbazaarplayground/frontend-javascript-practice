@@ -877,6 +877,7 @@ export default function App() {
               onChange={handleReflectionChange}
               copy={appCopy}
               variant={isRookieTrack ? "rookie" : "interview"}
+              challenge={activeChallenge}
             />
           )}
         </div>
