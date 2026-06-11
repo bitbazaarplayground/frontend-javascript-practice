@@ -1394,79 +1394,143 @@ function validateBuilderCardSearchChallenge(draft, language = "en") {
   return finalizeScoreResult(score, 6, 4, feedback, language);
 }
 
-function validateBuilderProductFilterChallenge(draft, language = "en") {
+function hasMiniBuildLayoutCss(source) {
+  const hasLayout =
+    source.compactCss.includes("display:grid") ||
+    source.compactCss.includes("display:flex");
+
+  return (
+    hasLayout &&
+    source.compactCss.includes("gap:") &&
+    source.compactCss.includes("padding:") &&
+    (source.compactCss.includes("border:") ||
+      source.compactCss.includes("border-radius:"))
+  );
+}
+
+function hasClearResetAction(source) {
+  return (
+    hasClickListener(source) &&
+    includesAny(source.lowerJs, [
+      ".value = \"\"",
+      ".value = ''",
+      ".value=\"\"",
+      ".value=''",
+      ".reset(",
+    ])
+  );
+}
+
+function hasEmptyStateControl(source) {
+  return (
+    includesAny(source.lowerAll, [
+      "no results",
+      "no topics",
+      "no resources",
+      "nothing matches",
+      "no items",
+      "empty",
+    ]) &&
+    includesAny(source.lowerJs, [
+      ".hidden",
+      ".style.display",
+      "visiblecount",
+      "matchcount",
+      "length === 0",
+      "length===0",
+    ])
+  );
+}
+
+function hasLiveSummaryUpdate(source) {
+  return (
+    includesAny(source.lowerJs, [
+      "visiblecount",
+      "matchcount",
+      "summary.textcontent",
+      "status.textcontent",
+    ]) && includesAny(source.lowerJs, ["textcontent", "innertext", "innerhtml"])
+  );
+}
+
+function validateBuilderTextareaCounterMiniBuild(draft, language = "en") {
   const source = getSource(draft);
   const isSpanish = language === "es";
   const feedback = [];
   let score = 0;
 
-  const hasStructure = hasTag(source.html, ["input", "ul", "li"]);
-  const hasData = includesAny(source.lowerJs, ["const lessonproducts", "const products", "let products"]);
-  const hasFilter = source.lowerJs.includes(".filter(");
-  const hasPriceParsing = includesAny(source.lowerJs, [
-    "number(",
-    "parseint(",
-    "parsefloat(",
-    "infinity",
+  const hasStructure = hasTag(source.html, ["textarea", "button"]) &&
+    hasTag(source.html, ["label", "p", "span"]);
+  const hasLayout = hasMiniBuildLayoutCss(source);
+  const hasLiveCount =
+    hasInputListener(source) &&
+    source.lowerJs.includes(".length") &&
+    includesAny(source.lowerJs, ["textcontent", "innertext"]);
+  const hasWarning =
+    includesAny(source.lowerAll, ["warning", "remaining", "limit"]) &&
+    includesAny(source.lowerJs, ["if (", "classlist.add", "classlist.toggle"]);
+  const hasClear = hasClearResetAction(source);
+  const hasSharedRender = includesAny(source.lowerJs, [
+    "function render",
+    "const render",
+    "function update",
+    "const update",
   ]);
-  const hasRendering = includesAny(source.lowerJs, [".map(", "innerhtml", "createelement"]);
-  const hasTwoInputFlow =
-    countMatches(source.lowerJs, /addeventlistener\s*\(\s*["']input["']/g) >= 2;
 
   [
     [
       hasStructure,
       isSpanish
-        ? "Bien - los dos inputs y la salida renderizada existen."
-        : "Good - the two inputs and rendered output are present.",
+        ? "Bien - la tarjeta incluye textarea, boton y texto de feedback."
+        : "Good - the card includes a textarea, button, and feedback text.",
       isSpanish
-        ? "Anade el input por nombre, el input de precio y una salida visible."
-        : "Add the name input, the price input, and a visible output area.",
+        ? "Crea la estructura completa con textarea, boton Clear y texto para el contador."
+        : "Build the full structure with a textarea, Clear button, and counter text.",
     ],
     [
-      hasData,
+      hasLayout,
       isSpanish
-        ? "Bien - los productos salen de un array de datos."
-        : "Good - the products come from a data array.",
+        ? "Bien - el CSS organiza la tarjeta con espaciado y borde."
+        : "Good - the CSS gives the card organised spacing and a border.",
       isSpanish
-        ? "Usa un array de productos en JavaScript para poder filtrarlos."
-        : "Use a JavaScript products array so the UI can filter real data.",
+        ? "Anade CSS de layout, espaciado, padding y borde para que parezca una interfaz real."
+        : "Add layout CSS with spacing, padding, and a border so this feels like a real interface.",
     ],
     [
-      hasFilter,
+      hasLiveCount,
       isSpanish
-        ? "Bien - la solucion deriva resultados con filter()."
-        : "Good - the solution derives results with filter().",
+        ? "Bien - el contador se actualiza mientras se escribe."
+        : "Good - the count updates while the user types.",
       isSpanish
-        ? "Usa filter() para combinar el filtro por nombre y por precio."
-        : "Use filter() to combine the name and price checks.",
+        ? "Usa el evento input, lee value.length y actualiza el texto visible."
+        : "Use the input event, read value.length, and update visible text.",
     ],
     [
-      hasPriceParsing,
+      hasWarning,
       isSpanish
-        ? "Bien - el precio se trata como numero."
-        : "Good - the price is treated as a number.",
+        ? "Bien - existe feedback condicional cerca del limite."
+        : "Good - there is conditional feedback near the limit.",
       isSpanish
-        ? "Convierte el valor del precio a numero antes de compararlo."
-        : "Convert the price input to a number before comparing it.",
+        ? "Anade una condicion que cambie el mensaje o clase cuando el texto este cerca del limite."
+        : "Add a condition that changes the message or class when the text is near the limit.",
     ],
     [
-      hasRendering,
+      hasClear,
       isSpanish
-        ? "Bien - los productos filtrados se vuelven a renderizar."
-        : "Good - the filtered products are rendered back into the UI.",
+        ? "Bien - Clear vacia el campo."
+        : "Good - Clear empties the field.",
       isSpanish
-        ? "Vuelve a renderizar la lista despues de aplicar los filtros."
-        : "Render the filtered list after applying the filters.",
+        ? "Conecta el boton Clear para vaciar el textarea y actualizar otra vez la UI."
+        : "Connect the Clear button so it empties the textarea and updates the UI again.",
     ],
     [
-      hasTwoInputFlow,
+      hasSharedRender,
       isSpanish
-        ? "Bien - ambos inputs pueden volver a disparar el filtrado."
-        : "Good - both inputs can trigger the filter again.",
+        ? "Bien - la logica de actualizacion esta reutilizada."
+        : "Good - the update logic is reusable.",
       isSpanish
-        ? "Escucha el evento input en los dos campos para actualizar la lista."
-        : "Listen to the input event on both fields so the list updates from either one.",
+        ? "Extrae la actualizacion a una funcion para poder usarla al escribir y al limpiar."
+        : "Move the UI update into a function so typing and clearing can both use it.",
     ],
   ].forEach(([passed, successMessage, missingMessage]) => {
     if (passed) score += 1;
@@ -1474,6 +1538,407 @@ function validateBuilderProductFilterChallenge(draft, language = "en") {
   });
 
   return finalizeScoreResult(score, 6, 4, feedback, language);
+}
+
+function validateBuilderSearchableTopicsMiniBuild(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure =
+    hasTag(source.html, ["input", "button", "ul", "li"]) &&
+    countTags(source.html, ["li"]) >= 6;
+  const hasLayout = hasMiniBuildLayoutCss(source);
+  const hasFilterFlow =
+    hasInputListener(source) &&
+    source.lowerJs.includes("tolowercase()") &&
+    source.lowerJs.includes("includes(") &&
+    hasItemLoop(source);
+  const hasVisibility = hasValidListVisibilityPattern(source);
+  const hasSummary = hasLiveSummaryUpdate(source);
+  const hasEmptyState = hasEmptyStateControl(source);
+  const hasClear = hasClearResetAction(source);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - existen input, boton y una lista real de al menos seis items."
+        : "Good - the input, button, and a real list of at least six items are present.",
+      isSpanish
+        ? "Construye el HTML con input, boton Clear y al menos seis items de lista."
+        : "Build the HTML with an input, Clear button, and at least six list items.",
+    ],
+    [
+      hasLayout,
+      isSpanish
+        ? "Bien - la busqueda tiene CSS de interfaz."
+        : "Good - the search feature has interface-level CSS.",
+      isSpanish
+        ? "Anade CSS con layout, gap, padding y borde para que no sea solo HTML sin estilo."
+        : "Add CSS with layout, gap, padding, and a border so it is not just unstyled HTML.",
+    ],
+    [
+      hasFilterFlow,
+      isSpanish
+        ? "Bien - el filtro en vivo recorre la lista con comparacion normalizada."
+        : "Good - the live filter loops through the list with a normalized comparison.",
+      isSpanish
+        ? "En el evento input, pasa query e items a minusculas, usa includes() y recorre cada item."
+        : "In the input event, lowercase the query and items, use includes(), and loop over every item.",
+    ],
+    [
+      hasVisibility,
+      isSpanish
+        ? "Bien - los items se ocultan y se vuelven a mostrar con valores validos."
+        : "Good - items are hidden and shown again with valid display values.",
+      isSpanish
+        ? 'Usa display "none" para ocultar y "list-item" o hidden/clases validas para volver a mostrar.'
+        : 'Use display "none" to hide and "list-item" or valid hidden/classes to show again.',
+    ],
+    [
+      hasSummary,
+      isSpanish
+        ? "Bien - la UI muestra un resumen vivo de resultados."
+        : "Good - the UI shows a live results summary.",
+      isSpanish
+        ? "Actualiza un texto visible con cuantas coincidencias se estan mostrando."
+        : "Update visible text with how many matches are currently showing.",
+    ],
+    [
+      hasEmptyState,
+      isSpanish
+        ? "Bien - existe estado de sin resultados controlado desde JavaScript."
+        : "Good - a no-results state is controlled from JavaScript.",
+      isSpanish
+        ? "Muestra u oculta el mensaje de sin resultados segun el total visible."
+        : "Show or hide the no-results message based on the visible total.",
+    ],
+    [
+      hasClear,
+      isSpanish
+        ? "Bien - Clear resetea la busqueda."
+        : "Good - Clear resets the search.",
+      isSpanish
+        ? "El boton Clear debe vaciar el input y volver a renderizar todos los items."
+        : "The Clear button should empty the input and render every item again.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 7, 5, feedback, language);
+}
+
+function validateBuilderBoldSearchClearMiniBuild(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure =
+    hasTag(source.html, ["input", "button", "ul", "li"]) &&
+    countTags(source.html, ["li"]) >= 5;
+  const hasLayout = hasMiniBuildLayoutCss(source) &&
+    includesAny(source.lowerCss, ["font-weight", ".is-match", "background"]);
+  const hasSearchFlow =
+    hasInputListener(source) &&
+    source.lowerJs.includes("tolowercase()") &&
+    source.lowerJs.includes("includes(") &&
+    hasItemLoop(source);
+  const hasBoldState = includesAny(source.lowerJs, [
+    "fontweight",
+    "classlist.add(\"is-match\"",
+    "classlist.add('is-match'",
+    "classlist.toggle(\"is-match\"",
+    "classlist.toggle('is-match'",
+    "\"700\"",
+    "'700'",
+    "\"bold\"",
+    "'bold'",
+  ]);
+  const keepsItemsVisible = !includesAny(source.lowerJs, [
+    ".style.display",
+    ".hidden = true",
+    ".hidden=true",
+    "setattribute(\"hidden\"",
+    "setattribute('hidden'",
+  ]);
+  const hasSummary = hasLiveSummaryUpdate(source);
+  const hasClear = hasClearResetAction(source);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - el HTML incluye buscador, boton y lista real."
+        : "Good - the HTML includes a search field, button, and real list.",
+      isSpanish
+        ? "Construye input, Clear, texto de estado y una lista de al menos cinco items."
+        : "Build the input, Clear button, status text, and a list of at least five items.",
+    ],
+    [
+      hasLayout,
+      isSpanish
+        ? "Bien - el CSS incluye layout y estilo visible para coincidencias."
+        : "Good - the CSS includes layout and a visible match style.",
+      isSpanish
+        ? "Anade CSS de layout y una clase/estilo que haga las coincidencias claramente visibles."
+        : "Add layout CSS and a class/style that makes matches clearly visible.",
+    ],
+    [
+      hasSearchFlow,
+      isSpanish
+        ? "Bien - la busqueda revisa cada item mientras se escribe."
+        : "Good - the search checks every item while the user types.",
+      isSpanish
+        ? "Usa input, toLowerCase(), includes() y un loop por cada item."
+        : "Use input, toLowerCase(), includes(), and a loop over every item.",
+    ],
+    [
+      hasBoldState,
+      isSpanish
+        ? "Bien - las coincidencias reciben negrita o una clase de destacado."
+        : "Good - matches receive bold styling or a highlight class.",
+      isSpanish
+        ? "Haz que los matches se pongan en negrita con fontWeight o classList."
+        : "Make matches bold with fontWeight or classList.",
+    ],
+    [
+      keepsItemsVisible,
+      isSpanish
+        ? "Bien - la lista no se convierte en un filtro de ocultar/mostrar."
+        : "Good - the list does not turn into a hide/show filter.",
+      isSpanish
+        ? "En este reto los items deben seguir visibles; destaca matches en vez de ocultar no matches."
+        : "In this challenge, items should stay visible; highlight matches instead of hiding non-matches.",
+    ],
+    [
+      hasSummary,
+      isSpanish
+        ? "Bien - el estado muestra cuantas coincidencias hay."
+        : "Good - the status shows how many matches exist.",
+      isSpanish
+        ? "Actualiza un texto visible con el numero de coincidencias."
+        : "Update visible text with the number of matches.",
+    ],
+    [
+      hasClear,
+      isSpanish
+        ? "Bien - Clear resetea input y destacado."
+        : "Good - Clear resets the input and highlight state.",
+      isSpanish
+        ? "El boton Clear debe vaciar el input y ejecutar otra vez la funcion de render."
+        : "The Clear button should empty the input and run the render function again.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 7, 5, feedback, language);
+}
+
+function validateBuilderCardSearchMiniBuild(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure =
+    hasTag(source.html, ["input", "button", "section", "article"]) &&
+    countTags(source.html, ["article"]) >= 3;
+  const hasLayout = hasMiniBuildLayoutCss(source) &&
+    (source.lowerCss.includes("grid-template-columns") ||
+      source.compactCss.includes("display:flex"));
+  const hasFilterFlow =
+    hasInputListener(source) &&
+    source.lowerJs.includes("tolowercase()") &&
+    source.lowerJs.includes("includes(") &&
+    hasItemLoop(source);
+  const hasVisibility = hasValidCardVisibilityPattern(source);
+  const hasSummary = hasLiveSummaryUpdate(source);
+  const hasEmptyState = hasEmptyStateControl(source);
+  const hasClear = hasClearResetAction(source);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - hay buscador, boton y varias cards reales."
+        : "Good - there is a search input, button, and several real cards.",
+      isSpanish
+        ? "Construye input, Clear, resumen, estado vacio y al menos tres article cards."
+        : "Build an input, Clear button, summary, empty state, and at least three article cards.",
+    ],
+    [
+      hasLayout,
+      isSpanish
+        ? "Bien - las cards tienen layout responsive con CSS."
+        : "Good - the cards have a responsive CSS layout.",
+      isSpanish
+        ? "Usa Grid o Flexbox y espaciado para que las cards no parezcan una lista plana."
+        : "Use Grid or Flexbox and spacing so the cards do not feel like a flat list.",
+    ],
+    [
+      hasFilterFlow,
+      isSpanish
+        ? "Bien - el filtro revisa el texto de cada card mientras se escribe."
+        : "Good - the filter checks each card's text while the user types.",
+      isSpanish
+        ? "En input, compara el query con el textContent de cada card."
+        : "On input, compare the query with each card's textContent.",
+    ],
+    [
+      hasVisibility,
+      isSpanish
+        ? "Bien - las cards se ocultan y muestran con estados validos."
+        : "Good - cards are hidden and shown with valid states.",
+      isSpanish
+        ? 'Usa "none" para ocultar y "block", "grid", "flex" o clases validas para mostrar.'
+        : 'Use "none" to hide and "block", "grid", "flex", or valid classes to show.',
+    ],
+    [
+      hasSummary,
+      isSpanish
+        ? "Bien - hay resumen vivo de cards visibles."
+        : "Good - there is a live summary of visible cards.",
+      isSpanish
+        ? "Actualiza un texto con cuantas cards quedan visibles."
+        : "Update text with how many cards remain visible.",
+    ],
+    [
+      hasEmptyState,
+      isSpanish
+        ? "Bien - el estado vacio se controla cuando no hay matches."
+        : "Good - the empty state is controlled when there are no matches.",
+      isSpanish
+        ? "Muestra el mensaje de sin resultados solo cuando no quede ninguna card visible."
+        : "Show the no-results message only when no cards remain visible.",
+    ],
+    [
+      hasClear,
+      isSpanish
+        ? "Bien - Clear restaura todas las cards."
+        : "Good - Clear restores every card.",
+      isSpanish
+        ? "El boton Clear debe vaciar el input y mostrar todas las cards otra vez."
+        : "The Clear button should empty the input and show every card again.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 7, 5, feedback, language);
+}
+
+function validateBuilderFeedbackPreviewMiniBuild(draft, language = "en") {
+  const source = getSource(draft);
+  const isSpanish = language === "es";
+  const feedback = [];
+  let score = 0;
+
+  const hasStructure =
+    hasTag(source.html, ["form", "input", "textarea", "button"]) &&
+    includesAny(source.lowerHtml, ["preview", "status"]);
+  const hasLayout = hasMiniBuildLayoutCss(source);
+  const hasLivePreview =
+    countMatches(source.lowerJs, /addeventlistener\s*\(\s*["']input["']/g) >= 2 &&
+    includesAny(source.lowerJs, ["preview", "textcontent"]) &&
+    source.lowerJs.includes(".value");
+  const hasCharacterCount =
+    source.lowerJs.includes(".length") &&
+    includesAny(source.lowerAll, ["character", "count"]);
+  const hasSubmitValidation =
+    includesAny(source.lowerJs, [
+      'addeventlistener("submit"',
+      "addeventlistener('submit'",
+      "onsubmit",
+    ]) &&
+    source.lowerJs.includes("preventdefault") &&
+    includesAny(source.lowerJs, ["trim()", "please", "error", "return"]);
+  const hasClear = hasClearResetAction(source);
+  const hasStatusFeedback = includesAny(source.lowerJs, [
+    "statustext",
+    "feedbackstatus",
+    "status.textcontent",
+    "submitted",
+    "success",
+  ]);
+
+  [
+    [
+      hasStructure,
+      isSpanish
+        ? "Bien - el HTML incluye formulario, campos, botones y preview."
+        : "Good - the HTML includes a form, fields, buttons, and preview.",
+      isSpanish
+        ? "Construye form, input de nombre, textarea, botones y un area de preview/status."
+        : "Build a form, name input, textarea, buttons, and a preview/status area.",
+    ],
+    [
+      hasLayout,
+      isSpanish
+        ? "Bien - form y preview tienen layout y espaciado."
+        : "Good - the form and preview have layout and spacing.",
+      isSpanish
+        ? "Anade CSS de layout, gap, padding y borde para unir form y preview en una mini interfaz."
+        : "Add layout, gap, padding, and border CSS to make the form and preview feel like one mini interface.",
+    ],
+    [
+      hasLivePreview,
+      isSpanish
+        ? "Bien - el preview cambia mientras se escribe."
+        : "Good - the preview changes while the user types.",
+      isSpanish
+        ? "Escucha input en los campos y actualiza el preview con textContent."
+        : "Listen for input on the fields and update the preview with textContent.",
+    ],
+    [
+      hasCharacterCount,
+      isSpanish
+        ? "Bien - el mensaje tiene contador de caracteres."
+        : "Good - the message has a character count.",
+      isSpanish
+        ? "Usa value.length para mostrar cuantos caracteres hay en el textarea."
+        : "Use value.length to show how many characters are in the textarea.",
+    ],
+    [
+      hasSubmitValidation,
+      isSpanish
+        ? "Bien - el submit se controla y valida sin refrescar la pagina."
+        : "Good - submit is controlled and validated without refreshing the page.",
+      isSpanish
+        ? "Escucha submit, usa preventDefault() y valida que los campos no esten vacios."
+        : "Listen for submit, use preventDefault(), and validate that the fields are not empty.",
+    ],
+    [
+      hasClear,
+      isSpanish
+        ? "Bien - Clear limpia los campos."
+        : "Good - Clear cleans the fields.",
+      isSpanish
+        ? "Conecta Clear para vaciar campos y volver a renderizar el preview."
+        : "Connect Clear so it empties the fields and re-renders the preview.",
+    ],
+    [
+      hasStatusFeedback,
+      isSpanish
+        ? "Bien - hay feedback visible de error o exito."
+        : "Good - visible error or success feedback is present.",
+      isSpanish
+        ? "Actualiza un texto de estado cuando el usuario envia o falta informacion."
+        : "Update status text when the user submits or misses required information.",
+    ],
+  ].forEach(([passed, successMessage, missingMessage]) => {
+    if (passed) score += 1;
+    feedback.push(passed ? successMessage : missingMessage);
+  });
+
+  return finalizeScoreResult(score, 7, 5, feedback, language);
 }
 
 function localizeMessage(language, english, spanish) {
@@ -3525,6 +3990,14 @@ function checkRequirement(requirement, source, challenge) {
     );
   }
   if (text.includes("padding")) return source.compactCss.includes("padding:");
+  if (text.includes("classlist")) return source.lowerJs.includes("classlist");
+  if (text.includes("class")) {
+    return (
+      source.lowerJs.includes("classlist") ||
+      source.lowerHtml.includes("class=") ||
+      source.lowerCss.includes(".")
+    );
+  }
   if (text.includes("rounded") || text.includes("corner")) {
     return source.compactCss.includes("border-radius:");
   }
@@ -3614,6 +4087,7 @@ function checkRequirement(requirement, source, challenge) {
   if (text.includes("map")) return source.lowerJs.includes(".map(");
   if (text.includes("filter")) return source.lowerJs.includes(".filter(");
   if (text.includes("find")) return source.lowerJs.includes(".find(");
+  if (text.includes("some")) return source.lowerJs.includes(".some(");
   if (text.includes("sort")) return source.lowerJs.includes(".sort(");
   if (text.includes("reduce") || text.includes("total")) {
     return source.lowerJs.includes(".reduce(") || includesAny(source.lowerJs, ["total", "sum"]);
@@ -4552,16 +5026,15 @@ export function validateChallenge(challengeOrId, draft, language = "en") {
     "copy-mock-pricing-section": validateCopyMockPricingSection,
     "copy-mock-dashboard-overview": validateCopyMockDashboardOverview,
     "live-search-filter": validateBuilderListSearchChallenge,
-    "fruit-partial-match-list": validateBuilderListSearchChallenge,
-    "city-search-list": validateBuilderListSearchChallenge,
-    "movie-search-list": validateBuilderListSearchChallenge,
-    "case-insensitive-book-search": validateBuilderListSearchChallenge,
-    "username-search-filter": validateBuilderListSearchChallenge,
     "no-results-search-state": validateBuilderNoResultsSearchChallenge,
     "clear-search-button": validateBuilderClearSearchChallenge,
     "bold-matching-fruits": validateBuilderBoldMatchesChallenge,
     "search-cards-layout": validateBuilderCardSearchChallenge,
-    "filter-products-name-price": validateBuilderProductFilterChallenge,
+    "mini-build-textarea-counter-card": validateBuilderTextareaCounterMiniBuild,
+    "mini-build-searchable-topics-list": validateBuilderSearchableTopicsMiniBuild,
+    "mini-build-bold-search-clear-list": validateBuilderBoldSearchClearMiniBuild,
+    "mini-build-card-search-empty-state": validateBuilderCardSearchMiniBuild,
+    "mini-build-feedback-form-preview": validateBuilderFeedbackPreviewMiniBuild,
     "simple-form-validation": (draft, language) =>
       validateBuilderBasicFormValidator(draft, language),
     "contact-form-validation": (draft, language) =>

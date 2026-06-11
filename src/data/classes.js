@@ -474,17 +474,17 @@ const classSections = {
     },
     {
       title: {
-        en: "Live text and search basics",
-        es: "Texto en vivo y busqueda basica",
+        en: "Live input, first filters, and event variations",
+        es: "Input en vivo, primeros filtros y variaciones de eventos",
       },
       challengeIds: [
         "character-counter",
         "live-search-filter",
-        "fruit-partial-match-list",
-        "city-search-list",
-        "movie-search-list",
-        "case-insensitive-book-search",
-        "username-search-filter",
+        "filter-lessons-with-filter-method",
+        "select-preview-change-event",
+        "checkbox-summary-panel",
+        "range-slider-live-preview",
+        "keydown-enter-add-tag",
       ],
     },
     {
@@ -515,6 +515,32 @@ const classSections = {
     },
     {
       title: {
+        en: "Core interaction repetitions",
+        es: "Repeticiones de interacciones clave",
+      },
+      challengeIds: [
+        "search-filter-count-reset",
+        "class-toggle-alert-panel",
+        "limited-step-counter",
+        "multi-faq-accordion",
+        "modal-open-close",
+      ],
+    },
+    {
+      title: {
+        en: "Interview-style mini builds",
+        es: "Mini builds estilo entrevista",
+      },
+      challengeIds: [
+        "mini-build-textarea-counter-card",
+        "mini-build-searchable-topics-list",
+        "mini-build-bold-search-clear-list",
+        "mini-build-card-search-empty-state",
+        "mini-build-feedback-form-preview",
+      ],
+    },
+    {
+      title: {
         en: "Integrated mini build",
         es: "Mini build integrado",
       },
@@ -529,7 +555,6 @@ const classSections = {
       },
       challengeIds: [
         "simple-form-validation",
-        "prevent-duplicate-items",
         "contact-form-validation",
         "login-form-submit-object",
         "booking-form-reset",
@@ -553,6 +578,7 @@ const classSections = {
       challengeIds: [
         "add-item-to-list",
         "add-goal-to-list",
+        "prevent-duplicate-items",
         "remove-item-from-list",
         "remove-saved-item",
       ],
@@ -563,13 +589,15 @@ const classSections = {
         es: "Ordenacion, filtros y estado de UI",
       },
       challengeIds: [
-        "sort-products",
         "filter-products",
+        "data-driven-lesson-search",
+        "sort-products",
         "todo-complete-toggle",
         "password-strength-checker",
         "password-rules-validation",
         "tab-switcher",
         "restaurant-tabs-panel",
+        "profile-tabs-active-state",
       ],
     },
     {
@@ -604,6 +632,10 @@ const classSections = {
         "save-load-todos-localstorage",
         "saved-favourites-localstorage",
         "cart-items-localstorage",
+        "dark-mode-preference-localstorage",
+        "saved-form-draft-localstorage",
+        "recently-viewed-products-localstorage",
+        "todo-completed-filter-localstorage",
       ],
     },
     {
@@ -617,6 +649,8 @@ const classSections = {
         "weather-search-panel",
         "recipe-search-app",
         "promise-all-user-posts",
+        "fetch-posts-loading-error-list",
+        "fetch-users-filter-after-load",
       ],
     },
     {
@@ -638,6 +672,19 @@ const classSections = {
     },
   ],
   "class-08": [
+    {
+      title: {
+        en: "Array method confidence",
+        es: "Confianza con metodos de array",
+      },
+      challengeIds: [
+        "map-product-cards",
+        "filter-available-sessions",
+        "find-selected-mentor",
+        "some-stock-warning",
+        "sort-students-by-score",
+      ],
+    },
     {
       title: {
         en: "Rendering and event patterns",
@@ -1197,14 +1244,18 @@ const classModules = [
     id: "class-15",
     number: "06",
     modeId: "rookie",
-    challengeIds: ["rookie-all-in-one-restaurant-site"],
+    challengeIds: [
+      "rookie-all-in-one-restaurant-site",
+      "rookie-all-in-one-portfolio-site",
+      "rookie-all-in-one-event-page",
+    ],
     title: {
       en: "Rookie all-in-one build",
       es: "Proyecto integrador Rookie",
     },
     summary: {
-      en: "Students bring the full Rookie path together in one polished multi-section website with navigation, cards, forms, responsive layout, and one small interaction.",
-      es: "El alumnado une todo Rookie en una web pulida con navegacion, tarjetas, formularios, layout responsive y una pequena interaccion.",
+      en: "Students bring the full Rookie path together across polished multi-section builds with navigation, cards, forms, responsive layout, and one small interaction.",
+      es: "El alumnado une todo Rookie en varios builds pulidos con navegacion, tarjetas, formularios, layout responsive y una pequena interaccion.",
     },
     outcomes: {
       en: [
@@ -1219,8 +1270,8 @@ const classModules = [
       ],
     },
     project: {
-      en: "A restaurant website all-in-one project",
-      es: "Un proyecto integrador de web de restaurante",
+      en: "Three full-page Rookie builds",
+      es: "Tres builds integradores Rookie",
     },
   },
   {
@@ -1234,11 +1285,11 @@ const classModules = [
       "toggle-card-class",
       "character-counter",
       "live-search-filter",
-      "fruit-partial-match-list",
-      "city-search-list",
-      "movie-search-list",
-      "case-insensitive-book-search",
-      "username-search-filter",
+      "filter-lessons-with-filter-method",
+      "select-preview-change-event",
+      "checkbox-summary-panel",
+      "range-slider-live-preview",
+      "keydown-enter-add-tag",
       "no-results-search-state",
       "clear-search-button",
       "bold-matching-fruits",
@@ -1249,6 +1300,16 @@ const classModules = [
       "counter-with-reset",
       "password-visibility-toggle",
       "button-click-counter",
+      "search-filter-count-reset",
+      "class-toggle-alert-panel",
+      "limited-step-counter",
+      "multi-faq-accordion",
+      "modal-open-close",
+      "mini-build-textarea-counter-card",
+      "mini-build-searchable-topics-list",
+      "mini-build-bold-search-clear-list",
+      "mini-build-card-search-empty-state",
+      "mini-build-feedback-form-preview",
       "interactive-settings-capstone",
     ],
     title: {
@@ -1256,8 +1317,8 @@ const classModules = [
       es: "Eventos del DOM y feedback en vivo",
     },
     summary: {
-      en: "The first serious JavaScript class: selecting elements, listening to events, updating content, and building lots of small search and feedback patterns.",
-      es: "La primera clase fuerte de JavaScript: seleccionar elementos, escuchar eventos, actualizar contenido y construir muchos patrones pequenos de busqueda y feedback.",
+      en: "The first serious JavaScript class: selecting elements, listening to events, updating content, repeating core UI patterns, and then combining HTML, CSS, and DOM logic in interview-style mini builds.",
+      es: "La primera clase fuerte de JavaScript: seleccionar elementos, escuchar eventos, actualizar contenido, repetir patrones clave de UI y luego combinar HTML, CSS y logica DOM en mini builds estilo entrevista.",
     },
     outcomes: {
       en: [
@@ -1284,7 +1345,6 @@ const classModules = [
     modeId: "builder",
     challengeIds: [
       "simple-form-validation",
-      "prevent-duplicate-items",
       "contact-form-validation",
       "login-form-submit-object",
       "booking-form-reset",
@@ -1292,15 +1352,18 @@ const classModules = [
       "form-data-preview",
       "add-item-to-list",
       "add-goal-to-list",
+      "prevent-duplicate-items",
       "remove-item-from-list",
       "remove-saved-item",
-      "sort-products",
       "filter-products",
+      "data-driven-lesson-search",
+      "sort-products",
       "todo-complete-toggle",
       "password-strength-checker",
       "password-rules-validation",
       "tab-switcher",
       "restaurant-tabs-panel",
+      "profile-tabs-active-state",
       "product-list-manager-capstone",
     ],
     title: {
@@ -1344,11 +1407,17 @@ const classModules = [
       "save-load-todos-localstorage",
       "saved-favourites-localstorage",
       "cart-items-localstorage",
+      "dark-mode-preference-localstorage",
+      "saved-form-draft-localstorage",
+      "recently-viewed-products-localstorage",
+      "todo-completed-filter-localstorage",
       "mock-product-search",
       "github-profile-finder",
       "weather-search-panel",
       "recipe-search-app",
       "promise-all-user-posts",
+      "fetch-posts-loading-error-list",
+      "fetch-users-filter-after-load",
       "shopping-cart-total",
       "filter-sort-products",
       "async-dashboard-capstone",
@@ -1358,8 +1427,8 @@ const classModules = [
       es: "JavaScript asincrono, APIs y almacenamiento del navegador",
     },
     summary: {
-      en: "A job-readiness bridge into promises, async/await, loading states, fetch mini apps, and saved browser data.",
-      es: "Un puente hacia empleabilidad con promesas, async/await, estados de carga, mini apps con fetch y datos guardados en el navegador.",
+      en: "A job-readiness bridge into promises, async/await, loading states, fetch mini apps, saved browser data, and state-shaped localStorage practice.",
+      es: "Un puente hacia empleabilidad con promesas, async/await, estados de carga, mini apps con fetch, datos guardados y practica de localStorage con forma de estado.",
     },
     outcomes: {
       en: [
@@ -1385,6 +1454,11 @@ const classModules = [
     number: "08",
     modeId: "builder",
     challengeIds: [
+      "map-product-cards",
+      "filter-available-sessions",
+      "find-selected-mentor",
+      "some-stock-warning",
+      "sort-students-by-score",
       "render-users-from-array",
       "event-delegation-todo-actions",
       "dropdown-menu-toggle",
@@ -1398,17 +1472,19 @@ const classModules = [
       es: "Patrones profesionales de UI con JavaScript",
     },
     summary: {
-      en: "Students practice the patterns that show up in junior frontend tasks: rendering from data, delegated events, menu interactions, async search, pagination, and KPI calculations.",
-      es: "El alumnado practica patrones habituales en tareas junior: renderizar desde datos, eventos delegados, interacciones de menu, busqueda asincrona, paginacion y KPIs.",
+      en: "Students practice the patterns that show up in junior frontend tasks: array methods, rendering from data, delegated events, menu interactions, async search, pagination, and KPI calculations.",
+      es: "El alumnado practica patrones habituales en tareas junior: metodos de arrays, renderizar desde datos, eventos delegados, interacciones de menu, busqueda asincrona, paginacion y KPIs.",
     },
     outcomes: {
       en: [
         "Render interfaces from structured data",
+        "Choose between map(), filter(), find(), some(), and sort()",
         "Handle scalable UI events",
         "Build dashboard and table interactions",
       ],
       es: [
         "Renderizar interfaces desde datos estructurados",
+        "Elegir entre map(), filter(), find(), some() y sort()",
         "Manejar eventos de UI escalables",
         "Crear interacciones de dashboards y tablas",
       ],
