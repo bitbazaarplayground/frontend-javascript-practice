@@ -349,38 +349,103 @@ highlightBtn.addEventListener("click", () => {
     title: "Challenge 5 — Character Counter",
     difficulty: "Easy",
     category: "JavaScript + DOM",
-    goal: "Update a live character counter as the user types.",
+    goal: "Update a live character counter as the user types, then style the count differently for even and odd numbers.",
     requirements: [
       "Add a textarea or input",
       "Add an element to show the count",
       "Update the count on every input change",
+      "Make the count red when the character count is even",
+      "Make the count blue when the character count is odd",
     ],
     tips: [
       "Use the input event.",
       "You can read the current text with value.",
       "Use textContent to update the counter display.",
+      "Use the remainder operator % to check whether the count is even or odd.",
+      "You can set count.style.color directly, or set a CSS class such as red or blue.",
     ],
-    concepts: ["input events", "DOM updates", "string length", "textContent"],
+    concepts: [
+      "input events",
+      "DOM updates",
+      "string length",
+      "textContent",
+      "modulo",
+      "CSS classes",
+    ],
     suggestedApproach: [
       "Create an input or textarea and a counter element.",
       "Select both elements in JavaScript.",
       "Listen for the input event.",
       "Update the counter with the text length.",
+      "Check whether the length is even or odd.",
+      "Apply the red or blue class to the counter.",
     ],
     commonMistakes: [
       "Using click instead of input",
       "Forgetting to read input.value.length",
       "Updating the variable but not the page text",
+      "Changing the text but forgetting to update the colour each time",
+      "Writing CSS classes but never applying them from JavaScript",
     ],
     expectedOutcome:
-      "A text field with a live counter that changes as the user types.",
+      "A text field with a live counter that changes as the user types: even counts appear red and odd counts appear blue.",
+    beginnerGuide: {
+      en: {
+        title: "Two ways to change colour from JavaScript",
+        intro:
+          "The counter has two jobs: show the current number, then choose a colour based on that number. You can do the colour part directly in JavaScript, or you can let JavaScript choose a CSS class.",
+        steps: [
+          "Read messageInput.value.length and store it in a variable like total.",
+          "Use total % 2 === 0 to ask: is this number even?",
+          "Option 1 is inline style: count.style.color = \"red\" or \"blue\".",
+          "Option 2 is CSS classes: define .red and .blue in CSS, then set count.className from JavaScript.",
+          "The class approach is usually cleaner because CSS owns the visual styling and JavaScript only decides which state is active.",
+        ],
+        code: `// Option 1: direct inline style
+if (total % 2 === 0) {
+  count.style.color = "red";
+} else {
+  count.style.color = "blue";
+}
+
+// Option 2: CSS class
+// .red { color: red; }
+// .blue { color: blue; }
+count.className = total % 2 === 0 ? "red" : "blue";`,
+      },
+      es: {
+        title: "Dos formas de cambiar color con JavaScript",
+        intro:
+          "El contador tiene dos trabajos: mostrar el numero actual y elegir un color segun ese numero. Puedes cambiar el color directamente en JavaScript o usar JavaScript para elegir una clase CSS.",
+        steps: [
+          "Lee messageInput.value.length y guardalo en una variable como total.",
+          "Usa total % 2 === 0 para preguntar: este numero es par?",
+          "Opcion 1: estilo directo con count.style.color = \"red\" o \"blue\".",
+          "Opcion 2: clases CSS. Define .red y .blue en CSS, y luego cambia count.className desde JavaScript.",
+          "El enfoque con clases suele ser mas limpio porque CSS se encarga del estilo visual y JavaScript solo decide que estado esta activo.",
+        ],
+        code: `// Opcion 1: estilo directo
+if (total % 2 === 0) {
+  count.style.color = "red";
+} else {
+  count.style.color = "blue";
+}
+
+// Opcion 2: clase CSS
+// .red { color: red; }
+// .blue { color: blue; }
+count.className = total % 2 === 0 ? "red" : "blue";`,
+      },
+    },
     starter: {
       html: `<textarea id="messageInput" placeholder="Type here..."></textarea>
 <p>Characters: <span id="count">0</span></p>`,
       css: `textarea {
   width: 100%;
   min-height: 120px;
-}`,
+}
+
+/* Add red and blue counter classes here. */`,
       js: ``,
     },
     solution: {
@@ -389,12 +454,25 @@ highlightBtn.addEventListener("click", () => {
       css: `textarea {
   width: 100%;
   min-height: 120px;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
 }`,
       js: `const messageInput = document.getElementById("messageInput");
 const count = document.getElementById("count");
 
 messageInput.addEventListener("input", () => {
-  count.textContent = messageInput.value.length;
+  const total = messageInput.value.length;
+  count.textContent = total;
+
+  // This solution uses CSS classes.
+  // Another valid option is: count.style.color = "red";
+  count.className = total % 2 === 0 ? "red" : "blue";
 });`,
     },
   },

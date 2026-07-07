@@ -39,6 +39,7 @@ const classPhaseMap = {
   "class-33": "phase-06",
   "class-34": "phase-06",
   "class-35": "phase-06",
+  "class-41": "phase-07",
 };
 
 const roadmapPhases = [
@@ -239,6 +240,34 @@ const roadmapPhases = [
       "class-35",
       "class-27",
     ],
+  },
+  {
+    id: "phase-07",
+    title: {
+      en: "Phase 7 - Police Assessment Preparation",
+      es: "Fase 7 - Preparacion para assessment policial",
+    },
+    duration: {
+      en: "As needed",
+      es: "Segun necesidad",
+    },
+    summary: {
+      en: "A separate preparation area for police recruitment judgement practice, CVF awareness, and confidence before online sift or interview stages.",
+      es: "Un area separada para practicar juicio en seleccion policial, conciencia del CVF y confianza antes de sift online o entrevistas.",
+    },
+    focus: {
+      en: [
+        "Situational judgement practice",
+        "Police values and behaviour explanations",
+        "Score review by focus area",
+      ],
+      es: [
+        "Practica de juicio situacional",
+        "Valores policiales y explicaciones de comportamiento",
+        "Revision de puntuacion por area",
+      ],
+    },
+    classIds: ["class-41"],
   },
 ];
 
@@ -1038,6 +1067,41 @@ const classSections = {
         es: "Une props tipadas, estado, renderizado de datos, filtros y UI asincrona en un dashboard practico.",
       },
       challengeIds: ["ts-all-in-one-dashboard-capstone"],
+    },
+  ],
+  "class-41": [
+    {
+      title: {
+        en: "Police SJT learning zone",
+        es: "Zona de aprendizaje SJT policial",
+      },
+      summary: {
+        en: "Understand the rating model, assessment stages, and judgement patterns before starting the mock tests.",
+        es: "Entiende el modelo de valoracion, las fases de assessment y los patrones de juicio antes de empezar los mocks.",
+      },
+      challengeIds: ["police-learning-zone"],
+    },
+    {
+      title: {
+        en: "PDF-style SJT mock tests",
+        es: "Mocks SJT estilo PDF",
+      },
+      summary: {
+        en: "Practise the original PDF set, then continue with the updated 2024 National Sift mock questions without duplicate scenarios.",
+        es: "Practica el set PDF original y continua con las preguntas actualizadas National Sift 2024 sin escenarios duplicados.",
+      },
+      challengeIds: [
+        "essex-police-sjt-mock-01",
+        "essex-police-sjt-mock-02",
+        "essex-police-sjt-mock-03",
+        "essex-police-sjt-mock-04",
+        "essex-police-sjt-mock-05",
+        "essex-police-sjt-final-review",
+        "national-sift-2024-mock-01",
+        "national-sift-2024-mock-02",
+        "national-sift-2024-mock-03",
+        "national-sift-2024-mock-04",
+      ],
     },
   ],
 };
@@ -2513,6 +2577,49 @@ const classModules = [
       es: "Un flujo de envio listo para enviar",
     },
   },
+  {
+    id: "class-41",
+    number: "01",
+    modeId: "police",
+    timeLimitMinutes: 200,
+    challengeIds: [
+      "police-learning-zone",
+      "essex-police-sjt-mock-01",
+      "essex-police-sjt-mock-02",
+      "essex-police-sjt-mock-03",
+      "essex-police-sjt-mock-04",
+      "essex-police-sjt-mock-05",
+      "essex-police-sjt-final-review",
+      "national-sift-2024-mock-01",
+      "national-sift-2024-mock-02",
+      "national-sift-2024-mock-03",
+      "national-sift-2024-mock-04",
+    ],
+    title: {
+      en: "Police SJT preparation: learning zone and expanded PDF set",
+      es: "Preparacion SJT policial: learning zone y set PDF ampliado",
+    },
+    summary: {
+      en: "A structured study zone plus 137 SJT practice questions from the supplied PDFs, split into mocks with duplicate scenarios removed.",
+      es: "Una zona de estudio estructurada mas 137 preguntas SJT de los PDFs aportados, divididas en mocks y sin escenarios duplicados.",
+    },
+    outcomes: {
+      en: [
+        "Practise the Counterproductive to Efficient rating scale",
+        "Understand what stronger police judgement tends to protect",
+        "Review weaker areas before online sift, interview, written, or briefing preparation",
+      ],
+      es: [
+        "Practicar la escala de Counterproductive a Efficient",
+        "Entender que protege un juicio policial mas fuerte",
+        "Revisar areas debiles antes del sift online, entrevista, escrito o briefing",
+      ],
+    },
+    project: {
+      en: "A saved police SJT preparation path",
+      es: "Una ruta guardada de preparacion SJT policial",
+    },
+  },
 ];
 
 function pickLocalized(value, language) {
@@ -2530,10 +2637,13 @@ function localizeSections(sections = [], language) {
 
 function getEstimatedTime(module, language = "en") {
   const isInterview = module.modeId === "interview";
+  const isPolice = module.modeId === "police";
   const isSingleCapstone = module.challengeIds.length === 1 && !isInterview;
   const timedLabel = module.timeLimitMinutes;
 
   if (language === "es") {
+    if (isPolice && timedLabel) return `Mock de ${timedLabel} min`;
+    if (isPolice) return "15-30 min";
     if (isInterview && timedLabel) return `Prueba de ${timedLabel} min`;
     if (isInterview) return "60-120 min";
     if (isSingleCapstone) return "2-4 horas";
@@ -2544,6 +2654,8 @@ function getEstimatedTime(module, language = "en") {
     return "4-6 horas";
   }
 
+  if (isPolice && timedLabel) return `${timedLabel} min mock`;
+  if (isPolice) return "15-30 min";
   if (isInterview && timedLabel) return `${timedLabel} min assessment`;
   if (isInterview) return "60-120 min";
   if (isSingleCapstone) return "2-4 hours";
@@ -2556,14 +2668,17 @@ function getEstimatedTime(module, language = "en") {
 
 function getFormatLabel(module, language = "en") {
   const isInterview = module.modeId === "interview";
+  const isPolice = module.modeId === "police";
   const isSingleCapstone = module.challengeIds.length === 1 && !isInterview;
 
   if (language === "es") {
+    if (isPolice) return "Mock SJT";
     if (isInterview) return "Prueba tecnica";
     if (isSingleCapstone) return "Capstone";
     return "Bloque guiado";
   }
 
+  if (isPolice) return "SJT mock";
   if (isInterview) return "Interview test";
   if (isSingleCapstone) return "Capstone";
   return "Guided block";

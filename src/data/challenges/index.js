@@ -1,5 +1,6 @@
 import { builderChallenges } from "./builder.js";
 import { interviewChallenges } from "./interview.js";
+import { policeChallenges } from "./police.js";
 import { reactChallenges } from "./react.js";
 import { rookieChallenges } from "./rookie.js";
 import { typescriptChallenges } from "./typescript.js";
@@ -59,5 +60,13 @@ export const challengeModes = [
       "Practice hiring-style builds that combine layout, DOM logic, async states, accessibility, testing, debugging, TypeScript, and realistic React take-homes.",
     level: "Advanced",
     challenges: renumberChallenges(interviewChallenges),
+  },
+  {
+    id: "police",
+    title: "Police SJT Prep",
+    description:
+      "Prepare for Essex Police-style recruitment judgement with original SJT practice, CVF-focused explanations, scoring by focus area, and saved progress.",
+    level: "Assessment preparation",
+    challenges: renumberChallenges(policeChallenges),
   },
 ];

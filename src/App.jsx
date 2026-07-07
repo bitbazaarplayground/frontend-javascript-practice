@@ -2,6 +2,8 @@ import { CheckCircle2, Menu } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import ConceptPrimer from "./components/ConceptPrimer";
 import InterviewReflectionPanel from "./components/InterviewReflectionPanel";
+import PoliceLearningPanel from "./components/PoliceLearningPanel";
+import PoliceSjtPanel from "./components/PoliceSjtPanel";
 import ThemeToggle from "./components/ThemeToggle";
 import WorkspacePanel from "./components/WorkspacePanel";
 import BriefPanel from "./components/layout/BriefPanel";
@@ -106,6 +108,10 @@ export default function App() {
     "practice-interview-reflections",
     {}
   );
+  const [policeSjtProgress, setPoliceSjtProgress] = useLocalStorage(
+    "practice-police-sjt-progress",
+    {}
+  );
   const [assessmentNow, setAssessmentNow] = useState(() => Date.now());
   const [progressTransferStatus, setProgressTransferStatus] = useState(null);
 
@@ -124,6 +130,7 @@ export default function App() {
     return localizedModes.find((mode) => mode.id === selectedModeId) || null;
   }, [localizedModes, selectedModeId]);
   const isInterviewTrack = selectedMode?.id === "interview";
+  const isPoliceTrack = selectedMode?.id === "police";
   const isRookieTrack = selectedMode?.id === "rookie";
 
   const selectedClass = useMemo(() => {
@@ -308,6 +315,7 @@ export default function App() {
           interviewMode,
           timedSessions,
           interviewReflections,
+          policeSjtProgress,
           guidedBuildState: readStoredJson("guided-build-state"),
           guidedBuildPreviewViewport: readStoredJson(
             "guided-build-preview-viewport"
@@ -461,6 +469,14 @@ export default function App() {
         !Array.isArray(imported.interviewReflections)
       ) {
         setInterviewReflections(imported.interviewReflections);
+      }
+
+      if (
+        imported.policeSjtProgress &&
+        typeof imported.policeSjtProgress === "object" &&
+        !Array.isArray(imported.policeSjtProgress)
+      ) {
+        setPoliceSjtProgress(imported.policeSjtProgress);
       }
 
       if (
@@ -629,6 +645,59 @@ export default function App() {
     }));
   };
 
+  const handlePoliceSjtProgressChange = (nextProgress) => {
+    if (!activeChallenge) return;
+
+    setPoliceSjtProgress((currentProgress) => ({
+      ...currentProgress,
+      [activeChallenge.id]: nextProgress,
+    }));
+
+    const answers = nextProgress.answers || {};
+    const questions = activeChallenge.sjt?.questions || [];
+    const isRatingMode = activeChallenge.sjt?.answerMode === "rating";
+    const validRatingIds = new Set(
+      (activeChallenge.sjt?.ratingScale || []).map((rating) => rating.id)
+    );
+    const totalQuestions = questions.length;
+    const answeredCount = questions.filter((question) => {
+      const answer = answers[question.id];
+      if (!answer || typeof answer !== "object" || Array.isArray(answer)) {
+        return false;
+      }
+
+      if (isRatingMode) {
+        const ratings =
+          answer.ratings &&
+          typeof answer.ratings === "object" &&
+          !Array.isArray(answer.ratings)
+            ? answer.ratings
+            : {};
+
+        return question.options.every((option) =>
+          validRatingIds.has(ratings[option.id])
+        );
+      }
+
+      return Boolean(
+        answer.best &&
+          answer.worst &&
+          answer.best !== answer.worst
+      );
+    }).length;
+    const nextStatus =
+      totalQuestions > 0 && answeredCount === totalQuestions
+        ? "completed"
+        : answeredCount > 0
+          ? "in-progress"
+          : "not-started";
+
+    setChallengeProgress((currentProgress) => ({
+      ...currentProgress,
+      [activeChallenge.id]: nextStatus,
+    }));
+  };
+
   if (selectedGuideId) {
     return (
       <GuidedBuildPage
@@ -683,6 +752,77 @@ export default function App() {
     return (
       <div className="theme-root" data-theme={theme}>
         <div className="app-main">{appCopy.app.noChallenge}</div>
+      </div>
+    );
+  }
+
+  if (isPoliceTrack) {
+    return (
+      <div className="theme-root app-shell single-layout" data-theme={theme}>
+        <SidebarDrawer
+          isOpen={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          onBackHome={handleBackHome}
+          modeTitle={
+            selectedClass
+              ? `${selectedMode.title} - ${selectedClass.title}`
+              : appCopy.app.modeLabel(selectedMode.title)
+          }
+          challenges={challenges}
+          activeId={activeChallenge.id}
+          onSelect={handleSelectChallenge}
+          challengeProgress={challengeProgress}
+          selectedClass={selectedClass}
+          copy={appCopy}
+        />
+
+        <div className="app-main">
+          <div className="app-container police-sjt-container">
+            <div className="top-actions">
+              <button className="primary-btn" onClick={() => setDrawerOpen(true)}>
+                <Menu size={17} aria-hidden="true" />
+                {appCopy.app.challenges}
+              </button>
+              <span className="mode-pill">
+                {selectedClass
+                  ? `${selectedMode.title} - ${selectedClass.title}`
+                  : appCopy.app.modeLabel(selectedMode.title)}
+              </span>
+              <ThemeToggle
+                theme={theme}
+                onChange={setTheme}
+                copy={appCopy.theme}
+              />
+            </div>
+
+            <ChallengeHeader
+              challenge={activeChallenge}
+              copy={appCopy}
+              eyebrow="Police SJT practice"
+              stepLabel={
+                selectedClass
+                  ? appCopy.header.blockStep(
+                      activeChallengeIndex + 1,
+                      challenges.length
+                    )
+                  : null
+              }
+            />
+
+            {activeChallenge.editorType === "sjt-learning" ? (
+              <PoliceLearningPanel
+                challenge={activeChallenge}
+                onComplete={handleMarkComplete}
+              />
+            ) : (
+              <PoliceSjtPanel
+                challenge={activeChallenge}
+                progress={policeSjtProgress[activeChallenge.id] || {}}
+                onProgressChange={handlePoliceSjtProgressChange}
+              />
+            )}
+          </div>
+        </div>
       </div>
     );
   }

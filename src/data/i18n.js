@@ -35,6 +35,12 @@ const modeCopy = {
         "Practice hiring-style builds that combine layout, DOM logic, async states, accessibility, testing, debugging, TypeScript, and realistic React take-homes.",
       level: "Advanced",
     },
+    police: {
+      title: "Police SJT Prep",
+      description:
+        "Prepare for Essex Police-style recruitment judgement with original SJT practice, CVF-focused explanations, scoring by focus area, and saved progress.",
+      level: "Assessment preparation",
+    },
   },
   es: {
     rookie: {
@@ -66,6 +72,12 @@ const modeCopy = {
       description:
         "Practica pruebas tipo entrevista que combinan layout, logica DOM, estados asincronos, accesibilidad, testing, depuracion, TypeScript y take-home apps realistas en React.",
       level: "Avanzado",
+    },
+    police: {
+      title: "Police SJT Prep",
+      description:
+        "Prepara tu juicio para pruebas tipo Essex Police con practica SJT original, explicaciones basadas en CVF, puntuacion por area y progreso guardado.",
+      level: "Preparacion de assessment",
     },
   },
 };
@@ -3075,6 +3087,9 @@ function localizeReadinessChecks(checks, language) {
 
 function localizeChallenge(challenge, language) {
   if (language !== "es") return challenge;
+  if (challenge.editorType === "sjt" || challenge.editorType === "sjt-learning") {
+    return challenge;
+  }
 
   const translatedChallenge = rookieChallengeCopy[challenge.id] || {};
   const generatedChallenge = getGeneratedChallengeCopy(challenge);
